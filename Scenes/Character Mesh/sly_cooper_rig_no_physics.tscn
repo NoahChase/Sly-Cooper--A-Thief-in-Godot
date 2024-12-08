@@ -1,0 +1,121 @@
+[gd_scene load_steps=9 format=3 uid="uid://c16aev7j644f1"]
+
+[ext_resource type="PackedScene" uid="uid://dtehx71rshaem" path="res://Assets/Models/SlyCooper_RigNoPhysics.blend" id="1_fknm3"]
+[ext_resource type="AnimationLibrary" uid="uid://dhc28csblnev5" path="res://Assets/Animations/Library Sly Idle.res" id="2_j3jg4"]
+
+[sub_resource type="Animation" id="Animation_5khbj"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("metarig/GeneralSkeleton:Hips")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.0805616, 0.84994, -0.309156)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_71qfp"]
+_data = {
+"RESET": SubResource("Animation_5khbj")
+}
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_d6wg3"]
+filter_enabled = true
+filters = ["", "%GeneralSkeleton:Chest", "%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:Neck", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Spine", "%GeneralSkeleton:UpperChest"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2pjcq"]
+animation = &"Library Sly Idle/Idle Look"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hdgr4"]
+animation = &"Library Sly Idle/Idle POSE"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ucif6"]
+graph_offset = Vector2(-790.567, 0)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_d6wg3")
+nodes/Add2/position = Vector2(20, 80)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_hdgr4")
+nodes/Animation/position = Vector2(-260, 80)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_2pjcq")
+"nodes/Animation 2/position" = Vector2(-260, 240)
+node_connections = [&"Add2", 0, &"Animation", &"Add2", 1, &"Animation 2", &"output", 0, &"Add2"]
+
+[node name="SlyCooper_RigNoPhysics" instance=ExtResource("1_fknm3")]
+
+[node name="GeneralSkeleton" parent="metarig" index="0"]
+bones/10/position = Vector3(0.0748153, 0.789316, -0.287105)
+bones/10/rotation = Quaternion(0.136138, -0.0528426, -0.0194888, 0.989088)
+bones/10/scale = Vector3(1, 1, 1)
+bones/11/rotation = Quaternion(0.0538717, 0.00522557, -0.000904506, 0.998534)
+bones/12/rotation = Quaternion(0.0542915, -0.00189402, 0.000456674, 0.998523)
+bones/13/rotation = Quaternion(0.063691, -0.00246734, 0.000160136, 0.997967)
+bones/14/rotation = Quaternion(-0.00928031, 0.015676, 1.13911e-05, 0.999834)
+bones/15/rotation = Quaternion(-0.00916537, 0.0156188, -0.000243222, 0.999836)
+bones/72/rotation = Quaternion(0.465095, 0.514451, 0.550373, -0.464883)
+bones/73/rotation = Quaternion(-0.146747, 0.883814, -0.431431, 0.105857)
+bones/74/rotation = Quaternion(0.329551, -0.625892, 0.330857, 0.624651)
+bones/75/rotation = Quaternion(-0.124031, 0.893907, 0.259986, 0.343444)
+bones/95/rotation = Quaternion(0.406439, -0.552341, -0.632412, -0.360252)
+bones/96/rotation = Quaternion(0.165963, 0.895657, -0.38544, -0.147275)
+bones/97/rotation = Quaternion(0.465511, 0.531921, -0.466769, 0.531494)
+bones/98/rotation = Quaternion(-0.112257, -0.904229, -0.189293, 0.365973)
+bones/130/rotation = Quaternion(0.143334, 0.396687, 0.888369, -0.181368)
+bones/131/rotation = Quaternion(0.014547, 0.90459, -0.425996, 0.00569843)
+bones/132/rotation = Quaternion(-0.0645298, 0.604075, -0.787143, 0.106469)
+bones/133/rotation = Quaternion(0.00022867, 1, -2.58684e-05, -0.000546407)
+bones/136/rotation = Quaternion(-0.00920892, 0.398315, 0.915495, 0.0559419)
+bones/137/rotation = Quaternion(-0.0152682, 0.894809, -0.446147, -0.00601062)
+bones/138/rotation = Quaternion(0.00287163, 0.566223, -0.816866, -0.110065)
+bones/139/rotation = Quaternion(0.000957231, 0.999997, 0.0001086, -0.00228731)
+
+[node name="Cane_LowPoly" parent="metarig/GeneralSkeleton" index="0"]
+transform = Transform3D(1.25772, 0.00655197, 0.0163353, -0.00667757, 1.25779, 0.00962971, -0.0162844, -0.00971547, 1.2577, -0.00541914, -0.00215483, 0.0017447)
+visible = false
+
+[node name="TeethUpper_LowPoly" parent="metarig/GeneralSkeleton" index="1"]
+transform = Transform3D(0.106245, 0.000464824, -0.00521695, -0.00208341, 0.100962, -0.033434, 0.00480541, 0.0334956, 0.100849, 0.00705497, 1.08327, -0.10972)
+
+[node name="TeethLower_LowPoly" parent="metarig/GeneralSkeleton" index="2"]
+transform = Transform3D(0.106245, 0.000464811, -0.00521695, -0.00208341, 0.100962, -0.033434, 0.00480541, 0.0334959, 0.100849, 0.00740532, 1.06579, -0.125045)
+
+[node name="EyeHLightBot_L" parent="metarig/GeneralSkeleton" index="3"]
+transform = Transform3D(0.106245, 0.000464822, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334957, 0.100849, 0.00706805, 1.08611, -0.108778)
+
+[node name="EyeHLightTop_L" parent="metarig/GeneralSkeleton" index="4"]
+transform = Transform3D(0.106245, 0.000464822, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334957, 0.100849, 0.00706805, 1.08611, -0.108778)
+
+[node name="Iris_L" parent="metarig/GeneralSkeleton" index="5"]
+transform = Transform3D(0.106245, 0.000464817, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334958, 0.100849, 0.00706803, 1.08611, -0.108778)
+
+[node name="Pupil_L" parent="metarig/GeneralSkeleton" index="6"]
+transform = Transform3D(0.106245, 0.000464817, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334958, 0.100849, 0.00706803, 1.08611, -0.108778)
+
+[node name="EyeHLightBot_R" parent="metarig/GeneralSkeleton" index="7"]
+transform = Transform3D(0.106245, 0.000464822, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334957, 0.100849, 0.00706804, 1.08611, -0.108778)
+
+[node name="EyeHLightTop_R" parent="metarig/GeneralSkeleton" index="8"]
+transform = Transform3D(0.106245, 0.000464822, -0.00521695, -0.00208341, 0.100962, -0.0334341, 0.00480541, 0.0334957, 0.100849, 0.00706804, 1.08611, -0.108778)
+
+[node name="Iris_R" parent="metarig/GeneralSkeleton" index="9"]
+transform = Transform3D(-0.106245, 0.000464823, -0.00521695, 0.00208341, 0.100962, -0.033434, -0.00480541, 0.0334956, 0.100849, 0.00706805, 1.08611, -0.108778)
+
+[node name="Pupil_R" parent="metarig/GeneralSkeleton" index="10"]
+transform = Transform3D(-0.106245, 0.000464823, -0.00521695, 0.00208341, 0.100962, -0.033434, -0.00480541, 0.0334956, 0.100849, 0.00706805, 1.08611, -0.108778)
+
+[node name="Hat_LowPoly" parent="metarig/GeneralSkeleton" index="11"]
+transform = Transform3D(1.25632, 0.00549627, -0.0616887, -0.0246356, 1.19384, -0.395348, 0.0568224, 0.396077, 1.1925, 0.0050654, -0.169857, -0.609032)
+
+[node name="EyeWhite_lowPoly" parent="metarig/GeneralSkeleton" index="12"]
+transform = Transform3D(0.106245, 0.000464824, -0.00521695, -0.00208341, 0.100962, -0.033434, 0.00480541, 0.0334956, 0.100849, 0.00706805, 1.08611, -0.108778)
+
+[node name="Belt_LowPoly" parent="metarig/GeneralSkeleton" index="13"]
+transform = Transform3D(0.105712, 0.00257079, -0.0116853, -0.00563212, 0.102363, -0.0284313, 0.0105563, 0.0288696, 0.101849, 0.0168062, 1.18841, -0.151731)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"": SubResource("AnimationLibrary_71qfp"),
+"Library Sly Idle": ExtResource("2_j3jg4")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource("AnimationNodeBlendTree_ucif6")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Add2/add_amount = 0.18
