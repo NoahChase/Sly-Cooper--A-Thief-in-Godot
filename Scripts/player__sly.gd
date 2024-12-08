@@ -1,19 +1,20 @@
 extends CharacterBody3D
 
 #const
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+const SPEED = 5.0 #jump distance #m, double jump distance #m
+const JUMP_VELOCITY = 4.5 #single jump 2m, double jump 3m
 
 #enum
 enum state {FLOOR, AIR, TO_TARGET, ON_TARGET}
+enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 
 #onready
+@onready var speed_mult = 1.0
 
 #export
 
 #var
 var target
-
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -38,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 
-func state_handler():
+func state_handler(delta: float) -> void:
 	pass
 	
 
@@ -50,7 +51,7 @@ func apply_target():
 	pass
 	
 
-func apply_magnetism(delta):
+func apply_magnetism(delta: float) -> void:
 	pass
 	
 
