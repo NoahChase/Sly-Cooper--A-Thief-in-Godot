@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dv14dnkatjdk8"]
+
+[ext_resource type="Texture2D" uid="uid://chjsbjms57q10" path="res://Assets/Textures/SlyCooper_RigNoPhysics_Sly_Body.png" id="1_f18ka"]
+
+[resource]
+albedo_texture = ExtResource("1_f18ka")
