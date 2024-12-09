@@ -1,6 +1,22 @@
-[gd_scene load_steps=13 format=3 uid="uid://brvn2u4qmm15o"]
+[gd_scene load_steps=16 format=3 uid="uid://brvn2u4qmm15o"]
 
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="1_04rnv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0b5fg"]
+sky_top_color = Color(0.0611566, 0.107362, 0.280453, 1)
+sky_horizon_color = Color(0.131301, 0.2045, 0.479728, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+sun_curve = 1e-05
+
+[sub_resource type="Sky" id="Sky_wipc4"]
+sky_material = SubResource("ProceduralSkyMaterial_0b5fg")
+
+[sub_resource type="Environment" id="Environment_kj0pv"]
+background_mode = 2
+sky = SubResource("Sky_wipc4")
+ambient_light_source = 2
+ambient_light_color = Color(0.716298, 0.716296, 0.716296, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
 size = Vector2(30, 30)
@@ -48,6 +64,16 @@ data = PackedVector3Array(-1, 0.5, 1, 1, 0.5, 1, -1, -0.5, 1, 1, 0.5, 1, 1, -0.5
 
 [node name="Hazard Room" type="Node3D"]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kj0pv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+light_color = Color(0.54099, 0.54099, 0.54099, 1)
+shadow_enabled = true
+shadow_opacity = 0.75
+shadow_blur = 1.5
+
 [node name="Floor" type="StaticBody3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
@@ -60,7 +86,6 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 shape = SubResource("ConcavePolygonShape3D_3iynk")
 
 [node name="Player_ Sly" parent="." instance=ExtResource("1_04rnv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Box 2_" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -2)

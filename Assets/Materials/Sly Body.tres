@@ -3,4 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://chjsbjms57q10" path="res://Assets/Textures/SlyCooper_RigNoPhysics_Sly_Body.png" id="1_f18ka"]
 
 [resource]
+diffuse_mode = 3
+specular_mode = 1
 albedo_texture = ExtResource("1_f18ka")
+roughness = 0.69
