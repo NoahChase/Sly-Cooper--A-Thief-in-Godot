@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=7 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" path="res://Scripts/player__sly.gd" id="1_jucx6"]
 [ext_resource type="PackedScene" uid="uid://c16aev7j644f1" path="res://Scenes/Character Mesh/sly_cooper_rig_no_physics.tscn" id="2_syly3"]
@@ -6,6 +6,16 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_h1oyc"]
+height = 6.0
+radius = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_s3532"]
+radius = 0.125
+height = 0.25
+radial_segments = 8
+rings = 4
 
 [node name="Player_ Sly" type="CharacterBody3D"]
 script = ExtResource("1_jucx6")
@@ -18,13 +28,35 @@ shape = SubResource("SphereShape3D_aa5ra")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("SphereShape3D_aa5ra")
 
-[node name="Rot Container" type="Node3D" parent="."]
+[node name="To Cam RayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Body Mesh Container" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Rot Container"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body Mesh Container"]
 visible = false
 mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
 
-[node name="SlyCooper_RigNoPhysics" parent="Rot Container" instance=ExtResource("2_syly3")]
-transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, -1, 0)
+[node name="SlyCooper_RigNoPhysics" parent="Body Mesh Container" instance=ExtResource("2_syly3")]
+transform = Transform3D(-1.4, 0, -1.22392e-07, 0, 1.4, 0, 1.22392e-07, 0, -1.4, 0, -1, 0)
+
+[node name="Target Area" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Target Area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+shape = SubResource("CylinderShape3D_h1oyc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Target Area"]
+
+[node name="Look_At Rotation" type="Node3D" parent="."]
+
+[node name="Basis_Offset" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_s3532")
+
+[connection signal="body_entered" from="Target Area" to="." method="_on_target_area_body_entered"]
+[connection signal="body_exited" from="Target Area" to="." method="_on_target_area_body_exited"]

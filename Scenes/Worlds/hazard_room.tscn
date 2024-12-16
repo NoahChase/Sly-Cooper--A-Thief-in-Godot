@@ -1,6 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://brvn2u4qmm15o"]
+[gd_scene load_steps=18 format=3 uid="uid://brvn2u4qmm15o"]
 
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="1_04rnv"]
+[ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="2_jwnsc"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="3_ox1mo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0b5fg"]
 sky_top_color = Color(0.0611566, 0.107362, 0.280453, 1)
@@ -16,7 +18,9 @@ sky_material = SubResource("ProceduralSkyMaterial_0b5fg")
 background_mode = 2
 sky = SubResource("Sky_wipc4")
 ambient_light_source = 2
-ambient_light_color = Color(0.716298, 0.716296, 0.716296, 1)
+ambient_light_color = Color(0.929715, 0.929715, 0.929715, 1)
+glow_enabled = true
+volumetric_fog_density = 0.7073
 
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
 size = Vector2(30, 30)
@@ -69,10 +73,16 @@ environment = SubResource("Environment_kj0pv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-light_color = Color(0.54099, 0.54099, 0.54099, 1)
+light_color = Color(0.804743, 0.804743, 0.804743, 1)
 shadow_enabled = true
 shadow_opacity = 0.75
 shadow_blur = 1.5
+
+[node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("1_04rnv")]
+camera_parent = NodePath("../Camera Parent")
+
+[node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("2_jwnsc")]
+camera_player = NodePath("../Player_ Sly")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -85,8 +95,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_83g37")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("ConcavePolygonShape3D_3iynk")
 
-[node name="Player_ Sly" parent="." instance=ExtResource("1_04rnv")]
-
 [node name="Box 2_" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -2)
 
@@ -94,6 +102,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -2)
 mesh = SubResource("BoxMesh_bhtuh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Box 2_"]
+shape = SubResource("ConcavePolygonShape3D_rccqr")
+
+[node name="Box 2_2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -8)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Box 2_2"]
+mesh = SubResource("BoxMesh_bhtuh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Box 2_2"]
 shape = SubResource("ConcavePolygonShape3D_rccqr")
 
 [node name="Box 3_" type="StaticBody3D" parent="."]
@@ -113,3 +130,6 @@ mesh = SubResource("BoxMesh_w0vfr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Box 1_2_"]
 shape = SubResource("ConcavePolygonShape3D_i8e8n")
+
+[node name="Target Point" parent="." instance=ExtResource("3_ox1mo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2.5)

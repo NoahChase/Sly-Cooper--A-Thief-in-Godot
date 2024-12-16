@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" path="res://Scripts/camera_parent.gd" id="1_t1ixj"]
 
-[node name="Camera Parent" type="Node3D"]
+[node name="Camera Parent" type="Node3D" node_paths=PackedStringArray("camera_target", "camera")]
 script = ExtResource("1_t1ixj")
+camera_target = NodePath("Camera Target")
+camera = NodePath("Camera Target/Camera3D")
 
 [node name="Camera Target" type="Node3D" parent="."]
 

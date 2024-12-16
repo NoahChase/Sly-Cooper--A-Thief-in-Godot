@@ -1,0 +1,96 @@
+[gd_scene load_steps=11 format=3 uid="uid://bj34qq52wpb60"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ij1nr"]
+radius = 0.125
+height = 0.25
+radial_segments = 8
+rings = 4
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xhep2"]
+frequency = 0.1
+fractal_gain = 0.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wbiar"]
+width = 32
+height = 32
+seamless = true
+noise = SubResource("FastNoiseLite_xhep2")
+
+[sub_resource type="Gradient" id="Gradient_glyak"]
+colors = PackedColorArray(0, 0, 0, 1, 0.288518, 0.288518, 0.288518, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_frr4c"]
+frequency = 0.1
+fractal_gain = 0.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ryavi"]
+width = 32
+height = 32
+seamless = true
+color_ramp = SubResource("Gradient_glyak")
+noise = SubResource("FastNoiseLite_frr4c")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8qnk"]
+transparency = 1
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.36, 0.381333, 1, 0.203922)
+albedo_texture = SubResource("NoiseTexture2D_wbiar")
+albedo_texture_force_srgb = true
+metallic_specular = 1.0
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.16, 0.188, 1, 1)
+emission_energy_multiplier = 15.0
+emission_texture = SubResource("NoiseTexture2D_ryavi")
+clearcoat_roughness = 1.0
+
+[sub_resource type="Animation" id="Animation_o3541"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_energy_multiplier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [15.0]
+}
+
+[sub_resource type="Animation" id="Animation_sshqn"]
+resource_name = "shine"
+length = 0.75
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_energy_multiplier")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75),
+"transitions": PackedFloat32Array(-3, -3),
+"update": 0,
+"values": [11.0, 17.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8yu1b"]
+_data = {
+"RESET": SubResource("Animation_o3541"),
+"shine": SubResource("Animation_sshqn")
+}
+
+[node name="Target Point" type="Node3D" groups=["target"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ij1nr")
+surface_material_override/0 = SubResource("StandardMaterial3D_i8qnk")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8yu1b")
+}
+autoplay = "shine"
