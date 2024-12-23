@@ -2,7 +2,10 @@
 extends Node3D
 
 @export var tail_targets = Node3D
+@export var player = CharacterBody3D
 
+@onready var anim_tree = $AnimationTree
+@onready var anim_player = $AnimationPlayer
 @onready var skeleton = %GeneralSkeleton
 @onready var bone_tail_001 = skeleton.find_bone("Tail.001")
 @onready var bone_tail_002 = skeleton.find_bone("Tail.002")
@@ -12,7 +15,6 @@ extends Node3D
 @onready var bone_tail_006 = skeleton.find_bone("Tail.006")
 @onready var bone_tail_007 = skeleton.find_bone("Tail.007")
 @onready var bone_tail_008 = skeleton.find_bone("Tail.008")
-
 
 @onready var ball_target = $"Tail IK Container/Ball Tail Target"
 @onready var ball_1 = $"Tail IK Container/Ball Tail 1"
@@ -66,3 +68,10 @@ func _physics_process(delta):
 	ball_4.global_position = lerp(ball_4.global_position, ball_5_cnt.global_position + (ball_6.position), 0.075)
 	ball_3.global_position = lerp(ball_3.global_position, ball_4_cnt.global_position + (ball_5.position), 0.075)
 	ball_2.global_position = lerp(ball_2.global_position, ball_3_cnt.global_position + (ball_4.position), 0.075)
+	
+	#if player != null:
+		#handle_animations()
+
+func handle_animations():
+	if player.state == player.AIR:
+		pass
