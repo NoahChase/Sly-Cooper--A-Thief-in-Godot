@@ -19,8 +19,8 @@ var distance = Vector3()
 
 var yaw = float()
 var pitch = float()
-var yaw_sens = 0.001
-var pitch_sens = 0.001
+var yaw_sens = 0.0015
+var pitch_sens = 0.0015
 
 var default_camera_offset := Vector3(0, 0, -4.5)
 

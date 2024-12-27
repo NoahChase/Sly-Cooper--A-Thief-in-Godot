@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 ## const
-const SPEED = 3.25 #jump distance #m, double jump distance #m
-const JUMP_VELOCITY = 6.26 #single jump 2m, double jump 3m
+const SPEED = 3.32 #really 3.32 #jump distance #4.25m, double jump distance #m
+const JUMP_VELOCITY = 6.3 #really 6.26 $single jump 2m, double jump 3m
 
 ## enum
 enum {FLOOR, AIR, TO_TARGET, ON_TARGET}
@@ -19,6 +19,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 
 @onready var target_points = []
 @onready var jump_num = 0
+@onready var gravmult = 1.0
 
 ## export
 @export var camera_target: Node3D
@@ -48,30 +49,46 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept"):
 		jump()
+		
+	if Input.is_action_just_pressed("circle"):
+		apply_target(delta)
+		apply_magnetism(delta)
 	
 	## States
 	if state == FLOOR:
 		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+		sly_mesh.anim_tree.deterministic = false
 		jump_num = 0
 	if state == AIR:
-		
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.05, 0.05)
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
-			
+			sly_mesh.anim_tree.deterministic = true
 		else:
 			air_mult = 1.0
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+			sly_mesh.anim_tree.deterministic = false
 		#$RichTextLabel.text = str("AIR")
-		velocity += get_gravity() * delta
+		
+		if velocity.y > 0:
+			gravmult = 1.0
+			#if jump_num <= 1:
+				#speed_mult = lerp(speed_mult, 1.125, 1)
+		else:
+			gravmult = lerp(gravmult, 1.25, 0.25)
+			#speed_mult = lerp(speed_mult, 1.0, 1)
+		velocity += get_gravity() * delta * gravmult
+			
 	else:
 		air_mult = 1.0
 		speed_mult = 1.0
-	if state == TO_TARGET:
+	if state == TO_TARGET and target != null:
 		#$RichTextLabel.text = str("TO TARGET")
+		apply_magnetism(delta)
 		if target == null or velocity.y > 0:
 			state = AIR
 	elif state == ON_TARGET and target != null:
+		apply_magnetism(delta)
 		#$CollisionShape3D.disabled = false
 		#$RichTextLabel.text = str("ON TARGET", " : ", target)
 		global_transform.origin = target.global_transform.origin
@@ -104,14 +121,14 @@ func _physics_process(delta: float) -> void:
 		camera_parent.pitch = lerp(camera_parent.pitch, -0.35, 0.01)
 		
 		var target_velocity = direction * SPEED * speed_mult
-		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure, 0.25 * air_mult)
-		velocity.z = lerp(velocity.z, target_velocity.z * left_stick_pressure, 0.25 * air_mult)
+		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure, 0.5 * air_mult)
+		velocity.z = lerp(velocity.z, target_velocity.z * left_stick_pressure, 0.5 * air_mult)
 	elif state != AIR:
 		velocity.x = lerp(velocity.x, 0.0, 0.5)
 		velocity.z = lerp(velocity.z, 0.0, 0.5)
 	else:
-		velocity.x = lerp(velocity.x, 0.0, 0.05 * (1-air_mult))
-		velocity.z = lerp(velocity.z, 0.0, 0.05 * (1-air_mult))
+		velocity.x = lerp(velocity.x, 0.0, 0.025 * (1-air_mult))
+		velocity.z = lerp(velocity.z, 0.0, 0.025 * (1-air_mult))
 
 	# Rotation
 	var target_rotation_y = $"Look_At Rotation".rotation.y
@@ -131,15 +148,12 @@ func _physics_process(delta: float) -> void:
 	var direction_2d = Vector2(direction.x, direction.z)
 # Camera Rotation
 	if horizontal < 0 and state == FLOOR:
-		camera_parent.yaw += velocity.length() / 5.5 * delta * left_stick_pressure
+		camera_parent.yaw += velocity.length() / 6 * delta * left_stick_pressure
 	elif horizontal > 0 and state == FLOOR:
-		camera_parent.yaw -= velocity.length() / 5.5 * delta * left_stick_pressure
+		camera_parent.yaw -= velocity.length() / 6 * delta * left_stick_pressure
 	
-	
+	$RichTextLabel.text = str(jump_num)
 	state_handler(delta)
-	if Input.is_action_just_pressed("circle"):
-		apply_target(delta)
-		apply_magnetism(delta)
 	camera_smooth_follow(delta)
 	move_and_slide()
 	
@@ -149,29 +163,31 @@ func state_handler(delta: float) -> void:
 		var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
 		if distance_to_player == 0:
 			state = ON_TARGET
-	elif not is_on_floor() and state != ON_TARGET:
+		else:
+			state = TO_TARGET
+	elif not is_on_floor() and state != ON_TARGET and state != TO_TARGET:
 		state = AIR
 	elif state != ON_TARGET:
 		state = FLOOR
 	
 
 func jump():
-	sly_mesh.anim_tree.set("parameters/Jump/request", 1)
-	if state == FLOOR:
-		velocity.y += JUMP_VELOCITY
-		jump_num += 1
-	elif state != ON_TARGET:
-		if jump_num < 2:
-			jump_num += 1
+	speed_mult = 1.25
+	jump_num += 1
+	if jump_num < 2:
+		#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
+		if state == FLOOR or state == ON_TARGET:
+			velocity.y += JUMP_VELOCITY
+		else:
 			air_mult = 1.0
 			speed_mult = 1.0
-			if velocity.y > 2.5:  # Rising phase of the first jump
+			if velocity.y > 3.15:  # Rising phase of the first jump
 				#manual_move_cam = true
-				velocity.y += (2.21 / velocity.y * 2.21)/1.25 # Smaller boost if rising
-			elif velocity.y < 2.21 and velocity.y > 0:
-				velocity.y += (2.21 + velocity.y/2.21)/1.25
+				velocity.y += (3.15 / velocity.y * 3.15) / 1.3 # Smaller boost if rising
+			elif velocity.y <= 3.15 and velocity.y > 0: # Midpoint of a jump
+				velocity.y += (3.15 + velocity.y/3.15) / 1.54
 			else:  # Falling phase of the jump
-				velocity.y += 2.21 - velocity.y
+				velocity.y += 3.15 - velocity.y / 1.54
 	
 
 func apply_target(delta):
@@ -204,14 +220,14 @@ func apply_magnetism(delta): # the holy grail of magnetism
 			#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
 		if distance_to_player < 1 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 			velocity = Vector3.ZERO # perfect snapping
-			$CollisionShape3D.disabled = true
+			#$CollisionShape3D.disabled = true
 			global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.125 / (distance_to_player + 0.125))
 			global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.125 / (distance_to_player + 0.125))
 			global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.125 / (distance_to_player + 0.125))
-		else:
-			$CollisionShape3D.disabled = false
-	else:
-		$CollisionShape3D.disabled = false
+		#else:
+			#$CollisionShape3D.disabled = false
+	#else:
+		#$CollisionShape3D.disabled = false
 	
 
 func camera_smooth_follow(delta):
@@ -223,7 +239,7 @@ func camera_smooth_follow(delta):
 	var cam_distance = (cam_to_player_x + cam_to_player_y + cam_to_player_z) / 3
 	var tform_mult
 	var offsetform = global_transform.origin + global_transform.basis.z * 1
-	var camera_length = -camera_parent.pitch * 4
+	var camera_length = -camera_parent.pitch * 6
 	var cam_max
 	var cam_min
 	var lerp_val
@@ -232,7 +248,7 @@ func camera_smooth_follow(delta):
 	var add = 6
 	cam_max = 0
 	cam_min = 0
-	tform_mult = 1.15
+	tform_mult = 1.0
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
@@ -248,7 +264,7 @@ func camera_smooth_follow(delta):
 		#elif not $"CollisionShape3D/Cam Y Ray".is_colliding():
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
 		else:
-			if velocity.y <= -1 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
+			if velocity.y <= -4 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.1)
 	else:
 		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.055)
@@ -257,9 +273,6 @@ func camera_smooth_follow(delta):
 	ray_to_cam.look_at(camera.global_position)
 	ray_to_cam.target_position = Vector3(0,0,-ray_to_cam_distance.length())
 	
-func ease_in_out(t: float) -> float:
-	# Cubic easing function for smooth in-out
-	return t * t * (3 - 2 * t)
 
 func _on_target_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("target"):
