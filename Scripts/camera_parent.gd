@@ -3,6 +3,7 @@ extends Node3D
 @onready var camera_return = $CameraTarget/Camera_Return
 
 @export var camera_target = Node3D
+@export var camera_container = Node3D
 @export var camera_player = CharacterBody3D
 @export var camera = Camera3D
 @export var pitch_max = 42
@@ -19,8 +20,8 @@ var distance = Vector3()
 
 var yaw = float()
 var pitch = float()
-var yaw_sens = 0.0015
-var pitch_sens = 0.0015
+var yaw_sens = 0.001
+var pitch_sens = 0.001
 
 var default_camera_offset := Vector3(0, 0, -4.5)
 
@@ -64,7 +65,7 @@ func _physics_process(delta):
 		var wall_detect = camera_player.ray_to_cam.get_collider()
 		var wall_distance = wall_detect.position - camera.global_position
 		if not wall_detect.is_in_group("player"):
-			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.9)
+			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.8)
 
 func return_camera_to_position(delta):
 	camera.global_position = camera.global_position.lerp(camera_return.global_transform.origin, 0.015)

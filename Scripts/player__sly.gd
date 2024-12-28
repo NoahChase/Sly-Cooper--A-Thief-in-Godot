@@ -12,6 +12,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var state = FLOOR
 
 @onready var ray_to_cam = $"To Cam RayCast"
+@onready var rot_container = $"Body Mesh Container"
 
 @onready var speed_mult = 1.0
 @onready var air_mult = 1.0
@@ -42,7 +43,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	
+	state_handler(delta)
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
 	
@@ -50,7 +51,10 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		jump()
 		
-	if Input.is_action_just_pressed("circle"):
+	if Input.is_action_just_pressed("circle") and state == AIR:
+		$"Body Mesh Container/AnimationPlayer".play("spin")
+		$"Target Area/AnimationPlayer".play("detect targets")
+	if $"Target Area/CollisionShape3D".disabled == false and state == AIR:
 		apply_target(delta)
 		apply_magnetism(delta)
 	
@@ -59,6 +63,7 @@ func _physics_process(delta: float) -> void:
 		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		sly_mesh.anim_tree.deterministic = false
 		jump_num = 0
+		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.05, 0.05)
@@ -68,7 +73,7 @@ func _physics_process(delta: float) -> void:
 			air_mult = 1.0
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 			sly_mesh.anim_tree.deterministic = false
-		#$RichTextLabel.text = str("AIR")
+		$RichTextLabel3.text = str("AIR")
 		
 		if velocity.y > 0:
 			gravmult = 1.0
@@ -83,16 +88,19 @@ func _physics_process(delta: float) -> void:
 		air_mult = 1.0
 		speed_mult = 1.0
 	if state == TO_TARGET and target != null:
-		#$RichTextLabel.text = str("TO TARGET")
+		jump_num = 0
+		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
+		$RichTextLabel3.text = str("TO TARGET", " : ", target)
 		apply_magnetism(delta)
-		if target == null or velocity.y > 0:
-			state = AIR
+		velocity += get_gravity() * delta
+		#if target == null or velocity.y > 0:
+			#state = AIR
 	elif state == ON_TARGET and target != null:
+		jump_num = 0
 		apply_magnetism(delta)
 		#$CollisionShape3D.disabled = false
-		#$RichTextLabel.text = str("ON TARGET", " : ", target)
+		$RichTextLabel3.text = str("ON TARGET", " : ", target)
 		global_transform.origin = target.global_transform.origin
-		
 		if target == null:
 			state = AIR
 	else:
@@ -137,13 +145,9 @@ func _physics_process(delta: float) -> void:
 
 	# Adjust rotation smoothing based on player movement
 	var look_val = 0.15 * air_mult * speed_mult
-
-	if state == AIR:
-		$"Body Mesh Container".rotation.y += angle_difference * look_val
-	elif left_stick_pressure != 0:
-		$"Body Mesh Container".rotation.y += angle_difference * look_val
+	$"Body Mesh Container".rotation.y += angle_difference * look_val
 	$"Look_At Rotation".look_at(position + direction)
-
+	
 	# Directional 2D vector for additional calculations (if needed)
 	var direction_2d = Vector2(direction.x, direction.z)
 # Camera Rotation
@@ -153,7 +157,6 @@ func _physics_process(delta: float) -> void:
 		camera_parent.yaw -= velocity.length() / 6 * delta * left_stick_pressure
 	
 	$RichTextLabel.text = str(jump_num)
-	state_handler(delta)
 	camera_smooth_follow(delta)
 	move_and_slide()
 	
@@ -165,6 +168,8 @@ func state_handler(delta: float) -> void:
 			state = ON_TARGET
 		else:
 			state = TO_TARGET
+		if state == ON_TARGET and distance_to_player > 0.5:
+			state = AIR
 	elif not is_on_floor() and state != ON_TARGET and state != TO_TARGET:
 		state = AIR
 	elif state != ON_TARGET:
@@ -176,8 +181,11 @@ func jump():
 	jump_num += 1
 	if jump_num < 2:
 		#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
-		if state == FLOOR or state == ON_TARGET:
+		if state == FLOOR:
 			velocity.y += JUMP_VELOCITY
+		elif state == ON_TARGET or state == TO_TARGET:
+			target = null
+			velocity.y += JUMP_VELOCITY + 0.25
 		else:
 			air_mult = 1.0
 			speed_mult = 1.0
@@ -214,16 +222,16 @@ func apply_magnetism(delta): # the holy grail of magnetism
 	if target != null and velocity.y < 0:  # No magnetism if jumping
 		var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 		state = TO_TARGET
-		if distance_to_player < 6 and global_transform.origin.y >= target.global_transform.origin.y - 0.25: # natural move toward
+		if global_transform.origin.y >= target.global_transform.origin.y - 0.25: # natural move toward
 			var magnet_direction = (target.global_transform.origin - global_transform.origin).normalized()
-			velocity = lerp(velocity, magnet_direction * SPEED * 2.25, 0.8 / (distance_to_player + 0.8))
+			velocity = magnet_direction * SPEED * 2
 			#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
 		if distance_to_player < 1 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 			velocity = Vector3.ZERO # perfect snapping
 			#$CollisionShape3D.disabled = true
 			global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.125 / (distance_to_player + 0.125))
-			global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.125 / (distance_to_player + 0.125))
-			global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.125 / (distance_to_player + 0.125))
+			global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.25 / (distance_to_player + 0.25))
+			global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.25 / (distance_to_player + 0.25))
 		#else:
 			#$CollisionShape3D.disabled = false
 	#else:

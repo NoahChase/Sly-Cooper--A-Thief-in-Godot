@@ -87,7 +87,7 @@ transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.830
 camera_parent = NodePath("../Camera Parent")
 
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("2_jwnsc")]
-transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 0.000366688, 0)
+transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 16.5004, 0)
 camera_player = NodePath("../Player_ Sly")
 pitch_max = 45
 aim_pitch_max = 0
@@ -1370,3 +1370,6 @@ shape = SubResource("ConcavePolygonShape3D_i8e8n")
 
 [node name="Target Point" parent="." instance=ExtResource("3_ox1mo")]
 transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.000920653, 1.00037, 2.5)
+
+[node name="Target Point2" parent="." instance=ExtResource("3_ox1mo")]
+transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, -1.99908, 15.0004, -9)
