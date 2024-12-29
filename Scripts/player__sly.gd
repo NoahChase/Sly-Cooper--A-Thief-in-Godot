@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 ## const
-const SPEED = 3.32 #really 3.32 #jump distance #4.25m, double jump distance #m
-const JUMP_VELOCITY = 6.3 #really 6.26 $single jump 2m, double jump 3m
+const SPEED = 3.74 #really 3.32 #jump distance #4.25m, double jump distance #m
+const JUMP_VELOCITY = 8.85 #really 6.26 $single jump 2m, double jump 3m
 
 ## enum
 enum {FLOOR, AIR, TO_TARGET, ON_TARGET}
@@ -43,6 +43,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
+	$RichTextLabel4.text = str(velocity.y)
 	state_handler(delta)
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
@@ -66,7 +67,7 @@ func _physics_process(delta: float) -> void:
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
-			air_mult = lerp(air_mult, 0.05, 0.05)
+			air_mult = lerp(air_mult, 0.01, 0.09)
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 			sly_mesh.anim_tree.deterministic = true
 		else:
@@ -75,12 +76,12 @@ func _physics_process(delta: float) -> void:
 			sly_mesh.anim_tree.deterministic = false
 		$RichTextLabel3.text = str("AIR")
 		
-		if velocity.y > 0:
-			gravmult = 1.0
+		if velocity.y > -9.8:
+			gravmult = 1.75
 			#if jump_num <= 1:
 				#speed_mult = lerp(speed_mult, 1.125, 1)
 		else:
-			gravmult = lerp(gravmult, 1.25, 0.25)
+			gravmult = lerp(gravmult, 1.0, 0.25)
 			#speed_mult = lerp(speed_mult, 1.0, 1)
 		velocity += get_gravity() * delta * gravmult
 			
@@ -188,13 +189,10 @@ func jump():
 		else:
 			air_mult = 1.0
 			speed_mult = 1.0
-			if velocity.y > 3.15:  # Rising phase of the first jump
-				#manual_move_cam = true
-				velocity.y += (3.15 / velocity.y * 3.15) / 1.2 # Smaller boost if rising
-			elif velocity.y <= 3.15 and velocity.y > 0: # Midpoint of a jump
-				velocity.y += (3.15 + velocity.y/3.15) / 2
-			else:  # Falling phase of the jump
-				velocity.y += 3.15 - velocity.y / 2
+			if velocity.y >= 0:
+				velocity.y += 2.5
+			else:
+				velocity.y += (-velocity.y / 1.5) + 2.75 * 1.5
 	
 
 func apply_target(delta):
@@ -254,7 +252,7 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5.25
+	var add = 5
 	cam_max = 0
 	cam_min = 0
 	tform_mult = 1
@@ -274,7 +272,7 @@ func camera_smooth_follow(delta):
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
 		else:
 			if velocity.y <= -4 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.1)
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.2)
 	else:
 		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.04)
 

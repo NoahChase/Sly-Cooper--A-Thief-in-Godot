@@ -7,6 +7,33 @@
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
 
+[sub_resource type="Animation" id="Animation_qor3j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 1, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_gekru"]
 resource_name = "spin"
 length = 0.6
@@ -35,33 +62,6 @@ tracks/1/keys = {
 "values": [Vector3(0, 1, 0), Vector3(0, 1.5, 0), Vector3(0, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_qor3j"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 1, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xn228"]
 _data = {
 "RESET": SubResource("Animation_qor3j"),
@@ -71,6 +71,21 @@ _data = {
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_h1oyc"]
 height = 6.0
 radius = 3.0
+
+[sub_resource type="Animation" id="Animation_hl1qu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape3D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_qgm1o"]
 resource_name = "detect targets"
@@ -86,21 +101,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_hl1qu"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CollisionShape3D:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rtc2p"]
@@ -140,7 +140,7 @@ mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
 
 [node name="SlyCooper_RigNoPhysics" parent="Body Mesh Container" node_paths=PackedStringArray("player") instance=ExtResource("2_syly3")]
-transform = Transform3D(-1.3, 0, -1.96295e-07, 0, 1.3, 0, 1.96295e-07, 0, -1.3, 0, -1, 0.0604469)
+transform = Transform3D(-1.2, 0, -1.81195e-07, 0, 1.2, 0, 1.81195e-07, 0, -1.2, 0, -1, 0.0604469)
 player = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body Mesh Container"]
@@ -153,7 +153,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.125, 0)
 shape = SubResource("CylinderShape3D_h1oyc")
 disabled = true
 
@@ -189,6 +189,14 @@ offset_left = 11.0
 offset_top = 322.0
 offset_right = 626.0
 offset_bottom = 942.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="."]
+offset_left = 1.0
+offset_top = 546.0
+offset_right = 616.0
+offset_bottom = 1166.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 

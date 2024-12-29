@@ -50,8 +50,8 @@ func _physics_process(delta):
 		stick_vector = Vector2.ZERO
 
 # Adjust yaw and pitch with dynamic scaling
-	yaw -= stick_vector.x * yaw_sens * delta * 1.75
-	pitch -= stick_vector.y * pitch_sens * delta * 1.75
+	yaw += stick_vector.x * yaw_sens * delta * 1.75
+	pitch += stick_vector.y * pitch_sens * delta * 1.75
 
 # Apply smooth interpolation to the camera
 	camera_target.rotation.y = lerp(camera_target.rotation.y, yaw, delta * 15)
