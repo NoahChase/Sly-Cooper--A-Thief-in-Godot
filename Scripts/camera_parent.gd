@@ -20,8 +20,8 @@ var distance = Vector3()
 
 var yaw = float()
 var pitch = float()
-var yaw_sens = 0.001
-var pitch_sens = 0.001
+var yaw_sens = 0.1
+var pitch_sens = 0.1
 
 var default_camera_offset := Vector3(0, 0, -4.5)
 
@@ -50,8 +50,8 @@ func _physics_process(delta):
 		stick_vector = Vector2.ZERO
 
 # Adjust yaw and pitch with dynamic scaling
-	yaw += stick_vector.x * yaw_sens * delta
-	pitch += stick_vector.y * pitch_sens * delta
+	yaw -= stick_vector.x * yaw_sens * delta * 1.75
+	pitch -= stick_vector.y * pitch_sens * delta * 1.75
 
 # Apply smooth interpolation to the camera
 	camera_target.rotation.y = lerp(camera_target.rotation.y, yaw, delta * 15)
@@ -60,6 +60,9 @@ func _physics_process(delta):
 	pitch = clamp(pitch, deg_to_rad(pitch_min), deg_to_rad(pitch_max))
 	yaw_sens = 1.5
 	pitch_sens = 1.5
+
+	if camera_player.direction:
+		pitch = lerp(pitch, -0.45, 0.015)
 
 	if camera_player.ray_to_cam.is_colliding():
 		var wall_detect = camera_player.ray_to_cam.get_collider()

@@ -19,12 +19,20 @@ background_mode = 1
 background_color = Color(0.0313726, 0.109804, 0.235294, 1)
 sky = SubResource("Sky_wipc4")
 ambient_light_source = 2
-ambient_light_color = Color(0.353379, 0.371796, 0.438269, 1)
+ambient_light_color = Color(0.5394, 0.556863, 0.62, 1)
 ssao_intensity = 1.0
-volumetric_fog_density = 0.1
-volumetric_fog_albedo = Color(0.352941, 0.372549, 0.439216, 1)
-volumetric_fog_anisotropy = 0.6
+fog_enabled = true
+fog_light_color = Color(0.1496, 0.213067, 0.34, 1)
+fog_density = 0.0058
+volumetric_fog_density = 0.3254
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+volumetric_fog_emission_energy = 1024.0
+volumetric_fog_gi_inject = 0.04
 volumetric_fog_length = 12.0
+volumetric_fog_detail_spread = 0.5
+volumetric_fog_ambient_inject = 0.16
+volumetric_fog_sky_affect = 0.0
+adjustment_saturation = 0.8
 
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
 size = Vector2(50, 50)
@@ -77,7 +85,7 @@ data = PackedVector3Array(-1, 0.5, 1, 1, 0.5, 1, -1, -0.5, 1, 1, 0.5, 1, 1, -0.5
 environment = SubResource("Environment_kj0pv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 9.15489e-12, -0.00020944, 0.00020944, -4.37297e-08, 1, 0, -1, -4.37297e-08, 0.0011301, 0.000366688, 0)
+transform = Transform3D(1, 9.15489e-12, -0.00020944, 0.00020944, -4.37297e-08, 1, 0, -1, -4.37297e-08, 0, 0, 0)
 light_color = Color(0.462204, 0.48785, 0.530248, 1)
 shadow_enabled = true
 shadow_blur = 1.5
@@ -90,6 +98,7 @@ camera_parent = NodePath("../Camera Parent")
 transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 16.5004, 0)
 camera_player = NodePath("../Player_ Sly")
 pitch_max = 45
+pitch_min = -89
 aim_pitch_max = 0
 aim_pitch_min = 0
 

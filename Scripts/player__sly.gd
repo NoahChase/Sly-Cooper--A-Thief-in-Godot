@@ -126,7 +126,6 @@ func _physics_process(delta: float) -> void:
 	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult * left_stick_pressure, 0.0, vertical * air_mult * speed_mult * left_stick_pressure).rotated(Vector3.UP, camera_T)).normalized()
 
 	if direction:
-		camera_parent.pitch = lerp(camera_parent.pitch, -0.35, 0.01)
 		
 		var target_velocity = direction * SPEED * speed_mult
 		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure, 0.5 * air_mult)
@@ -191,11 +190,11 @@ func jump():
 			speed_mult = 1.0
 			if velocity.y > 3.15:  # Rising phase of the first jump
 				#manual_move_cam = true
-				velocity.y += (3.15 / velocity.y * 3.15) / 1.3 # Smaller boost if rising
+				velocity.y += (3.15 / velocity.y * 3.15) / 1.2 # Smaller boost if rising
 			elif velocity.y <= 3.15 and velocity.y > 0: # Midpoint of a jump
-				velocity.y += (3.15 + velocity.y/3.15) / 1.54
+				velocity.y += (3.15 + velocity.y/3.15) / 2
 			else:  # Falling phase of the jump
-				velocity.y += 3.15 - velocity.y / 1.54
+				velocity.y += 3.15 - velocity.y / 2
 	
 
 func apply_target(delta):
@@ -219,17 +218,19 @@ func apply_target(delta):
 	
 
 func apply_magnetism(delta): # the holy grail of magnetism
-	if target != null and velocity.y < 0:  # No magnetism if jumping
+	if target != null:  # No magnetism if jumping
 		var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 		state = TO_TARGET
 		if global_transform.origin.y >= target.global_transform.origin.y - 0.25: # natural move toward
 			var magnet_direction = (target.global_transform.origin - global_transform.origin).normalized()
-			velocity = magnet_direction * SPEED * 2
+			velocity.x = magnet_direction.x * SPEED * 2
+			velocity.y = magnet_direction.y * SPEED * 1.5
+			velocity.z = magnet_direction.z * SPEED * 2
 			#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
-		if distance_to_player < 1 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
+		if distance_to_player < 0.25 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 			velocity = Vector3.ZERO # perfect snapping
 			#$CollisionShape3D.disabled = true
-			global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.125 / (distance_to_player + 0.125))
+			global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.2 / (distance_to_player + 0.2))
 			global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.25 / (distance_to_player + 0.25))
 			global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.25 / (distance_to_player + 0.25))
 		#else:
@@ -253,10 +254,10 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 6
+	var add = 5.25
 	cam_max = 0
 	cam_min = 0
-	tform_mult = 1.0
+	tform_mult = 1
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
@@ -268,14 +269,14 @@ func camera_smooth_follow(delta):
 	
 	if state == AIR:
 		if manual_move_cam == true:
-			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.055)
+			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.04)
 		#elif not $"CollisionShape3D/Cam Y Ray".is_colliding():
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
 		else:
 			if velocity.y <= -4 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.1)
 	else:
-		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.055)
+		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.15, 0.04)
 
 	var ray_to_cam_distance =  ray_to_cam.global_transform.origin - camera.global_transform.origin
 	ray_to_cam.look_at(camera.global_position)
