@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c16aev7j644f1" path="res://Scenes/Character Mesh/sly_cooper_rig_no_physics.tscn" id="2_syly3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
+radius = 0.3
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
 
@@ -116,16 +117,21 @@ radial_segments = 8
 rings = 4
 
 [node name="Player_ Sly" type="CharacterBody3D" node_paths=PackedStringArray("sly_mesh")]
+floor_constant_speed = true
 floor_max_angle = 0.506145
 script = ExtResource("1_jucx6")
 sly_mesh = NodePath("Body Mesh Container/SlyCooper_RigNoPhysics")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("SphereShape3D_aa5ra")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_aa5ra")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("SphereShape3D_aa5ra")
 
 [node name="To Cam RayCast" type="RayCast3D" parent="."]
@@ -140,7 +146,7 @@ mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
 
 [node name="SlyCooper_RigNoPhysics" parent="Body Mesh Container" node_paths=PackedStringArray("player") instance=ExtResource("2_syly3")]
-transform = Transform3D(-1.2, 0, -1.81195e-07, 0, 1.2, 0, 1.81195e-07, 0, -1.2, 0, -1, 0.0604469)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 0, -1, 0.0604469)
 player = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body Mesh Container"]

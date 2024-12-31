@@ -73,19 +73,21 @@ func _physics_process(delta: float) -> void:
 	
 	## States
 	if state == FLOOR:
+		
 		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
-		sly_mesh.anim_tree.deterministic = false
+		if not direction:
+			sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
+		else:
+			sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
 		jump_num = 0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.01, 0.09)
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
-			sly_mesh.anim_tree.deterministic = true
 		else:
 			air_mult = 1.0
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
-			sly_mesh.anim_tree.deterministic = false
 		$RichTextLabel3.text = str("AIR")
 		
 		if velocity.y > -9.8:
