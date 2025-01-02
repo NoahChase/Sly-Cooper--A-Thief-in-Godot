@@ -102,6 +102,10 @@ right_stick_left={
 ]
 }
 
+[physics]
+
+3d/default_gravity=7.0
+
 [rendering]
 
 occlusion_culling/bvh_build_quality=0

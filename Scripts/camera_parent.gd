@@ -62,7 +62,7 @@ func _physics_process(delta):
 	pitch_sens = 1.5
 
 	if camera_player.direction:
-		pitch = lerp(pitch, -0.45, 0.015)
+		pitch = lerp(pitch, -0.15, 0.015)
 
 	if camera_player.ray_to_cam.is_colliding():
 		var wall_detect = camera_player.ray_to_cam.get_collider()
