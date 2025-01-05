@@ -17,14 +17,16 @@ config/icon="res://icon.svg"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=640
+window/size/viewport_height=480
 window/size/mode=3
 window/size/borderless=true
+window/stretch/mode="viewport"
 
 [global_group]
 
 target=""
+floor=""
 
 [input]
 
@@ -104,7 +106,7 @@ right_stick_left={
 
 [physics]
 
-3d/default_gravity=7.0
+3d/default_gravity=6.5
 
 [rendering]
 
@@ -115,10 +117,7 @@ reflections/sky_reflections/ggx_samples=24
 reflections/reflection_atlas/reflection_size=128
 reflections/reflection_atlas/reflection_count=48
 global_illumination/gi/use_half_resolution=true
-textures/default_filters/anisotropic_filtering_level=1
 environment/ssao/blur_passes=3
-textures/decals/filter=2
-textures/light_projectors/filter=2
 occlusion_culling/occlusion_rays_per_thread=256
 occlusion_culling/use_occlusion_culling=true
 lights_and_shadows/positional_shadow/atlas_size=2048

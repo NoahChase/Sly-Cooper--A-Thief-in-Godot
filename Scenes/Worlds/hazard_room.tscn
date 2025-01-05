@@ -16,26 +16,27 @@ sky_material = SubResource("ProceduralSkyMaterial_0b5fg")
 
 [sub_resource type="Environment" id="Environment_kj0pv"]
 background_mode = 1
-background_color = Color(0.0313726, 0.109804, 0.235294, 1)
+background_color = Color(0.16, 0.2, 0.32, 1)
 sky = SubResource("Sky_wipc4")
 ambient_light_source = 2
-ambient_light_color = Color(0.6432, 0.649007, 0.67, 1)
+ambient_light_color = Color(0.6708, 0.71448, 0.78, 1)
 ssao_intensity = 1.0
 fog_enabled = true
-fog_light_color = Color(0.1496, 0.213067, 0.34, 1)
-fog_density = 0.0058
-volumetric_fog_density = 0.3254
-volumetric_fog_albedo = Color(0, 0, 0, 1)
-volumetric_fog_emission_energy = 1024.0
-volumetric_fog_gi_inject = 0.04
-volumetric_fog_length = 12.0
+fog_light_color = Color(0.03, 0.0475, 0.1, 1)
+fog_light_energy = 5.0
+fog_density = 0.03
+volumetric_fog_density = 0.0322
+volumetric_fog_emission_energy = 5.66
+volumetric_fog_gi_inject = 0.0
+volumetric_fog_length = 6.0
 volumetric_fog_detail_spread = 0.5
 volumetric_fog_ambient_inject = 0.16
-volumetric_fog_sky_affect = 0.0
-adjustment_saturation = 0.8
+adjustment_enabled = true
+adjustment_brightness = 0.95
+adjustment_contrast = 1.04
 
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
-size = Vector2(50, 50)
+size = Vector2(500, 500)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_va7e5"]
 noise_type = 3
@@ -43,7 +44,7 @@ frequency = 0.025
 fractal_octaves = 10
 fractal_lacunarity = 1.225
 fractal_gain = 2.61
-fractal_weighted_strength = 0.5
+fractal_weighted_strength = 0.25
 domain_warp_enabled = true
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gbqxu"]
@@ -56,10 +57,10 @@ noise = SubResource("FastNoiseLite_va7e5")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83g37"]
 albedo_color = Color(0.53881, 0.516233, 0.505785, 1)
 albedo_texture = SubResource("NoiseTexture2D_gbqxu")
-uv1_scale = Vector3(12, 12, 1)
+uv1_scale = Vector3(120, 120, 1)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_nb313"]
-data = PackedVector3Array(30, -30, 0, -30, -30, 0, 30, 30, 0, -30, -30, 0, -30, 30, 0, 30, 30, 0)
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yevve"]
+data = PackedVector3Array(250, -250, 0, -250, -250, 0, 250, 250, 0, -250, -250, 0, -250, 250, 0, 250, 250, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bhtuh"]
 size = Vector3(2, 2, 2)
@@ -135,7 +136,7 @@ environment = SubResource("Environment_kj0pv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 9.15489e-12, -0.00020944, 0.00020944, -4.37297e-08, 1, 0, -1, -4.37297e-08, 0, 0, 0)
-light_color = Color(0.462204, 0.48785, 0.530248, 1)
+light_color = Color(0.303233, 0.303233, 0.303233, 1)
 shadow_enabled = true
 shadow_blur = 1.5
 
@@ -151,7 +152,7 @@ pitch_min = -88
 aim_pitch_max = 0
 aim_pitch_min = 0
 
-[node name="Floor" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="." groups=["floor"]]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
@@ -160,7 +161,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_83g37")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("ConcavePolygonShape3D_nb313")
+shape = SubResource("ConcavePolygonShape3D_yevve")
 
 [node name="Box 2_" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -2)
@@ -1658,7 +1659,7 @@ mesh = SubResource("CylinderMesh_p2hft")
 shape = SubResource("ConcavePolygonShape3D_d0rbw")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.33333, 0.5, 11.5)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.33333, 0.5, 13)
 material_override = SubResource("StandardMaterial3D_3x5g7")
 mesh = SubResource("CylinderMesh_p2hft")
 
@@ -1676,3 +1677,22 @@ mesh = SubResource("CylinderMesh_p2hft")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D6/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_d0rbw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 2.5, 0)
+light_color = Color(0.682353, 0.623529, 0.443137, 1)
+distance_fade_enabled = true
+distance_fade_begin = 15.0
+distance_fade_length = 15.0
+omni_range = 6.0
+omni_attenuation = 0.5
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.5, -13)
+light_color = Color(0.64, 0.5936, 0.4544, 1)
+shadow_opacity = 0.5
+distance_fade_enabled = true
+distance_fade_begin = 15.0
+distance_fade_length = 15.0
+omni_range = 6.0
+omni_attenuation = 0.5

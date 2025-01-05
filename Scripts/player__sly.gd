@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 ## const
-const SPEED = 3.954 #jump distance #4m, double jump distance #?m
-const JUMP_VELOCITY = 8.366 #single jump 2m, cozy double jump 3m
+const SPEED = 3.55 #jump distance #4m, double jump distance #?m
+const JUMP_VELOCITY = 8.06 #single jump 2m, cozy double jump 3m
 
 ## enum
 enum {FLOOR, AIR, TO_TARGET, ON_TARGET}
@@ -35,16 +35,18 @@ var camera_T = float()
 var horizontal
 var vertical
 var manual_move_cam
+var floor_or_roof
 
 func _ready() -> void:
 	camera_target = camera_parent.camera_target
 	camera = camera_parent.camera
 
 func _process(delta: float) -> void:
+	
 	# Constants for the calculation
-	var new_gravity = 7 * 2.5  # Gravity (m/s^2)
-	var jump_velocity = 8.85  # Initial vertical velocity (m/s)
-	var desired_jump_distance = 4 # Desired horizontal distance (m)
+	var new_gravity = 6.5 * 2.5  # Gravity (m/s^2)
+	var jump_velocity = 8  # Initial vertical velocity (m/s)
+	var desired_jump_distance = 3.5 # Desired horizontal distance (m)
 	var desired_jump_height = 2
 # Time to reach the peak of the jump and total air time
 	var time_to_peak = jump_velocity / new_gravity
@@ -58,6 +60,7 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	floor_or_roof = $"Floor Ray".get_collider()
 	$RichTextLabel4.text = str(velocity.y)
 	var left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
@@ -78,7 +81,6 @@ func _physics_process(delta: float) -> void:
 	
 	## States
 	if state == FLOOR:
-		
 		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		if not direction:
 			var any_not_colliding = false
@@ -121,7 +123,7 @@ func _physics_process(delta: float) -> void:
 		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		$RichTextLabel3.text = str("TO TARGET", " : ", target)
 		apply_magnetism(delta)
-		if velocity.y > -7:
+		if velocity.y > -6.5:
 			gravmult = 2.5
 			#if jump_num <= 1:
 				#speed_mult = lerp(speed_mult, 1.125, 1)
@@ -231,9 +233,9 @@ func jump():
 			air_mult = 1.0
 			speed_mult = 1.0
 			if velocity.y >= 0:
-				velocity.y += 2.865
+				velocity.y += 2.75
 			else:
-				velocity.y += (-velocity.y) + 5.865
+				velocity.y += (-velocity.y) + 5.75
 	
 
 func apply_target(delta):
@@ -304,7 +306,7 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5
+	var add = 5.25
 	cam_max = 0
 	cam_min = 0
 	tform_mult = 1
@@ -327,7 +329,7 @@ func camera_smooth_follow(delta):
 			if distance_to_player > 2:
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.0075)
 		else:
-			if velocity.y <= -7 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.14: # and not downward_raycast.is_colliding()
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.14: # and not downward_raycast.is_colliding()
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.2)
 	else:
 		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.04)

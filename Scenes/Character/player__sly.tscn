@@ -157,7 +157,7 @@ transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0.
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray4" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, -0.35)
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, -2.84217e-14, 0, 1, 0, 0, -0.25)
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray5" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
@@ -190,7 +190,7 @@ visible = false
 mesh = SubResource("SphereMesh_s3532")
 
 [node name="Floor Ray" type="RayCast3D" parent="."]
-target_position = Vector3(0, -0.75, 0)
+target_position = Vector3(0, -0.5, 0)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 offset_right = 40.0
@@ -214,10 +214,10 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
-offset_left = 1.0
-offset_top = 546.0
-offset_right = 616.0
-offset_bottom = 1166.0
+offset_left = -1.0
+offset_top = 362.0
+offset_right = 614.0
+offset_bottom = 982.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
