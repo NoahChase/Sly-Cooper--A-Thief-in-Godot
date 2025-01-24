@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=12 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" path="res://Scripts/player__sly.gd" id="1_jucx6"]
-[ext_resource type="PackedScene" uid="uid://c16aev7j644f1" path="res://Scenes/Character Mesh/sly_cooper_rig_no_physics.tscn" id="2_syly3"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
 
@@ -119,7 +118,7 @@ rings = 4
 floor_constant_speed = true
 floor_max_angle = 0.506145
 script = ExtResource("1_jucx6")
-sly_mesh = NodePath("Body Mesh Container/SlyCooper_RigNoPhysics")
+sly_mesh = NodePath("")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -136,33 +135,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46572, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body Mesh Container"]
-visible = false
 mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
-
-[node name="SlyCooper_RigNoPhysics" parent="Body Mesh Container" node_paths=PackedStringArray("player") instance=ExtResource("2_syly3")]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 0, -0.975, 0)
-player = NodePath("../..")
-
-[node name="tip toe ray" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0.35, 0, 0)
-target_position = Vector3(0, -0.25, 0)
-
-[node name="tip toe ray2" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, -0.35, 0, 0)
-target_position = Vector3(0, -0.25, 0)
-
-[node name="tip toe ray3" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 1.42109e-14, 0, 1, 0, -1.42109e-14, 0, 1, 0, 0, 0.35)
-target_position = Vector3(0, -0.25, 0)
-
-[node name="tip toe ray4" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 2.84217e-14, 0, 1, 0, -2.84217e-14, 0, 1, 0, 0, -0.25)
-target_position = Vector3(0, -0.25, 0)
-
-[node name="tip toe ray5" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(1, 0, 5.68434e-14, 0, 1, 0, -5.68434e-14, 0, 1, 1.776e-08, 0.20528, 0.232381)
-target_position = Vector3(0, 0, 0.25)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body Mesh Container"]
 libraries = {
