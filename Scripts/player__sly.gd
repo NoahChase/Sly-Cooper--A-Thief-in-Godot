@@ -81,28 +81,28 @@ func _physics_process(delta: float) -> void:
 	
 	## States
 	if state == FLOOR:
-		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		if not direction:
 			var any_not_colliding = false
 			for ray in tiptoe_rays:
 				if not ray.is_colliding() and not $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray5".is_colliding():
 					any_not_colliding = true
-				if any_not_colliding:
-					sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
-				else:
-					sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
-		else:
-			sly_mesh.anim_tree.set("parameters/Input Timescale/scale", left_stick_pressure)
-			sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
+				#if any_not_colliding:
+					#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
+				#else:
+					#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
+		#else:
+			#sly_mesh.anim_tree.set("parameters/Input Timescale/scale", left_stick_pressure)
+			#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
 		jump_num = 0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.02, 0.08)
-			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
+			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		else:
 			air_mult = 1.0
-			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		$RichTextLabel3.text = str("AIR")
 		
 		if velocity.y > -7:
@@ -120,7 +120,7 @@ func _physics_process(delta: float) -> void:
 	if state == TO_TARGET and target != null:
 		jump_num = 0
 		air_mult = 0.0
-		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
+		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		$RichTextLabel3.text = str("TO TARGET", " : ", target)
 		apply_magnetism(delta)
 		if velocity.y > -6.5:
@@ -233,7 +233,7 @@ func jump():
 			jump_num = 0
 			state = AIR
 		elif state != TO_TARGET:
-			sly_mesh.anim_tree.set("parameters/Jump/request", 1)
+			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			speed_mult = 1.0
 			if velocity.y >= 0:
