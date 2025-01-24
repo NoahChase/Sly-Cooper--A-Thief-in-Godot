@@ -1,4 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://bj34qq52wpb60"]
+[gd_scene load_steps=13 format=3 uid="uid://bj34qq52wpb60"]
+
+[ext_resource type="Script" path="res://Scripts/target_point.gd" id="1_57eij"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ij1nr"]
 radius = 0.125
@@ -89,6 +91,7 @@ _data = {
 [node name="Target Point" type="StaticBody3D" groups=["target"]]
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("1_57eij")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ij1nr")

@@ -98,7 +98,7 @@ func _physics_process(delta: float) -> void:
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
-			air_mult = lerp(air_mult, 0.02, 0.09)
+			air_mult = lerp(air_mult, 0.02, 0.08)
 			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		else:
 			air_mult = 1.0
@@ -134,6 +134,7 @@ func _physics_process(delta: float) -> void:
 		#if target == null or velocity.y > 0:
 			#state = AIR
 	elif state == ON_TARGET and target != null:
+		target.player = self
 		jump_num = 0
 		air_mult = 1.0
 		manual_move_cam = true
@@ -205,8 +206,10 @@ func state_handler(delta: float) -> void:
 	if target != null:
 		var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
 		if distance_to_player <= 0.125:
+			target.player = self
 			state = ON_TARGET
 		else:
+			target.player = self
 			state = TO_TARGET
 		if state == ON_TARGET and distance_to_player > 0.5:
 			state = AIR
@@ -224,6 +227,7 @@ func jump():
 		if state == FLOOR:
 			velocity.y += JUMP_VELOCITY
 		elif state == ON_TARGET:
+			target.player = null
 			target = null
 			velocity.y += JUMP_VELOCITY
 			jump_num = 0

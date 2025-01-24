@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dewl2w5fkebud"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ru1tb"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 2.30962
+radial_segments = 6
+rings = 1
+
+[node name="test_rope_mesh" type="Node3D"]
+
+[node name="mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, 0, 0, 0)
+visible = false
+mesh = SubResource("CylinderMesh_ru1tb")
