@@ -65,8 +65,10 @@ func _physics_process(delta):
 		if camera_player.floor_or_roof == null or camera_player.floor_or_roof.is_in_group("floor"):
 			pitch = lerp(pitch, -0.2, 0.015)
 		else:
-			pitch = lerp(pitch, -0.6, 0.015)
-
+			if pitch > 0.2:
+				pitch = lerp(pitch, 0.6, 0.015)
+			else:
+				pitch = lerp(pitch, -0.6, 0.015)
 	if camera_player.ray_to_cam.is_colliding():
 		var wall_detect = camera_player.ray_to_cam.get_collider()
 		var wall_distance = wall_detect.position - camera.global_position
