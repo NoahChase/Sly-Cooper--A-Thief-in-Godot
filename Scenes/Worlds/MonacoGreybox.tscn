@@ -1,0 +1,95 @@
+[gd_scene load_steps=11 format=3 uid="uid://dxqr21q4g3u4w"]
+
+[ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="1_ebu6a"]
+[ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="2_2iiy1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yriwh"]
+sky_top_color = Color(0.475002, 0.212117, 0.286491, 1)
+sky_horizon_color = Color(0.719937, 0.453802, 0.234962, 1)
+sky_curve = 0.0861524
+ground_bottom_color = Color(0.412712, 0.194602, 0.0027835, 1)
+ground_horizon_color = Color(0.79595, 0.521523, 0.16202, 1)
+ground_curve = 0.0221914
+
+[sub_resource type="Sky" id="Sky_0evow"]
+sky_material = SubResource("ProceduralSkyMaterial_yriwh")
+
+[sub_resource type="Environment" id="Environment_upsl3"]
+background_mode = 2
+sky = SubResource("Sky_0evow")
+ssao_enabled = true
+ssao_intensity = 0.15
+ssil_enabled = true
+ssil_intensity = 0.25
+fog_light_color = Color(0.0944809, 0.122568, 0.224381, 1)
+fog_density = 0.002
+volumetric_fog_density = 0.0322
+volumetric_fog_emission_energy = 5.66
+volumetric_fog_gi_inject = 0.0
+volumetric_fog_length = 6.0
+volumetric_fog_detail_spread = 0.5
+volumetric_fog_ambient_inject = 0.16
+adjustment_contrast = 1.04
+
+[sub_resource type="QuadMesh" id="QuadMesh_frumx"]
+size = Vector2(500, 500)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tbxtb"]
+noise_type = 3
+frequency = 0.025
+fractal_octaves = 10
+fractal_lacunarity = 1.225
+fractal_gain = 2.61
+fractal_weighted_strength = 0.25
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gbqxu"]
+width = 128
+height = 128
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_tbxtb")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2pce"]
+albedo_color = Color(0.53881, 0.516233, 0.505785, 1)
+albedo_texture = SubResource("NoiseTexture2D_gbqxu")
+uv1_scale = Vector3(120, 120, 1)
+distance_fade_mode = 2
+distance_fade_min_distance = 280.0
+distance_fade_max_distance = 170.0
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_xn3j0"]
+data = PackedVector3Array(250, -250, 0, -250, -250, 0, 250, 250, 0, -250, -250, 0, -250, 250, 0, 250, 250, 0)
+
+[node name="MonacoGreybox" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_upsl3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.430338, 3.94734e-08, -0.902668, 0.902668, -1.88185e-08, 0.430338, -7.4408e-19, -1, -4.37297e-08, 0, 1.81612, 0)
+light_color = Color(0.881059, 0.576941, 0.370283, 1)
+shadow_enabled = true
+shadow_blur = 1.5
+
+[node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("1_ebu6a")]
+transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, -3.00212, 2.96533, -8)
+camera_parent = NodePath("../Camera Parent")
+
+[node name="Camera Parent" parent="." instance=ExtResource("2_2iiy1")]
+transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 16.5004, 0)
+pitch_max = 45
+pitch_min = -88
+aim_pitch_max = 0
+aim_pitch_min = 0
+
+[node name="Floor" type="StaticBody3D" parent="." groups=["floor"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_frumx")
+surface_material_override/0 = SubResource("StandardMaterial3D_e2pce")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("ConcavePolygonShape3D_xn3j0")
