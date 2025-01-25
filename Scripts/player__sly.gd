@@ -1,4 +1,5 @@
 extends CharacterBody3D
+## In GitHub, Belongs to Character Sly Cooper Branch
 
 ## const
 const SPEED = 3.55 #jump distance #4m, double jump distance #?m
