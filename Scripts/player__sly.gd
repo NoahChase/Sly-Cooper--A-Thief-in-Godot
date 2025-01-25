@@ -27,7 +27,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @export var camera_target: Node3D
 @export var camera_parent: Node3D
 @export var camera: Camera3D
-@export var sly_mesh: Node3D
+@onready var sly_mesh = $"Body Mesh Container/SlyCooper_RigNoPhysics"
 
 ## var
 var target
@@ -317,7 +317,7 @@ func camera_smooth_follow(delta):
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
-	var tform = $"Body Mesh Container/SlyCooper_RigNoPhysics".global_transform.origin - $"Body Mesh Container".global_transform.basis.z * tform_mult
+	var tform = sly_mesh.global_transform.origin - $"Body Mesh Container".global_transform.basis.z * tform_mult
 	$Basis_Offset.global_transform.origin.x = lerp($Basis_Offset.global_transform.origin.x, tform.x, cam_timer / 2 * lerp_val)
 	$Basis_Offset.global_transform.origin.z = lerp($Basis_Offset.global_transform.origin.z, tform.z, cam_timer / 2 * lerp_val)
 	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, 1)

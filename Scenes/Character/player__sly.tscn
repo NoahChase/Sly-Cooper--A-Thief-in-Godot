@@ -114,11 +114,10 @@ height = 0.25
 radial_segments = 8
 rings = 4
 
-[node name="Player_ Sly" type="CharacterBody3D" node_paths=PackedStringArray("sly_mesh")]
+[node name="Player_ Sly" type="CharacterBody3D"]
 floor_constant_speed = true
 floor_max_angle = 0.506145
 script = ExtResource("1_jucx6")
-sly_mesh = NodePath("")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

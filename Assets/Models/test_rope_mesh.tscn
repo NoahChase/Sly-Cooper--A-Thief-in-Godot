@@ -3,7 +3,7 @@
 [sub_resource type="CylinderMesh" id="CylinderMesh_ru1tb"]
 top_radius = 0.05
 bottom_radius = 0.05
-height = 2.23086
+height = 2.23885
 radial_segments = 6
 rings = 1
 
