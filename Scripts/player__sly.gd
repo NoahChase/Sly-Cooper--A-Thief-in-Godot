@@ -106,7 +106,7 @@ func _physics_process(delta: float) -> void:
 			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		$RichTextLabel3.text = str("AIR")
 		
-		if velocity.y > -7:
+		if velocity.y > -6.5:
 			gravmult = 2.5
 			#if jump_num <= 1:
 				#speed_mult = lerp(speed_mult, 1.125, 1)
@@ -237,7 +237,7 @@ func jump():
 			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			speed_mult = 1.0
-			if velocity.y >= 0:
+			if velocity.y >= 2.75:
 				velocity.y += 2.75
 			else:
 				velocity.y += (-velocity.y) + 5.75
