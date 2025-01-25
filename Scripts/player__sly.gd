@@ -1,4 +1,5 @@
 extends CharacterBody3D
+## In GitHub, Belongs to Character Sly Cooper Branch
 
 ## const
 const SPEED = 3.55 #jump distance #4m, double jump distance #?m
@@ -269,13 +270,13 @@ func apply_magnetism(delta): # the holy grail of magnetism
 		state = TO_TARGET
 		if global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
 			
-			velocity.x = lerp(velocity.x, magnet_direction.x * SPEED * 9.8, 0.25)
-			velocity.z = lerp(velocity.z, magnet_direction.z * SPEED * 9.8, 0.25)
+			velocity.x = lerp(velocity.x, magnet_direction.x * SPEED * 9.8, 0.2)
+			velocity.z = lerp(velocity.z, magnet_direction.z * SPEED * 9.8, 0.2)
 			
 			var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
 			
-			if not horizontal_distance <= SPEED * 10 * delta:
-				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.25)
+			if not horizontal_distance <= SPEED * 6.5 * delta:
+				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05)
 			elif  global_transform.origin.y < target.global_transform.origin.y:
 				velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
 		else:
