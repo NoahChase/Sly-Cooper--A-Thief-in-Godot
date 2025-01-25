@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=13 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" path="res://Scripts/player__sly.gd" id="1_jucx6"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_30xp2"]
+size = Vector3(0.1, 0.1, 2)
 
 [sub_resource type="Animation" id="Animation_qor3j"]
 length = 0.001
@@ -156,6 +159,10 @@ target_position = Vector3(0, -0.25, 0)
 [node name="tip toe ray5" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
 transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -6.07758e-08, -0.738928, -0.267238)
 target_position = Vector3(0, 0, 0.25)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("BoxMesh_30xp2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body Mesh Container"]
 libraries = {
