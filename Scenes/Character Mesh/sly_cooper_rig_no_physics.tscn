@@ -333,7 +333,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 3.72529e
 mesh = SubResource("BoxMesh_ctiw8")
 
 [node name="Ball Tail 8" type="MeshInstance3D" parent="Ball Tail Root" index="3"]
-transform = Transform3D(0.899075, 0, -0.437498, 0, 0.999894, -1.4013e-45, 0.437499, 1.4013e-45, 0.899074, 0.0778626, 0.576019, -0.258675)
+transform = Transform3D(0.899075, 0, -0.437498, 0, 0.999894, 0, 0.437499, 0, 0.899074, 0.0778626, 0.576019, -0.258675)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -344,7 +344,7 @@ transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, 0, 0, 1, 2.23517e-08, -0.072
 mesh = SubResource("BoxMesh_hp8ys")
 
 [node name="Ball Tail 7" type="MeshInstance3D" parent="Ball Tail Root" index="4"]
-transform = Transform3D(0.899055, -1.4013e-45, -0.437499, 0, 0.999842, -2.8026e-45, 0.437489, 2.8026e-45, 0.899075, 0.143487, 0.515375, -0.393536)
+transform = Transform3D(0.899055, 0, -0.437499, 0, 0.999842, 0, 0.437489, 0, 0.899075, 0.143487, 0.515375, -0.393536)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -355,7 +355,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0611968, -0.148)
 mesh = SubResource("BoxMesh_2lu7f")
 
 [node name="Ball Tail 6" type="MeshInstance3D" parent="Ball Tail Root" index="5"]
-transform = Transform3D(0.899067, -1.4013e-45, -0.437496, 0, 0.99984, -4.2039e-45, 0.437495, 4.2039e-45, 0.89907, 0.208237, 0.454188, -0.526599)
+transform = Transform3D(0.899067, 0, -0.437496, 0, 0.99984, 0, 0.437495, 0, 0.89907, 0.208237, 0.454188, -0.526599)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -366,7 +366,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0794359, -0.14)
 mesh = SubResource("BoxMesh_x8uyn")
 
 [node name="Ball Tail 5" type="MeshInstance3D" parent="Ball Tail Root" index="6"]
-transform = Transform3D(0.899053, -1.4013e-45, -0.437489, 0, 0.999837, -4.2039e-45, 0.437488, 4.2039e-45, 0.899056, 0.269486, 0.374764, -0.652469)
+transform = Transform3D(0.899053, 0, -0.437489, 0, 0.999837, 0, 0.437488, 0, 0.899056, 0.269486, 0.374764, -0.652469)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -377,7 +377,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.31323e-10, -0.0837352, -0.1
 mesh = SubResource("BoxMesh_x8uyn")
 
 [node name="Ball Tail 4" type="MeshInstance3D" parent="Ball Tail Root" index="7"]
-transform = Transform3D(0.89905, -1.4013e-45, -0.437489, 0, 0.999823, -4.2039e-45, 0.437486, 4.2039e-45, 0.899056, 0.346433, 0.291043, -0.810598)
+transform = Transform3D(0.89905, 0, -0.437489, 0, 0.999823, 0, 0.437486, 0, 0.899056, 0.346433, 0.291043, -0.810598)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -388,7 +388,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86265e-09, -0.0901181, -0.2
 mesh = SubResource("BoxMesh_x8uyn")
 
 [node name="Ball Tail 3" type="MeshInstance3D" parent="Ball Tail Root" index="8"]
-transform = Transform3D(0.899046, 0, -0.437489, -2.8026e-45, 0.999767, -5.60519e-45, 0.437485, 7.00649e-45, 0.899056, 0.434021, 0.200941, -0.990593)
+transform = Transform3D(0.899046, 0, -0.437489, 0, 0.999767, 0, 0.437485, 0, 0.899056, 0.434021, 0.200941, -0.990593)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -399,7 +399,7 @@ transform = Transform3D(0.996326, -0.0457649, 0.0723829, -0.0853036, -0.455858, 
 mesh = SubResource("BoxMesh_x8uyn")
 
 [node name="Ball Tail 2" type="MeshInstance3D" parent="Ball Tail Root" index="9"]
-transform = Transform3D(0.899047, 2.8026e-45, -0.437492, -7.00649e-45, 0.99977, -5.60519e-45, 0.437485, 8.40779e-45, 0.899062, 0.493005, 0.117822, -1.14483)
+transform = Transform3D(0.899047, 0, -0.437492, 0, 0.99977, 0, 0.437485, 0, 0.899062, 0.493005, 0.117822, -1.14483)
 top_level = true
 mesh = SubResource("BoxMesh_3lfr3")
 
@@ -413,43 +413,43 @@ mesh = SubResource("BoxMesh_x8uyn")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0625, 0)
 bones/0/position = Vector3(1.1612e-08, 0.74602, -0.00193296)
 bones/1/position = Vector3(0.000474975, 0.000474975, 0.000474975)
-bones/10/position = Vector3(-0.00643582, 0.855241, -0.00664721)
-bones/10/rotation = Quaternion(0.143247, -0.0330025, -0.0123152, 0.98906)
+bones/10/position = Vector3(-0.0796445, 0.8615, -0.00809433)
+bones/10/rotation = Quaternion(0.163415, -0.0385887, 0.00620535, 0.985783)
 bones/11/position = Vector3(-2.16606e-16, 0.1409, 0.00690236)
-bones/11/rotation = Quaternion(0.0695557, -0.0127676, 0.00356703, 0.99749)
-bones/12/rotation = Quaternion(0.0376083, 0.0151068, -0.00382825, 0.999171)
-bones/13/rotation = Quaternion(0.0452418, 0.000777651, 0.00498278, 0.998963)
+bones/11/rotation = Quaternion(0.0861114, -0.00925072, 0.00260944, 0.996239)
+bones/12/rotation = Quaternion(0.0468666, 0.00121669, -0.000286345, 0.9989)
+bones/13/rotation = Quaternion(0.0460347, 0.00301896, 0.00624577, 0.998916)
 bones/13/scale = Vector3(1, 1, 0.999999)
-bones/14/rotation = Quaternion(-0.0298638, -0.0179172, 0.0214906, 0.999162)
-bones/15/rotation = Quaternion(-0.0504025, 0.00516876, 0.00693952, 0.998692)
+bones/14/rotation = Quaternion(-0.0361816, -0.0177534, 0.0209397, 0.998968)
+bones/15/rotation = Quaternion(-0.0529005, 0.00587762, 0.00562867, 0.998567)
 bones/56/scale = Vector3(1, 1, 1)
 bones/57/scale = Vector3(1, 1, 1)
 bones/70/rotation = Quaternion(-0.35155, -0.348675, -0.399688, 0.771419)
 bones/70/scale = Vector3(1, 1, 1)
 bones/72/position = Vector3(0.0633166, 0.0976588, 0.00782372)
-bones/72/rotation = Quaternion(0.495142, 0.545982, 0.562787, -0.374177)
-bones/73/rotation = Quaternion(0.0149017, 0.953227, -0.289065, 0.0870534)
+bones/72/rotation = Quaternion(0.489309, 0.548186, 0.564082, -0.376671)
+bones/73/rotation = Quaternion(0.0202895, 0.951381, -0.297555, 0.0769586)
 bones/73/scale = Vector3(0.999999, 1, 0.999999)
-bones/74/rotation = Quaternion(0.226695, -0.714616, 0.218615, 0.624613)
+bones/74/rotation = Quaternion(0.191008, -0.722385, 0.178558, 0.64015)
 bones/74/scale = Vector3(0.999999, 1, 1)
-bones/75/rotation = Quaternion(-0.0111878, 0.653335, 0.314676, 0.688481)
+bones/75/rotation = Quaternion(-0.033127, 0.669058, 0.336003, 0.662092)
 bones/95/position = Vector3(-0.0637059, 0.090302, 0.015742)
-bones/95/rotation = Quaternion(0.487129, -0.659979, -0.481987, -0.307932)
-bones/96/rotation = Quaternion(0.067663, 0.925039, -0.373154, -0.0219208)
+bones/95/rotation = Quaternion(0.486489, -0.658923, -0.494691, -0.290569)
+bones/96/rotation = Quaternion(0.0959032, 0.929607, -0.355386, -0.018292)
 bones/97/position = Vector3(-0.00114774, 0.233412, -0.000875463)
-bones/97/rotation = Quaternion(0.277945, 0.705196, -0.277945, 0.590077)
+bones/97/rotation = Quaternion(0.306019, 0.697673, -0.306019, 0.570926)
 bones/97/scale = Vector3(0.999999, 0.999999, 0.999999)
-bones/98/rotation = Quaternion(-0.012787, -0.657528, -0.209998, 0.72346)
+bones/98/rotation = Quaternion(-0.0193383, -0.658714, -0.203913, 0.723976)
 bones/120/position = Vector3(0.00070335, 0.0147822, 0.131181)
 bones/120/rotation = Quaternion(-0.0722975, -0.0474817, 0.0137924, 0.996157)
 bones/120/scale = Vector3(1, 1, 1)
 bones/130/position = Vector3(0.073522, -0.0766083, -0.0259213)
-bones/130/rotation = Quaternion(0.0518173, 0.37944, 0.912447, -0.144154)
-bones/131/rotation = Quaternion(-0.0194914, 0.940288, -0.339004, -0.0235486)
+bones/130/rotation = Quaternion(0.0536781, 0.343692, 0.922403, -0.167832)
+bones/131/rotation = Quaternion(-0.0215262, 0.971477, -0.234296, -0.0295823)
 bones/131/scale = Vector3(1, 1, 0.999999)
-bones/132/rotation = Quaternion(-0.126287, 0.639472, -0.756192, 0.057458)
+bones/132/rotation = Quaternion(-0.141559, 0.697611, -0.692477, 0.117373)
 bones/132/scale = Vector3(0.999999, 1.00001, 0.999995)
-bones/133/rotation = Quaternion(-1.88962e-08, 0.999045, 0.0437053, 1.9611e-09)
+bones/133/rotation = Quaternion(-8.80993e-09, 0.996992, 0.0775009, -1.95097e-09)
 bones/133/scale = Vector3(1, 1.00001, 0.999986)
 bones/134/position = Vector3(-0.00730926, 0.127941, 0.00102151)
 bones/134/rotation = Quaternion(-0.0126292, 0.186482, 0.979947, -0.0690641)
@@ -458,11 +458,11 @@ bones/135/position = Vector3(-0.0248685, 0.044463, -0.00651964)
 bones/135/rotation = Quaternion(0.203259, 0.000721591, 0.000726901, 0.979125)
 bones/135/scale = Vector3(0.999999, 0.999999, 1)
 bones/136/position = Vector3(-0.0787393, -0.070641, -0.004869)
-bones/136/rotation = Quaternion(-0.0394081, 0.383289, 0.92107, 0.0562689)
-bones/137/rotation = Quaternion(0.0746977, 0.935843, -0.344335, -0.00722418)
+bones/136/rotation = Quaternion(-0.0458055, 0.420613, 0.905727, 0.025413)
+bones/137/rotation = Quaternion(0.0643518, 0.926042, -0.371893, -0.000592701)
 bones/137/scale = Vector3(0.999999, 1, 1)
-bones/138/rotation = Quaternion(0.102173, 0.639896, -0.755646, -0.0953548)
-bones/139/rotation = Quaternion(-3.77924e-08, 0.999677, 0.0253949, -8.84156e-09)
+bones/138/rotation = Quaternion(0.0611517, 0.63231, -0.770648, -0.0504527)
+bones/139/rotation = Quaternion(-4.30389e-08, 0.999524, 0.0308617, 3.07261e-08)
 bones/140/rotation = Quaternion(0.0126288, 0.186482, 0.979947, 0.0690643)
 bones/140/scale = Vector3(1, 1, 0.999999)
 bones/141/position = Vector3(0.0408724, 0.0366471, -0.00755698)
@@ -474,7 +474,7 @@ bones/142/scale = Vector3(1, 1, 1)
 bones/143/scale = Vector3(1, 1, 1)
 
 [node name="Cane_LowPoly" parent="metarig/GeneralSkeleton" index="0"]
-transform = Transform3D(0.543564, -0.50464, 0.670727, 0.694821, -0.177794, -0.696858, 0.470913, 0.844823, 0.253993, -0.391309, 0.908701, 0.354961)
+transform = Transform3D(0.499968, -0.520048, 0.692517, 0.691558, -0.241611, -0.680713, 0.521324, 0.819251, 0.238846, -0.473583, 0.881695, 0.33434)
 bone_name = "RightHand"
 bone_idx = 98
 
@@ -482,43 +482,43 @@ bone_idx = 98
 transform = Transform3D(0.286598, 0.942817, -0.170169, -0.918975, 0.320748, 0.229361, 0.270827, 0.090647, 0.958351, -0.714821, -0.90577, 0.0535462)
 
 [node name="TeethUpper_LowPoly" parent="metarig/GeneralSkeleton" index="1"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180147, 0.0119013, 0.0177353, 0.104208, -0.00731913, 1.14349, 0.18475)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.026217, 0.0155869, 0.025365, 0.102123, -0.0962698, 1.13439, 0.199785)
 
 [node name="TeethLower_LowPoly" parent="metarig/GeneralSkeleton" index="2"]
-transform = Transform3D(0.105696, -0.00350975, -0.0114739, 0.00152526, 0.104827, -0.0180147, 0.0119013, 0.0177356, 0.104208, -0.00563627, 1.12392, 0.172313)
+transform = Transform3D(0.105145, -0.00781661, -0.0141066, 0.00414047, 0.10301, -0.026217, 0.0155869, 0.0253653, 0.102123, -0.0934959, 1.11589, 0.185989)
 
 [node name="EyeHLightBot_L" parent="metarig/GeneralSkeleton" index="3"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180148, 0.0119013, 0.0177354, 0.104208, -0.00741786, 1.14644, 0.185249)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="EyeHLightTop_L" parent="metarig/GeneralSkeleton" index="4"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180148, 0.0119013, 0.0177354, 0.104208, -0.00741787, 1.14644, 0.185249)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="Iris_L" parent="metarig/GeneralSkeleton" index="5"]
-transform = Transform3D(0.105696, -0.00350973, -0.0114738, 0.00152526, 0.104827, -0.0180149, 0.0119013, 0.0177355, 0.104208, -0.00741792, 1.14644, 0.18525)
+transform = Transform3D(0.105145, -0.00781657, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.0253651, 0.102123, -0.0964897, 1.13729, 0.200499)
 
 [node name="Pupil_L" parent="metarig/GeneralSkeleton" index="6"]
-transform = Transform3D(0.105696, -0.00350973, -0.0114738, 0.00152526, 0.104827, -0.0180149, 0.0119013, 0.0177355, 0.104208, -0.00741792, 1.14644, 0.18525)
+transform = Transform3D(0.105145, -0.00781657, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.0253651, 0.102123, -0.0964897, 1.13729, 0.200499)
 
 [node name="EyeHLightBot_R" parent="metarig/GeneralSkeleton" index="7"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180148, 0.0119013, 0.0177354, 0.104208, -0.00741787, 1.14643, 0.185249)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="EyeHLightTop_R" parent="metarig/GeneralSkeleton" index="8"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180148, 0.0119013, 0.0177354, 0.104208, -0.00741788, 1.14644, 0.185249)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.0262171, 0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="Iris_R" parent="metarig/GeneralSkeleton" index="9"]
-transform = Transform3D(-0.105696, -0.00350972, -0.0114739, -0.00152526, 0.104827, -0.0180147, -0.0119013, 0.0177353, 0.104208, -0.00741786, 1.14643, 0.185249)
+transform = Transform3D(-0.105145, -0.00781656, -0.0141066, -0.00414047, 0.10301, -0.026217, -0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="Pupil_R" parent="metarig/GeneralSkeleton" index="10"]
-transform = Transform3D(-0.105696, -0.00350972, -0.0114739, -0.00152526, 0.104827, -0.0180147, -0.0119013, 0.0177353, 0.104208, -0.00741786, 1.14643, 0.185249)
+transform = Transform3D(-0.105145, -0.00781656, -0.0141066, -0.00414047, 0.10301, -0.026217, -0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="Hat_LowPoly" parent="metarig/GeneralSkeleton" index="11"]
-transform = Transform3D(1.24982, -0.0415015, -0.135674, 0.0180357, 1.23954, -0.213021, 0.140729, 0.209717, 1.23223, 0.0456763, -0.170076, -0.117558)
+transform = Transform3D(1.2433, -0.0924285, -0.166806, 0.0489597, 1.21806, -0.31001, 0.18431, 0.299935, 1.20757, 0.0132117, -0.150047, -0.197552)
 
 [node name="EyeWhite_lowPoly" parent="metarig/GeneralSkeleton" index="12"]
-transform = Transform3D(0.105696, -0.00350972, -0.0114739, 0.00152526, 0.104827, -0.0180147, 0.0119013, 0.0177353, 0.104208, -0.00741787, 1.14643, 0.185249)
+transform = Transform3D(0.105145, -0.00781656, -0.0141066, 0.00414047, 0.10301, -0.026217, 0.0155869, 0.025365, 0.102123, -0.0964897, 1.13729, 0.200498)
 
 [node name="Belt_LowPoly" parent="metarig/GeneralSkeleton" index="13"]
-transform = Transform3D(0.104981, 0.0012879, -0.017193, -0.00286086, 0.10592, -0.00953412, 0.0170021, 0.00987043, 0.104555, 0.00647298, 1.28712, 0.0732137)
+transform = Transform3D(0.104723, -0.00275205, -0.0185392, 0.000239573, 0.105422, -0.014296, 0.0187408, 0.0140307, 0.103779, -0.0838365, 1.29005, 0.0888026)
 
 [node name="Tail 1 IK" type="SkeletonIK3D" parent="metarig/GeneralSkeleton" index="21"]
 root_bone = &"Tail.001"
@@ -556,11 +556,11 @@ tip_bone = &"Tail.002"
 target_node = NodePath("../../../Ball Tail Root/Ball Tail 3/Node3D/cnt3")
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="metarig/GeneralSkeleton" index="28"]
-transform = Transform3D(0.997518, 0.0632862, 0.0308551, -0.0338162, 0.0462628, 0.998357, 0.0617547, -0.996923, 0.0482881, -0.00397137, 0.844905, -0.0442278)
+transform = Transform3D(0.996945, 0.0778375, -0.0065072, -0.000377893, 0.0881147, 0.99611, 0.0781081, -0.993065, 0.0878749, -0.0761638, 0.852764, -0.0460276)
 bone_name = "Tail.001"
 bone_idx = 122
 
 [node name="Bone Cane Hand" type="BoneAttachment3D" parent="metarig/GeneralSkeleton" index="29"]
-transform = Transform3D(0.543564, -0.50464, 0.670727, 0.694821, -0.177794, -0.696858, 0.470913, 0.844823, 0.253993, -0.391309, 0.908701, 0.354961)
+transform = Transform3D(0.499968, -0.520048, 0.692517, 0.691558, -0.241611, -0.680713, 0.521324, 0.819251, 0.238846, -0.473583, 0.881695, 0.33434)
 bone_name = "RightHand"
 bone_idx = 98

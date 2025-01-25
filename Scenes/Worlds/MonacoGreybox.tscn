@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dxqr21q4g3u4w"]
+[gd_scene load_steps=11 format=3 uid="uid://dpgfnp4mncjy4"]
 
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="1_ebu6a"]
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="2_2iiy1"]
@@ -76,8 +76,9 @@ shadow_blur = 1.5
 transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, -3.00212, 2.96533, -8)
 camera_parent = NodePath("../Camera Parent")
 
-[node name="Camera Parent" parent="." instance=ExtResource("2_2iiy1")]
+[node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("2_2iiy1")]
 transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 16.5004, 0)
+camera_player = NodePath("../Player_ Sly")
 pitch_max = 45
 pitch_min = -88
 aim_pitch_max = 0

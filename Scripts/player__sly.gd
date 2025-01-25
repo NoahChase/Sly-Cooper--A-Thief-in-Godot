@@ -27,7 +27,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @export var camera_target: Node3D
 @export var camera_parent: Node3D
 @export var camera: Camera3D
-@export var sly_mesh: Node3D
+@onready var sly_mesh = $"Body Mesh Container/SlyCooper_RigNoPhysics"
 
 ## var
 var target
@@ -81,28 +81,28 @@ func _physics_process(delta: float) -> void:
 	
 	## States
 	if state == FLOOR:
-		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		if not direction:
 			var any_not_colliding = false
 			for ray in tiptoe_rays:
 				if not ray.is_colliding() and not $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray5".is_colliding():
 					any_not_colliding = true
-				if any_not_colliding:
-					sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
-				else:
-					sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
-		else:
-			sly_mesh.anim_tree.set("parameters/Input Timescale/scale", left_stick_pressure)
-			sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
+				#if any_not_colliding:
+					#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
+				#else:
+					#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
+		#else:
+			#sly_mesh.anim_tree.set("parameters/Input Timescale/scale", left_stick_pressure)
+			#sly_mesh.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
 		jump_num = 0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.02, 0.08)
-			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
+			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		else:
 			air_mult = 1.0
-			sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
+			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		$RichTextLabel3.text = str("AIR")
 		
 		if velocity.y > -7:
@@ -120,7 +120,7 @@ func _physics_process(delta: float) -> void:
 	if state == TO_TARGET and target != null:
 		jump_num = 0
 		air_mult = 0.0
-		sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
+		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		$RichTextLabel3.text = str("TO TARGET", " : ", target)
 		apply_magnetism(delta)
 		if velocity.y > -6.5:
@@ -233,7 +233,7 @@ func jump():
 			jump_num = 0
 			state = AIR
 		elif state != TO_TARGET:
-			sly_mesh.anim_tree.set("parameters/Jump/request", 1)
+			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			speed_mult = 1.0
 			if velocity.y >= 0:
@@ -317,7 +317,7 @@ func camera_smooth_follow(delta):
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
-	var tform = $"Body Mesh Container/SlyCooper_RigNoPhysics".global_transform.origin - $"Body Mesh Container".global_transform.basis.z * tform_mult
+	var tform = sly_mesh.global_transform.origin - $"Body Mesh Container".global_transform.basis.z * tform_mult
 	$Basis_Offset.global_transform.origin.x = lerp($Basis_Offset.global_transform.origin.x, tform.x, cam_timer / 2 * lerp_val)
 	$Basis_Offset.global_transform.origin.z = lerp($Basis_Offset.global_transform.origin.z, tform.z, cam_timer / 2 * lerp_val)
 	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, 1)
