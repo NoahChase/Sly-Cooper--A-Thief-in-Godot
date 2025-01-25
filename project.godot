@@ -21,7 +21,6 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/size/mode=3
 window/size/borderless=true
-window/stretch/mode="viewport"
 
 [global_group]
 
