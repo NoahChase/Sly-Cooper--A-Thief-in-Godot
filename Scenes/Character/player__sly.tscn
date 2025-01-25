@@ -72,7 +72,7 @@ _data = {
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_h1oyc"]
 height = 5.0
-radius = 2.5
+radius = 2.25
 
 [sub_resource type="Animation" id="Animation_hl1qu"]
 length = 0.001
@@ -174,7 +174,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 shape = SubResource("CylinderShape3D_h1oyc")
 disabled = true
 
