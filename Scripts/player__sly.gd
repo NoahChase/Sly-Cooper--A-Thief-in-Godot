@@ -210,7 +210,6 @@ func state_handler(delta: float) -> void:
 			target.player = self
 			state = ON_TARGET
 		else:
-			target.player = self
 			state = TO_TARGET
 		if state == ON_TARGET and distance_to_player > 0.5:
 			state = AIR
@@ -275,9 +274,9 @@ func apply_magnetism(delta): # the holy grail of magnetism
 			
 			var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
 			
-			if not horizontal_distance <= SPEED * 6.5 * delta:
-				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05)
-			elif  global_transform.origin.y < target.global_transform.origin.y:
+			if horizontal_distance >= 1:
+				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05 / (horizontal_distance + 0.05))
+			elif global_transform.origin.y < target.global_transform.origin.y:
 				velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
 		else:
 			state = AIR
