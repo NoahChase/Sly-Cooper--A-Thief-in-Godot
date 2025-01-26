@@ -106,7 +106,7 @@ func _physics_process(delta: float) -> void:
 			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		$RichTextLabel3.text = str("AIR")
 		
-		if velocity.y > -7:
+		if velocity.y > -6.5:
 			gravmult = 2.5
 			#if jump_num <= 1:
 				#speed_mult = lerp(speed_mult, 1.125, 1)
@@ -210,7 +210,6 @@ func state_handler(delta: float) -> void:
 			target.player = self
 			state = ON_TARGET
 		else:
-			target.player = self
 			state = TO_TARGET
 		if state == ON_TARGET and distance_to_player > 0.5:
 			state = AIR
@@ -237,7 +236,7 @@ func jump():
 			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			speed_mult = 1.0
-			if velocity.y >= 0:
+			if velocity.y >= 2.75:
 				velocity.y += 2.75
 			else:
 				velocity.y += (-velocity.y) + 5.75
@@ -275,9 +274,9 @@ func apply_magnetism(delta): # the holy grail of magnetism
 			
 			var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
 			
-			if not horizontal_distance <= SPEED * 6.5 * delta:
-				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05)
-			elif  global_transform.origin.y < target.global_transform.origin.y:
+			if horizontal_distance >= 1:
+				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05 / (horizontal_distance + 0.05))
+			elif global_transform.origin.y < target.global_transform.origin.y:
 				velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
 		else:
 			state = AIR
