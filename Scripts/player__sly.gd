@@ -236,10 +236,10 @@ func jump():
 			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			speed_mult = 1.0
-			if velocity.y >= 2.75:
+			if velocity.y >= 0:
 				velocity.y += 2.75
 			else:
-				velocity.y += (-velocity.y) + 5.75
+				velocity.y += (-velocity.y/2) + 6.5
 	
 
 func apply_target(delta):
@@ -310,7 +310,7 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5.25
+	var add = 5.5
 	cam_max = 0
 	cam_min = 0
 	tform_mult = 1
