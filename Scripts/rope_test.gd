@@ -8,7 +8,7 @@ extends Node3D
 @export var end_is_rigidbody = false
 @export_range(1,50,1) var number_of_segments = 10
 @export_range(0, 100.0, 0.1) var cable_length = 5.0
-@export var cable_gravity_amp = 2
+@export var cable_gravity_amp = 1
 @export var cable_thickness = 0.1
 @export var cable_springiness = 6.5*2
 @export var is_path = false
@@ -75,7 +75,7 @@ func _physics_process(delta: float) -> void:
 			# Gravity
 			if raycast.get("collider") == null:
 				var distance_to_target = (joints[i].global_position - target_point.global_position).length()
-				joints[i].global_position.y = lerp(joints[i].global_position.y, joints[i].global_position.y - ((11 - distance_to_target)), cable_gravity_amp * delta / 2.0)
+				joints[i].global_position.y = lerp(joints[i].global_position.y, joints[i].global_position.y - 1, cable_gravity_amp * delta)
 			# stretch
 			joints[i].global_position = lerp(joints[i].global_position, joints[i-1].global_position + (joints[i+1].global_position - joints[i-1].global_position) / 2.0, cable_springiness * delta)
 		# Calculate movement magnitude
