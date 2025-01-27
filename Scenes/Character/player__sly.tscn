@@ -214,10 +214,9 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
-offset_left = -1.0
-offset_top = 362.0
-offset_right = 614.0
-offset_bottom = 982.0
+offset_top = 181.0
+offset_right = 615.0
+offset_bottom = 801.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
