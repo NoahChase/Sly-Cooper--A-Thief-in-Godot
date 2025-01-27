@@ -11,4 +11,12 @@ camera = NodePath("Camera Target/Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="Camera Target"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+<<<<<<< Updated upstream
 fov = 60.0
+=======
+<<<<<<< Updated upstream
+fov = 55.0
+=======
+fov = 65.0
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
