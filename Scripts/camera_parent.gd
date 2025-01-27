@@ -59,7 +59,11 @@ func _physics_process(delta):
 
 	pitch = clamp(pitch, deg_to_rad(pitch_min), deg_to_rad(pitch_max))
 	yaw_sens = 1.5
+<<<<<<< Updated upstream
 	pitch_sens = 0.75
+=======
+	pitch_sens = 1.0
+>>>>>>> Stashed changes
 
 	if camera_player.direction:
 		if camera_player.floor_or_roof == null or camera_player.floor_or_roof.is_in_group("floor"):
