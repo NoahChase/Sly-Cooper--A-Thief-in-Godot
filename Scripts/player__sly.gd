@@ -2,7 +2,7 @@ extends CharacterBody3D
 ## In GitHub, Belongs to Character Sly Cooper Branch
 
 ## const
-const SPEED = 3.52 #jump distance #4m, double jump distance #?m
+const SPEED = 3.55 #jump distance #4m, double jump distance #?m
 const JUMP_VELOCITY = 8.06 #single jump 2m, cozy double jump 3m
 
 ## enum
@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 	
 	# Constants for the calculation
 	var new_gravity = 6.5 * 2.5  # Gravity (m/s^2)
-	var jump_velocity = 8.06  # Initial vertical velocity (m/s)
+	var jump_velocity = 8  # Initial vertical velocity (m/s)
 	var desired_jump_distance = 3.5 # Desired horizontal distance (m)
 	var desired_jump_height = 2
 # Time to reach the peak of the jump and total air time
@@ -58,11 +58,11 @@ func _process(delta: float) -> void:
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
 	$RichTextLabel4.text = str("jump: ", jump_vel," speed: ", required_speed)
-	#$RichTextLabel4.text = str(velocity.y)
 
 
 func _physics_process(delta: float) -> void:
 	floor_or_roof = $"Floor Ray".get_collider()
+	$RichTextLabel4.text = str(velocity.y)
 	var left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
 	state_handler(delta)
@@ -72,8 +72,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept"):
 		jump()
-	
-	
+		
 	if Input.is_action_just_pressed("circle") and state == AIR:
 		#$"Body Mesh Container/AnimationPlayer".play("spin")
 		$"Target Area/AnimationPlayer".play("detect targets")
@@ -99,7 +98,6 @@ func _physics_process(delta: float) -> void:
 		jump_num = 0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
-		speed_mult = 1.0
 		if not $"Floor Ray".is_colliding():
 			air_mult = lerp(air_mult, 0.02, 0.08)
 			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
@@ -119,11 +117,7 @@ func _physics_process(delta: float) -> void:
 			
 	else:
 		air_mult = 1.0
-		if Input.is_action_pressed("shift"):
-			speed_mult = 1.5
-		else:
-			speed_mult = 1.0
-		
+		speed_mult = 1.0
 	if state == TO_TARGET and target != null:
 		jump_num = 0
 		air_mult = 0.0
@@ -173,16 +167,12 @@ func _physics_process(delta: float) -> void:
 	
 
 	# Calculate movement direction relative to the camera
-	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult * joystick_input.length(), 0.0, vertical * air_mult * speed_mult * joystick_input.length()).rotated(Vector3.UP, camera_T)).normalized()
+	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult * left_stick_pressure, 0.0, vertical * air_mult * speed_mult * left_stick_pressure).rotated(Vector3.UP, camera_T)).normalized()
 
 	if direction:
-		var speed_factor = velocity.length() / SPEED
-		var lerp_speed = clamp(1 - speed_factor, 0.065, 0.65) * air_mult
-		if state == AIR:
-			lerp_speed = 0.5 * air_mult
 		var target_velocity = direction * SPEED * speed_mult
-		velocity.x = lerp(velocity.x, target_velocity.x * joystick_input.length(), lerp_speed)
-		velocity.z = lerp(velocity.z, target_velocity.z * joystick_input.length(), lerp_speed)
+		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure, 0.5 * air_mult)
+		velocity.z = lerp(velocity.z, target_velocity.z * left_stick_pressure, 0.5 * air_mult)
 	elif state != AIR:
 		velocity.x = lerp(velocity.x, 0.0, 0.5)
 		velocity.z = lerp(velocity.z, 0.0, 0.5)
@@ -196,8 +186,7 @@ func _physics_process(delta: float) -> void:
 	var angle_difference = wrapf(target_rotation_y - current_rotation_y, -PI, PI)
 
 	# Adjust rotation smoothing based on player movement
-
-	var look_val = 0.165 * air_mult / speed_mult
+	var look_val = 0.2 * air_mult * speed_mult
 	$"Body Mesh Container".rotation.y += angle_difference * look_val
 	$"Look_At Rotation".look_at(position + direction)
 	
@@ -205,9 +194,9 @@ func _physics_process(delta: float) -> void:
 	var direction_2d = Vector2(direction.x, direction.z)
 # Camera Rotation
 	if horizontal < 0 and state == FLOOR:
-		camera_parent.yaw += velocity.length() / 5.5 * delta * -horizontal
+		camera_parent.yaw += velocity.length() / 6 * delta * left_stick_pressure
 	elif horizontal > 0 and state == FLOOR:
-		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
+		camera_parent.yaw -= velocity.length() / 6 * delta * left_stick_pressure
 	
 	$RichTextLabel.text = str(jump_num)
 	camera_smooth_follow(delta)
@@ -321,7 +310,7 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5
+	var add = 5.5
 	cam_max = 0
 	cam_min = 0
 	tform_mult = 1
@@ -341,7 +330,7 @@ func camera_smooth_follow(delta):
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
-			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y:
+			if distance_to_player > 2:
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.0075)
 		else:
 			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.14: # and not downward_raycast.is_colliding()
