@@ -5,39 +5,35 @@
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="3_ox1mo"]
 [ext_resource type="Script" path="res://Scripts/rope_test.gd" id="4_bas3i"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6iabb"]
-sky_top_color = Color(0.00599999, 0.0706667, 0.2, 1)
-sky_horizon_color = Color(0, 0.0431373, 0.14902, 1)
-sky_curve = 0.310579
-ground_bottom_color = Color(0, 0.0431373, 0.14902, 1)
-ground_horizon_color = Color(0, 0.0431373, 0.14902, 1)
-sun_angle_max = 0.0
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0b5fg"]
+sky_top_color = Color(0.0611566, 0.107362, 0.280453, 1)
+sky_horizon_color = Color(0.131301, 0.2045, 0.479728, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+sun_curve = 1e-05
 
-[sub_resource type="Sky" id="Sky_qmevv"]
-sky_material = SubResource("ProceduralSkyMaterial_6iabb")
+[sub_resource type="Sky" id="Sky_wipc4"]
+sky_material = SubResource("ProceduralSkyMaterial_0b5fg")
 
 [sub_resource type="Environment" id="Environment_kj0pv"]
-background_mode = 2
-background_color = Color(0, 0.0425, 0.15, 1)
-sky = SubResource("Sky_qmevv")
+background_mode = 1
+background_color = Color(0.0878965, 0.123076, 0.250316, 1)
+sky = SubResource("Sky_wipc4")
 ambient_light_source = 2
-ambient_light_color = Color(0.538596, 0.57821, 0.661051, 1)
+ambient_light_color = Color(0.276676, 0.307478, 0.37239, 1)
 ssao_enabled = true
-ssao_intensity = 0.2
+ssao_intensity = 0.15
 ssil_enabled = true
 ssil_intensity = 0.25
 fog_enabled = true
-fog_light_color = Color(0.1, 0.103333, 0.2, 1)
-fog_density = 0.025
-fog_aerial_perspective = 0.504
-fog_sky_affect = 0.0
+fog_light_color = Color(0.0944809, 0.122568, 0.224381, 1)
+fog_density = 0.002
 volumetric_fog_density = 0.0322
 volumetric_fog_emission_energy = 5.66
 volumetric_fog_gi_inject = 0.0
 volumetric_fog_length = 6.0
 volumetric_fog_detail_spread = 0.5
 volumetric_fog_ambient_inject = 0.16
-adjustment_enabled = true
 adjustment_contrast = 1.04
 
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
@@ -65,7 +61,7 @@ albedo_texture = SubResource("NoiseTexture2D_gbqxu")
 uv1_scale = Vector3(120, 120, 1)
 distance_fade_mode = 2
 distance_fade_min_distance = 280.0
-distance_fade_max_distance = 100.0
+distance_fade_max_distance = 170.0
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yevve"]
 data = PackedVector3Array(250, -250, 0, -250, -250, 0, 250, 250, 0, -250, -250, 0, -250, 250, 0, 250, 250, 0)
@@ -257,7 +253,7 @@ environment = SubResource("Environment_kj0pv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 9.15489e-12, -0.00020944, 0.00020944, -4.37297e-08, 1, 0, -1, -4.37297e-08, 0, 0, 0)
-light_color = Color(0.436558, 0.456328, 0.488133, 1)
+light_color = Color(0.369015, 0.387131, 0.416276, 1)
 shadow_enabled = true
 shadow_blur = 1.5
 
@@ -1861,20 +1857,6 @@ transform = Transform3D(0.17887, 0.186716, -0.965834, -2.14558e-06, 0.981654, 0.
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
 progress = 4.68005
-=======
-<<<<<<< Updated upstream
-transform = Transform3D(0.17887, 0.186716, -0.965834, -2.14558e-06, 0.981654, 0.189779, 0.983785, -0.0339461, 0.175606, 4.48935, 13.4666, -7.81625)
-progress = 4.51517
-=======
-<<<<<<< Updated upstream
-transform = Transform3D(0.178871, 0.355149, -0.917369, 1.63899e-06, 0.932394, 0.360977, 0.983784, -0.0645744, 0.166795, 4.18595, 12.5599, -7.76108)
-progress = 4.68005
-=======
-transform = Transform3D(0.17887, 0.204447, -0.962236, -2.13813e-06, 0.977998, 0.207801, 0.983785, -0.0371699, 0.174952, 4.32964, 13.4994, -7.78721)
-progress = 4.51517
->>>>>>> Stashed changes
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 loop = false
 
 [node name="Target Point" parent="Rope/Path3D/PathFollow3D" instance=ExtResource("3_ox1mo")]
