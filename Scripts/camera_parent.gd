@@ -58,8 +58,8 @@ func _physics_process(delta):
 	camera_target.rotation.x = lerp(camera_target.rotation.x, pitch, delta * 15)
 
 	pitch = clamp(pitch, deg_to_rad(pitch_min), deg_to_rad(pitch_max))
-	yaw_sens = 1.5
-	pitch_sens = 1.5
+	yaw_sens = 1.25
+	pitch_sens = 1.25
 
 	if camera_player.direction:
 		if camera_player.floor_or_roof == null or camera_player.floor_or_roof.is_in_group("floor"):
@@ -72,7 +72,14 @@ func _physics_process(delta):
 		var wall_distance = wall_detect.position - camera.global_position
 		if not wall_detect.is_in_group("player"):
 			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.8)
-
+	
+	if camera_player.target != null:
+		if camera_player.target.is_in_group("rope"):
+			camera.fov = lerp(camera.fov, 75.0, 0.02)
+		else:
+			camera.fov = lerp(camera.fov, 60.0, 0.02)
+	else:
+		camera.fov = lerp(camera.fov, 60.0, 0.02)
 func return_camera_to_position(delta):
 	camera.global_position = camera.global_position.lerp(camera_return.global_transform.origin, 0.015)
 

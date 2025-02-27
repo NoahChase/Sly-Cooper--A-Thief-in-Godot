@@ -14,6 +14,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 
 @onready var ray_to_cam = $"To Cam RayCast"
 @onready var rot_container = $"Body Mesh Container"
+@onready var basis_offset = $Basis_Offset
 
 @onready var speed_mult = 1.0
 @onready var air_mult = 1.0
@@ -24,12 +25,16 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var jump_num = 0
 @onready var gravmult = 1.0
 
+@onready var jump_cam_trigger = false
+
 ## export
 @export var camera_target: Node3D
 @export var camera_parent: Node3D
 @export var camera: Camera3D
 @onready var sly_mesh = $"Body Mesh Container/SlyCooper_RigNoPhysics"
-
+@onready var temp_sly = $"Body Mesh Container/SlyCooper_2025"
+@onready var true_player_rot = $"True Player Rotation"
+@onready var temptext = $RichTextLabel2
 ## var
 var target
 var camera_T = float()
@@ -43,7 +48,7 @@ func _ready() -> void:
 	camera = camera_parent.camera
 
 func _process(delta: float) -> void:
-	
+	state_handler(delta)
 	# Constants for the calculation
 	var new_gravity = 6.5 * 2.5  # Gravity (m/s^2)
 	var jump_velocity = 8.06  # Initial vertical velocity (m/s)
@@ -57,15 +62,15 @@ func _process(delta: float) -> void:
 
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
-	$RichTextLabel4.text = str("jump: ", jump_vel," speed: ", required_speed)
+	$RichTextLabel4.text = str("jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
 	#$RichTextLabel4.text = str(velocity.y)
-
+	
 
 func _physics_process(delta: float) -> void:
 	floor_or_roof = $"Floor Ray".get_collider()
 	var left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
-	state_handler(delta)
+	
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
 	
@@ -81,7 +86,7 @@ func _physics_process(delta: float) -> void:
 		apply_target(delta)
 		apply_magnetism(delta)
 	
-	## States
+## States
 	if state == FLOOR:
 		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		if not direction:
@@ -125,8 +130,13 @@ func _physics_process(delta: float) -> void:
 			speed_mult = 1.0
 		
 	if state == TO_TARGET and target != null:
+		#for making rope movement smooth, can also be used to charge jumps
+		var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
+		if distance_to_player <= 0.875:
+			target.player = self
 		jump_num = 0
 		air_mult = 0.0
+		
 		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		$RichTextLabel3.text = str("TO TARGET", " : ", target)
 		apply_magnetism(delta)
@@ -148,7 +158,7 @@ func _physics_process(delta: float) -> void:
 		apply_magnetism(delta)
 		#$CollisionShape3D.disabled = false
 		$RichTextLabel3.text = str("ON TARGET", " : ", target)
-		global_transform.origin = target.global_transform.origin
+		
 		velocity += get_gravity() * delta
 		if target == null:
 			state = AIR
@@ -192,14 +202,23 @@ func _physics_process(delta: float) -> void:
 
 	# Rotation
 	var target_rotation_y = $"Look_At Rotation".rotation.y
-	var current_rotation_y = $"Body Mesh Container".rotation.y
+	var current_rotation_y = true_player_rot.rotation.y
 	var angle_difference = wrapf(target_rotation_y - current_rotation_y, -PI, PI)
 
 	# Adjust rotation smoothing based on player movement
 
 	var look_val = 0.165 * air_mult / speed_mult
-	$"Body Mesh Container".rotation.y += angle_difference * look_val
-	$"Look_At Rotation".look_at(position + direction)
+	if target == null or not target.is_in_group("rope"):
+		$"Body Mesh Container".rotation.y += angle_difference * look_val
+	# for rope correction (re align to proper rotation)
+	if $"Body Mesh Container".rotation.y != true_player_rot.rotation.y and state != ON_TARGET:
+		#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
+		var angle_diff = fposmod(true_player_rot.rotation.y - $"Body Mesh Container".rotation.y + PI, TAU) - PI
+		$"Body Mesh Container".rotation.y += angle_diff * 0.12
+	
+	true_player_rot.rotation.y += angle_difference * look_val
+	if not direction.length_squared() < 0.0001:
+		$"Look_At Rotation".look_at(position + direction)
 	
 	# Directional 2D vector for additional calculations (if needed)
 	var direction_2d = Vector2(direction.x, direction.z)
@@ -209,7 +228,7 @@ func _physics_process(delta: float) -> void:
 	elif horizontal > 0 and state == FLOOR:
 		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
 	
-	$RichTextLabel.text = str(jump_num)
+	$RichTextLabel.text = str("fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num)
 	camera_smooth_follow(delta)
 	move_and_slide()
 	
@@ -220,6 +239,8 @@ func state_handler(delta: float) -> void:
 		if distance_to_player <= 0.125:
 			target.player = self
 			state = ON_TARGET
+			#keeps player from shifting on target with input (because this function is in _process(delta))
+			global_transform.origin = target.global_transform.origin
 		else:
 			state = TO_TARGET
 		if state == ON_TARGET and distance_to_player > 0.5:
@@ -277,34 +298,34 @@ func apply_magnetism(delta): # the holy grail of magnetism
 	if target != null:  # No magnetism if jumping
 		var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 		var magnet_direction = (target.global_transform.origin - global_transform.origin).normalized()
-		state = TO_TARGET
-		if global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
-			
-			velocity.x = lerp(velocity.x, magnet_direction.x * SPEED * 9.8, 0.2)
-			velocity.z = lerp(velocity.z, magnet_direction.z * SPEED * 9.8, 0.2)
-			
-			var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
-			
-			if horizontal_distance >= 1:
-				velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05 / (horizontal_distance + 0.05))
-			elif global_transform.origin.y < target.global_transform.origin.y:
-				velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
-		else:
-			state = AIR
-			target = null
-
-			#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
-		if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
-			velocity = Vector3.ZERO # perfect snapping
-			#$CollisionShape3D.disabled = true
-			global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.2 / (distance_to_player + 0.2))
-			global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.25 / (distance_to_player + 0.25))
-			global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.25 / (distance_to_player + 0.25))
-		#else:
-			#$CollisionShape3D.disabled = false
-	#else:
-		#$CollisionShape3D.disabled = false
+		if not state == ON_TARGET: 
+			state = TO_TARGET
+			if global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
+				
+				velocity.x = lerp(velocity.x, magnet_direction.x * SPEED * 9.8, 0.2)
+				velocity.z = lerp(velocity.z, magnet_direction.z * SPEED * 9.8, 0.2)
+				
+				var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
+				
+				if horizontal_distance >= 1:
+					velocity.y = lerp(velocity.y, magnet_direction.y + 0.5 * SPEED, 0.05 / (horizontal_distance + 0.05))
+				elif global_transform.origin.y < target.global_transform.origin.y:
+					velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
+			else:
+				state = AIR
+				target = null
 	
+				#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
+			if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
+				velocity = Vector3.ZERO # perfect snapping
+				#$CollisionShape3D.disabled = true
+				global_transform.origin.y = lerp(global_transform.origin.y, target.global_transform.origin.y, 0.2 / (distance_to_player + 0.2))
+				global_transform.origin.x = lerp(global_transform.origin.x, target.global_transform.origin.x, 0.25 / (distance_to_player + 0.25))
+				global_transform.origin.z = lerp(global_transform.origin.z, target.global_transform.origin.z, 0.25 / (distance_to_player + 0.25))
+		else:
+			velocity = Vector3.ZERO # perfect snapping
+			global_transform.origin = target.global_transform.origin
+		
 
 func camera_smooth_follow(delta):
 	var cam_speed = 350
@@ -315,16 +336,16 @@ func camera_smooth_follow(delta):
 	var cam_distance = (cam_to_player_x + cam_to_player_y + cam_to_player_z) / 3
 	var tform_mult
 	var offsetform = global_transform.origin + global_transform.basis.z * 1
-	var camera_length = -camera_parent.pitch * 6
+	var camera_length = -camera_parent.pitch * 2
 	var cam_max
 	var cam_min
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5
+	var add = 5.25
 	cam_max = 0
-	cam_min = 0
-	tform_mult = 1
+	cam_min = -1
+	tform_mult = 0.75
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
@@ -334,20 +355,31 @@ func camera_smooth_follow(delta):
 	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, 1)
 	camera_parent.position.z = lerp(camera_parent.position.z, $Basis_Offset.global_transform.origin.z, 1)
 	
+	#set move camera on high double jump
+	## Add raycast collider check here and ensure does not turn off early
+	if velocity.y >= 7 and jump_num > 0:
+		jump_cam_trigger = true
+	elif velocity.y <= 0 or state != AIR:
+		jump_cam_trigger = false
+
 	if state == AIR or state == TO_TARGET:
 		if manual_move_cam == true:
-			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.04)
+			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 		#elif not $"CollisionShape3D/Cam Y Ray".is_colliding():
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
+		## Add Modifier: If ray from floor to feet.lenth < 2m
+		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
+			if jump_cam_trigger == true:
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0075))
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y:
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.0075)
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.0075)
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.14: # and not downward_raycast.is_colliding()
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.2)
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.5: # and not downward_raycast.is_colliding()
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.2)
 	else:
-		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.04)
+		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 
 	var ray_to_cam_distance =  ray_to_cam.global_transform.origin - camera.global_transform.origin
 	ray_to_cam.look_at(camera.global_position)

@@ -1,6 +1,6 @@
+@tool
 extends Node3D
 
-@export var tail_targets = Node3D
 @export var player = CharacterBody3D
 
 @onready var anim_tree = $AnimationTree
@@ -19,20 +19,20 @@ extends Node3D
 @onready var ball_target = $"Ball Tail Root/Ball Target"
 @onready var ball_1 =$"Ball Tail Root/Ball Tail 1"
 @onready var ball_8 = $"Ball Tail Root/Ball Tail 8"
-@export var ball_7 = MeshInstance3D
-@export var ball_6 = MeshInstance3D
-@export var ball_5 = MeshInstance3D
-@export var ball_4 = MeshInstance3D
-@export var ball_3 = MeshInstance3D
+@onready var ball_7 = $"Ball Tail Root/Ball Tail 7"
+@onready var ball_6 = $"Ball Tail Root/Ball Tail 6"
+@onready var ball_5 = $"Ball Tail Root/Ball Tail 5"
+@onready var ball_4 = $"Ball Tail Root/Ball Tail 4"
+@onready var ball_3 = $"Ball Tail Root/Ball Tail 3"
 @onready var ball_2 = $"Ball Tail Root/Ball Tail 2"
 
 @onready var ball_1_cnt = $"Ball Tail Root/Ball Tail 1/Node3D/cnt1"
 @onready var ball_8_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt8"
-@export var ball_7_cnt = MeshInstance3D
-@export var ball_6_cnt = MeshInstance3D
-@export var ball_5_cnt = MeshInstance3D
-@export var ball_4_cnt = MeshInstance3D
-@export var ball_3_cnt = MeshInstance3D
+@onready var ball_7_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt7"
+@onready var ball_6_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt6"
+@onready var ball_5_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt5"
+@onready var ball_4_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt4"
+@onready var ball_3_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt3"
 @onready var ball_2_cnt = $"Ball Tail Root/Ball Tail 2/Node3D/cnt2"
 
 func _ready():

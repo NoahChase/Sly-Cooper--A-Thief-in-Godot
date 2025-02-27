@@ -1,8 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=17 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" path="res://Scripts/player__sly.gd" id="1_jucx6"]
+[ext_resource type="PackedScene" uid="uid://cqun0y1nxdxei" path="res://Scenes/Character Mesh/sly_cooper_2025_01.tscn" id="2_spmol"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p85ho"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.14902)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
 
@@ -69,6 +74,12 @@ _data = {
 "RESET": SubResource("Animation_qor3j"),
 "spin": SubResource("Animation_gekru")
 }
+
+[sub_resource type="BoxMesh" id="BoxMesh_n1aft"]
+size = Vector3(0.125, 0.125, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cd1su"]
+size = Vector3(0.25, 0.25, 0.25)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_h1oyc"]
 height = 5.0
@@ -137,6 +148,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46572, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="SlyCooper_RigNoPhysics" type="MeshInstance3D" parent="Body Mesh Container"]
+visible = false
+material_override = SubResource("StandardMaterial3D_p85ho")
 mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
 
@@ -169,6 +182,20 @@ libraries = {
 "": SubResource("AnimationLibrary_xn228")
 }
 
+[node name="SlyCooper_2025" parent="Body Mesh Container" instance=ExtResource("2_spmol")]
+transform = Transform3D(-1.2, 0, -1.04907e-07, 0, 1.2, 0, 1.04907e-07, 0, -1.2, 0, -1, 0.473444)
+
+[node name="True Player Rotation" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="True Player Rotation"]
+mesh = SubResource("BoxMesh_n1aft")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="True Player Rotation/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+mesh = SubResource("BoxMesh_cd1su")
+
+[node name="Look_At Rotation" type="Node3D" parent="."]
+
 [node name="Target Area" type="Area3D" parent="."]
 collision_layer = 2
 collision_mask = 2
@@ -183,8 +210,6 @@ libraries = {
 "": SubResource("AnimationLibrary_rtc2p")
 }
 
-[node name="Look_At Rotation" type="Node3D" parent="."]
-
 [node name="Basis_Offset" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("SphereMesh_s3532")
@@ -193,15 +218,15 @@ mesh = SubResource("SphereMesh_s3532")
 target_position = Vector3(0, -0.5, 0)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 402.0
+offset_bottom = 73.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
 offset_top = 136.0
-offset_right = 40.0
-offset_bottom = 176.0
+offset_right = 167.0
+offset_bottom = 224.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 

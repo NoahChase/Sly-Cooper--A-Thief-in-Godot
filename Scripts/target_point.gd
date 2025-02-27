@@ -1,5 +1,5 @@
 extends StaticBody3D
-@export var is_selected = false
+@onready var is_selected = false
 @export var player : CharacterBody3D
 @onready var mesh = $MeshInstance3D
 
@@ -12,12 +12,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if player == null:
 		is_selected = false
-		mesh.visible = true
 		
 	else:
 		is_selected = true
+	
+	if is_selected:
 		mesh.visible = false
-	#if is_selected:
-		#$MeshInstance3D.visible = false
-	#else:
-		#$MeshInstance3D.visible = true
+	else:
+		mesh.visible = true

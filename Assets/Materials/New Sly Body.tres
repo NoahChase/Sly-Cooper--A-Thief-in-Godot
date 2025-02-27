@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://5pnj2tksgiwf"]
+
+[ext_resource type="Texture2D" uid="uid://c6n1cktdyit8" path="res://Assets/Textures/Sly_Body.png" id="1_07k7x"]
+
+[resource]
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_07k7x")
+metallic_specular = 0.0

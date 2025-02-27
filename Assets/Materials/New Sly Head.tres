@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dgxoi68vnlo35"]
+
+[ext_resource type="Texture2D" uid="uid://clq4jysv2wvqb" path="res://Assets/Textures/Sly_Head_Paint.png" id="1_yne2d"]
+
+[resource]
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_yne2d")
+metallic_specular = 0.0
