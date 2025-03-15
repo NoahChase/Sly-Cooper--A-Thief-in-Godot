@@ -74,7 +74,7 @@ func _physics_process(delta):
 			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.8)
 	
 	if camera_player.target != null:
-		if camera_player.target.is_in_group("rope"):
+		if camera_player.target.adj_fov == true:
 			camera.fov = lerp(camera.fov, 75.0, 0.02)
 		else:
 			camera.fov = lerp(camera.fov, 60.0, 0.02)

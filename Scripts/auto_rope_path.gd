@@ -70,6 +70,22 @@ func _ready():
 		print("Stored sag points: ", sag_points)
 		
 
+func _physics_process(delta: float) -> void:
+	if not Engine.is_editor_hint():
+		# Runtime
+		move_progress(delta)
+		ball2player(delta)
+		bend_rope(delta)
+		path_follow.progress_ratio = clamp(path_follow.progress_ratio, 0.1, 0.9)
+	else:
+		# Editor
+		update_curve()
+		if path_3d:
+			length = calculate_path_length(path_3d.curve)
+		
+
+# Editor Functions
+
 func look_at_target(node: Node3D, target_position: Vector3) -> void:
 	var direction = (target_position - node.global_position).normalized()
 	var look_rotation = atan2(direction.x, direction.z)  # Get Y-axis rotation
@@ -116,19 +132,7 @@ func calculate_path_length(curve: Curve3D, subdivisions: int = 100) -> float:
 		previous_position = current_position
 	return snappedf(length, 0.01)  # Rounds to two decimal places
 
-
-
-func _physics_process(delta: float) -> void:
-	if not Engine.is_editor_hint():
-		move_progress(delta)
-		ball2player(delta)
-		bend_rope(delta)
-		path_follow.progress_ratio = clamp(path_follow.progress_ratio, 0.1, 0.9)
-	else:
-		update_curve()
-		if path_3d:
-			length = calculate_path_length(path_3d.curve)
-		
+# Runtime functions
 
 func bend_rope(delta):
 	if path_3d and target_point:
@@ -144,8 +148,8 @@ func bend_rope(delta):
 				val = lerp(val, 0.0, 0.005)
 				bend_mult = lerp(bend_mult, 1.0, 0.005)
 			else:
-				val = lerp(val, 1.0, 0.005)
-				bend_mult = lerp(bend_mult, val, 0.005)
+				val = lerp(val, 1.0, 0.01)
+				bend_mult = lerp(bend_mult, val, 0.01)
 			
 			lerp_factor = clamp(distance / (length / 1.75) * (1-val), val, 1.0 + val) * bend_mult
 			new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
@@ -166,14 +170,14 @@ func move_progress(delta):
 
 		# Determine movement multiplier
 		var target_prog_mult = 1.0 if player.direction else 0.0
-		prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.2)
+		prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
 
 		# Adjust progress along the path
 		path_follow.progress_ratio += delta / (length / 3.5) * prog_mult
 
 		# Reset lerp_val on direction switch
 		if old_forward != null and forward != old_forward:
-			lerp_val = 0.2
+			lerp_val = 0.1
 		else:
 			lerp_val = lerp(lerp_val, 1.0, 0.005)
 

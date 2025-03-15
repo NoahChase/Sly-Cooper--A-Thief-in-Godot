@@ -23,9 +23,10 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var target_points = []
 @onready var tiptoe_rays = [$"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray2", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray3", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray4"]
 @onready var jump_num = 0
+@onready var jump_mult = 1.0
 @onready var gravmult = 1.0
-
 @onready var jump_cam_trigger = false
+@onready var previous_jump_was_notch = false
 
 ## export
 @export var camera_target: Node3D
@@ -37,6 +38,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var temptext = $RichTextLabel2
 ## var
 var target
+var last_target
 var camera_T = float()
 var horizontal
 var vertical
@@ -62,7 +64,7 @@ func _process(delta: float) -> void:
 
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
-	$RichTextLabel4.text = str("jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
+	$RichTextLabel4.text = str("jump_mult: ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
 	#$RichTextLabel4.text = str(velocity.y)
 	
 
@@ -123,7 +125,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta * gravmult
 			
 	else:
-		air_mult = 1.0
+		previous_jump_was_notch = false
 		if Input.is_action_pressed("shift"):
 			speed_mult = 1.5
 		else:
@@ -163,8 +165,10 @@ func _physics_process(delta: float) -> void:
 		if target == null:
 			state = AIR
 	else:
+		last_target = target
 		target = null
-		manual_move_cam = false
+		if ! previous_jump_was_notch:
+			manual_move_cam = false
 
 	
 
@@ -208,13 +212,13 @@ func _physics_process(delta: float) -> void:
 	# Adjust rotation smoothing based on player movement
 
 	var look_val = 0.165 * air_mult / speed_mult
-	if target == null or not target.is_in_group("rope"):
-		$"Body Mesh Container".rotation.y += angle_difference * look_val
+	if target == null or not target.is_in_group("LOCK PLAYER ROT"):
+		rot_container.rotation.y += angle_difference * look_val
 	# for rope correction (re align to proper rotation)
-	if $"Body Mesh Container".rotation.y != true_player_rot.rotation.y and state != ON_TARGET:
+	if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET:
 		#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
-		var angle_diff = fposmod(true_player_rot.rotation.y - $"Body Mesh Container".rotation.y + PI, TAU) - PI
-		$"Body Mesh Container".rotation.y += angle_diff * 0.12
+		var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
+		rot_container.rotation.y += angle_diff * 0.12
 	
 	true_player_rot.rotation.y += angle_difference * look_val
 	if not direction.length_squared() < 0.0001:
@@ -228,7 +232,7 @@ func _physics_process(delta: float) -> void:
 	elif horizontal > 0 and state == FLOOR:
 		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
 	
-	$RichTextLabel.text = str("fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num)
+	$RichTextLabel.text = str("fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num, "  prevnotch: ", previous_jump_was_notch, " mancam: ", manual_move_cam)
 	camera_smooth_follow(delta)
 	move_and_slide()
 	
@@ -254,14 +258,17 @@ func state_handler(delta: float) -> void:
 func jump():
 	speed_mult = 1.25
 	jump_num += 1
+	if not previous_jump_was_notch:
+		jump_mult = 1.0
 	if jump_num < 2:
 		#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 		if state == FLOOR:
-			velocity.y += JUMP_VELOCITY
+			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_TARGET:
 			target.player = null
+			last_target = target
 			target = null
-			velocity.y += JUMP_VELOCITY
+			velocity.y += JUMP_VELOCITY * jump_mult
 			jump_num = 0
 			state = AIR
 		elif state != TO_TARGET:
@@ -272,27 +279,36 @@ func jump():
 				velocity.y += 2.75
 			else:
 				velocity.y += (-velocity.y/2) + 6.5
+	jump_mult = 1.0
 	
 
 func apply_target(delta):
-	var closest_point = null
-	var min_distance = INF
 	var predicted_position = global_transform.origin + velocity * delta
 	var best_target = null
-	var max_distance_reduction = -INF
+	var best_score = -INF  # Higher score means a better target
+
+	var weight_distance_reduction = 1.0  # Adjust this to prioritize speed vs. closeness
+	var weight_closeness = 0.5           # Higher = prioritize closer targets
+
 	for potential_target in target_points:
 		var current_distance = global_transform.origin.distance_to(potential_target.global_transform.origin)
 		var predicted_distance = predicted_position.distance_to(potential_target.global_transform.origin)
 		var distance_reduction = current_distance - predicted_distance
-		if current_distance < min_distance:
-			min_distance = current_distance
-			closest_point = potential_target
-			best_target = closest_point
-		else:
-			best_target = null
-		if best_target != null:
-			target = best_target
-	
+
+		# Avoid division by zero if current_distance is extremely small
+		var closeness_score = 1.0 / max(current_distance, 0.001)
+
+		# Combined scoring function
+		var score = (distance_reduction * weight_distance_reduction) + (closeness_score * weight_closeness)
+
+		if score > best_score:
+			best_score = score
+			best_target = potential_target
+
+	# Assign the best target after evaluating all options
+	if best_target != null:
+		target = best_target
+
 
 func apply_magnetism(delta): # the holy grail of magnetism
 	if target != null:  # No magnetism if jumping
@@ -313,6 +329,7 @@ func apply_magnetism(delta): # the holy grail of magnetism
 					velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
 			else:
 				state = AIR
+				last_target = target
 				target = null
 	
 				#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
@@ -349,7 +366,7 @@ func camera_smooth_follow(delta):
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
-	var tform = sly_mesh.global_transform.origin - $"Body Mesh Container".global_transform.basis.z * tform_mult
+	var tform = sly_mesh.global_transform.origin - rot_container.global_transform.basis.z * tform_mult
 	$Basis_Offset.global_transform.origin.x = lerp($Basis_Offset.global_transform.origin.x, tform.x, cam_timer / 2 * lerp_val)
 	$Basis_Offset.global_transform.origin.z = lerp($Basis_Offset.global_transform.origin.z, tform.z, cam_timer / 2 * lerp_val)
 	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, 1)

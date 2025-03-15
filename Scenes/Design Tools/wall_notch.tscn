@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bthauipqrijr0"]
+
+[ext_resource type="Script" path="res://Scripts/wall_notch.gd" id="1_ktv51"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_5f0wb"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_4dckx"]
+radius = 5.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_g28s5"]
+radius = 0.125
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bl6pj"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="Wall Notch" type="Node3D" node_paths=PackedStringArray("area3d", "area_col")]
+script = ExtResource("1_ktv51")
+area3d = NodePath("Area3D")
+area_col = NodePath("Area3D/CollisionShape3D")
+auto_jump = null
+
+[node name="Target Point" parent="." groups=["LOCK PLAYER ROT", "notch"] instance=ExtResource("2_5f0wb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_4dckx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_g28s5")
+surface_material_override/0 = SubResource("StandardMaterial3D_bl6pj")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

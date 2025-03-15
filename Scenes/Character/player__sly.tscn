@@ -128,7 +128,7 @@ height = 0.25
 radial_segments = 8
 rings = 4
 
-[node name="Player_ Sly" type="CharacterBody3D"]
+[node name="Player_ Sly" type="CharacterBody3D" groups=["Player"]]
 floor_constant_speed = true
 floor_max_angle = 0.506145
 script = ExtResource("1_jucx6")
@@ -201,7 +201,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6996, 0)
 shape = SubResource("CylinderShape3D_h1oyc")
 disabled = true
 

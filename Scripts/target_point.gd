@@ -1,6 +1,7 @@
 extends StaticBody3D
 @onready var is_selected = false
 @export var player : CharacterBody3D
+@export var adj_fov = false
 @onready var mesh = $MeshInstance3D
 
 # Called when the node enters the scene tree for the first time.
@@ -15,6 +16,7 @@ func _process(delta: float) -> void:
 		
 	else:
 		is_selected = true
+	mesh.visible = false
 	
 	if is_selected:
 		mesh.visible = false
