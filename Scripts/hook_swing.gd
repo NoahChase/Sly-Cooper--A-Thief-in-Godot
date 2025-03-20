@@ -25,7 +25,12 @@ func _physics_process(delta: float) -> void:
 				assign_look_at()
 			else:
 				is_facing_toward()
+				# Align the player's rotation.y to face the correct direction
 				player.rot_container.rotation.y = lerp_angle(player.rot_container.rotation.y, atan2(dir_to_look.x, dir_to_look.z), 0.15)
+				
+				# Align X and Z based on swing but adjusted for player direction
+				var sign_correction = sign(cos(player.rot_container.global_rotation.y - target_point.global_rotation.y))
+				player.rot_container.rotation.x = rot_container.rotation.x * sign_correction
 			
 			# if no direction start timer
 			#if direction and timer is stopped, swing
@@ -45,16 +50,10 @@ func _physics_process(delta: float) -> void:
 		look_assigned = false
 		has_swinged_once = false
 		if player != null:
-			#return player rotation to original (I will move this to player script later so we can destroy this node if needed)
-			if player.rotation.x != 0:
-				player.rotation.x = lerp_angle(player.rotation.x, 0.0, 0.2)
-			else:
-				player = null
+			player = null
 		else:
 			swing_strength = 0.75
 			rot_container.rotation.x = lerp(rot_container.rotation.x, 0.0, 0.1)
-			
-	
 
 func assign_look_at():
 	##determine which look node to use for the player's y rotation

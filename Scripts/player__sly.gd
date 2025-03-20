@@ -214,6 +214,8 @@ func _physics_process(delta: float) -> void:
 	var look_val = 0.165 * air_mult / speed_mult
 	if target == null or not target.is_in_group("LOCK PLAYER ROT"):
 		rot_container.rotation.y += angle_difference * look_val
+		rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
+		rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
 	# for rope correction (re align to proper rotation)
 	if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET:
 		#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
