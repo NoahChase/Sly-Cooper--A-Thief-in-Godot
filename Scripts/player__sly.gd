@@ -2,7 +2,7 @@ extends CharacterBody3D
 ## In GitHub, Belongs to Character Sly Cooper Branch
 
 ## const
-const SPEED = 3.52 #jump distance #4m, double jump distance #?m
+const SPEED = 4.03 #3.52 for 3.4m #4.03 jump distance 4m
 const JUMP_VELOCITY = 8.06 #single jump 2m, cozy double jump 3m
 
 ## enum
@@ -27,6 +27,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var gravmult = 1.0
 @onready var jump_cam_trigger = false
 @onready var previous_jump_was_notch = false
+@onready var left_stick_pressure = 1.0
 
 ## export
 @export var camera_target: Node3D
@@ -48,10 +49,7 @@ var floor_or_roof
 func _ready() -> void:
 	camera_target = camera_parent.camera_target
 	camera = camera_parent.camera
-
-func _process(delta: float) -> void:
-	state_handler(delta)
-	# Constants for the calculation
+		# Constants for the calculation
 	var new_gravity = 6.5 * 2.5  # Gravity (m/s^2)
 	var jump_velocity = 8.06  # Initial vertical velocity (m/s)
 	var desired_jump_distance = 3.5 # Desired horizontal distance (m)
@@ -65,12 +63,14 @@ func _process(delta: float) -> void:
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
 	$RichTextLabel4.text = str("jump_mult: ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
-	#$RichTextLabel4.text = str(velocity.y)
+
+func _process(delta: float) -> void:
+	state_handler(delta)
 	
 
 func _physics_process(delta: float) -> void:
 	floor_or_roof = $"Floor Ray".get_collider()
-	var left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
+	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
 	
 	if Input.is_action_just_pressed("esc"):
@@ -90,6 +90,7 @@ func _physics_process(delta: float) -> void:
 	
 ## States
 	if state == FLOOR:
+		air_mult = 1.0
 		#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "floor")
 		if not direction:
 			var any_not_colliding = false
@@ -106,9 +107,12 @@ func _physics_process(delta: float) -> void:
 		jump_num = 0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
+		var forward = -rot_container.global_transform.basis.z
+
+		
 		speed_mult = 1.0
 		if not $"Floor Ray".is_colliding():
-			air_mult = lerp(air_mult, 0.02, 0.08)
+			air_mult = lerp(air_mult, 0.05, 0.08)
 			#sly_mesh.anim_tree.set("parameters/Anim State/transition_request", "air")
 		else:
 			air_mult = 1.0
@@ -117,11 +121,8 @@ func _physics_process(delta: float) -> void:
 		
 		if velocity.y > -6.5:
 			gravmult = 2.5
-			#if jump_num <= 1:
-				#speed_mult = lerp(speed_mult, 1.125, 1)
 		else:
-			gravmult = lerp(gravmult, 1.0, 0.125)
-			#speed_mult = lerp(speed_mult, 1.0, 1)
+			gravmult = 1.0
 		velocity += get_gravity() * delta * gravmult
 			
 	else:
@@ -147,7 +148,7 @@ func _physics_process(delta: float) -> void:
 			#if jump_num <= 1:
 				#speed_mult = lerp(speed_mult, 1.125, 1)
 		else:
-			gravmult = lerp(gravmult, 1.0, 0.125)
+			gravmult = 1.0
 			#speed_mult = lerp(speed_mult, 1.0, 1)
 		velocity += get_gravity() * delta * gravmult
 		#if target == null or velocity.y > 0:
@@ -184,7 +185,6 @@ func _physics_process(delta: float) -> void:
 	horizontal = joystick_input.x
 	vertical = joystick_input.y
 	
-	
 
 	# Calculate movement direction relative to the camera
 	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult * joystick_input.length(), 0.0, vertical * air_mult * speed_mult * joystick_input.length()).rotated(Vector3.UP, camera_T)).normalized()
@@ -204,7 +204,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = lerp(velocity.x, 0.0, 0.025 * (1-air_mult))
 		velocity.z = lerp(velocity.z, 0.0, 0.025 * (1-air_mult))
 
-	# Rotation
+# Rotation
 	var target_rotation_y = $"Look_At Rotation".rotation.y
 	var current_rotation_y = true_player_rot.rotation.y
 	var angle_difference = wrapf(target_rotation_y - current_rotation_y, -PI, PI)
@@ -256,13 +256,13 @@ func state_handler(delta: float) -> void:
 	
 
 func jump():
-	speed_mult = 1.25
 	jump_num += 1
 	if not previous_jump_was_notch:
 		jump_mult = 1.0
 	if jump_num < 2:
 		#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 		if state == FLOOR:
+			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_TARGET:
 			target.player = null
@@ -274,7 +274,6 @@ func jump():
 		elif state != TO_TARGET:
 			#sly_mesh.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
-			speed_mult = 1.0
 			if velocity.y >= 0:
 				velocity.y += 2.75
 			else:
@@ -359,7 +358,7 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5.25
+	var add = 5.00
 	cam_max = 0
 	cam_min = -1
 	tform_mult = 0.75
@@ -390,7 +389,7 @@ func camera_smooth_follow(delta):
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0075))
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
-			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y:
+			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.0075)
 		else:
 			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.5: # and not downward_raycast.is_colliding()

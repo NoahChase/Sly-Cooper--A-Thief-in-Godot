@@ -12,11 +12,11 @@ config_version=5
 
 config/name="Sly Cooper: A Thief in Godot"
 run/main_scene="res://Scenes/Worlds/hazard_room.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 run/delta_smoothing=false
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="res://A Thief in Godot.png"
 boot_splash/use_filter=false
+boot_splash/image="res://A Thief in Godot.png"
 config/icon="res://A Thief in Godot.png"
 boot_splash/minimum_display_time=2000
 
@@ -29,7 +29,7 @@ settings/stdout/print_fps=true
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
-window/size/borderless=true
+window/vsync/vsync_mode=0
 
 [global_group]
 
@@ -40,6 +40,7 @@ pole=""
 notch=""
 Player=""
 "LOCK PLAYER ROT"=""
+swing=""
 
 [input]
 
@@ -129,6 +130,7 @@ shift={
 
 [physics]
 
+3d/run_on_separate_thread=true
 3d/default_gravity=6.5
 
 [rendering]

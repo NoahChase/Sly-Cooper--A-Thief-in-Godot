@@ -20,38 +20,42 @@ func _ready():
 	previous_position = path_follow_3d.global_transform.origin
 func _physics_process(delta):
 	if not Engine.is_editor_hint():
-		# get test_ball to look at pole
-		var dir = test_ball.global_position - $"Path3D/PathFollow3D/Grip Offset".global_position
-		test_ball.rotation.y = atan2(dir.x, dir.z)
-		if test_ball.is_selected:
-			if target != null:
-				#make player look at pole
-				target.rot_container.rotation.y = lerp_angle(target.rot_container.rotation.y, test_ball.rotation.y, 0.15)
-				move_ball = false
-
-				var camera_direction = test_ball.global_transform.origin - target.camera_parent.camera.global_transform.origin
-				
-				if target.state == target.ON_TARGET:
-					target.global_transform.origin = test_ball.global_transform.origin
-					#target.sly_container.rotation.y = lerp(target.sly_container.rotation.y, -test_ball.rotation.y, 0.1)
-				speed = 1.25
-				
-				
-				if reversed:
-					if Input.is_action_pressed("ui_down"):
-						path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002
-					if Input.is_action_pressed("ui_up"):
-						path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
-				else:
-					if Input.is_action_pressed("ui_up"):
-						path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002
-					if Input.is_action_pressed("ui_down"):
-						path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
-		elif target != null:
-			ball2player(delta)
-		
+		var dis_2_plyr = (target.global_transform.origin - test_ball.global_transform.origin).length()
+		if dis_2_plyr > length / 2:
+			return
+		else:
+			# get test_ball to look at pole
+			var dir = test_ball.global_position - $"Path3D/PathFollow3D/Grip Offset".global_position
+			test_ball.rotation.y = atan2(dir.x, dir.z)
+			if test_ball.is_selected:
+				if target != null:
+					#make player look at pole
+					target.rot_container.rotation.y = lerp_angle(target.rot_container.rotation.y, test_ball.rotation.y, 0.15)
+					move_ball = false
+	
+					var camera_direction = test_ball.global_transform.origin - target.camera_parent.camera.global_transform.origin
+					
+					if target.state == target.ON_TARGET:
+						target.global_transform.origin = test_ball.global_transform.origin
+						#target.sly_container.rotation.y = lerp(target.sly_container.rotation.y, -test_ball.rotation.y, 0.1)
+					speed = 1.25
+					
+					
+					if reversed:
+						if Input.is_action_pressed("ui_down"):
+							path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002
+						if Input.is_action_pressed("ui_up"):
+							path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
+					else:
+						if Input.is_action_pressed("ui_up"):
+							path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002
+						if Input.is_action_pressed("ui_down"):
+							path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
+			elif target != null:
+				ball2player(delta)
 			
-		path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
+				
+			path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
 	else:
 		if path:
 				length = calculate_path_length(path.curve)

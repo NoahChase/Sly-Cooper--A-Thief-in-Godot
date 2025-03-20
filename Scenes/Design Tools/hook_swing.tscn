@@ -1,0 +1,81 @@
+[gd_scene load_steps=12 format=3 uid="uid://b4athtlke2t2e"]
+
+[ext_resource type="Script" uid="uid://c8t6q4glc6o27" path="res://Scripts/hook_swing.gd" id="1_iriet"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_iojh8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxfox"]
+diffuse_mode = 3
+specular_mode = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_44ef5"]
+radius = 0.125
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ts64k"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_j75q4"]
+radius = 0.125
+height = 0.25
+
+[sub_resource type="Gradient" id="Gradient_0olf0"]
+colors = PackedColorArray(0.796243, 0.796243, 0.796243, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_onv10"]
+noise_type = 2
+seed = 3
+frequency = 0.004
+fractal_gain = -4.87
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fbnoq"]
+width = 128
+height = 128
+seamless = true
+color_ramp = SubResource("Gradient_0olf0")
+noise = SubResource("FastNoiseLite_onv10")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rmciy"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.853333, 0.45, 1)
+albedo_texture = SubResource("NoiseTexture2D_fbnoq")
+metallic_specular = 1.0
+roughness = 0.5
+clearcoat_enabled = true
+clearcoat_roughness = 1.0
+
+[sub_resource type="TorusMesh" id="TorusMesh_mi5h1"]
+inner_radius = 0.125
+outer_radius = 0.25
+rings = 7
+ring_segments = 6
+
+[node name="Hook Swing" type="Node3D"]
+script = ExtResource("1_iriet")
+
+[node name="Rot Container" type="Node3D" parent="."]
+
+[node name="Look At 1" type="MeshInstance3D" parent="Rot Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+material_override = SubResource("StandardMaterial3D_kxfox")
+mesh = SubResource("SphereMesh_44ef5")
+skeleton = NodePath("../..")
+
+[node name="Look At 2" type="MeshInstance3D" parent="Rot Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+material_override = SubResource("StandardMaterial3D_ts64k")
+mesh = SubResource("SphereMesh_j75q4")
+skeleton = NodePath("../..")
+
+[node name="Target Point" parent="Rot Container" groups=["LOCK PLAYER ROT", "swing"] instance=ExtResource("2_iojh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 3.82137e-15, 8.74228e-08, 8.74228e-08, 4.37114e-08, 1, 0, 1, -4.37114e-08, 0, 0.125, 0)
+material_override = SubResource("StandardMaterial3D_rmciy")
+mesh = SubResource("TorusMesh_mi5h1")
+
+[node name="Has Swinged Timer" type="Timer" parent="."]
+one_shot = true

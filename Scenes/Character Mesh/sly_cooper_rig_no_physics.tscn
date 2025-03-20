@@ -1,7 +1,7 @@
 [gd_scene load_steps=45 format=3 uid="uid://c16aev7j644f1"]
 
 [ext_resource type="PackedScene" uid="uid://dtehx71rshaem" path="res://Assets/Models/SlyCooper_RigNoPhysics.blend" id="1_fknm3"]
-[ext_resource type="Script" path="res://Scripts/sly_mesh.gd" id="2_10cyu"]
+[ext_resource type="Script" uid="uid://daramrt1l8nik" path="res://Scripts/sly_mesh.gd" id="2_10cyu"]
 [ext_resource type="AnimationLibrary" uid="uid://dg0wle6w7iw3r" path="res://Assets/Animations/Library Sly MASTER 005.res" id="3_iatrl"]
 
 [sub_resource type="Animation" id="Animation_5khbj"]
@@ -9,7 +9,7 @@ length = 0.001
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_71qfp"]
 _data = {
-"RESET": SubResource("Animation_5khbj")
+&"RESET": SubResource("Animation_5khbj")
 }
 
 [sub_resource type="Curve" id="Curve_mllmr"]
@@ -250,9 +250,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yoxlg"]
 _data = {
-"RESET": SubResource("Animation_ul3bh"),
-"cnt1": SubResource("Animation_333fq"),
-"new_animation": SubResource("Animation_e1vac")
+&"RESET": SubResource("Animation_ul3bh"),
+&"cnt1": SubResource("Animation_333fq"),
+&"new_animation": SubResource("Animation_e1vac")
 }
 
 [sub_resource type="BoxMesh" id="BoxMesh_nffyq"]

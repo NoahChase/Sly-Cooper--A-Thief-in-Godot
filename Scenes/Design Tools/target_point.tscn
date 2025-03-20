@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://bj34qq52wpb60"]
 
-[ext_resource type="Script" path="res://Scripts/target_point.gd" id="1_57eij"]
+[ext_resource type="Script" uid="uid://duw7xddv1s1bp" path="res://Scripts/target_point.gd" id="1_57eij"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ij1nr"]
 radius = 0.125
@@ -84,8 +84,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8yu1b"]
 _data = {
-"RESET": SubResource("Animation_o3541"),
-"shine": SubResource("Animation_sshqn")
+&"RESET": SubResource("Animation_o3541"),
+&"shine": SubResource("Animation_sshqn")
 }
 
 [node name="Target Point" type="StaticBody3D" groups=["target"]]
@@ -102,6 +102,6 @@ shape = SubResource("ConcavePolygonShape3D_f30fa")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_8yu1b")
+&"": SubResource("AnimationLibrary_8yu1b")
 }
 autoplay = "shine"

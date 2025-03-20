@@ -21,33 +21,32 @@ func _ready() -> void:
 	area_radius = clamp(area_radius, 0, INF)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	if Engine.is_editor_hint():
+	if not Engine.is_editor_hint():
+		if player == null:
+			return
+		else:
+			#make sure player is closest to this one (is selected)
+			if not target_point.is_selected:
+				if player.state == player.AIR:
+					if player.previous_jump_was_notch and player.last_target != target_point:
+						magnetize_target()
+			else:
+				var dir = target_point.global_position - $MeshInstance3D.global_position
+				target_point.rotation.y = atan2(dir.x, dir.z)
+				player.rot_container.rotation.y = lerp_angle(player.rot_container.rotation.y, target_point.rotation.y, 0.15)
+				if auto_jump:
+					player.jump_mult = jump_mult
+					player.previous_jump_was_notch = true
+					player.jump()
+				elif player.direction:
+					player.jump_mult = jump_mult
+					player.previous_jump_was_notch = true
+	else:
 		area_col.shape = SphereShape3D.new()
 		area_col.shape.radius = area_radius
 		area_col.position.y = area_pos_y
 		area_radius = clamp(area_radius, 0, INF)
-	elif not player == null:
-		#make sure player is closest to this one (is selected)
-		if target_point.is_selected:
-			var dir = target_point.global_position - $MeshInstance3D.global_position
-			target_point.rotation.y = atan2(dir.x, dir.z)
-			player.rot_container.rotation.y = lerp_angle(player.rot_container.rotation.y, target_point.rotation.y, 0.15)
-			if Input.is_action_pressed("ui_down"):
-				player.jump_mult = jump_mult
-				player.previous_jump_was_notch = true
-			elif auto_jump:
-				player.jump_mult = jump_mult
-				player.previous_jump_was_notch = true
-				player.jump()
-
-		if player.state == player.AIR:
-			if player.previous_jump_was_notch and player.last_target != target_point:
-				magnetize_target()
-			
-			
-		#if not player.do_big_jump == true:
-			#if target_point.is_selected:
-				#pass
+	
 
 func magnetize_target():
 	var direction = (target_point.global_transform.origin - player.global_transform.origin + Vector3(0,1,0)).normalized()

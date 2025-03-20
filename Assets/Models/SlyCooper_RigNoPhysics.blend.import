@@ -18,6 +18,7 @@ nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
+nodes/use_node_type_suffixes=true
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
@@ -48,19 +49,21 @@ _subresources={
 "HeadMat": {
 "use_external/enabled": true,
 "use_external/path": "res://Assets/Materials/Sly Head.tres"
+},
+"OH_Outline_Material": {
+"use_external/enabled": true,
+"use_external/path": "uid://deqx25kqeg14p"
+},
+"OutlineMat": {
+"use_external/enabled": true,
+"use_external/path": "uid://deqx25kqeg14p"
 }
 },
 "nodes": {
-"PATH:Camera": {
-"import/skip_import": true
-},
 "PATH:Circle": {
 "import/skip_import": true
 },
 "PATH:Cube": {
-"import/skip_import": true
-},
-"PATH:Sun": {
 "import/skip_import": true
 },
 "PATH:metarig/Skeleton3D": {
@@ -82,6 +85,7 @@ blender/nodes/modifiers=1
 blender/meshes/colors=false
 blender/meshes/uvs=true
 blender/meshes/normals=true
+blender/meshes/export_geometry_nodes_instances=false
 blender/meshes/tangents=true
 blender/meshes/skins=2
 blender/meshes/export_bones_deforming_mesh_only=false
