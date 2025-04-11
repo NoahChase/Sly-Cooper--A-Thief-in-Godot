@@ -13,23 +13,15 @@ config_version=5
 config/name="Sly Cooper: A Thief in Godot"
 run/main_scene="res://Scenes/Worlds/hazard_room.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
-run/delta_smoothing=false
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/use_filter=false
 boot_splash/image="res://A Thief in Godot.png"
 config/icon="res://A Thief in Godot.png"
 boot_splash/minimum_display_time=2000
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
 window/size/mode=3
-window/vsync/vsync_mode=0
 
 [global_group]
 
@@ -135,7 +127,7 @@ shift={
 
 [rendering]
 
-occlusion_culling/bvh_build_quality=0
+occlusion_culling/bvh_build_quality=1
 2d/shadow_atlas/size=1024
 reflections/sky_reflections/roughness_layers=6
 reflections/sky_reflections/ggx_samples=24
@@ -143,5 +135,4 @@ reflections/reflection_atlas/reflection_size=128
 reflections/reflection_atlas/reflection_count=48
 global_illumination/gi/use_half_resolution=true
 environment/ssao/blur_passes=3
-occlusion_culling/occlusion_rays_per_thread=256
 occlusion_culling/use_occlusion_culling=true

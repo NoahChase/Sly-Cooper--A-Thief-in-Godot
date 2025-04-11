@@ -21,7 +21,7 @@ func _ready():
 func _physics_process(delta):
 	if not Engine.is_editor_hint():
 		var dis_2_plyr = (target.global_transform.origin - test_ball.global_transform.origin).length()
-		if dis_2_plyr > length / 2:
+		if dis_2_plyr > length:
 			return
 		else:
 			# get test_ball to look at pole
@@ -52,7 +52,7 @@ func _physics_process(delta):
 						if Input.is_action_pressed("ui_down"):
 							path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
 			elif target != null:
-				ball2player(delta)
+				ball2player()
 			
 				
 			path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
@@ -79,7 +79,7 @@ func calculate_path_length(curve: Curve3D, subdivisions: int = 100) -> float:
 
 # Runtime Functions
 
-func ball2player(delta):
+func ball2player():
 	if not path or not path.curve:
 		return
 

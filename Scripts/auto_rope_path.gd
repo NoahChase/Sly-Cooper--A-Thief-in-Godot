@@ -6,6 +6,8 @@ extends Node3D
 @export var end_point: Node3D
 @export var curve_amplitude: float = 0.5
 @export_range(3, 50, 1) var num_segments: int = 10
+@export var start_clamp = 0.01
+@export var end_clamp = 0.99
 @export var length = 0.0
 @export var path_follow = PathFollow3D
 @export var target_point = StaticBody3D
@@ -74,7 +76,7 @@ func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		# Runtime
 		var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
-		if dis_2_plyr > length / 2:
+		if dis_2_plyr > length:
 			return
 		else:
 			if target_point.is_selected:
@@ -82,7 +84,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				ball2player(delta)
 			bend_rope(delta)
-			path_follow.progress_ratio = clamp(path_follow.progress_ratio, 0.1, 0.9)
+			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:
 		# Editor
 		update_curve()
@@ -174,7 +176,7 @@ func move_progress(delta):
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
 	# Adjust progress along the path
-	path_follow.progress_ratio += delta / (length / 3.5) * prog_mult
+	path_follow.progress_ratio += delta / (length / 4.0) * prog_mult
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
 		lerp_val = 0.1

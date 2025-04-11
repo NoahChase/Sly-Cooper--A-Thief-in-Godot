@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b4athtlke2t2e"]
+[gd_scene load_steps=13 format=3 uid="uid://b4athtlke2t2e"]
 
 [ext_resource type="Script" uid="uid://c8t6q4glc6o27" path="res://Scripts/hook_swing.gd" id="1_iriet"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_iojh8"]
@@ -19,6 +19,9 @@ albedo_color = Color(0, 0, 0, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_j75q4"]
 radius = 0.125
 height = 0.25
+
+[sub_resource type="BoxMesh" id="BoxMesh_cjysu"]
+size = Vector3(0.125, 0.125, 2)
 
 [sub_resource type="Gradient" id="Gradient_0olf0"]
 colors = PackedColorArray(0.796243, 0.796243, 0.796243, 1, 1, 1, 1, 1)
@@ -55,25 +58,28 @@ ring_segments = 6
 [node name="Hook Swing" type="Node3D"]
 script = ExtResource("1_iriet")
 
-[node name="Rot Container" type="Node3D" parent="."]
-
-[node name="Look At 1" type="MeshInstance3D" parent="Rot Container"]
+[node name="Look At 1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 visible = false
 material_override = SubResource("StandardMaterial3D_kxfox")
 mesh = SubResource("SphereMesh_44ef5")
-skeleton = NodePath("../..")
 
-[node name="Look At 2" type="MeshInstance3D" parent="Rot Container"]
+[node name="Look At 2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 visible = false
 material_override = SubResource("StandardMaterial3D_ts64k")
 mesh = SubResource("SphereMesh_j75q4")
-skeleton = NodePath("../..")
+
+[node name="Rot Container" type="Node3D" parent="."]
+visible = false
 
 [node name="Target Point" parent="Rot Container" groups=["LOCK PLAYER ROT", "swing"] instance=ExtResource("2_iojh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rot Container"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -1, 0)
 visible = false
+mesh = SubResource("BoxMesh_cjysu")
 
 [node name="Ring" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1, 3.82137e-15, 8.74228e-08, 8.74228e-08, 4.37114e-08, 1, 0, 1, -4.37114e-08, 0, 0.125, 0)

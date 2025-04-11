@@ -79,7 +79,6 @@ camera_parent = NodePath("../Camera Parent")
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("2_2iiy1")]
 transform = Transform3D(1, -0.00020944, 0, 0.00020944, 1, 1.83098e-11, 0, -1.83098e-11, 1, 0.0011301, 16.5004, 0)
 camera_player = NodePath("../Player_ Sly")
-pitch_max = 45
 pitch_min = -88
 aim_pitch_max = 0
 aim_pitch_min = 0

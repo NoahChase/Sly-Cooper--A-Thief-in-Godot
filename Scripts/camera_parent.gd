@@ -6,10 +6,10 @@ extends Node3D
 @export var camera_container = Node3D
 @export var camera_player = CharacterBody3D
 @export var camera = Camera3D
-@export var pitch_max = 42
-@export var pitch_min = -80
-@export var aim_pitch_max = 80
-@export var aim_pitch_min = -80
+@export var pitch_max = 45
+@export var pitch_min = -85
+@export var aim_pitch_max = 85
+@export var aim_pitch_min = -85
 
 var right_stick_pressure
 var left_stick_pressure
@@ -77,11 +77,11 @@ func _physics_process(delta):
 		if camera_player.target.adj_fov == true:
 			camera.fov = lerp(camera.fov, 75.0, 0.02)
 		else:
-			camera.fov = lerp(camera.fov, 60.0, 0.02)
+			camera.fov = lerp(camera.fov, 55.0, 0.02)
 	else:
-		camera.fov = lerp(camera.fov, 60.0, 0.02)
-func return_camera_to_position(delta):
+		camera.fov = lerp(camera.fov, 55.0, 0.02)
+func return_camera_to_position():
 	camera.global_position = camera.global_position.lerp(camera_return.global_transform.origin, 0.015)
 
-func rotate_yaw(delta):
+func rotate_yaw():
 	yaw += 1

@@ -10,15 +10,15 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if player == null:
 		is_selected = false
 		
 	else:
 		is_selected = true
-	mesh.visible = false
-	
-	if is_selected:
-		mesh.visible = false
-	else:
-		mesh.visible = true
+	#mesh.visible = false
+	#
+	#if is_selected:
+		#mesh.visible = false
+	#else:
+		#mesh.visible = true

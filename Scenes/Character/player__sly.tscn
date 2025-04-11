@@ -1,7 +1,6 @@
-[gd_scene load_steps=18 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=17 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" uid="uid://bkicq7vwc604f" path="res://Scripts/player__sly.gd" id="1_jucx6"]
-[ext_resource type="PackedScene" uid="uid://cqun0y1nxdxei" path="res://Scenes/Character Mesh/sly_cooper_2025_01.tscn" id="2_spmol"]
 [ext_resource type="PackedScene" uid="uid://bysuj8xbry7yo" path="res://Scenes/Character Mesh/sly_cooper_model.tscn" id="3_nt6o0"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
@@ -130,8 +129,6 @@ radial_segments = 8
 rings = 4
 
 [node name="Player_ Sly" type="CharacterBody3D" groups=["Player"]]
-floor_constant_speed = true
-floor_max_angle = 0.506145
 script = ExtResource("1_jucx6")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
@@ -183,12 +180,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_xn228")
 }
 
-[node name="SlyCooper_2025" parent="Body Mesh Container" instance=ExtResource("2_spmol")]
-transform = Transform3D(-1.2, 0, -1.04907e-07, 0, 1.2, 0, 1.04907e-07, 0, -1.2, 0, -1, 0.473444)
-visible = false
-
 [node name="sly_cooper_model" parent="Body Mesh Container" instance=ExtResource("3_nt6o0")]
-transform = Transform3D(-1.2, 0, -1.81195e-07, 0, 1.2, 0, 1.81195e-07, 0, -1.2, 0, -1, 0)
+transform = Transform3D(-1.175, 0, -1.7742e-07, 0, 1.175, 0, 1.7742e-07, 0, -1.175, 0, -1, 0)
 
 [node name="True Player Rotation" type="Node3D" parent="."]
 visible = false
@@ -206,7 +199,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.75, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, -0.5)
 shape = SubResource("CylinderShape3D_h1oyc")
 disabled = true
 
@@ -223,14 +216,12 @@ mesh = SubResource("SphereMesh_s3532")
 target_position = Vector3(0, -0.5, 0)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-visible = false
 offset_right = 402.0
 offset_bottom = 73.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
-visible = false
 offset_top = 136.0
 offset_right = 167.0
 offset_bottom = 224.0
@@ -246,7 +237,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
-visible = false
 offset_top = 181.0
 offset_right = 615.0
 offset_bottom = 801.0
