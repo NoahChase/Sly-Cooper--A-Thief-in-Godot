@@ -188,6 +188,22 @@ func move_progress(delta):
 func ball2player(delta):
 	# Get the closest offset on the curve
 	var closest_offset = path_3d.curve.get_closest_offset(player.global_position)
-	# Convert offset to progress_ratio only if the rope isn't being manually moved
+
+	# Find vertical difference
+	var y_dif = (player.global_transform.origin.y - target_point.global_transform.origin.y) * player.left_stick_pressure
+
+	# Get the player's forward direction (assuming -Z is forward)
+	var forward = player.rot_container.global_transform.basis.z.normalized()
+
+	# Project vertical difference into forward movement along rope
+	var forward_offset = forward * y_dif
+	
+	# Get how much the forward_offset moves along the curve direction (assumes rope moves along path_follow.basis.z)
+	var curve_forward = path_follow.global_transform.basis.z.normalized()
+	var directional_offset = forward_offset.dot(curve_forward)
+
 	if length > 0:
-		path_follow.progress_ratio = closest_offset / length
+		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset) / length, 0.25)
+		else:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset * 0) / length, 1.0)

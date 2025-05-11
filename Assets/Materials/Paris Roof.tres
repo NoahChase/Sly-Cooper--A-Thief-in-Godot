@@ -1,7 +1,7 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bjgvbcdijm5so"]
 
 [resource]
-albedo_color = Color(0.28, 0.288, 0.4, 1)
+albedo_color = Color(0.2475, 0.264375, 0.45, 1)
 clearcoat = 0.07
 clearcoat_roughness = 1.0
 refraction_scale = 1.0

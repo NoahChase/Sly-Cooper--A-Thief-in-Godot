@@ -80,6 +80,8 @@ func calculate_path_length(curve: Curve3D, subdivisions: int = 100) -> float:
 # Runtime Functions
 
 func ball2player():
+	# need to make the ball move toward the player on x and y, clamping at (-0.25,0.25) on x and y
+	
 	if not path or not path.curve:
 		return
 
