@@ -123,10 +123,17 @@ func _physics_process(delta: float) -> void:
 		#var forward = -rot_container.global_transform.basis.z
 
 		speed_mult = 1.0
-		if not $"Floor Ray".is_colliding():
-			air_mult = lerp(air_mult, 0.05, 0.08)
+		if not $"Floor Ray".is_colliding() and gravmult > 1.0:
+			#slight dampening when player just begins to fall
+			air_mult = lerp(air_mult, 0.1, 0.05)
 			#temp_sly.anim_tree.set("parameters/Anim State/transition_request", "air")
+		elif velocity.y <= -6.5 and gravmult <= 1.0 and not $"Floor Ray".is_colliding():
+			#smooth release so they can control a long fall naturally and also set their rotation  right just before they hit the ground
+			#self.visible = false
+			air_mult = lerp(air_mult, 0.5, 0.05)
 		else:
+			#resets multipliers when player jumps into the air (upward velocity)
+			#self.visible = true
 			air_mult = 1.0
 			jump_mult = 1.0
 			#temp_sly.anim_tree.set("parameters/Anim State/transition_request", "floor")
@@ -150,7 +157,8 @@ func _physics_process(delta: float) -> void:
 		air_mult = 1.0
 		jump_num = 0
 		jump_mult = 1.0
-		$RichTextLabel3.text = str("ON LEDGE")
+		target = $"ray v container/ray v ball"
+		$RichTextLabel3.text = str("ON LEDGE", target)
 		
 
 	if state == TO_TARGET and target != null:
@@ -215,7 +223,7 @@ func _physics_process(delta: float) -> void:
 
 	if direction and state != ON_LEDGE:
 		var speed_factor = velocity.length() / SPEED
-		var lerp_speed = clamp(1 - speed_factor, 0.05, 0.75) * air_mult
+		var lerp_speed = clamp(1 - speed_factor, 0.075, 0.8) * air_mult
 		if state == AIR:
 			lerp_speed = 0.5 * air_mult
 		var target_velocity = direction * SPEED * speed_mult
@@ -225,8 +233,8 @@ func _physics_process(delta: float) -> void:
 		velocity.x = lerp(velocity.x, 0.0, 0.5)
 		velocity.z = lerp(velocity.z, 0.0, 0.5)
 	else:
-		velocity.x = lerp(velocity.x, 0.0, 0.025 * (1-air_mult))
-		velocity.z = lerp(velocity.z, 0.0, 0.025 * (1-air_mult))
+		velocity.x = lerp(velocity.x, 0.0, 0.015 * (1-air_mult))
+		velocity.z = lerp(velocity.z, 0.0, 0.015 * (1-air_mult))
 
 # Rotation
 	var target_rotation_y = $"Look_At Rotation".rotation.y
@@ -237,17 +245,21 @@ func _physics_process(delta: float) -> void:
 
 	var look_val = 0.165 * air_mult / speed_mult
 	if target == null or not target.is_in_group("LOCK PLAYER ROT"):
+		#for rotating on point targets
 		rot_container.rotation.y += angle_difference * look_val
 		if not rot_container.rotation.x == 0.0:
 			rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
 		if not rot_container.rotation.z == 0.0:
 			rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
 	# for rope correction (re align to proper rotation)
-	if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET:
+	if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
 		#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
 		var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
-		rot_container.rotation.y += angle_diff * 0.12
-	
+		rot_container.rotation.y += angle_diff * look_val
+	elif can_ledge:
+		pass
+		var dir = rot_container.global_position - $"ray v container/ray v ball".global_position
+		rot_container.rotation.y = lerp_angle(rot_container.rotation.y, atan2(dir.x, dir.z), 0.2)
 	true_player_rot.rotation.y += angle_difference * look_val
 	if not direction.length_squared() < 0.0001:
 		$"Look_At Rotation".look_at(position + direction)
@@ -338,8 +350,7 @@ func ledge_detect(delta):
 					$"ray v container".global_transform.origin = cp_final + offset
 					$"ray v container/ray v ball".global_transform.origin = cp_final
 					
-					if cp_final.y >= global_transform.origin.y + 0.29 and cp_final.y <= global_transform.origin.y + 0.5:
-						target = $"ray v container/ray v ball"
+					if velocity.y < 0 and cp_final.y >= global_transform.origin.y + 0.29 and cp_final.y <= global_transform.origin.y + 0.5:
 						state = ON_LEDGE
 						can_ledge = true
 

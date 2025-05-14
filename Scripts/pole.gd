@@ -1,6 +1,6 @@
 @tool
 extends Node3D
-
+@export var update_tool = false
 @export var test_ball = StaticBody3D
 @onready var path_follow_3d = $Path3D/PathFollow3D
 @onready var path = $Path3D
@@ -57,7 +57,7 @@ func _physics_process(delta):
 				
 			path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
 	else:
-		if path:
+		if path and update_tool:
 				length = calculate_path_length(path.curve)
 	
 

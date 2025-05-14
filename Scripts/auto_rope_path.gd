@@ -1,6 +1,7 @@
 @tool
 extends Node3D
 
+@export var update_tool = false
 @export var path_3d: Path3D
 @export var start_point: Node3D
 @export var end_point: Node3D
@@ -86,10 +87,11 @@ func _physics_process(delta: float) -> void:
 			bend_rope(delta)
 			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:
-		# Editor
-		update_curve()
-		if path_3d:
-			length = calculate_path_length(path_3d.curve)
+		if update_tool:
+			# Editor
+			update_curve()
+			if path_3d:
+				length = calculate_path_length(path_3d.curve)
 		
 
 # Editor Functions
@@ -154,10 +156,10 @@ func bend_rope(delta):
 		
 			if target_point.is_selected:
 				val = lerp(val, 0.0, 0.005)
-				bend_mult = lerp(bend_mult, 1.0, 0.005)
+				bend_mult = lerp(bend_mult, 1.0, 0.015)
 			else:
 				val = lerp(val, 1.0, 0.01)
-				bend_mult = lerp(bend_mult, val, 0.01)
+				bend_mult = lerp(bend_mult, val, 0.03)
 			
 			lerp_factor = clamp(distance / (length / 1.9) * (1-val), val, 1.0 + val) * bend_mult
 			new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
@@ -179,7 +181,7 @@ func move_progress(delta):
 	path_follow.progress_ratio += delta / (length / 4.0) * prog_mult
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
-		lerp_val = 0.1
+		lerp_val = 0.2
 	else:
 		lerp_val = lerp(lerp_val, 1.0, 0.005)
 	old_forward = forward

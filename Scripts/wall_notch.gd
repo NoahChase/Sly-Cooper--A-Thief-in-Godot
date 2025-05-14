@@ -1,4 +1,3 @@
-@tool
 extends Node3D
 @onready var player = null
 @onready var target_point = $"Target Point"

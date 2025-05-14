@@ -199,7 +199,7 @@ libraries = {
 }
 
 [node name="sly_cooper_model" parent="Body Mesh Container" instance=ExtResource("3_nt6o0")]
-transform = Transform3D(-1.163, 0, -1.75608e-07, 0, 1.163, 0, 1.75608e-07, 0, -1.163, 0, -1, 0.5)
+transform = Transform3D(-1.165, 0, -1.7591e-07, 0, 1.165, 0, 1.7591e-07, 0, -1.165, 0, -1, 0.329555)
 
 [node name="True Player Rotation" type="Node3D" parent="."]
 
@@ -291,7 +291,7 @@ visible = false
 [node name="ray v" type="RayCast3D" parent="ray v container"]
 target_position = Vector3(0, -5, 0)
 
-[node name="ray v ball" type="MeshInstance3D" parent="ray v container"]
+[node name="ray v ball" type="MeshInstance3D" parent="ray v container" groups=["LOCK PLAYER ROT", "target"]]
 mesh = SubResource("SphereMesh_lkte6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ray v container"]
