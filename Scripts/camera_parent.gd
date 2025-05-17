@@ -84,7 +84,7 @@ func _physics_process(delta):
 		else:
 			camera.fov = lerp(camera.fov, 55.0, 0.02)
 	else:
-		camera.fov = lerp(camera.fov, 60.0, 0.02)
+		camera.fov = lerp(camera.fov, 55.0, 0.02)
 
 func rotate_yaw():
 	yaw += 1

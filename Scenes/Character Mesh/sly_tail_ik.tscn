@@ -1,0 +1,166 @@
+[gd_scene load_steps=22 format=3 uid="uid://bgw72mtkdp7to"]
+
+[ext_resource type="Script" uid="uid://bp77i8fstkhak" path="res://Scripts/sly_tail_ik.gd" id="1_rraud"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wmk2m"]
+size = Vector3(0.15, 0.15, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lqqst"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_888th"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u6d1t"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_08k33"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kfss2"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w7dhe"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3sayo"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fcon5"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w3x8s"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n0b15"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bh68k"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qmqv0"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yft0r"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3uf2x"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eje8v"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5ca04"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bh7we"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c5wvv"]
+size = Vector3(0.05, 0.2, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6mhtb"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="Sly Tail IK" type="Node3D"]
+script = ExtResource("1_rraud")
+
+[node name="Ball Root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 0, 0, 0)
+
+[node name="Ball_Target" type="MeshInstance3D" parent="Ball Root"]
+mesh = SubResource("BoxMesh_wmk2m")
+
+[node name="Ball_1" type="MeshInstance3D" parent="Ball Root"]
+mesh = SubResource("BoxMesh_lqqst")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_1"]
+
+[node name="ik_1" type="MeshInstance3D" parent="Ball Root/Ball_1/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_888th")
+
+[node name="Ball_8" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_u6d1t")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_8"]
+
+[node name="ik_8" type="MeshInstance3D" parent="Ball Root/Ball_8/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_08k33")
+
+[node name="Ball_7" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.25)
+mesh = SubResource("BoxMesh_kfss2")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_7"]
+
+[node name="ik_7" type="MeshInstance3D" parent="Ball Root/Ball_7/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_w7dhe")
+
+[node name="Ball_6" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.075, -0.375)
+mesh = SubResource("BoxMesh_3sayo")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_6"]
+
+[node name="ik_6" type="MeshInstance3D" parent="Ball Root/Ball_6/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_fcon5")
+
+[node name="Ball_5" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.5)
+mesh = SubResource("BoxMesh_w3x8s")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_5"]
+
+[node name="ik_5" type="MeshInstance3D" parent="Ball Root/Ball_5/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_n0b15")
+
+[node name="Ball_4" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.125, -0.625)
+mesh = SubResource("BoxMesh_bh68k")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_4"]
+
+[node name="ik_4" type="MeshInstance3D" parent="Ball Root/Ball_4/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_qmqv0")
+
+[node name="Ball_3" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -0.75)
+mesh = SubResource("BoxMesh_yft0r")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_3"]
+
+[node name="ik_3" type="MeshInstance3D" parent="Ball Root/Ball_3/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_3uf2x")
+
+[node name="Ball_2" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.175, -0.875)
+mesh = SubResource("BoxMesh_eje8v")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_2"]
+
+[node name="ik_2" type="MeshInstance3D" parent="Ball Root/Ball_2/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_5ca04")
+
+[node name="Ball_2_end" type="MeshInstance3D" parent="Ball Root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -1)
+visible = false
+mesh = SubResource("BoxMesh_bh7we")
+
+[node name="Node3D" type="Node3D" parent="Ball Root/Ball_2_end"]
+
+[node name="ik_2_end" type="MeshInstance3D" parent="Ball Root/Ball_2_end/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, -0.125)
+mesh = SubResource("BoxMesh_c5wvv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ball Root"]
+visible = false
+mesh = SubResource("BoxMesh_6mhtb")

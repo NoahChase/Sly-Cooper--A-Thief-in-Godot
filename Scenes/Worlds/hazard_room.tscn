@@ -1,8 +1,9 @@
-[gd_scene load_steps=93 format=3 uid="uid://brvn2u4qmm15o"]
+[gd_scene load_steps=85 format=3 uid="uid://brvn2u4qmm15o"]
 
 [ext_resource type="Texture2D" uid="uid://7o85xs4kc3q1" path="res://Assets/Temp Imports/moon.png" id="1_3wukr"]
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="1_04rnv"]
 [ext_resource type="VoxelGIData" uid="uid://cu186fwmtt6js" path="res://Scenes/Worlds/hazard_room.VoxelGI_data.res" id="1_baxcw"]
+[ext_resource type="Environment" uid="uid://detfmk4yuxymg" path="res://Assets/Materials/paris_environment.tres" id="1_y3rjl"]
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="2_jwnsc"]
 [ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="3_bw3ks"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="3_ox1mo"]
@@ -12,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bgu13h5qrb1tn" path="res://Assets/Temp Imports/p-bld-sml.fbx" id="9_lvdcs"]
 [ext_resource type="PackedScene" uid="uid://bxqra240gka0o" path="res://Assets/Temp Imports/p-sly2-tall-roundmodified.fbx" id="10_sipa1"]
 [ext_resource type="PackedScene" uid="uid://bk2ltbcpn1b2u" path="res://Assets/Temp Imports/p-sly2-tall-sly1modified.fbx" id="11_8uj4r"]
+[ext_resource type="Texture2D" uid="uid://dgyrsdlwqfn0" path="res://Assets/Materials/pebble_noise_texture_2d.tres" id="11_pu5wn"]
 [ext_resource type="PackedScene" uid="uid://pm6ngpob3mir" path="res://Assets/Temp Imports/paris_building_dome_.fbx" id="11_v370q"]
 [ext_resource type="PackedScene" uid="uid://547c1q6l0txv" path="res://Assets/Temp Imports/paris_scaled_tower_01_.fbx" id="13_ntuth"]
 [ext_resource type="PackedScene" uid="uid://11m456s685sk" path="res://Assets/Temp Imports/paris_building_scaled_short_01.fbx" id="14_shoyq"]
@@ -43,83 +45,13 @@
 [ext_resource type="PackedScene" uid="uid://c5jbstposhgau" path="res://Assets/Temp Imports/p-bld-2tier-1-.fbx" id="40_j08r8"]
 [ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="41_aic2x"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_3dlm8"]
-sky_top_color = Color(0.052, 0.104, 0.26, 1)
-sky_horizon_color = Color(0.136, 0.068, 0.34, 1)
-sky_curve = 0.0625242
-ground_bottom_color = Color(0.136, 0.068, 0.34, 1)
-ground_horizon_color = Color(0.0786667, 0.07, 0.2, 1)
-ground_curve = 1e-05
-sun_angle_max = 0.0
-
-[sub_resource type="Sky" id="Sky_wipc4"]
-sky_material = SubResource("ProceduralSkyMaterial_3dlm8")
-
-[sub_resource type="Environment" id="Environment_kj0pv"]
-background_mode = 2
-background_color = Color(0.0878965, 0.123076, 0.250316, 1)
-sky = SubResource("Sky_wipc4")
-ambient_light_source = 2
-ambient_light_color = Color(0.455, 0.50375, 0.65, 1)
-ambient_light_sky_contribution = 0.0
-tonemap_white = 0.75
-ssao_enabled = true
-ssao_intensity = 1.0
-ssil_enabled = true
-ssil_intensity = 0.5
-sdfgi_use_occlusion = true
-glow_enabled = true
-glow_levels/1 = 1.0
-glow_levels/2 = 0.18
-glow_levels/3 = 2.0
-glow_levels/4 = 0.5
-glow_normalized = true
-fog_enabled = true
-fog_light_color = Color(0.0625, 0, 0.25, 1)
-fog_density = 0.015
-fog_sky_affect = 0.25
-volumetric_fog_density = 0.0125
-volumetric_fog_albedo = Color(0.0627451, 0.0627451, 0.278431, 1)
-volumetric_fog_emission = Color(0.0627451, 0.0627451, 0.278431, 1)
-volumetric_fog_anisotropy = 0.56
-volumetric_fog_sky_affect = 0.5
-adjustment_contrast = 1.03
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_baxcw"]
-size = Vector2(2000, 2000)
-
-[sub_resource type="Gradient" id="Gradient_baxcw"]
-offsets = PackedFloat32Array(0.418079, 0.971751)
-colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.196078)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_nfklj"]
-noise_type = 2
-fractal_octaves = 4
-fractal_gain = 0.405
-cellular_distance_function = 3
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g87ic"]
-invert = true
-in_3d_space = true
-seamless = true
-seamless_blend_skirt = 0.5
-color_ramp = SubResource("Gradient_baxcw")
-noise = SubResource("FastNoiseLite_nfklj")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8wsl6"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.392157)
-albedo_texture = SubResource("NoiseTexture2D_g87ic")
-uv1_scale = Vector3(5.85, 5.85, 5.85)
-distance_fade_mode = 2
-distance_fade_min_distance = 1000.0
-distance_fade_max_distance = 300.0
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y3rjl"]
 transparency = 1
 disable_fog = true
-albedo_color = Color(0.794115, 0.819801, 0.963436, 1)
+albedo_color = Color(0.67, 0.681, 1, 1)
 albedo_texture = ExtResource("1_3wukr")
+emission_enabled = true
+emission = Color(0.1856, 0.21866, 0.29, 1)
 billboard_mode = 1
 
 [sub_resource type="Curve3D" id="Curve3D_vycax"]
@@ -174,28 +106,30 @@ point_count = 11
 [sub_resource type="QuadMesh" id="QuadMesh_c2mvs"]
 size = Vector2(1000, 1000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_va7e5"]
-noise_type = 3
-frequency = 0.025
-fractal_octaves = 10
-fractal_lacunarity = 1.225
-fractal_gain = 2.61
-fractal_weighted_strength = 0.25
-domain_warp_enabled = true
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gbqxu"]
-width = 128
-height = 128
-generate_mipmaps = false
-seamless = true
-noise = SubResource("FastNoiseLite_va7e5")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83g37"]
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.53881, 0.516233, 0.505785, 1)
-albedo_texture = SubResource("NoiseTexture2D_gbqxu")
-metallic = 0.23
+albedo_color = Color(0.503029, 0.480884, 0.470634, 1)
+albedo_texture = ExtResource("11_pu5wn")
+metallic = 0.2
+metallic_specular = 1.0
+metallic_texture = ExtResource("11_pu5wn")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = -0.85
+normal_texture = ExtResource("11_pu5wn")
+clearcoat_roughness = 1.0
+clearcoat_texture = ExtResource("11_pu5wn")
+ao_light_affect = 0.3
+ao_texture = ExtResource("11_pu5wn")
+ao_texture_channel = 4
+heightmap_scale = 2.439
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("11_pu5wn")
+subsurf_scatter_strength = 0.5
+subsurf_scatter_texture = ExtResource("11_pu5wn")
 uv1_scale = Vector3(120, 120, 1)
 distance_fade_mode = 2
 distance_fade_min_distance = 800.0
@@ -299,24 +233,20 @@ emission_energy_multiplier = 3.0
 [node name="Hazard Room" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_kj0pv")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="WorldEnvironment"]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 50, 0)
-mesh = SubResource("PlaneMesh_baxcw")
-surface_material_override/0 = SubResource("StandardMaterial3D_8wsl6")
+environment = ExtResource("1_y3rjl")
 
 [node name="moon" type="Sprite3D" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2742.5, 1593.5, -1577)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2742.5, 1593.5, -386.5)
 material_overlay = SubResource("StandardMaterial3D_y3rjl")
 cast_shadow = 0
 modulate = Color(1, 1, 1, 0)
-pixel_size = 0.33
+pixel_size = 0.5
 texture = ExtResource("1_3wukr")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.201078, 0.946197, -0.253533, 0, 0.258819, 0.965926, 0.979575, 0.194227, -0.0520428, 0, 0, 0)
-light_color = Color(0.5525, 0.576875, 0.65, 1)
+light_color = Color(0.45, 0.4875, 0.6, 1)
+light_energy = 0.5
 light_bake_mode = 1
 shadow_enabled = true
 shadow_normal_bias = 3.0
@@ -691,7 +621,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_sjb7b")
 shape = SubResource("ConcavePolygonShape3D_gpk06")
 
 [node name="4" type="MeshInstance3D" parent="Box 2_80"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.5, 21.5, 42.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.5, 22, 46)
 mesh = SubResource("BoxMesh_2vw03")
 surface_material_override/0 = SubResource("StandardMaterial3D_yqlxe")
 
@@ -1555,21 +1485,21 @@ mesh = SubResource("BoxMesh_j08r8")
 surface_material_override/0 = SubResource("StandardMaterial3D_aic2x")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, -44, -766.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.5, -35, -793)
 pixel_size = 1.0
 texture = ExtResource("41_aic2x")
 
 [node name="Sprite3D2" type="Sprite3D" parent="."]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -788, -44, 36.5)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -781.5, -35, 25)
 pixel_size = 1.0
 texture = ExtResource("41_aic2x")
 
 [node name="Sprite3D3" type="Sprite3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 34, -44, 845.5)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 34, -35, 845.5)
 pixel_size = 1.0
 texture = ExtResource("41_aic2x")
 
 [node name="Sprite3D4" type="Sprite3D" parent="."]
-transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 861, -44, 42.5)
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 852.5, -35, 26)
 pixel_size = 1.0
 texture = ExtResource("41_aic2x")

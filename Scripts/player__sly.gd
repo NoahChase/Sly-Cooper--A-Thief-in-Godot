@@ -38,6 +38,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var temp_sly = $"Body Mesh Container/sly_cooper_model"
 @onready var true_player_rot = $"True Player Rotation"
 @onready var temptext = $RichTextLabel2
+
 ## var
 var target
 var last_target
@@ -73,7 +74,6 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	$"ray v container/MeshInstance3D".global_transform.origin.y = global_transform.origin.y + 0.75
 	if ledge_cooldown_timer > 0.0:
 		ledge_cooldown_timer -= delta
 	floor_or_roof = $"Floor Ray".get_collider()
@@ -333,15 +333,15 @@ func jump():
 
 
 func ledge_detect(delta):
-	if ledge_cooldown_timer > 0.0:
-		return  # skip ledge detection while on cooldown
-
+	var ray_col = $"True Player Rotation/Ledge Ray 1".get_collider()
+	var cp_ray_v = $"ray v container/ray v".get_collision_point()
+	var cp_ray = $"True Player Rotation/Ledge Ray 1".get_collision_point()
 	if not can_ledge:
 		if state == AIR and not $"True Player Rotation/Cancel Ledge Ray".is_colliding() and not $"True Player Rotation/Cancel Ledge Ray2".is_colliding() and not $"True Player Rotation/Cancel Ledge Ray3".is_colliding():
 			var motion = velocity.normalized() * delta * 0.5
 			if test_move(global_transform, motion):
 				var collision = move_and_collide(motion)
-				if collision:
+				if collision and ledge_cooldown_timer <= 0.0:
 					var point = collision.get_position()
 					cp_final = point
 
@@ -353,6 +353,18 @@ func ledge_detect(delta):
 					if velocity.y < 0 and cp_final.y >= global_transform.origin.y + 0.29 and cp_final.y <= global_transform.origin.y + 0.5:
 						state = ON_LEDGE
 						can_ledge = true
+			elif $"True Player Rotation/Ledge Ray 1".is_colliding() and not ray_col.is_in_group("Player"):
+				## does not reliably place ball at said location because of how this is set up
+				## also, ledge ray 1 needs to be where cancel ledge ray is, and cancel ledge ray needs to be y=2, so the player does not "catch a ledge" when on an upward slope
+				## need to allow ball time to get to ledge
+				cp_final = ray_col
+				$"ray v container".global_transform.origin = cp_final.global_transform.origin
+				$"ray v container/ray v ball".global_transform.origin.y = cp_ray_v.y
+				$"ray v container/ray v ball".global_transform.origin.x = cp_ray.x
+				$"ray v container/ray v ball".global_transform.origin.z = cp_ray.z
+				if velocity.y < 0:
+					state = ON_LEDGE
+					can_ledge = true
 
 
 

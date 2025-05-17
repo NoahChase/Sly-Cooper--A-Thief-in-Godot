@@ -1,10 +1,13 @@
 extends Node3D
 
 @export var player = CharacterBody3D
+@export var tail_ik = Node3D
 
 @onready var anim_tree = $AnimationTree
 @onready var anim_player = $AnimationPlayer
 @onready var skeleton = %GeneralSkeleton
+@onready var tail_001_attachment = $metarig/GeneralSkeleton/Tail_001_Attachment
+@onready var hips = $metarig/GeneralSkeleton/hips
 
 #@onready var bone_tail_001 = skeleton.find_bone("Tail.001")
 #@onready var bone_tail_002 = skeleton.find_bone("Tail.002")
@@ -35,7 +38,8 @@ extends Node3D
 #@onready var ball_3_cnt = $"Ball Tail Root/Ball Tail 8/Node3D/cnt3"
 #@onready var ball_2_cnt = $"Ball Tail Root/Ball Tail 2/Node3D/cnt2"
 #
-#func _ready():
+
+	
 	#$"metarig/GeneralSkeleton/Tail 1 IK".start()
 	#$"metarig/GeneralSkeleton/Tail 3 IK".start()
 	#$"metarig/GeneralSkeleton/Tail 4 IK".start()
