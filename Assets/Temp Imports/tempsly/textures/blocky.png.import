@@ -2,27 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bduc5pd7flxvx"
-path.s3tc="res://.godot/imported/Sly Body AO.png-ff348153a0c132fcd0da5e6b97e1ebb5.s3tc.ctex"
+uid="uid://cu138t3piysxu"
+path="res://.godot/imported/blocky.png-79150d54b43c9cea0b69125649a87db4.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Sly Body AO.png"
-dest_files=["res://.godot/imported/Sly Body AO.png-ff348153a0c132fcd0da5e6b97e1ebb5.s3tc.ctex"]
+source_file="res://Assets/Temp Imports/tempsly/textures/blocky.png"
+dest_files=["res://.godot/imported/blocky.png-79150d54b43c9cea0b69125649a87db4.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -32,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

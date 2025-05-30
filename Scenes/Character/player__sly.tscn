@@ -1,16 +1,18 @@
-[gd_scene load_steps=22 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=23 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" uid="uid://bkicq7vwc604f" path="res://Scripts/player__sly.gd" id="1_jucx6"]
-[ext_resource type="PackedScene" uid="uid://bysuj8xbry7yo" path="res://Scenes/Character Mesh/sly_cooper_model.tscn" id="3_nt6o0"]
+[ext_resource type="PackedScene" uid="uid://dgc3kyslosely" path="res://Scenes/Character Mesh/sly_cooper_anims_4.tscn" id="3_ncpw6"]
 [ext_resource type="PackedScene" uid="uid://cm3ie3krms2au" path="res://Scenes/Character Mesh/sly_tail.tscn" id="3_r3pa2"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_aa5ra"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r3pa2"]
+height = 1.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p85ho"]
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.14902)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
+height = 1.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_30xp2"]
 size = Vector3(0.1, 0.1, 2)
@@ -83,9 +85,9 @@ size = Vector3(0.125, 0.125, 2)
 size = Vector3(0.25, 0.25, 0.25)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_lkte6"]
-top_radius = 3.0
-bottom_radius = 5.0
-height = 9.0
+top_radius = 2.0
+bottom_radius = 4.0
+height = 8.0
 radial_segments = 16
 rings = 1
 
@@ -94,7 +96,7 @@ transparency = 1
 albedo_color = Color(1, 1, 1, 0.32549)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_nt6o0"]
-points = PackedVector3Array(0, -4.5, -5, -1.91366, -4.5, -4.6202, 0, 0, -4.00059, 1.91269, -4.5, -4.6202, -2.12216, 4.5, -2.12216, -1.1482, 4.5, -2.77212, -3.53563, -4.5, -3.53563, 0, 4.5, -3.0002, 1.14722, 4.5, -2.77212, 2.12118, 4.5, -2.12216, 3.53465, -4.5, -3.53563, -4.6202, -4.5, -1.91366, -2.77212, 4.5, -1.1482, 2.77114, 4.5, -1.1482, 4.61922, -4.5, -1.91366, -5, -4.5, 0, -4.00059, 0, 0, -3.0002, 4.5, 0, 2.99922, 4.5, 0, 5, -4.5, 0, -4.6202, -4.5, 1.91269, -2.77212, 4.5, 1.14722, 2.77114, 4.5, 1.14722, 4.61922, -4.5, 1.91269, -3.53563, -4.5, 3.53465, -2.12216, 4.5, 2.12118, 2.12118, 4.5, 2.12118, 3.53465, -4.5, 3.53465, -1.91366, -4.5, 4.61922, -1.1482, 4.5, 2.77114, 1.14722, 4.5, 2.77114, 1.91269, -4.5, 4.61922, 0, -4.5, 5, 0, 4.5, 2.99922)
+points = PackedVector3Array(2, 4, 0, 2.77134, 0, 1.148, 3.69538, -4, 1.53015, 4, -4, 0, 3.69538, -4, -1.53093, 2.77134, 0, -1.14879, 1.8473, 4, -0.765857, 1.8473, 4, 0.765074, 2.82772, -4, 2.82772, 2.82772, -4, -2.8285, 1.41347, 4, -1.41425, 1.41347, 4, 1.41347, 1.148, 0, 2.77134, 1.53015, -4, 3.69538, 1.53015, -4, -3.69616, 1.148, 0, -2.77212, 0.765074, 4, -1.84808, 0.765074, 4, 1.8473, 0, 4, 2, 0, -4, 4, 0, -4, -4, 0, 4, -2, -0.765857, 4, 1.8473, -1.14879, 0, 2.77134, -1.53093, -4, 3.69538, -1.53093, -4, -3.69616, -1.14879, 0, -2.77212, -0.765857, 4, -1.84808, -1.41425, 4, 1.41347, -2.8285, -4, 2.82772, -2.8285, -4, -2.8285, -1.41425, 4, -1.41425, -1.84808, 4, 0.765074, -2.77212, 0, 1.148, -3.69616, -4, 1.53015, -3.69616, -4, -1.53093, -2.77212, 0, -1.14879, -1.84808, 4, -0.765857, -2, 4, 0, -4, -4, 0)
 
 [sub_resource type="Animation" id="Animation_hl1qu"]
 length = 0.001
@@ -107,7 +109,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [true]
 }
 
@@ -123,7 +125,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
-"update": 0,
+"update": 1,
 "values": [false, true]
 }
 
@@ -146,16 +148,16 @@ height = 0.5
 [sub_resource type="BoxMesh" id="BoxMesh_lkte6"]
 size = Vector3(0.25, 0.25, 0.25)
 
+[sub_resource type="PrismMesh" id="PrismMesh_nt6o0"]
+size = Vector3(0.25, 0.5, 0.25)
+
 [node name="Player_ Sly" type="CharacterBody3D" groups=["Player"]]
+floor_max_angle = 0.610865
 script = ExtResource("1_jucx6")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("SphereShape3D_aa5ra")
-
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0)
-shape = SubResource("SphereShape3D_aa5ra")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_r3pa2")
 
 [node name="To Cam RayCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46572, 0)
@@ -165,29 +167,35 @@ debug_shape_thickness = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="SlyCooper_RigNoPhysics" type="MeshInstance3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_p85ho")
 mesh = SubResource("CapsuleMesh_11x8b")
 skeleton = NodePath("")
 
 [node name="tip toe ray" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -0.4025, -0.975, 6.07758e-08)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -0.4025, -0.725, 6.07758e-08)
+visible = false
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray2" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 0.4025, -0.975, -6.07758e-08)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 0.4025, -0.725, -6.07758e-08)
+visible = false
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray3" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -6.07758e-08, -0.975, -0.4025)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -6.07758e-08, -0.725, -0.4025)
+visible = false
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray4" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 4.34113e-08, -0.975, 0.2875)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, 4.34113e-08, -0.725, 0.2875)
+visible = false
 target_position = Vector3(0, -0.25, 0)
 
 [node name="tip toe ray5" type="RayCast3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
-transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -6.07758e-08, -0.738928, -0.267238)
+transform = Transform3D(-1.15, 0, -1.73645e-07, 0, 1.15, 0, 1.73645e-07, 0, -1.15, -6.07758e-08, -0.488928, -0.267238)
+visible = false
 target_position = Vector3(0, 0, 0.25)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
@@ -199,9 +207,70 @@ libraries = {
 &"": SubResource("AnimationLibrary_xn228")
 }
 
-[node name="sly_cooper_model" parent="Body Mesh Container" node_paths=PackedStringArray("player") instance=ExtResource("3_nt6o0")]
-transform = Transform3D(-1.05, 0, -1.58546e-07, 0, 1.05, 0, 1.58546e-07, 0, -1.05, 0, -1, 0.329555)
+[node name="Ledge Ray 1" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.625, 0)
+target_position = Vector3(0, 0, -0.75)
+
+[node name="Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.625, 0)
+target_position = Vector3(0, 0, -0.75)
+
+[node name="Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.625, 0)
+target_position = Vector3(0, 0, -0.75)
+
+[node name="Cancel Ledge Ray" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+target_position = Vector3(0, 0, -1)
+
+[node name="Cancel Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.5, 0)
+target_position = Vector3(0, 0, -1)
+
+[node name="Cancel Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.5, 0)
+target_position = Vector3(0, 0, -1)
+
+[node name="Floor Ray" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray7" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.875, 0.125)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray8" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.875, -0.125)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray9" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.875, -0.125)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray6" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.875, 0.125)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray4" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.875, 0)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray5" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.875, 0)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray2" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, -0.25)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="Floor Ray3" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0.25)
+target_position = Vector3(0, -0.5, 0)
+
+[node name="SlyCooper_Anims4" parent="Body Mesh Container" node_paths=PackedStringArray("player", "tail_ik") instance=ExtResource("3_ncpw6")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, 0)
 player = NodePath("../..")
+tail_ik = NodePath("../../sly_tail")
 
 [node name="True Player Rotation" type="Node3D" parent="."]
 
@@ -214,25 +283,10 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 mesh = SubResource("BoxMesh_cd1su")
 
-[node name="Ledge Ray 1" type="RayCast3D" parent="True Player Rotation"]
-target_position = Vector3(0, 0, -0.75)
-
-[node name="Cancel Ledge Ray" type="RayCast3D" parent="True Player Rotation"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.5)
-target_position = Vector3(0, 0, -0.25)
-
-[node name="Cancel Ledge Ray2" type="RayCast3D" parent="True Player Rotation"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.4, 0.6, -0.25)
-target_position = Vector3(-0.3, 0, -0.3)
-
-[node name="Cancel Ledge Ray3" type="RayCast3D" parent="True Player Rotation"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.4, 0.6, -0.25)
-target_position = Vector3(0.3, 0, -0.3)
-
 [node name="sly_tail" parent="." node_paths=PackedStringArray("player", "sly_mesh") instance=ExtResource("3_r3pa2")]
-transform = Transform3D(-1.105, 0, -1.6685e-07, 0, 1.105, 0, 1.6685e-07, 0, -1.105, 0, 0, 0)
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 player = NodePath("..")
-sly_mesh = NodePath("../Body Mesh Container/sly_cooper_model")
+sly_mesh = NodePath("../Body Mesh Container/SlyCooper_Anims4")
 
 [node name="Target Area" type="Area3D" parent="."]
 collision_layer = 2
@@ -255,11 +309,9 @@ libraries = {
 }
 
 [node name="Basis_Offset" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = false
 mesh = SubResource("SphereMesh_s3532")
-
-[node name="Floor Ray" type="RayCast3D" parent="."]
-target_position = Vector3(0, -0.5, 0)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 offset_right = 402.0
@@ -268,6 +320,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
+visible = false
 offset_top = 136.0
 offset_right = 167.0
 offset_bottom = 224.0
@@ -275,6 +328,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="."]
+visible = false
 offset_left = 11.0
 offset_top = 322.0
 offset_right = 626.0
@@ -283,6 +337,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
+visible = false
 offset_top = 181.0
 offset_right = 615.0
 offset_bottom = 801.0
@@ -296,6 +351,7 @@ one_shot = true
 
 [node name="ray v container" type="Node3D" parent="."]
 top_level = true
+visible = false
 
 [node name="ray v" type="RayCast3D" parent="ray v container"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
@@ -306,6 +362,15 @@ mesh = SubResource("SphereMesh_lkte6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ray v container"]
 mesh = SubResource("BoxMesh_lkte6")
+
+[node name="collision point" type="Node3D" parent="."]
+top_level = true
+visible = false
+
+[node name="collision arrow" type="MeshInstance3D" parent="collision point"]
+transform = Transform3D(1, 0, 0, 0, -1, 5.96046e-08, 0, -5.96046e-08, -1, 0, 0.25, 0)
+mesh = SubResource("PrismMesh_nt6o0")
+skeleton = NodePath("../..")
 
 [connection signal="body_entered" from="Target Area" to="." method="_on_target_area_body_entered"]
 [connection signal="body_exited" from="Target Area" to="." method="_on_target_area_body_exited"]

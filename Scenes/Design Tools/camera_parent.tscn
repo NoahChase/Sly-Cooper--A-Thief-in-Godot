@@ -11,7 +11,8 @@ camera = NodePath("Camera Target/Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="Camera Target"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
-fov = 65.0
+fov = 60.0
+near = 0.25
 
 [node name="Cam Right" type="Node3D" parent="Camera Target/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)

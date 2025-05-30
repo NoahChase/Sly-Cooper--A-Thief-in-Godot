@@ -1,0 +1,286 @@
+[gd_scene load_steps=35 format=3 uid="uid://bif0giwjyihhu"]
+
+[ext_resource type="Environment" uid="uid://detfmk4yuxymg" path="res://Assets/Materials/paris_environment.tres" id="1_ict60"]
+[ext_resource type="PackedScene" uid="uid://bbsnx75cjnrhu" path="res://Assets/Temp Imports/LANDSCAPETEST.fbx" id="2_ayyj4"]
+[ext_resource type="VoxelGIData" uid="uid://b3exakncpmt4i" path="res://Scenes/Worlds/paris.VoxelGI_data.res" id="2_oombb"]
+[ext_resource type="Texture2D" uid="uid://dgyrsdlwqfn0" path="res://Assets/Materials/pebble_noise_texture_2d.tres" id="3_mem7q"]
+[ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="3_sx0hb"]
+[ext_resource type="PackedScene" uid="uid://bylg7n7g7v4xf" path="res://Assets/Temp Imports/p-bld-med.fbx" id="4_ct0i8"]
+[ext_resource type="PackedScene" uid="uid://pm6ngpob3mir" path="res://Assets/Temp Imports/paris_building_dome_.fbx" id="5_oombb"]
+[ext_resource type="PackedScene" uid="uid://bgu13h5qrb1tn" path="res://Assets/Temp Imports/p-bld-sml.fbx" id="5_to7il"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="6_dvddd"]
+[ext_resource type="PackedScene" uid="uid://deqtk38eydtop" path="res://Assets/Temp Imports/p-bld-med-03-.fbx" id="9_g7l7j"]
+[ext_resource type="PackedScene" uid="uid://c5jbstposhgau" path="res://Assets/Temp Imports/p-bld-2tier-1-.fbx" id="10_t5gi0"]
+[ext_resource type="PackedScene" uid="uid://cu6bh7ej2m07e" path="res://Assets/Temp Imports/p-sly2-tall.fbx" id="12_2hh4o"]
+[ext_resource type="PackedScene" uid="uid://cm1h46f6jf01e" path="res://Assets/Temp Imports/p-rooftest.fbx" id="13_rh87b"]
+[ext_resource type="PackedScene" uid="uid://csk1awk0ra6ae" path="res://Assets/Temp Imports/paris_building_scaled_med_03.fbx" id="14_rwpp5"]
+[ext_resource type="PackedScene" uid="uid://bivpo5lg3gc46" path="res://Assets/Temp Imports/paris_building_scaled_tall_03.fbx" id="15_66xxp"]
+[ext_resource type="PackedScene" uid="uid://uhhvluh5l8dv" path="res://Assets/Temp Imports/paris_building_scaled_tall_05.fbx" id="16_nu518"]
+[ext_resource type="PackedScene" uid="uid://41n2l1ty8nxg" path="res://Assets/Temp Imports/roman pillar.fbx" id="17_sj703"]
+[ext_resource type="PackedScene" uid="uid://dmpabcei3gf12" path="res://Assets/Temp Imports/paris_eiffeltower.fbx" id="19_dv1ss"]
+[ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="20_jvyva"]
+[ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="21_whgqy"]
+[ext_resource type="PackedScene" uid="uid://1r2ird5x31ub" path="res://Assets/Temp Imports/p-bld-med-02-.fbx" id="23_g7l7j"]
+[ext_resource type="PackedScene" uid="uid://547c1q6l0txv" path="res://Assets/Temp Imports/paris_scaled_tower_01_.fbx" id="24_g7l7j"]
+[ext_resource type="PackedScene" uid="uid://b0k1ejmlkqlca" path="res://Assets/Temp Imports/p-bld-med-classic.glb" id="25_2hh4o"]
+[ext_resource type="PackedScene" uid="uid://bixha23p0lm3o" path="res://Assets/Temp Imports/p-bld-safehouse.fbx" id="25_t5gi0"]
+[ext_resource type="PackedScene" uid="uid://cf5wmy3ddaxgd" path="res://Assets/Temp Imports/p-bld-sly2-medtower.glb" id="25_w3huo"]
+[ext_resource type="PackedScene" uid="uid://xh6njyth5vem" path="res://Assets/Temp Imports/p-bld-tall-classic-01-.glb" id="26_w3huo"]
+[ext_resource type="PackedScene" uid="uid://bgstehumyyjb6" path="res://Assets/Temp Imports/a balcony.glb" id="27_2hh4o"]
+[ext_resource type="PackedScene" uid="uid://0aqdv3whvcao" path="res://Assets/Temp Imports/p-modular-aframe.glb" id="28_rh87b"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ifx51"]
+size = Vector2(3000, 3000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wlk0e"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.503029, 0.480884, 0.470634, 1)
+albedo_texture = ExtResource("3_mem7q")
+metallic = 0.2
+metallic_specular = 1.0
+metallic_texture = ExtResource("3_mem7q")
+roughness_texture_channel = 4
+normal_enabled = true
+normal_scale = 0.23
+normal_texture = ExtResource("3_mem7q")
+clearcoat_roughness = 1.0
+clearcoat_texture = ExtResource("3_mem7q")
+ao_light_affect = 0.3
+ao_texture = ExtResource("3_mem7q")
+ao_texture_channel = 4
+heightmap_scale = 2.439
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+heightmap_texture = ExtResource("3_mem7q")
+subsurf_scatter_strength = 0.5
+subsurf_scatter_texture = ExtResource("3_mem7q")
+uv1_scale = Vector3(120, 120, 1)
+distance_fade_mode = 2
+distance_fade_min_distance = 2000.0
+distance_fade_max_distance = 1500.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_t5gi0"]
+size = Vector3(2, 2, 4)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_t5gi0"]
+data = PackedVector3Array(-1, 1, 2, 1, 1, 2, -1, -1, 2, 1, 1, 2, 1, -1, 2, -1, -1, 2, 1, 1, -2, -1, 1, -2, 1, -1, -2, -1, 1, -2, -1, -1, -2, 1, -1, -2, 1, 1, 2, 1, 1, -2, 1, -1, 2, 1, 1, -2, 1, -1, -2, 1, -1, 2, -1, 1, -2, -1, 1, 2, -1, -1, -2, -1, 1, 2, -1, -1, 2, -1, -1, -2, 1, 1, 2, -1, 1, 2, 1, 1, -2, -1, 1, 2, -1, 1, -2, 1, 1, -2, -1, -1, 2, 1, -1, 2, -1, -1, -2, 1, -1, 2, 1, -1, -2, -1, -1, -2)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2hh4o"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.5
+radial_segments = 6
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rh87b"]
+emission_enabled = true
+emission = Color(0.5, 0.433333, 0.1, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_ict60")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.201078, 0.946197, -0.253533, 0, 0.258819, 0.965926, 0.979575, 0.194227, -0.0520428, 0, 0, 0)
+light_color = Color(0.39, 0.425, 0.6, 1)
+light_energy = 0.5
+light_bake_mode = 1
+shadow_enabled = true
+shadow_normal_bias = 3.0
+directional_shadow_blend_splits = true
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.1478, 90.5056, -35.7922)
+size = Vector3(638.046, 250.901, 763.873)
+data = ExtResource("2_oombb")
+
+[node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("20_jvyva")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 78.0038, 9.10546, 13.9083)
+camera_parent = NodePath("../Camera Parent")
+
+[node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("21_whgqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39, 15.6216, 3.5)
+camera_player = NodePath("../Player_ Sly")
+
+[node name="base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -6, 0)
+mesh = SubResource("QuadMesh_ifx51")
+skeleton = NodePath("../LANDSCAPETEST")
+surface_material_override/0 = SubResource("StandardMaterial3D_wlk0e")
+
+[node name="Sprite3D4" type="Sprite3D" parent="."]
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 852.5, -2.7432, 26)
+pixel_size = 1.0
+texture = ExtResource("3_sx0hb")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.5, -2.7432, -793)
+pixel_size = 1.0
+texture = ExtResource("3_sx0hb")
+
+[node name="Sprite3D2" type="Sprite3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -781.5, -2.7432, 25)
+pixel_size = 1.0
+texture = ExtResource("3_sx0hb")
+
+[node name="Sprite3D3" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 34, -2.7432, 845.5)
+pixel_size = 1.0
+texture = ExtResource("3_sx0hb")
+
+[node name="LANDSCAPETEST" parent="." groups=["floor"] instance=ExtResource("2_ayyj4")]
+
+[node name="paris_building_scaled_small_01_" parent="." instance=ExtResource("5_oombb")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 21.5, 22.3583, -214.057)
+
+[node name="Target Point3" parent="paris_building_scaled_small_01_" instance=ExtResource("6_dvddd")]
+transform = Transform3D(-0.965926, 0.000202303, 0.258819, 0.00020944, 1, 1.83098e-11, -0.258819, 5.42071e-05, -0.965926, 0, 22.5, 0)
+
+[node name="p-bld-med" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.983252, 0, 0.182253, 0, 1, 0, -0.182253, 0, 0.983252, -59.1358, -6.38983e-07, -71.9215)
+
+[node name="p-bld-med3" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.983252, 0, 0.182253, 0, 1, 0, -0.182253, 0, 0.983252, -86.4548, -6.38983e-07, -66.8577)
+
+[node name="p-bld-med2" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -38.0616, -4.76837e-07, 14.4668)
+
+[node name="p-bld-med4" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -41.9471, -4.76837e-07, -1.23805)
+
+[node name="p-bld-med6" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -39.9471, -4.76837e-07, 6.76195)
+
+[node name="p-bld-med5" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -38.0616, 14.2047, 14.4668)
+
+[node name="p-bld-med7" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -43.8223, -4.76837e-07, -8.90077)
+visible = false
+
+[node name="p-bld-med8" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -43.8223, 14.2047, -8.90077)
+
+[node name="p-bld-med9" parent="." instance=ExtResource("4_ct0i8")]
+transform = Transform3D(0.237703, 0, -0.971338, 0, 1, 0, 0.971338, 0, 0.237703, -43.8223, -0.00583375, -8.90077)
+
+[node name="p-bld-sml" parent="." instance=ExtResource("5_to7il")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.8804, -0.198915, 9.8086)
+
+[node name="p-bld-sml2" parent="." instance=ExtResource("5_to7il")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.8804, 3.30108, 9.8086)
+
+[node name="p-bld-med-03-2" parent="." instance=ExtResource("9_g7l7j")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -108.533, 2.79135, -127.229)
+
+[node name="p-bld-2tier-1-" parent="." instance=ExtResource("10_t5gi0")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -138.058, 6.24731e-06, 100.406)
+
+[node name="p-sly2-tall2" parent="." instance=ExtResource("12_2hh4o")]
+transform = Transform3D(0.964095, 0, 0.265556, 0, 1, 0, -0.265556, 0, 0.964095, 96.9942, -0.987763, 43.2529)
+
+[node name="louvre" type="Node3D" parent="."]
+transform = Transform3D(0.978735, 0, 0.205128, 0, 1, 0, -0.205128, 0, 0.978735, -135.578, 0, -74.0982)
+
+[node name="p-rooftest" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4.57798, 0, 18.5982)
+
+[node name="p-rooftest2" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.42202, 0, 18.5982)
+
+[node name="p-rooftest3" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -15.422, 0, 18.5982)
+
+[node name="p-rooftest7" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 4.57798, 0, -16.4018)
+
+[node name="p-rooftest8" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.42202, 0, -16.4018)
+
+[node name="p-rooftest9" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -15.422, 0, -16.4018)
+
+[node name="p-rooftest4" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, -17.922, 0, 11.0982)
+
+[node name="p-rooftest5" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, -17.922, 0, 1.09816)
+
+[node name="p-rooftest6" parent="louvre" instance=ExtResource("13_rh87b")]
+transform = Transform3D(1, 0, -4.37114e-08, 0, 1, 0, 4.37114e-08, 0, 1, -17.922, 0, -8.90184)
+
+[node name="paris_building_scaled_med_03" parent="." instance=ExtResource("14_rwpp5")]
+transform = Transform3D(0.976436, 0, 0.215809, 0, 1, 0, -0.215809, 0, 0.976436, -74.5194, 1.23978e-05, 9.19488)
+
+[node name="paris_building_scaled_tall_03" parent="." instance=ExtResource("15_66xxp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -88.2584, 4.8721, -139.99)
+
+[node name="paris_building_scaled_tall_05" parent="." instance=ExtResource("16_nu518")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.3556, 1.20791, -125.562)
+
+[node name="roman pillar" parent="." instance=ExtResource("17_sj703")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118.504, 0.468471, 97.5394)
+
+[node name="paris_eiffeltower" parent="." instance=ExtResource("19_dv1ss")]
+transform = Transform3D(11.0262, 0, -16.686, 0, 20, 0, 16.686, 0, 11.0262, -137.128, 10.4251, 174.334)
+
+[node name="p-bld-med-02-" parent="." instance=ExtResource("23_g7l7j")]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 100.118, 1.14441e-05, -7.39213)
+
+[node name="paris_scaled_tower_01_" parent="." instance=ExtResource("24_g7l7j")]
+transform = Transform3D(0.5, 0, 0.866026, 0, 1, 0, -0.866026, 0, 0.5, 115.945, -4.41074e-06, 30.116)
+
+[node name="p-bld-safehouse" parent="." instance=ExtResource("25_t5gi0")]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 60.9564, 0, 1.5019)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 76.3919, 1, 5.52358)
+mesh = SubResource("BoxMesh_t5gi0")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_t5gi0")
+
+[node name="p-bld-sly2-medtower3" parent="." instance=ExtResource("25_w3huo")]
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 87, 0, 9)
+
+[node name="p-bld-med-classic" parent="." instance=ExtResource("25_2hh4o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.5, 0, 27)
+
+[node name="p-bld-tall-classic-01-" parent="." instance=ExtResource("26_w3huo")]
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, 61.5981, 0, 48.2321)
+
+[node name="p-modular-aframe" parent="." instance=ExtResource("28_rh87b")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 78.2805, 0, 23.4655)
+
+[node name="a balcony" parent="p-modular-aframe" instance=ExtResource("27_2hh4o")]
+transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 0, 0, 0)
+
+[node name="a balcony2" parent="p-modular-aframe" instance=ExtResource("27_2hh4o")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -10, 0, 1.52588e-05)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.5, 3.5, -3)
+mesh = SubResource("CylinderMesh_2hh4o")
+surface_material_override/0 = SubResource("StandardMaterial3D_rh87b")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98.5, 3.5, 14.2925)
+mesh = SubResource("CylinderMesh_2hh4o")
+surface_material_override/0 = SubResource("StandardMaterial3D_rh87b")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 87.352, 3.5, 40.7397)
+mesh = SubResource("CylinderMesh_2hh4o")
+surface_material_override/0 = SubResource("StandardMaterial3D_rh87b")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.5, 3.5, 17)
+mesh = SubResource("CylinderMesh_2hh4o")
+surface_material_override/0 = SubResource("StandardMaterial3D_rh87b")

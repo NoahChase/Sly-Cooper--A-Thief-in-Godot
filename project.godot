@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Sly Cooper: A Thief in Godot"
-run/main_scene="res://Scenes/Worlds/hazard_room.tscn"
+run/main_scene="uid://bif0giwjyihhu"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/use_filter=false
@@ -21,7 +21,10 @@ boot_splash/minimum_display_time=2000
 
 [display]
 
+window/size/viewport_width=960
+window/size/viewport_height=720
 window/size/mode=3
+window/stretch/mode="viewport"
 
 [global_group]
 
@@ -33,6 +36,7 @@ notch=""
 Player=""
 "LOCK PLAYER ROT"=""
 swing=""
+point=""
 
 [input]
 

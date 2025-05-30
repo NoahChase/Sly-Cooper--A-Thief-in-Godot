@@ -42,7 +42,6 @@ func _input(event):
 		mouse_motion = false
 			
 	
-
 func _physics_process(delta):
 	var cam_input_x = Input.get_axis("right_stick_right", "right_stick_left")
 	var cam_input_y = Input.get_axis("right_stick_down", "right_stick_up")
@@ -64,11 +63,13 @@ func _physics_process(delta):
 	yaw_sens = 1.33
 	pitch_sens = 1.33
 	
+	
 	if camera_player.ray_to_cam.is_colliding():
 		var wall_detect = camera_player.ray_to_cam.get_collider()
 		var wall_distance = wall_detect.position - camera.global_position
 		if not wall_detect.is_in_group("player"):
 			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.8)
+			
 	
 	if camera_player.direction:
 		if camera_player.floor_or_roof == null:
@@ -77,14 +78,14 @@ func _physics_process(delta):
 			if camera_player.floor_or_roof.is_in_group("floor"):
 				pitch = lerp(pitch, -0.125, 0.015)
 			else:
-				pitch = lerp(pitch, -0.625, 0.015)
+				pitch = lerp(pitch, -0.5, 0.015)
 	if camera_player.target != null and camera_player.can_ledge == false:
 		if camera_player.target.adj_fov == true:
 			camera.fov = lerp(camera.fov, 75.0, 0.02)
 		else:
-			camera.fov = lerp(camera.fov, 55.0, 0.02)
+			camera.fov = lerp(camera.fov, 60.0, 0.02)
 	else:
-		camera.fov = lerp(camera.fov, 55.0, 0.02)
+		camera.fov = lerp(camera.fov, 60.0, 0.02)
 
 func rotate_yaw():
 	yaw += 1

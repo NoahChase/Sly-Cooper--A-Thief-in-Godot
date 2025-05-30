@@ -1,8 +1,10 @@
 [gd_resource type="Environment" load_steps=8 format=3 uid="uid://detfmk4yuxymg"]
 
+[ext_resource type="FastNoiseLite" uid="uid://bwjowamk6u511" path="res://Assets/Textures/cloud1_noise_lite.tres" id="1_m0gmh"]
+[ext_resource type="FastNoiseLite" uid="uid://7skoxmqtmiem" path="res://Assets/Textures/cloud2_noise_lite.tres" id="2_py4ff"]
+
 [sub_resource type="Shader" id="Shader_n7bvf"]
-code = "
-// NOTE: Shader automatically converted from Godot Engine 4.4.stable's ProceduralSkyMaterial.
+code = "// NOTE: Shader automatically converted from Godot Engine 4.4.stable's ProceduralSkyMaterial.
 
 shader_type sky;
 render_mode use_debanding;
@@ -85,82 +87,49 @@ void sky() {
 	ground *= ground_energy;
 
 	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
-	vec3 clouds = texture(cloud_texture, (sky_uv * cloud_scale) + (TIME * cloud_direction * cloud_speed * 0.01)).rgb
-	            - texture(cloud_texture2, (sky_uv * cloud_scale) + (TIME * cloud_direction2 * cloud_speed2 * 0.01)).rgb;
-	
-	clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
-	clouds = clamp(clouds, 0.0, 1.0);
-	
+	vec3 clouds = texture(cloud_texture, (sky_uv*cloud_scale) + (TIME*cloud_direction*cloud_speed*.01)).rgb - texture(cloud_texture2, (sky_uv * cloud_scale) + (TIME * cloud_direction2 * cloud_speed2*.01)).rgb;
+
 	// Extract brightness from cloud color and apply smoothstep to control opacity
 	float raw_cloud_brightness = max(clouds.r, max(clouds.g, clouds.b));
 	float cloud_alpha = smoothstep(0.0, 0.8, raw_cloud_brightness) * cloud_color.a;
-	
+
 	// Blend clouds with sky
 	sky = mix(sky, cloud_color.rgb, cloud_alpha);
-	
-
 	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
 }
 "
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ksesm"]
-noise_type = 2
-seed = 3
-frequency = 0.0214
-fractal_type = 3
-fractal_gain = -0.175
-fractal_ping_pong_strength = -0.04
-cellular_return_type = 5
-domain_warp_enabled = true
-domain_warp_amplitude = 100.0
-domain_warp_frequency = -0.05
-domain_warp_fractal_octaves = 10
-domain_warp_fractal_lacunarity = 0.0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_n7bvf"]
-width = 1024
-height = 1024
-seamless = true
-noise = SubResource("FastNoiseLite_ksesm")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_py4ff"]
-noise_type = 2
-frequency = 0.016
-fractal_gain = 0.565
-domain_warp_enabled = true
-domain_warp_frequency = 0.02
-domain_warp_fractal_lacunarity = 0.0
-
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ksesm"]
-width = 1024
-height = 1024
 seamless = true
-seamless_blend_skirt = 0.5
-noise = SubResource("FastNoiseLite_py4ff")
+noise = ExtResource("1_m0gmh")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_py4ff"]
+seamless = true
+noise = ExtResource("2_py4ff")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_74q3j"]
 shader = SubResource("Shader_n7bvf")
-shader_parameter/sky_top_color = Color(0.0625, 0.078125, 0.25, 1)
-shader_parameter/sky_horizon_color = Color(0.1125, 0.075, 0.3, 1)
+shader_parameter/sky_top_color = Color(0.05, 0.075, 0.2, 1)
+shader_parameter/sky_horizon_color = Color(0.12125, 0.105, 0.3, 1)
 shader_parameter/sky_curve = 0.075
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
-shader_parameter/ground_bottom_color = Color(0.1125, 0.075, 0.3, 1)
-shader_parameter/ground_horizon_color = Color(0.0786667, 0.07, 0.2, 1)
+shader_parameter/ground_bottom_color = Color(0.12125, 0.105, 0.3, 1)
+shader_parameter/ground_horizon_color = Color(0.121569, 0.105882, 0.301961, 1)
 shader_parameter/ground_curve = 1e-05
 shader_parameter/ground_energy = 1.0
 shader_parameter/sun_angle_max = 0.0
 shader_parameter/sun_curve = 0.15
 shader_parameter/exposure = 1.0
-shader_parameter/cloud_texture = SubResource("NoiseTexture2D_n7bvf")
-shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_ksesm")
+shader_parameter/cloud_texture = SubResource("NoiseTexture2D_ksesm")
+shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_py4ff")
 shader_parameter/cloud_direction = Vector2(-1, 0.5)
 shader_parameter/cloud_direction2 = Vector2(0.5, -1)
-shader_parameter/cloud_scale = Vector2(0.02, 0.02)
-shader_parameter/cloud_distance = 0.015
-shader_parameter/cloud_speed = 0.15
-shader_parameter/cloud_speed2 = 0.2
-shader_parameter/cloud_color = Color(0.3245, 0.36875, 0.59, 0.137255)
+shader_parameter/cloud_scale = Vector2(0.05, 0.05)
+shader_parameter/cloud_distance = 0.073
+shader_parameter/cloud_speed = 0.4
+shader_parameter/cloud_speed2 = 0.3
+shader_parameter/cloud_color = Color(0.275, 0.3125, 0.5, 0.196078)
 
 [sub_resource type="Sky" id="Sky_wipc4"]
 sky_material = SubResource("ShaderMaterial_74q3j")
@@ -170,14 +139,12 @@ background_mode = 2
 background_color = Color(0.0878965, 0.123076, 0.250316, 1)
 sky = SubResource("Sky_wipc4")
 ambient_light_source = 2
-ambient_light_color = Color(0.455, 0.51625, 0.7, 1)
+ambient_light_color = Color(0.3, 0.35, 0.6, 1)
 ambient_light_sky_contribution = 0.0
-ambient_light_energy = 0.8
 tonemap_white = 0.75
 ssao_enabled = true
 ssao_intensity = 1.0
 ssil_enabled = true
-ssil_intensity = 0.5
 sdfgi_use_occlusion = true
 glow_enabled = true
 glow_levels/1 = 1.0
@@ -186,13 +153,16 @@ glow_levels/3 = 2.0
 glow_levels/4 = 0.5
 glow_normalized = true
 fog_enabled = true
-fog_light_color = Color(0.0586667, 0.044, 0.22, 1)
-fog_density = 0.02
-fog_sky_affect = 0.25
-volumetric_fog_density = 0.0125
-volumetric_fog_albedo = Color(0.0627451, 0.0627451, 0.278431, 1)
-volumetric_fog_emission = Color(0.0627451, 0.0627451, 0.278431, 1)
+fog_light_color = Color(0.02, 0.08, 0.2, 1)
+fog_density = 0.015
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.005
+volumetric_fog_albedo = Color(0.075, 0.13125, 0.3, 1)
+volumetric_fog_emission = Color(0.075, 0.13125, 0.3, 1)
 volumetric_fog_anisotropy = 0.56
-volumetric_fog_sky_affect = 0.5
-adjustment_contrast = 1.03
-adjustment_saturation = 1.05
+volumetric_fog_length = 32.0
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_contrast = 1.02
+adjustment_saturation = 1.02

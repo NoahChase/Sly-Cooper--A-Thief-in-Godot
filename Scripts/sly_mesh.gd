@@ -6,7 +6,7 @@ extends Node3D
 @onready var anim_tree = $AnimationTree
 @onready var anim_player = $AnimationPlayer
 @onready var skeleton = %GeneralSkeleton
-@onready var tail_001_attachment = $metarig/GeneralSkeleton/Tail_001_Attachment
+@export var tail_001_attachment = BoneAttachment3D
 @onready var hips = $metarig/GeneralSkeleton/hips
 
 #@onready var bone_tail_001 = skeleton.find_bone("Tail.001")

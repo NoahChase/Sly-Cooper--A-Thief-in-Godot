@@ -23,6 +23,8 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 
 @onready var target_points = []
 @onready var tiptoe_rays = [$"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray2", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray3", $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray4"]
+@onready var floor_rays = [$"Body Mesh Container/Floor Ray", $"Body Mesh Container/Floor Ray4", $"Body Mesh Container/Floor Ray7", $"Body Mesh Container/Floor Ray8", $"Body Mesh Container/Floor Ray9", $"Body Mesh Container/Floor Ray5", $"Body Mesh Container/Floor Ray6", $"Body Mesh Container/Floor Ray2", $"Body Mesh Container/Floor Ray3"]
+
 @onready var jump_num = 0
 @onready var jump_mult = 1.0
 @onready var gravmult = 1.0
@@ -35,10 +37,10 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @export var camera_parent: Node3D
 @export var camera: Camera3D
 @onready var sly_mesh = $"Body Mesh Container/SlyCooper_RigNoPhysics"
-@onready var temp_sly = $"Body Mesh Container/sly_cooper_model"
+@onready var temp_sly = $"Body Mesh Container/SlyCooper_Anims4"
 @onready var true_player_rot = $"True Player Rotation"
 @onready var temptext = $RichTextLabel2
-
+@onready var jump_from_floor_anim = false
 ## var
 var target
 var last_target
@@ -67,16 +69,28 @@ func _ready() -> void:
 
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
-	$RichTextLabel4.text = str("jump_mult: ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
+	#$RichTextLabel4.text = str("floor max angle: ", floor_max_angle, "jump mult : ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
 
 func _process(delta: float) -> void:
 	state_handler()
 
 
 func _physics_process(delta: float) -> void:
+	var colliding_count = 0  # Reset every frame
+	
+	for ray in floor_rays:
+		if ray.is_colliding():
+			colliding_count += 1
+	
+	# Decide angle *after* all rays are checked
+	if colliding_count < floor_rays.size() / 2:
+		floor_max_angle = deg_to_rad(0.0)
+	else:
+		floor_max_angle = deg_to_rad(45.0)
+	
 	if ledge_cooldown_timer > 0.0:
 		ledge_cooldown_timer -= delta
-	floor_or_roof = $"Floor Ray".get_collider()
+	floor_or_roof = $"Body Mesh Container/Floor Ray".get_collider()
 	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
 	
@@ -97,37 +111,42 @@ func _physics_process(delta: float) -> void:
 	
 ## States
 	if state == FLOOR:
+		#collision_detect() #put node at player's feet, leave it when they jump
+		if jump_from_floor_anim == false:
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
 		can_ledge = false
 		air_mult = 1.0
 		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
 		if not direction:
-			var any_not_colliding = false
-			for ray in tiptoe_rays:
-				if not ray.is_colliding() and not $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray5".is_colliding():
-					any_not_colliding = true
-				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle")
+			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
+			#var any_not_colliding = false
+			#for ray in tiptoe_rays:
+				#if not ray.is_colliding() and not $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray5".is_colliding():
+					#any_not_colliding = true
 				#if any_not_colliding:
 					#temp_sly.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
 				#else:
 					#temp_sly.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
 		else:
-			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk")
-			#temp_sly.anim_tree.set("parameters/Input Timescale/scale", left_stick_pressure)
-			#temp_sly.anim_tree.set("parameters/Floor Transition/transition_request", "floor walk")
+			if speed_mult == 1.0:
+				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk")
+			else:
+				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_run")
 		jump_num = 0
 		jump_mult = 1.0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
+		jump_from_floor_anim = false
 		can_ledge = false
 		temp_sly.anim_tree.set("parameters/state/transition_request", "air")
 		#var forward = -rot_container.global_transform.basis.z
 
 		speed_mult = 1.0
-		if not $"Floor Ray".is_colliding() and gravmult > 1.0:
+		if not $"Body Mesh Container/Floor Ray".is_colliding() and gravmult > 1.0:
 			#slight dampening when player just begins to fall
 			air_mult = lerp(air_mult, 0.1, 0.05)
 			#temp_sly.anim_tree.set("parameters/Anim State/transition_request", "air")
-		elif velocity.y <= -6.5 and gravmult <= 1.0 and not $"Floor Ray".is_colliding():
+		elif velocity.y <= -6.5 and gravmult <= 1.0 and not $"Body Mesh Container/Floor Ray".is_colliding():
 			#smooth release so they can control a long fall naturally and also set their rotation  right just before they hit the ground
 			#self.visible = false
 			air_mult = lerp(air_mult, 0.5, 0.05)
@@ -149,6 +168,7 @@ func _physics_process(delta: float) -> void:
 		previous_jump_was_notch = false
 		if Input.is_action_pressed("shift"):
 			speed_mult = 1.5
+			
 		else:
 			speed_mult = 1.0
 		
@@ -159,6 +179,10 @@ func _physics_process(delta: float) -> void:
 		jump_mult = 1.0
 		target = $"ray v container/ray v ball"
 		$RichTextLabel3.text = str("ON LEDGE", target)
+		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
+		temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
+		temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+		#lerp to ledge w offset
 		
 
 	if state == TO_TARGET and target != null:
@@ -171,7 +195,7 @@ func _physics_process(delta: float) -> void:
 			jump_num = 0
 			air_mult = 0.0
 			
-			#temp_sly.anim_tree.set("parameters/Anim State/transition_request", "air")
+			temp_sly.anim_tree.set("parameters/state/transition_request", "air")
 			$RichTextLabel3.text = str("TO TARGET", " : ", target)
 			apply_magnetism()
 			if velocity.y > -6.5:
@@ -186,6 +210,16 @@ func _physics_process(delta: float) -> void:
 			target = null
 			state = AIR
 	elif state == ON_TARGET and target != null:
+		temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
+		
+		if target.is_in_group("pole") or target.is_in_group("swing"):
+			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
+		if direction:
+			if not target.is_in_group("point") and not target.is_in_group("notch") and not target.is_in_group("pole") and not target.is_in_group("swing"):
+				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk")
+		elif not target.is_in_group("pole") and not target.is_in_group("swing"):
+			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
 		target.player = self
 		jump_num = 0
 		air_mult = 1.0
@@ -244,23 +278,23 @@ func _physics_process(delta: float) -> void:
 	# Adjust rotation smoothing based on player movement
 
 	var look_val = 0.165 * air_mult / speed_mult
-	if target == null or not target.is_in_group("LOCK PLAYER ROT"):
-		#for rotating on point targets
-		rot_container.rotation.y += angle_difference * look_val
-		if not rot_container.rotation.x == 0.0:
-			rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
-		if not rot_container.rotation.z == 0.0:
-			rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
-	# for rope correction (re align to proper rotation)
-	if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
-		#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
-		var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
-		rot_container.rotation.y += angle_diff * look_val
-	elif can_ledge:
-		pass
+	if can_ledge:
 		var dir = rot_container.global_position - $"ray v container/ray v ball".global_position
 		rot_container.rotation.y = lerp_angle(rot_container.rotation.y, atan2(dir.x, dir.z), 0.2)
-	true_player_rot.rotation.y += angle_difference * look_val
+	else:
+		if target == null or not target.is_in_group("LOCK PLAYER ROT"):
+			#for rotating on point targets
+			rot_container.rotation.y += angle_difference * look_val
+			if not rot_container.rotation.x == 0.0:
+				rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
+			if not rot_container.rotation.z == 0.0:
+				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
+		# for rope correction (re align to proper rotation)
+		if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
+			#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
+			var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
+			rot_container.rotation.y += angle_diff * look_val
+		true_player_rot.rotation.y += angle_difference * look_val
 	if not direction.length_squared() < 0.0001:
 		$"Look_At Rotation".look_at(position + direction)
 	
@@ -272,7 +306,7 @@ func _physics_process(delta: float) -> void:
 	elif horizontal > 0 and state == FLOOR:
 		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
 	
-	$RichTextLabel.text = str("fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num, "  prevnotch: ", previous_jump_was_notch, " mancam: ", manual_move_cam)
+	$RichTextLabel.text = str("floor max angle: ", floor_max_angle, "fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num, "  prevnotch: ", previous_jump_was_notch, " mancam: ", manual_move_cam)
 	ledge_detect(delta)
 	camera_smooth_follow(delta)
 	move_and_slide()
@@ -304,9 +338,8 @@ func jump():
 	if not previous_jump_was_notch:
 		jump_mult = 1.0
 	if jump_num < 2:
-		temp_sly.anim_tree.set("parameters/state/transition_request", "air")
-		#temp_sly.anim_tree.set("parameters/Jump/request", 1)
 		if state == FLOOR:
+			jump_from_floor_anim = true
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_LEDGE:
@@ -321,58 +354,61 @@ func jump():
 			velocity.y += JUMP_VELOCITY * jump_mult
 			jump_num = 0
 			state = AIR
+			
 		elif state != TO_TARGET:
-			#temp_sly.anim_tree.set("parameters/Jump/request", 1)
 			air_mult = 1.0
 			if velocity.y >= 0:
 				velocity.y += 2.75
-			else:
+			elif velocity.y <= -6.5:
 				velocity.y += (-velocity.y/2) + 2.75
+			else:
+				velocity.y += (-velocity.y) + 2.75
+		temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 	jump_mult = 1.0
+
+func collision_detect():
+	$"collision point".global_transform.origin = self.global_transform.origin
+	#
+	#var motion = velocity * delta
+	#if test_move(global_transform, motion):
+		#var collision = move_and_collide(motion)
+		#if collision:
+			#var point = collision.get_position()
+			#$"collision point".global_transform.origin = point
+			#$"collision point".visible = true
+		#else:
+			#$"collision point".visible = false
 	
 
-
 func ledge_detect(delta):
-	var ray_col = $"True Player Rotation/Ledge Ray 1".get_collider()
 	var cp_ray_v = $"ray v container/ray v".get_collision_point()
-	var cp_ray = $"True Player Rotation/Ledge Ray 1".get_collision_point()
-	if not can_ledge:
-		if state == AIR and not $"True Player Rotation/Cancel Ledge Ray".is_colliding() and not $"True Player Rotation/Cancel Ledge Ray2".is_colliding() and not $"True Player Rotation/Cancel Ledge Ray3".is_colliding():
-			var motion = velocity.normalized() * delta * 0.5
-			if test_move(global_transform, motion):
-				var collision = move_and_collide(motion)
-				if collision and ledge_cooldown_timer <= 0.0:
-					var point = collision.get_position()
-					cp_final = point
-
-					var ray_v = $"ray v container/ray v"
-					var offset = Vector3(0, 7, 0)
-					$"ray v container".global_transform.origin = cp_final + offset
-					$"ray v container/ray v ball".global_transform.origin = cp_final
-					
-					if velocity.y < 0 and cp_final.y >= global_transform.origin.y + 0.29 and cp_final.y <= global_transform.origin.y + 0.5:
-						state = ON_LEDGE
-						can_ledge = true
-			elif $"True Player Rotation/Ledge Ray 1".is_colliding() and not ray_col.is_in_group("Player"):
-				## does not reliably place ball at said location because of how this is set up
-				## also, ledge ray 1 needs to be where cancel ledge ray is, and cancel ledge ray needs to be y=2, so the player does not "catch a ledge" when on an upward slope
-				## need to allow ball time to get to ledge
-				cp_final = ray_col
-				$"ray v container".global_transform.origin = cp_final.global_transform.origin
-				$"ray v container/ray v ball".global_transform.origin.y = cp_ray_v.y
-				$"ray v container/ray v ball".global_transform.origin.x = cp_ray.x
-				$"ray v container/ray v ball".global_transform.origin.z = cp_ray.z
-				if velocity.y < 0:
-					state = ON_LEDGE
-					can_ledge = true
-
-
-
-func tween_to_ledge():
-	#global_transform.origin.x = lerp(global_transform.origin.x, cp_final.x, 0.25)
-	#global_transform.origin.y = lerp(global_transform.origin.y, cp_final.y, 0.25)
-	#global_transform.origin.z = lerp(global_transform.origin.z, cp_final.z, 0.25)
-	global_transform.origin = target.global_transform.origin + Vector3(0,1,0)
+	
+	var ray_col = $"Body Mesh Container/Ledge Ray 1".get_collider()
+	var ray2_col = $"Body Mesh Container/Ledge Ray 2".get_collider()
+	var ray3_col = $"Body Mesh Container/Ledge Ray 3".get_collider()
+	
+	var cp_ray = $"Body Mesh Container/Ledge Ray 1".get_collision_point()
+	var cp_ray2 = $"Body Mesh Container/Ledge Ray 2".get_collision_point()
+	var cp_ray3 = $"Body Mesh Container/Ledge Ray 3".get_collision_point()
+	
+	if not can_ledge and state == AIR and velocity.y < 0:
+		if not $"Body Mesh Container/Cancel Ledge Ray".is_colliding() and not $"Body Mesh Container/Cancel Ledge Ray 2".is_colliding() and not $"Body Mesh Container/Cancel Ledge Ray 3".is_colliding():
+			if $"Body Mesh Container/Ledge Ray 1".is_colliding():
+				cp_final = cp_ray
+				state = ON_LEDGE
+				can_ledge = true
+			elif $"Body Mesh Container/Ledge Ray 2".is_colliding():
+				cp_final = cp_ray2
+				state = ON_LEDGE
+				can_ledge = true
+			elif $"Body Mesh Container/Ledge Ray 3".is_colliding():
+				cp_final = cp_ray3
+				state = ON_LEDGE
+				can_ledge = true
+			var offset = Vector3(0, 7, 0)
+			$"ray v container".global_transform.origin = cp_final + offset
+			$"ray v container/ray v ball".global_transform.origin = cp_final
+		
 
 func apply_target(delta):
 	if can_ledge:
@@ -408,7 +444,7 @@ func apply_target(delta):
 func apply_magnetism(): # the holy grail of magnetism
 	if target != null:  # No magnetism if jumping
 		if can_ledge:
-			tween_to_ledge()
+			pass
 		else:
 				
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
@@ -443,22 +479,18 @@ func apply_magnetism(): # the holy grail of magnetism
 func camera_smooth_follow(delta):
 	var cam_speed = 350
 	var cam_timer = clamp(delta * cam_speed / 20, 0, 1)
-	var cam_to_player_x = abs(camera_parent.camera.global_transform.origin.x - global_transform.origin.x)
-	var cam_to_player_y = abs(camera_parent.camera.global_transform.origin.y - global_transform.origin.y)
-	var cam_to_player_z = abs(camera_parent.camera.global_transform.origin.z - global_transform.origin.z)
-	var cam_distance = (cam_to_player_x + cam_to_player_y + cam_to_player_z) / 3
 	var tform_mult
 	var offsetform = global_transform.origin + global_transform.basis.z * 1
-	var camera_length = -camera_parent.pitch * 1.5
+	var camera_length = -camera_parent.pitch
 	var cam_max
 	var cam_min
 	var lerp_val
 	
 	lerp_val = 0.15
-	var add = 5.5
+	var add = 4.5
 	cam_max = 0
-	cam_min = -1.5
-	tform_mult = 1.0
+	cam_min = 0.0
+	tform_mult = .5
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera.position = lerp(camera.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
@@ -477,24 +509,28 @@ func camera_smooth_follow(delta):
 
 	if state == AIR or state == TO_TARGET:
 		if manual_move_cam == true:
-			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.04)
+			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 		#elif not $"CollisionShape3D/Cam Y Ray".is_colliding():
 			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.75, 0.055)
 		## Add Modifier: If ray from floor to feet.lenth < 2m
+		elif $"Body Mesh Container/Floor Ray".is_colliding():
+			var raycol = $"Body Mesh Container/Floor Ray".get_collider()
+			if raycol.global_position.y != $"collision point".global_position.y:
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
 			if jump_cam_trigger == true:
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, ((velocity.y) * .0075))
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0075))
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.0075)
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.0075)
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.25: # and not downward_raycast.is_colliding()
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.2)
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.5: # and not downward_raycast.is_colliding()
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.2)
 	else:
-		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.25, 0.04)
-		
-	ray_to_cam_distance =  ray_to_cam.global_transform.origin - camera.global_transform.origin
+		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
+
+	ray_to_cam_distance = ray_to_cam.global_transform.origin - camera.global_transform.origin
 	ray_to_cam.look_at(camera.global_position)
 	ray_to_cam.target_position = Vector3(0,0,-ray_to_cam_distance.length())
 	

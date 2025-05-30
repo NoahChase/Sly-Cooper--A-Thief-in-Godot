@@ -2,7 +2,6 @@ extends Node3D
 
 @export var player = CharacterBody3D
 @export var sly_mesh = Node3D
-
 @onready var skeleton = $metarig/Skeleton3D
 
 @onready var tail_1 = skeleton.find_bone("Tail.001")
@@ -49,10 +48,14 @@ func _ready():
 	$metarig/Skeleton3D/IK_2_.start()
 
 func _physics_process(delta):
-	#$metarig/Skeleton3D/Tail_LowPoly.position
+	## ball_target and sly_tail must have the same position and rotation to keep things aligned
 	global_transform.origin = sly_mesh.tail_001_attachment.global_transform.origin
 	ball_target.global_position = sly_mesh.tail_001_attachment.global_position
+	global_rotation = player.rot_container.global_rotation + Vector3(0, -PI, 0) #small vector3 adjustment for -180 rotation of player
 	ball_target.global_rotation = player.rot_container.global_rotation + Vector3(0, -PI, 0) #small vector3 adjustment for -180 rotation of player
+	
+#	need to clamp base of tail so it stays 'on' when flipping along x axis
+	#ball_1.global_rotation.x = clamp(ball_1.global_rotation.x, deg_to_rad(20), deg_to_rad(-20))
 
 	# Update tail segment rotations
 	ball_1.global_rotation = lerp_shortest_rotation(ball_1.global_rotation, ball_target.global_rotation, 0.45)
