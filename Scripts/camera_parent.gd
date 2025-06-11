@@ -1,7 +1,5 @@
 extends Node3D
 
-@onready var camera_return = $CameraTarget/Camera_Return
-
 @export var camera_target = Node3D
 @export var camera_container = Node3D
 @export var camera_player = CharacterBody3D

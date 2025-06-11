@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0q01l776k7jc"]
+
+[ext_resource type="Script" uid="uid://gir0yfgvio3d" path="res://Scripts/hurtbox.gd" id="1_71xft"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_71xft"]
+
+[node name="hurtbox" type="Node3D" node_paths=PackedStringArray("col_shape")]
+script = ExtResource("1_71xft")
+col_shape = NodePath("Area3D/CollisionShape3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_71xft")
+debug_color = Color(0, 1, 0, 0.419608)

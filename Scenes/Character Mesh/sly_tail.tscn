@@ -69,6 +69,7 @@ bottom_radius = 0.25
 height = 0.25
 
 [node name="sly_tail" instance=ExtResource("1_r72bx")]
+top_level = true
 script = ExtResource("2_irjf2")
 
 [node name="metarig" parent="." index="0"]

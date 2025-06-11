@@ -83,7 +83,7 @@ func _physics_process(delta: float) -> void:
 			colliding_count += 1
 	
 	# Decide angle *after* all rays are checked
-	if colliding_count < floor_rays.size() / 2:
+	if velocity.y <= 0 and colliding_count <= 2:
 		floor_max_angle = deg_to_rad(0.0)
 	else:
 		floor_max_angle = deg_to_rad(45.0)
@@ -101,7 +101,9 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		jump()
 	
-	
+	if Input.is_action_just_pressed("square"):
+		temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
+
 	if Input.is_action_just_pressed("circle") and state == AIR:
 		#$"Body Mesh Container/AnimationPlayer".play("spin")
 		$"Target Area/AnimationPlayer".play("detect targets")
@@ -118,15 +120,14 @@ func _physics_process(delta: float) -> void:
 		air_mult = 1.0
 		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
 		if not direction:
-			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
-			#var any_not_colliding = false
-			#for ray in tiptoe_rays:
-				#if not ray.is_colliding() and not $"Body Mesh Container/SlyCooper_RigNoPhysics/tip toe ray5".is_colliding():
-					#any_not_colliding = true
-				#if any_not_colliding:
-					#temp_sly.anim_tree.set("parameters/Floor Transition/transition_request", "floor teeter")
-				#else:
-					#temp_sly.anim_tree.set("parameters/Floor Transition/transition_request", "floor idle")
+			var any_not_colliding = false
+			for ray in floor_rays:
+				if not ray.is_colliding():
+					any_not_colliding = true
+				if any_not_colliding:
+					temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
+				else:
+					temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
 		else:
 			if speed_mult == 1.0:
 				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk")
@@ -333,12 +334,15 @@ func state_handler():
 	
 
 func jump():
+#	parameters/jump_state/transition_request
 	can_ledge = false
 	jump_num += 1
 	if not previous_jump_was_notch:
 		jump_mult = 1.0
 	if jump_num < 2:
+		temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 		if state == FLOOR:
+			#temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			jump_from_floor_anim = true
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y += JUMP_VELOCITY * jump_mult
@@ -356,6 +360,7 @@ func jump():
 			state = AIR
 			
 		elif state != TO_TARGET:
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
 			if velocity.y >= 0:
 				velocity.y += 2.75
@@ -364,7 +369,7 @@ func jump():
 			else:
 				velocity.y += (-velocity.y) + 2.75
 		temp_sly.anim_tree.set("parameters/OneShot/request", 1)
-	jump_mult = 1.0
+	#jump_mult = 1.0 ik why this is here
 
 func collision_detect():
 	$"collision point".global_transform.origin = self.global_transform.origin

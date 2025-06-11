@@ -5,14 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://cm3ie3krms2au" path="res://Scenes/Character Mesh/sly_tail.tscn" id="3_r3pa2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r3pa2"]
-height = 1.5
+height = 1.625
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p85ho"]
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.14902)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_11x8b"]
-height = 1.5
+height = 1.625
 
 [sub_resource type="BoxMesh" id="BoxMesh_30xp2"]
 size = Vector3(0.1, 0.1, 2)
@@ -156,7 +156,7 @@ floor_max_angle = 0.610865
 script = ExtResource("1_jucx6")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8125, 0)
 shape = SubResource("CapsuleShape3D_r3pa2")
 
 [node name="To Cam RayCast" type="RayCast3D" parent="."]
@@ -167,7 +167,7 @@ debug_shape_thickness = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="SlyCooper_RigNoPhysics" type="MeshInstance3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1875, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_p85ho")
 mesh = SubResource("CapsuleMesh_11x8b")
@@ -200,6 +200,7 @@ target_position = Vector3(0, 0, 0.25)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body Mesh Container/SlyCooper_RigNoPhysics"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("BoxMesh_30xp2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Body Mesh Container"]
