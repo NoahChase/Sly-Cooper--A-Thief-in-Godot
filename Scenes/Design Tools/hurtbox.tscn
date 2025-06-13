@@ -4,11 +4,11 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_71xft"]
 
-[node name="hurtbox" type="Node3D" node_paths=PackedStringArray("col_shape")]
+[node name="hurtbox" type="Node3D" node_paths=PackedStringArray("col_shape") groups=["hurtbox"]]
 script = ExtResource("1_71xft")
 col_shape = NodePath("Area3D/CollisionShape3D")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." groups=["hurtbox"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("BoxShape3D_71xft")

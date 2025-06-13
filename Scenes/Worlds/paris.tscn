@@ -1,14 +1,31 @@
-[gd_scene load_steps=10 format=3 uid="uid://bath36ob6dj1b"]
+[gd_scene load_steps=15 format=3 uid="uid://bath36ob6dj1b"]
 
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
 [ext_resource type="VoxelGIData" uid="uid://f553vglevgdr" path="res://Scenes/Worlds/Paris.VoxelGI_data.res" id="1_pr2ko"]
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="2_25okp"]
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="3_617rq"]
-[ext_resource type="PackedScene" uid="uid://bixha23p0lm3o" path="res://Assets/Temp Imports/p-bld-safehouse.fbx" id="4_5n2g1"]
 [ext_resource type="PackedScene" uid="uid://cf5wmy3ddaxgd" path="res://Assets/Temp Imports/p-bld-sly2-medtower.glb" id="5_gojqr"]
+[ext_resource type="PackedScene" uid="uid://c4mn85fobgsha" path="res://Assets/Temp Imports/p-bld-safehouse.glb" id="6_617rq"]
 [ext_resource type="PackedScene" uid="uid://0aqdv3whvcao" path="res://Assets/Temp Imports/p-modular-aframe.glb" id="6_gfphh"]
 [ext_resource type="PackedScene" uid="uid://bgstehumyyjb6" path="res://Assets/Temp Imports/a balcony.glb" id="7_u86sc"]
 [ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="8_awwuf"]
+[ext_resource type="PackedScene" uid="uid://12jg0s5papwk" path="res://Assets/Temp Imports/world paris.glb" id="11_5n2g1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_25okp"]
+size = Vector3(2, 2, 3)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_25okp"]
+data = PackedVector3Array(-1, 1, 1.5, 1, 1, 1.5, -1, -1, 1.5, 1, 1, 1.5, 1, -1, 1.5, -1, -1, 1.5, 1, 1, -1.5, -1, 1, -1.5, 1, -1, -1.5, -1, 1, -1.5, -1, -1, -1.5, 1, -1, -1.5, 1, 1, 1.5, 1, 1, -1.5, 1, -1, 1.5, 1, 1, -1.5, 1, -1, -1.5, 1, -1, 1.5, -1, 1, -1.5, -1, 1, 1.5, -1, -1, -1.5, -1, 1, 1.5, -1, -1, 1.5, -1, -1, -1.5, 1, 1, 1.5, -1, 1, 1.5, 1, 1, -1.5, -1, 1, 1.5, -1, 1, -1.5, 1, 1, -1.5, -1, -1, 1.5, 1, -1, 1.5, -1, -1, -1.5, 1, -1, 1.5, 1, -1, -1.5, -1, -1, -1.5)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_25okp"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_617rq"]
+emission_enabled = true
+emission = Color(0.72549, 0.658824, 0.454902, 1)
+emission_energy_multiplier = 2.0
 
 [node name="Paris" type="Node3D"]
 
@@ -16,7 +33,7 @@
 environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.573576, -0.769751, 0.280167, 0, 0.34202, 0.939693, -0.819152, 0.538985, -0.196175, 0, 0, 0)
+transform = Transform3D(0.761538, -0.64812, 3.06161e-08, -0.226976, -0.266696, 0.936672, -0.607076, -0.713312, -0.350207, 0, 12.8696, 0)
 light_color = Color(0.411765, 0.45098, 0.627451, 1)
 light_energy = 0.5
 light_bake_mode = 1
@@ -30,27 +47,46 @@ size = Vector3(758.704, 181.617, 796.222)
 data = ExtResource("1_pr2ko")
 
 [node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("2_25okp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.0038, 9.10546, 13.9083)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.49679, 10.0887, 7.66253)
 camera_parent = NodePath("../Camera Parent")
 
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("3_617rq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 15.6216, 3.5)
 camera_player = NodePath("../Player_ Sly")
 
-[node name="p-bld-safehouse" parent="." instance=ExtResource("4_5n2g1")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 1.5, 0, 1.5)
+[node name="p-bld-safehouse2" parent="." instance=ExtResource("6_617rq")]
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 4, 0.2, 3)
 
 [node name="p-bld-sly2-medtower3" parent="." instance=ExtResource("5_gojqr")]
-transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 28, 0, 9)
+transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, 28, 0.2, 9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="p-bld-sly2-medtower3"]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 11.14, 0.8, -0.037)
+mesh = SubResource("BoxMesh_25okp")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="p-bld-sly2-medtower3/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="p-bld-sly2-medtower3/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_25okp")
 
 [node name="p-modular-aframe" parent="." instance=ExtResource("6_gfphh")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 19, 0, 23.5)
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 19, 0, 23)
 
 [node name="a balcony" parent="p-modular-aframe" instance=ExtResource("7_u86sc")]
 transform = Transform3D(-2.98023e-08, 0, 1, 0, 1, 0, -1, 0, -2.98023e-08, 0, 0, 0)
 
 [node name="a balcony2" parent="p-modular-aframe" instance=ExtResource("7_u86sc")]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -10, 0, 1.52588e-05)
+
+[node name="light emis" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 4, 22)
+mesh = SubResource("CylinderMesh_25okp")
+surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
+
+[node name="light emis2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 4, -8)
+mesh = SubResource("CylinderMesh_25okp")
+surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
 [node name="Sprite3D4" type="Sprite3D" parent="."]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 852.5, -2.7432, 26)
@@ -71,3 +107,5 @@ texture = ExtResource("8_awwuf")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 34, -2.7432, 845.5)
 pixel_size = 1.0
 texture = ExtResource("8_awwuf")
+
+[node name="world paris" parent="." instance=ExtResource("11_5n2g1")]

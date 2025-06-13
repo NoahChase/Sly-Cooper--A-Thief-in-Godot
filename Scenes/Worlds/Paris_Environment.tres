@@ -22,6 +22,7 @@ uniform float sun_curve : hint_range(0, 1) = 0.15;
 uniform float exposure : hint_range(0, 128) = 1.0;
 
 uniform vec4 cloud_color : source_color = vec4(1.0, 1.0, 1.0, 1.0); // white, fully opaque
+uniform float cloud_distance;
 uniform vec2 cloud_direction;
 uniform vec2 cloud_direction2;
 uniform vec2 cloud_scale;
@@ -88,9 +89,10 @@ void sky() {
 	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
 	
 	vec3 clouds = texture(cloud_texture, (sky_uv*cloud_scale) + (TIME*cloud_direction*cloud_speed*.01)).rgb - texture(cloud_texture2, (sky_uv * cloud_scale) + (TIME * cloud_direction2 * cloud_speed2*.01)).rgb;
+	clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
 	float raw_cloud_brightness = max(clouds.r, max(clouds.g, clouds.b));
 	float cloud_alpha = smoothstep(0.0, 0.8, raw_cloud_brightness) * cloud_color.a;
-
+	
 	// Blend clouds with sky
 	sky = mix(sky, cloud_color.rgb, cloud_alpha);
 	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
@@ -148,6 +150,7 @@ shader_parameter/sun_angle_max = 0.523599
 shader_parameter/sun_curve = 0.0
 shader_parameter/exposure = 1.0
 shader_parameter/cloud_color = Color(0.174021, 0.19852, 0.369085, 0.560784)
+shader_parameter/cloud_distance = 0.02
 shader_parameter/cloud_direction = Vector2(-1, 0.5)
 shader_parameter/cloud_direction2 = Vector2(0.5, -1)
 shader_parameter/cloud_scale = Vector2(0.02, 0.02)
@@ -166,7 +169,10 @@ sky = SubResource("Sky_r3fl7")
 ambient_light_source = 2
 ambient_light_color = Color(0.301961, 0.333333, 0.501961, 1)
 ssao_enabled = true
+ssao_intensity = 1.0
 ssil_enabled = true
+ssil_radius = 2.5
+ssil_intensity = 0.5
 glow_enabled = true
 fog_enabled = true
 fog_light_color = Color(0.0196078, 0.0784314, 0.2, 1)

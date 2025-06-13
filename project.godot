@@ -21,6 +21,10 @@ config/icon="res://icon.svg"
 
 window/size/mode=3
 
+[global_group]
+
+hurtbox=""
+
 [input]
 
 ui_accept={

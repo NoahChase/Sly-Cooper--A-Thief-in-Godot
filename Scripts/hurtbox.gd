@@ -1,5 +1,7 @@
 @tool
 extends Node3D
+@export var player = false
+@export var parent = CharacterBody3D
 @export var col_shape = CollisionShape3D
 @export var col_x = 1.0
 @export var col_y = 1.0
