@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgbbsv1fb5nex"]
+
+[ext_resource type="Script" uid="uid://dlvcledff4yvv" path="res://Scripts/hp_container.gd" id="1_rqbnw"]
+
+[node name="HP Container" type="Node3D"]
+script = ExtResource("1_rqbnw")
+
+[node name="Damage Flash Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Damage Flash Timer" to="." method="_on_damage_flash_timer_timeout"]

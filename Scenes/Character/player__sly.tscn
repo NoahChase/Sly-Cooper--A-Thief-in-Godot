@@ -209,27 +209,27 @@ libraries = {
 }
 
 [node name="Ledge Ray 1" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.625, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
 target_position = Vector3(0, 0, -0.75)
 
 [node name="Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.625, 0)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.6, 0)
 target_position = Vector3(0, 0, -0.75)
 
 [node name="Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.625, 0)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.6, 0)
 target_position = Vector3(0, 0, -0.75)
 
 [node name="Cancel Ledge Ray" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.375, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.375, 0)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.4, 0)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.375, 0)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.4, 0)
 target_position = Vector3(0, 0, -1)
 
 [node name="Floor Ray" type="RayCast3D" parent="Body Mesh Container"]
@@ -294,13 +294,13 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 0)
 visible = false
 mesh = SubResource("CylinderMesh_lkte6")
 surface_material_override/0 = SubResource("StandardMaterial3D_nt6o0")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 0)
 shape = SubResource("ConvexPolygonShape3D_nt6o0")
 disabled = true
 
@@ -366,7 +366,6 @@ mesh = SubResource("BoxMesh_lkte6")
 
 [node name="collision point" type="Node3D" parent="."]
 top_level = true
-visible = false
 
 [node name="collision arrow" type="MeshInstance3D" parent="collision point"]
 transform = Transform3D(1, 0, 0, 0, -1, 5.96046e-08, 0, -5.96046e-08, -1, 0, 0.25, 0)

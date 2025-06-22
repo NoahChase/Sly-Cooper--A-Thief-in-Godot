@@ -87,12 +87,12 @@ void sky() {
 	ground *= ground_energy;
 
 	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
-	
+
 	vec3 clouds = texture(cloud_texture, (sky_uv*cloud_scale) + (TIME*cloud_direction*cloud_speed*.01)).rgb - texture(cloud_texture2, (sky_uv * cloud_scale) + (TIME * cloud_direction2 * cloud_speed2*.01)).rgb;
 	clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
 	float raw_cloud_brightness = max(clouds.r, max(clouds.g, clouds.b));
 	float cloud_alpha = smoothstep(0.0, 0.8, raw_cloud_brightness) * cloud_color.a;
-	
+
 	// Blend clouds with sky
 	sky = mix(sky, cloud_color.rgb, cloud_alpha);
 	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
@@ -137,12 +137,12 @@ noise = SubResource("FastNoiseLite_4xowi")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
-shader_parameter/sky_top_color = Color(0.0509804, 0.0745098, 0.2, 1)
+shader_parameter/sky_top_color = Color(0.0391, 0.0609167, 0.17, 1)
 shader_parameter/sky_horizon_color = Color(0.121569, 0.105882, 0.301961, 1)
 shader_parameter/sky_curve = 0.075
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
-shader_parameter/ground_bottom_color = Color(0.00392157, 0.0666667, 0.188235, 1)
+shader_parameter/ground_bottom_color = Color(0, 0.0375, 0.15, 1)
 shader_parameter/ground_horizon_color = Color(0.121569, 0.105882, 0.301961, 1)
 shader_parameter/ground_curve = 0.02
 shader_parameter/ground_energy = 1.0
@@ -167,21 +167,22 @@ background_mode = 2
 background_color = Color(0.0862745, 0.121569, 0.25098, 1)
 sky = SubResource("Sky_r3fl7")
 ambient_light_source = 2
-ambient_light_color = Color(0.301961, 0.333333, 0.501961, 1)
+ambient_light_color = Color(0.36, 0.42, 0.6, 1)
 ssao_enabled = true
-ssao_intensity = 1.0
-ssil_enabled = true
-ssil_radius = 2.5
+ssil_radius = 2.0
 ssil_intensity = 0.5
+ssil_sharpness = 1.0
 glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.05
 fog_enabled = true
-fog_light_color = Color(0.0196078, 0.0784314, 0.2, 1)
+fog_light_color = Color(0.024, 0.0466666, 0.16, 1)
 fog_density = 0.015
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.005
-volumetric_fog_albedo = Color(0.0745098, 0.129412, 0.301961, 1)
-volumetric_fog_emission = Color(0.0745098, 0.129412, 0.301961, 1)
+volumetric_fog_albedo = Color(0.075, 0.13125, 0.3, 1)
+volumetric_fog_emission = Color(0.075, 0.13125, 0.3, 1)
 volumetric_fog_anisotropy = 0.5
 volumetric_fog_length = 32.0
 volumetric_fog_sky_affect = 0.0

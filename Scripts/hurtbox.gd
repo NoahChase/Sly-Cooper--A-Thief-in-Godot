@@ -1,27 +1,11 @@
-@tool
-extends Node3D
-@export var player = false
-@export var parent = CharacterBody3D
-@export var col_shape = CollisionShape3D
-@export var col_x = 1.0
-@export var col_y = 1.0
-@export var col_z = 1.0
-@export var run_tool = false
+extends Area3D
 
-func _ready() -> void:
-	if col_shape and col_shape.shape:
-		col_shape.shape = col_shape.shape.duplicate()  # Make the shape unique
-		col_shape.shape.size = Vector3(col_x, col_y, col_z)
-	if run_tool:
-		run_tool = false
+@export var damage = 1
+@export var is_hit = false
 
-func _physics_process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		if run_tool and col_shape and col_shape.shape:
-			col_shape.shape.size = Vector3(col_x, col_y, col_z)
-
-func _on_area_3d_area_entered(area: Area3D) -> void:
+func _on_area_entered(area: Area3D) -> void:
 	pass # Replace with function body.
 
-func _on_area_3d_area_exited(area: Area3D) -> void:
+
+func _on_area_exited(area: Area3D) -> void:
 	pass # Replace with function body.

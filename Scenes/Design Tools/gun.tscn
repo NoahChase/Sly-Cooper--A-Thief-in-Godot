@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bibovwn6qb1d8"]
+
+[ext_resource type="Script" uid="uid://bahd8fglbsqkx" path="res://Scripts/gun.gd" id="1_op1r2"]
+
+[node name="gun" type="Node3D"]
+script = ExtResource("1_op1r2")
+
+[node name="muzzle" type="Node3D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

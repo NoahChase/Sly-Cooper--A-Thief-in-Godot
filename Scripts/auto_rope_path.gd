@@ -155,11 +155,11 @@ func bend_rope(delta):
 			var lerp_factor
 		
 			if target_point.is_selected:
-				val = lerp(val, 0.0, 0.005)
+				val = lerp(val, 0.0, 0.01)
 				bend_mult = lerp(bend_mult, 1.0, 0.015)
 			else:
-				val = lerp(val, 1.0, 0.01)
-				bend_mult = lerp(bend_mult, val, 0.03)
+				val = lerp(val, 1.0, 0.005)
+				bend_mult = lerp(bend_mult, val, 0.001)
 			
 			lerp_factor = clamp(distance / (length / 1.9) * (1-val), val, 1.0 + val) * bend_mult
 			new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
