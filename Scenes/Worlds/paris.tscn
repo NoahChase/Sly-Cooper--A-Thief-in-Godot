@@ -1,10 +1,11 @@
-[gd_scene load_steps=24 format=3 uid="uid://bath36ob6dj1b"]
+[gd_scene load_steps=26 format=3 uid="uid://bath36ob6dj1b"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
 [ext_resource type="VoxelGIData" uid="uid://f553vglevgdr" path="res://Scenes/Worlds/Paris.VoxelGI_data.res" id="1_pr2ko"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_0qql5"]
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="2_25okp"]
+[ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="3_0qql5"]
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="3_617rq"]
 [ext_resource type="PackedScene" uid="uid://c4mn85fobgsha" path="res://Assets/Temp Imports/p-bld-safehouse.glb" id="6_617rq"]
 [ext_resource type="PackedScene" uid="uid://0aqdv3whvcao" path="res://Assets/Temp Imports/p-modular-aframe.glb" id="6_gfphh"]
@@ -21,10 +22,17 @@
 
 [sub_resource type="Curve3D" id="Curve3D_oqbgp"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 15.9174, 4.19727, -5.18777, 0, 0, 0, 0, 0, 0, 15.7257, 4.1121, -5.96899, 0, 0, 0, 0, 0, 0, 15.5339, 4.0637, -6.75022, 0, 0, 0, 0, 0, 0, 15.3422, 4.05206, -7.53144, 0, 0, 0, 0, 0, 0, 15.1504, 4.07719, -8.31266, 0, 0, 0, 0, 0, 0, 14.9587, 4.13908, -9.09389, 0, 0, 0, 0, 0, 0, 14.767, 4.23774, -9.87511, 0, 0, 0, 0, 0, 0, 14.5752, 4.37316, -10.6563, 0, 0, 0, 0, 0, 0, 14.3835, 4.54534, -11.4376, 0, 0, 0, 0, 0, 0, 14.1917, 4.75429, -12.2188, 0, 0, 0, 0, 0, 0, 14, 5, -13),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 14, 7, -14, 0, 0, 0, 0, 0, 0, 14.1921, 6.45925, -13.1095, 0, 0, 0, 0, 0, 0, 14.3841, 5.97753, -12.219, 0, 0, 0, 0, 0, 0, 14.5762, 5.55482, -11.3285, 0, 0, 0, 0, 0, 0, 14.7682, 5.19113, -10.438, 0, 0, 0, 0, 0, 0, 14.9603, 4.88646, -9.54745, 0, 0, 0, 0, 0, 0, 15.1524, 4.6408, -8.65694, 0, 0, 0, 0, 0, 0, 15.3444, 4.45417, -7.76643, 0, 0, 0, 0, 0, 0, 15.5365, 4.32655, -6.87592, 0, 0, 0, 0, 0, 0, 15.7285, 4.25796, -5.98541, 0, 0, 0, 0, 0, 0, 15.9206, 4.24838, -5.0949),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 11
+
+[sub_resource type="Curve3D" id="Curve3D_b2g3t"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.3854, 0.00124359, -5.61229, 0, 0, 0, 0, 0, 0, 13.3857, 4.85423, -5.61203),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_25okp"]
 top_radius = 0.25
@@ -44,31 +52,36 @@ emission_energy_multiplier = 2.0
 
 [node name="Rope" type="Node3D" parent="." node_paths=PackedStringArray("path_3d", "start_point", "end_point", "path_follow", "target_point", "player")]
 script = ExtResource("1_3ytsx")
+update_tool = true
 path_3d = NodePath("Path3D")
 start_point = NodePath("start")
 end_point = NodePath("end")
-length = 8.15
+curve_amplitude = 0.8
+length = 9.65
 path_follow = NodePath("Path3D/PathFollow3D")
 target_point = NodePath("Path3D/PathFollow3D/Target Point")
 player = NodePath("../Player_ Sly")
-
-[node name="start" type="Node3D" parent="Rope"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9174, 4.19727, -5.18777)
+bend_mult = 0.2
 
 [node name="end" type="Node3D" parent="Rope"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 5, -13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9206, 4.24838, -5.0949)
+
+[node name="start" type="Node3D" parent="Rope"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 7, -14)
 
 [node name="Path3D" type="Path3D" parent="Rope"]
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Rope/Path3D"]
-transform = Transform3D(0.971177, -0.025096, 0.237037, -2.79397e-09, 0.994442, 0.105286, -0.238361, -0.102251, 0.965779, 15.9174, 4.19727, -5.18777)
+transform = Transform3D(-0.977519, 0.0668702, -0.199934, 9.51063e-06, 0.948257, 0.317165, 0.210827, 0.310007, -0.927024, 14.8624, 5.04181, -10.0015)
+progress = 4.5459
 loop = false
 
-[node name="Target Point" parent="Rope/Path3D/PathFollow3D" groups=["rope"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(-0.971177, 0, 0.238361, 0, 1, 0, -0.238361, 0, -0.971177, 0, 0, 0)
+[node name="Target Point" parent="Rope/Path3D/PathFollow3D" groups=["LOCK PLAYER ROT", "rope"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(0.977524, 0, -0.210825, 0, 1, 0, 0.210825, 0, 0.977524, 0, 0.1, 0)
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Rope"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.05, -0.05)
 polygon = PackedVector2Array(0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0)
 mode = 2
 path_node = NodePath("../Path3D")
@@ -83,12 +96,49 @@ path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
 
+[node name="Pole" type="Node3D" parent="." node_paths=PackedStringArray("test_ball", "target")]
+script = ExtResource("3_0qql5")
+update_tool = true
+test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
+target = NodePath("../Player_ Sly")
+length = 4.85
+end_clamp = 0.7
+reversed = true
+
+[node name="Path3D" type="Path3D" parent="Pole"]
+curve = SubResource("Curve3D_b2g3t")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Pole/Path3D"]
+transform = Transform3D(-4.37105e-08, 0.99999, -4.37105e-08, 0, -4.37109e-08, -0.999979, -0.99998, -4.37109e-08, 1.91065e-15, 13.3856, 3.39852, -5.61211)
+progress = 3.39709
+loop = false
+
+[node name="Grip Offset" type="Node3D" parent="Pole/Path3D/PathFollow3D"]
+
+[node name="Target Point" parent="Pole/Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.25, 0)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Pole"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
+polygon = PackedVector2Array(0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.761538, -0.64812, -2.0328e-08, -0.226976, -0.266696, 0.936672, -0.607076, -0.713312, -0.350207, -4, 12.8696, -1)
-light_color = Color(0.49, 0.5425, 0.7, 1)
+light_color = Color(0.42, 0.465, 0.6, 1)
 light_indirect_energy = 0.0
 light_specular = 0.5
 light_bake_mode = 1
@@ -127,11 +177,13 @@ transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -10, 0, 
 
 [node name="light emis" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4, 21)
+cast_shadow = 0
 mesh = SubResource("CylinderMesh_25okp")
 surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
 [node name="light emis2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 4, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7482, 4, -5.6377)
+cast_shadow = 0
 mesh = SubResource("CylinderMesh_25okp")
 surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
@@ -160,6 +212,9 @@ texture = ExtResource("8_awwuf")
 [node name="car 2m" parent="." instance=ExtResource("11_gojqr")]
 transform = Transform3D(-0.149343, -0.1431, -0.978377, -0.0040988, 0.989554, -0.144109, 0.988777, -0.0175116, -0.14837, 13.5607, 0.154036, 3.59113)
 
+[node name="car 2m2" parent="." instance=ExtResource("11_gojqr")]
+transform = Transform3D(0.920012, 0.0443686, -0.389372, 0.00893545, 0.990938, 0.13403, 0.391789, -0.126788, 0.911278, 19.5607, 0.154036, -4.40887)
+
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("12_u86sc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.79588, 11.2578, 6)
 hurtboxes = [NodePath("Hurtbox")]
@@ -183,6 +238,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 17)
 
 [node name="projectile" parent="." instance=ExtResource("16_ybblj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 9, 12)
+
+[node name="Target Point" parent="." groups=["point"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 29.3349, 4, -0.75)
+
+[node name="Target Point2" parent="." groups=["point"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 33.6651, 4, -3.25)
 
 [connection signal="area_entered" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_entered"]
 [connection signal="area_exited" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_exited"]

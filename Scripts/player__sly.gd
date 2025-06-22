@@ -225,7 +225,7 @@ func _physics_process(delta: float) -> void:
 			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
 		if direction:
 			if not target.is_in_group("point") and not target.is_in_group("notch") and not target.is_in_group("pole") and not target.is_in_group("swing"):
-				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk")
+				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk_rope")
 		elif not target.is_in_group("pole") and not target.is_in_group("swing"):
 			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
 		target.player = self
@@ -351,6 +351,8 @@ func state_handler():
 	
 
 func jump():
+	if state == TO_TARGET:
+		return
 #	parameters/jump_state/transition_request
 	can_ledge = false
 	jump_num += 1
@@ -460,7 +462,8 @@ func apply_target(delta):
 	
 		# Assign the best target after evaluating all options
 		if best_target != null:
-			do_spin_animation()
+			if not best_target.is_in_group("pole"):
+				do_spin_animation()
 			target = best_target
 			
 	
@@ -537,26 +540,26 @@ func camera_smooth_follow(delta):
 
 	if state == AIR or state == TO_TARGET:
 		if manual_move_cam == true:
-			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.04)
+			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 		#elif not $"CollisionShape3D/Cam Y Ray".is_colliding():
-			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.055)
+			#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.055)
 		## Add Modifier: If ray from floor to feet.lenth < 2m
 		#elif $"Body Mesh Container/Floor Ray".is_colliding():
 			#var raycol = $"Body Mesh Container/Floor Ray".get_collider()
 			#if raycol.global_position.y != $"collision point".global_position.y:
-				#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.04)
+				#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
 			if jump_cam_trigger == true:
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, ((velocity.y) * .0075))
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0075))
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.0075)
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.0075)
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.625: # and not downward_raycast.is_colliding()
-				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.2)
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1.5: # and not downward_raycast.is_colliding()
+				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.2)
 	else:
-		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.625, 0.04)
+		camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
 
 	ray_to_cam_distance = ray_to_cam.global_transform.origin - camera.global_transform.origin
 	ray_to_cam.look_at(camera.global_position)

@@ -1,3 +1,4 @@
+## NOTE: If Player is spinning while on the rope, flip the Start Point and End Point
 @tool
 extends Node3D
 
@@ -54,13 +55,15 @@ func _ready():
 		var point_distance = highest_y - lowest_y
 		var sag_step = point_distance / median_index
 		# Calculate sag for each point based on its distance from the median
+		
 		for i in range(len(return_points)):
 			var distance_from_median = abs(i - median_index)
-			var multiplier = 1 - (distance_from_median / median_index)
-			# Apply sag to the y-coordinate of the sagged points
-			# Instead of subtracting sag_step * multiplier, we apply sag directly
+			var multiplier = 1.0 - (distance_from_median / median_index)
+		
+			if i == 1 or i == len(return_points) - 2:
+				multiplier *= 0.75
+		
 			var sag_value = sag_step * multiplier
-			# Add the sag to the y-coordinate of the sag points to simulate a downward curve
 			sag_points[i].y = return_points[i].y - sag_value
 
 		# Debugging output
@@ -181,7 +184,7 @@ func move_progress(delta):
 	path_follow.progress_ratio += delta / (length / 4.0) * prog_mult
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
-		lerp_val = 0.2
+		lerp_val = 0.1
 	else:
 		lerp_val = lerp(lerp_val, 1.0, 0.005)
 	old_forward = forward
@@ -206,6 +209,6 @@ func ball2player(delta):
 
 	if length > 0:
 		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset) / length, 0.25)
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset / 1.5) / length, 0.25)
 		else:
 			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset * 0) / length, 1.0)
