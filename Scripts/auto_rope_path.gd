@@ -149,6 +149,7 @@ func calculate_path_length(curve: Curve3D, subdivisions: int = 100) -> float:
 
 func bend_rope(delta):
 	if path_3d and target_point:
+		var do_bend = true
 		var curve: Curve3D = path_3d.curve
 		var target_pos = target_point.global_position - global_position
 		var new_positions = []
@@ -160,16 +161,22 @@ func bend_rope(delta):
 			if target_point.is_selected:
 				val = lerp(val, 0.0, 0.01)
 				bend_mult = lerp(bend_mult, 1.0, 0.015)
+				if val == 0.0:
+					do_bend = false
 			else:
 				val = lerp(val, 1.0, 0.005)
 				bend_mult = lerp(bend_mult, val, 0.001)
-			
-			lerp_factor = clamp(distance / (length / 1.9) * (1-val), val, 1.0 + val) * bend_mult
-			new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
+				if val == 1.0:
+					do_bend = false
+				
+			if do_bend:
+				lerp_factor = clamp(distance / (length / 1.9) * (1-val), val, 1.0 + val) * bend_mult
+				new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
 		
-		# Apply all updates in one go
-		for i in range(curve.get_point_count()):
-			curve.set_point_position(i, new_positions[i])
+		if do_bend:
+			# Apply all updates in one go
+			for i in range(curve.get_point_count()):
+				curve.set_point_position(i, new_positions[i])
 
 func move_progress(delta):
 	var angle_diff = fposmod(player.true_player_rot.global_rotation.y - path_follow.global_rotation.y, TAU)
@@ -181,7 +188,7 @@ func move_progress(delta):
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
 	# Adjust progress along the path
-	path_follow.progress_ratio += delta / (length / 4.0) * prog_mult
+	path_follow.progress_ratio += delta / (length / 6.0) * prog_mult
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
 		lerp_val = 0.1
@@ -194,7 +201,7 @@ func ball2player(delta):
 	# Get the closest offset on the curve
 	var closest_offset = path_3d.curve.get_closest_offset(player.global_position)
 
-	# Find vertical difference
+	# Find vertical difference, use left_stick_pressure rather than joystick_input.length()
 	var y_dif = (player.global_transform.origin.y - target_point.global_transform.origin.y) * player.left_stick_pressure
 
 	# Get the player's forward direction (assuming -Z is forward)

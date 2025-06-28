@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bath36ob6dj1b"]
+[gd_scene load_steps=28 format=3 uid="uid://bath36ob6dj1b"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="2_25okp"]
 [ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="3_0qql5"]
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="3_617rq"]
+[ext_resource type="PackedScene" uid="uid://8r1717wlwg3r" path="res://Assets/Temp Imports/p-bld-4.glb" id="3_oqbgp"]
 [ext_resource type="PackedScene" uid="uid://c4mn85fobgsha" path="res://Assets/Temp Imports/p-bld-safehouse.glb" id="6_617rq"]
 [ext_resource type="PackedScene" uid="uid://0aqdv3whvcao" path="res://Assets/Temp Imports/p-modular-aframe.glb" id="6_gfphh"]
 [ext_resource type="PackedScene" uid="uid://bgstehumyyjb6" path="res://Assets/Temp Imports/a balcony.glb" id="7_u86sc"]
@@ -22,17 +23,24 @@
 
 [sub_resource type="Curve3D" id="Curve3D_oqbgp"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 14, 7, -14, 0, 0, 0, 0, 0, 0, 14.1921, 6.45925, -13.1095, 0, 0, 0, 0, 0, 0, 14.3841, 5.97753, -12.219, 0, 0, 0, 0, 0, 0, 14.5762, 5.55482, -11.3285, 0, 0, 0, 0, 0, 0, 14.7682, 5.19113, -10.438, 0, 0, 0, 0, 0, 0, 14.9603, 4.88646, -9.54745, 0, 0, 0, 0, 0, 0, 15.1524, 4.6408, -8.65694, 0, 0, 0, 0, 0, 0, 15.3444, 4.45417, -7.76643, 0, 0, 0, 0, 0, 0, 15.5365, 4.32655, -6.87592, 0, 0, 0, 0, 0, 0, 15.7285, 4.25796, -5.98541, 0, 0, 0, 0, 0, 0, 15.9206, 4.24838, -5.0949),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 15.9206, 4.44346, -4.6924, 0, 0, 0, 0, 0, 0, 15.9285, 4.44782, -5.69017, 0, 0, 0, 0, 0, 0, 15.9365, 4.51523, -6.68794, 0, 0, 0, 0, 0, 0, 15.9444, 4.64568, -7.68571, 0, 0, 0, 0, 0, 0, 15.9524, 4.83917, -8.68348, 0, 0, 0, 0, 0, 0, 15.9603, 5.09571, -9.68125, 0, 0, 0, 0, 0, 0, 15.9682, 5.41529, -10.679, 0, 0, 0, 0, 0, 0, 15.9762, 5.79791, -11.6768, 0, 0, 0, 0, 0, 0, 15.9841, 6.24358, -12.6746, 0, 0, 0, 0, 0, 0, 15.9921, 6.75229, -13.6723, 0, 0, 0, 0, 0, 0, 16, 7.32405, -14.6701),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 11
 
 [sub_resource type="Curve3D" id="Curve3D_b2g3t"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.3854, 0.00124359, -5.61229, 0, 0, 0, 0, 0, 0, 13.3857, 4.85423, -5.61203),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 8.3349, 0.00124359, -13.7503, 0, 0, 0, 0, 0, 0, 8.33535, 5.96541, -13.7503),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_0qql5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -6.45027, 4.26618, 6.35907, 0, 0, 0, 0, 0, 0, -6.49104, 6.91638, 6.44514, 0, 0, 0, 0, 0, 0, -6.61074, 8.66248, 6.73266, 0, 0, 0, 0, 0, 0, -6.12949, 9.57825, 6.34843),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_25okp"]
 top_radius = 0.25
@@ -41,7 +49,7 @@ height = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_617rq"]
 emission_enabled = true
-emission = Color(0.72549, 0.658824, 0.454902, 1)
+emission = Color(0.7, 0.62125, 0.385, 1)
 emission_energy_multiplier = 2.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ww0qh"]
@@ -52,33 +60,34 @@ emission_energy_multiplier = 2.0
 
 [node name="Rope" type="Node3D" parent="." node_paths=PackedStringArray("path_3d", "start_point", "end_point", "path_follow", "target_point", "player")]
 script = ExtResource("1_3ytsx")
-update_tool = true
 path_3d = NodePath("Path3D")
-start_point = NodePath("start")
-end_point = NodePath("end")
-curve_amplitude = 0.8
-length = 9.65
+start_point = NodePath("end")
+end_point = NodePath("start")
+curve_amplitude = 500.0
+start_clamp = 0.1
+end_clamp = 0.9
+length = 10.53
 path_follow = NodePath("Path3D/PathFollow3D")
 target_point = NodePath("Path3D/PathFollow3D/Target Point")
 player = NodePath("../Player_ Sly")
 bend_mult = 0.2
 
 [node name="end" type="Node3D" parent="Rope"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9206, 4.24838, -5.0949)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9206, 4.44346, -4.6924)
 
 [node name="start" type="Node3D" parent="Rope"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 7, -14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 7.32405, -14.6701)
 
 [node name="Path3D" type="Path3D" parent="Rope"]
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Rope/Path3D"]
-transform = Transform3D(-0.977519, 0.0668702, -0.199934, 9.51063e-06, 0.948257, 0.317165, 0.210827, 0.310007, -0.927024, 14.8624, 5.04181, -10.0015)
+transform = Transform3D(0.999823, -0.00198121, -0.00770613, -1.61794e-08, 0.968355, -0.248972, 0.00795663, 0.248959, 0.968344, 15.9564, 4.96999, -9.19228)
 progress = 4.5459
 loop = false
 
 [node name="Target Point" parent="Rope/Path3D/PathFollow3D" groups=["LOCK PLAYER ROT", "rope"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(0.977524, 0, -0.210825, 0, 1, 0, 0.210825, 0, 0.977524, 0, 0.1, 0)
+transform = Transform3D(-0.999968, 0, -0.00795776, 0, 1, 0, 0.00795776, 0, -0.999968, 0, 0.1, 0)
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Rope"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.05, -0.05)
@@ -96,12 +105,15 @@ path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
 
+[node name="p-bld-4" parent="Rope" instance=ExtResource("3_oqbgp")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -13, 0, -15)
+
 [node name="Pole" type="Node3D" parent="." node_paths=PackedStringArray("test_ball", "target")]
 script = ExtResource("3_0qql5")
 update_tool = true
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../Player_ Sly")
-length = 4.85
+length = 5.96
 end_clamp = 0.7
 reversed = true
 
@@ -109,14 +121,15 @@ reversed = true
 curve = SubResource("Curve3D_b2g3t")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Pole/Path3D"]
-transform = Transform3D(-4.37105e-08, 0.99999, -4.37105e-08, 0, -4.37109e-08, -0.999979, -0.99998, -4.37109e-08, 1.91065e-15, 13.3856, 3.39852, -5.61211)
-progress = 3.39709
+transform = Transform3D(-1.62914e-07, 0.999967, -4.37096e-08, 0, -4.37099e-08, -0.999959, -0.999957, -1.62915e-07, 7.1212e-15, 8.33535, 5.96541, -13.7503)
+progress = 5.96417
 loop = false
 
 [node name="Grip Offset" type="Node3D" parent="Pole/Path3D/PathFollow3D"]
 
 [node name="Target Point" parent="Pole/Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.25, 0)
+visible = false
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Pole"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
@@ -132,15 +145,53 @@ path_local = false
 path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
+smooth_faces = true
+
+[node name="Safehouse Pole" type="Node3D" parent="." node_paths=PackedStringArray("test_ball", "target")]
+script = ExtResource("3_0qql5")
+test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
+target = NodePath("../Player_ Sly")
+length = 5.53
+start_clamp = 0.05
+end_clamp = 0.7
+reversed = true
+
+[node name="Path3D" type="Path3D" parent="Safehouse Pole"]
+curve = SubResource("Curve3D_0qql5")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Safehouse Pole/Path3D"]
+transform = Transform3D(-0.00541552, 0.997696, 0.0674874, 0.162112, 0.067471, -0.984461, -0.986755, 0.0056091, -0.162105, -6.4985, 7.02521, 6.46306)
+progress = 2.76457
+loop = false
+
+[node name="Grip Offset" type="Node3D" parent="Safehouse Pole/Path3D/PathFollow3D"]
+
+[node name="Target Point" parent="Safehouse Pole/Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(1, -2.6077e-08, -2.98023e-08, 3.72529e-09, 1, 1.67638e-08, -2.98023e-08, 4.84288e-08, 1, 0.029, -0.25, 0)
+visible = false
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Safehouse Pole"]
+polygon = PackedVector2Array(0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.761538, -0.64812, -2.0328e-08, -0.226976, -0.266696, 0.936672, -0.607076, -0.713312, -0.350207, -4, 12.8696, -1)
-light_color = Color(0.42, 0.465, 0.6, 1)
-light_indirect_energy = 0.0
-light_specular = 0.5
+light_color = Color(0.455, 0.51625, 0.7, 1)
+light_indirect_energy = 0.8
 light_bake_mode = 1
 shadow_enabled = true
 shadow_normal_bias = 3.0
@@ -153,7 +204,7 @@ size = Vector3(758.704, 181.617, 796.222)
 data = ExtResource("1_pr2ko")
 
 [node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("2_25okp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.49679, 10.0887, 6.66253)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.162, 10.5934, -5.2736)
 camera_parent = NodePath("../Camera Parent")
 
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("3_617rq")]
@@ -182,7 +233,7 @@ mesh = SubResource("CylinderMesh_25okp")
 surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
 [node name="light emis2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7482, 4, -5.6377)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7482, 4, -13.6377)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_25okp")
 surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
@@ -210,7 +261,7 @@ texture = ExtResource("8_awwuf")
 [node name="world paris" parent="." instance=ExtResource("11_5n2g1")]
 
 [node name="car 2m" parent="." instance=ExtResource("11_gojqr")]
-transform = Transform3D(-0.149343, -0.1431, -0.978377, -0.0040988, 0.989554, -0.144109, 0.988777, -0.0175116, -0.14837, 13.5607, 0.154036, 3.59113)
+transform = Transform3D(-0.0291615, -0.144091, -0.989136, 0.000512832, 0.989554, -0.144166, 0.999575, -0.00471144, -0.0287834, 13.414, 0.127338, 2.47111)
 
 [node name="car 2m2" parent="." instance=ExtResource("11_gojqr")]
 transform = Transform3D(0.920012, 0.0443686, -0.389372, 0.00893545, 0.990938, 0.13403, 0.391789, -0.126788, 0.911278, 19.5607, 0.154036, -4.40887)
@@ -241,6 +292,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 9, 12)
 
 [node name="Target Point" parent="." groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 29.3349, 4, -0.75)
+
+[node name="Target Point3" parent="." groups=["point"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 8.3349, 6, -13.75)
 
 [node name="Target Point2" parent="." groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 33.6651, 4, -3.25)

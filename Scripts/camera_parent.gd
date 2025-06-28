@@ -9,8 +9,7 @@ extends Node3D
 @export var aim_pitch_max = 85
 @export var aim_pitch_min = -85 
 
-var right_stick_pressure
-var left_stick_pressure
+
 @onready var handling_obstruction = false
 var distance = Vector3()
 @onready var avg_distance = 1

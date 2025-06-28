@@ -32,7 +32,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var jump_cam_trigger = false
 @onready var previous_jump_was_notch = false
 @onready var left_stick_pressure = 1.0
-
+@onready var joystick_input = Vector2()
 ## export
 @export var camera_target: Node3D
 @export var camera_parent: Node3D
@@ -93,6 +93,7 @@ func _physics_process(delta: float) -> void:
 	if ledge_cooldown_timer > 0.0:
 		ledge_cooldown_timer -= delta
 	floor_or_roof = $"Body Mesh Container/Floor Ray".get_collider()
+	# keep for reading pressure, better on rope than joystick_input.length()
 	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
 	
@@ -176,7 +177,7 @@ func _physics_process(delta: float) -> void:
 		temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
 		previous_jump_was_notch = false
 		if Input.is_action_pressed("shift"):
-			speed_mult = 1.5
+			speed_mult = 2.0
 		else:
 			speed_mult = 1.0
 		
@@ -253,19 +254,10 @@ func _physics_process(delta: float) -> void:
 
 	# Calculate input direction
 	var joystick_input = Vector2(Input.get_axis("ui_left", "ui_right"), Input.get_axis("ui_up", "ui_down"))
-	temp_sly.anim_tree.set("parameters/walk timescale/scale", joystick_move_mult)
 	if joystick_input.length() < 1.0:
 		joystick_input = lerp(joystick_input, joystick_input.normalized(), joystick_input)
 	else:
 		joystick_input = joystick_input.normalized()
-	joystick_move_mult = joystick_input.length()
-	if state == FLOOR:
-		joystick_move_mult = clamp(joystick_move_mult, 1.0, 1.0)
-	else:
-		joystick_move_mult = clamp(joystick_move_mult, 0.0, 1.0)
-		#used to be joystick_input = joystick_input.normalized()
-	#else: joystick_input = joystick_input.normalized()
-
 	horizontal = joystick_input.x
 	vertical = joystick_input.y
 	
@@ -275,11 +267,17 @@ func _physics_process(delta: float) -> void:
 	if direction and state != ON_LEDGE:
 		var speed_factor = velocity.length() / SPEED
 		var lerp_speed = clamp(1 - speed_factor, 0.075, 0.8) * air_mult
+		var left_stick_pressure_corrected
+		left_stick_pressure_corrected = joystick_input.length()
 		if state == AIR:
 			lerp_speed = 0.5 * air_mult
+			left_stick_pressure_corrected = clamp(left_stick_pressure_corrected, 0.0,1.0)
+		else:
+			left_stick_pressure_corrected = clamp(left_stick_pressure_corrected, 0.25,1.0)
+			temp_sly.anim_tree.set("parameters/walk timescale/scale", left_stick_pressure_corrected)
 		var target_velocity = direction * SPEED * speed_mult
-		velocity.x = lerp(velocity.x, target_velocity.x * joystick_input.length(), lerp_speed)
-		velocity.z = lerp(velocity.z, target_velocity.z * joystick_input.length(), lerp_speed)
+		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure_corrected, lerp_speed)
+		velocity.z = lerp(velocity.z, target_velocity.z * left_stick_pressure_corrected, lerp_speed)
 	elif state != AIR:
 		velocity.x = lerp(velocity.x, 0.0, 0.5)
 		velocity.z = lerp(velocity.z, 0.0, 0.5)
@@ -548,6 +546,8 @@ func camera_smooth_follow(delta):
 			#var raycol = $"Body Mesh Container/Floor Ray".get_collider()
 			#if raycol.global_position.y != $"collision point".global_position.y:
 				#camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, 0.04)
+		elif velocity.y >= 0 and global_transform.origin.y > camera_parent.global_transform.origin.y + 1.5:
+			camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0025))
 		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
 			if jump_cam_trigger == true:
 				camera_parent.position.y = lerp(camera_parent.position.y, global_transform.origin.y + 1.5, ((velocity.y) * .0075))

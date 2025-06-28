@@ -1,10 +1,16 @@
-[gd_scene load_steps=24 format=3 uid="uid://cm3ie3krms2au"]
+[gd_scene load_steps=26 format=3 uid="uid://cm3ie3krms2au"]
 
 [ext_resource type="PackedScene" uid="uid://r3y8p3a8teaw" path="res://Assets/Temp Imports/tempsly/sly_tail.fbx" id="1_r72bx"]
 [ext_resource type="Script" uid="uid://d2q3gyq47gf4d" path="res://Scripts/sly_tail.gd" id="2_irjf2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_r72bx"]
 size = Vector3(0.15, 0.15, 0.15)
+
+[sub_resource type="BoxMesh" id="BoxMesh_r14oj"]
+size = Vector3(0.1, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r72bx"]
+albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_irjf2"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -141,6 +147,11 @@ visible = false
 [node name="Ball_Target" type="MeshInstance3D" parent="Ball Root" index="0"]
 mesh = SubResource("BoxMesh_r72bx")
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ball Root/Ball_Target" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -0.5)
+mesh = SubResource("BoxMesh_r14oj")
+surface_material_override/0 = SubResource("StandardMaterial3D_r72bx")
+
 [node name="Ball_1" type="MeshInstance3D" parent="Ball Root" index="1"]
 mesh = SubResource("BoxMesh_irjf2")
 
@@ -238,3 +249,9 @@ mesh = SubResource("BoxMesh_owrtd")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." index="2"]
 visible = false
 mesh = SubResource("CylinderMesh_r72bx")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+visible = false
+mesh = SubResource("BoxMesh_r14oj")
+surface_material_override/0 = SubResource("StandardMaterial3D_r72bx")

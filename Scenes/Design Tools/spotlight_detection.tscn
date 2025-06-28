@@ -38,23 +38,24 @@ is_spotlight = true
 
 [node name="Area3D" type="Area3D" parent="."]
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -4.15854)
+shape = SubResource("ConvexPolygonShape3D_ltd0j")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Area3D/CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -4.15854, -1.81776e-07)
 light_color = Color(0.98, 0.98, 0.882, 1)
 light_specular = 0.25
 light_cull_mask = 4294967293
 shadow_enabled = true
 shadow_bias = 0.125
 distance_fade_enabled = true
-distance_fade_shadow = 30.0
-distance_fade_length = 30.0
+distance_fade_shadow = 40.0
+distance_fade_length = 40.0
 spot_range = 12.5
 spot_attenuation = 1.03526e-05
 spot_angle = 40.0
 spot_angle_attenuation = 0.05
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -4.15854)
-shape = SubResource("ConvexPolygonShape3D_ltd0j")
 
 [node name="Look At Player" type="Node3D" parent="."]
 

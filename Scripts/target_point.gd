@@ -13,7 +13,6 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null:
 		is_selected = false
-		
 	else:
 		is_selected = true
 	#mesh.visible = false

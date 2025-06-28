@@ -48,41 +48,46 @@ func _ready():
 	#Engine.time_scale = 0.25
 
 func _physics_process(delta):
-	global_transform.basis = global_transform.basis.slerp(
-		Basis().from_euler(Vector3(
-			sly_mesh.tail_001_attachment.global_rotation.x,
-			lerp_angle(global_rotation.y, player.rot_container.global_rotation.y - PI, delta * 20.0),
-			player.rot_container.global_rotation.z
-		)) * Basis().rotated(Vector3.RIGHT, deg_to_rad(90)),
-		delta * 40.0
+	var bone_transform = sly_mesh.tail_001_attachment.global_transform
+	# Correct axes
+	var correction = Basis(
+		Vector3(-1, 0, 0),  # bone X → world X (right)
+		Vector3(0, 0, -1),  # bone Y → world Z (forward/back)
+		Vector3(0, -1, 0)   # bone Z → world Y (up)
 	)
+	# Rotate correction 180 degrees around Y to flip forward/back axis (flip tail to face the right way)
+	correction = correction.rotated(Vector3.UP, deg_to_rad(180))
+	# Set tail position and rotation to the basis of Sly's tail bone (bone_transform)
+	bone_transform.basis = bone_transform.basis * correction
+	global_transform.basis = bone_transform.basis
+	global_position = bone_transform.origin
 	ball_target.global_transform.basis = global_transform.basis
-	global_position = sly_mesh.tail_001_attachment.global_position
 	ball_target.global_position = global_position
+	# Check handedness
+	#print("Correction determinant: ", correction.determinant())  # Should be close to +1
 
 	# Update tail segment rotations
-	ball_1.global_rotation = lerp_shortest_rotation(ball_1.global_rotation, ball_target.global_rotation, 0.5)
-	ball_8.global_rotation = lerp_shortest_rotation(ball_8.global_rotation, ball_1.global_rotation, 0.45)
-	ball_7.global_rotation = lerp_shortest_rotation(ball_7.global_rotation, ball_8.global_rotation, 0.4)
-	ball_6.global_rotation = lerp_shortest_rotation(ball_6.global_rotation, ball_7.global_rotation, 0.35)
-	ball_5.global_rotation = lerp_shortest_rotation(ball_5.global_rotation, ball_6.global_rotation, 0.3)
-	ball_4.global_rotation = lerp_shortest_rotation(ball_4.global_rotation, ball_5.global_rotation, 0.25)
-	ball_3.global_rotation = lerp_shortest_rotation(ball_3.global_rotation, ball_4.global_rotation, 0.2)
-	ball_2.global_rotation = lerp_shortest_rotation(ball_2.global_rotation, ball_3.global_rotation, 0.15)
+	ball_1.global_rotation = lerp_shortest_rotation(ball_1.global_rotation, ball_target.global_rotation, 0.6)
+	ball_8.global_rotation = lerp_shortest_rotation(ball_8.global_rotation, ball_1.global_rotation, 0.55)
+	ball_7.global_rotation = lerp_shortest_rotation(ball_7.global_rotation, ball_8.global_rotation, 0.5)
+	ball_6.global_rotation = lerp_shortest_rotation(ball_6.global_rotation, ball_7.global_rotation, 0.45)
+	ball_5.global_rotation = lerp_shortest_rotation(ball_5.global_rotation, ball_6.global_rotation, 0.4)
+	ball_4.global_rotation = lerp_shortest_rotation(ball_4.global_rotation, ball_5.global_rotation, 0.35)
+	ball_3.global_rotation = lerp_shortest_rotation(ball_3.global_rotation, ball_4.global_rotation, 0.3)
+	ball_2.global_rotation = lerp_shortest_rotation(ball_2.global_rotation, ball_3.global_rotation, 0.25)
 
 	# Update tail segment positions
-	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position + Vector3(0, -0.03125, 0), 0.5)
-	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.03125, 0), 0.45)
-	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.0625, 0), 0.4)
-	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.0625, 0), 0.35)
-	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.0625, 0), 0.3)
-	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.0625, 0), 0.25)
-	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.0625, 0), 0.2)
-	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.0625, 0), 0.15)
+	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position + Vector3(0, -0.03125, 0), 0.6)
+	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.03125, 0), 0.55)
+	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.0625, 0), 0.5)
+	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.0625, 0), 0.45)
+	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.0625, 0), 0.4)
+	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.0625, 0), 0.35)
+	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.0625, 0), 0.3)
+	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.0625, 0), 0.25)
 
-	# Helper function to lerp rotation using the shortest path
 func lerp_shortest_rotation(current, target, factor):
-	# Interpolate each axis separately
+	# lerp each axis separately. Annoying but it won't work otherwise.
 	var result = Vector3(
 		lerp_angle(current.x, target.x, factor),
 		lerp_angle(current.y, target.y, factor),
