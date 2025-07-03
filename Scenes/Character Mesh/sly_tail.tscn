@@ -149,10 +149,12 @@ mesh = SubResource("BoxMesh_r72bx")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Ball Root/Ball_Target" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -0.5)
+visible = false
 mesh = SubResource("BoxMesh_r14oj")
 surface_material_override/0 = SubResource("StandardMaterial3D_r72bx")
 
 [node name="Ball_1" type="MeshInstance3D" parent="Ball Root" index="1"]
+visible = false
 mesh = SubResource("BoxMesh_irjf2")
 
 [node name="Node3D" type="Node3D" parent="Ball Root/Ball_1" index="0"]

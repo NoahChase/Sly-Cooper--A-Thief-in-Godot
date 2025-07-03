@@ -33,6 +33,7 @@ target=""
 rope=""
 point=""
 pole=""
+swing=""
 
 [input]
 
@@ -132,9 +133,6 @@ square={
 [rendering]
 
 occlusion_culling/bvh_build_quality=0
-lights_and_shadows/directional_shadow/size=8192
-lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3
-lights_and_shadows/positional_shadow/soft_shadow_filter_quality=3
 environment/ssao/fadeout_from=30.0
 environment/ssao/fadeout_to=100.0
 environment/ssil/quality=1
@@ -143,4 +141,3 @@ environment/ssil/fadeout_to=100.0
 environment/volumetric_fog/volume_size=32
 environment/volumetric_fog/volume_depth=32
 occlusion_culling/use_occlusion_culling=true
-lights_and_shadows/positional_shadow/atlas_size=8192

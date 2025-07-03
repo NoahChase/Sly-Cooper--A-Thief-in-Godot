@@ -347,6 +347,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="Look_At Rotation" type="Node3D" parent="."]
+visible = false
 
 [node name="Pounce Timer" type="Timer" parent="."]
 one_shot = true
@@ -367,6 +368,7 @@ mesh = SubResource("BoxMesh_lkte6")
 
 [node name="collision point" type="Node3D" parent="."]
 top_level = true
+visible = false
 
 [node name="collision arrow" type="MeshInstance3D" parent="collision point"]
 transform = Transform3D(1, 0, 0, 0, -1, 5.96046e-08, 0, -5.96046e-08, -1, 0, 0.25, 0)

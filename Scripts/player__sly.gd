@@ -56,6 +56,7 @@ var ledge_cooldown_timer := 0.0
 var joystick_move_mult = 1.0
 
 func _ready() -> void:
+	#Engine.time_scale = 0.25
 	camera_target = camera_parent.camera_target
 	camera = camera_parent.camera
 		# Constants for the calculation
@@ -177,7 +178,7 @@ func _physics_process(delta: float) -> void:
 		temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
 		previous_jump_was_notch = false
 		if Input.is_action_pressed("shift"):
-			speed_mult = 2.0
+			speed_mult = 1.75
 		else:
 			speed_mult = 1.0
 		
@@ -195,7 +196,7 @@ func _physics_process(delta: float) -> void:
 		
 
 	if state == TO_TARGET and target != null:
-		if velocity.length() > 0.1:
+		if velocity.length() > 0.001:
 			#for making rope movement smooth, can also be used to charge jumps
 			# we also need to add a condition for the hook swing, probably on that script instead. if its target is too far from the pivot, cancel
 			var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
@@ -204,7 +205,14 @@ func _physics_process(delta: float) -> void:
 			jump_num = 0
 			air_mult = 0.0
 			
-			temp_sly.anim_tree.set("parameters/state/transition_request", "air")
+			if target.is_in_group("pole"):
+				temp_sly.anim_tree.set("parameters/state/transition_request", "pole")
+				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_idle")
+			elif target.is_in_group("swing"):
+				temp_sly.anim_tree.set("parameters/state/transition_request", "swing")
+				temp_sly.anim_tree.set("parameters/swing_state/transition_request", "swing_idle")
+			else:
+				temp_sly.anim_tree.set("parameters/state/transition_request", "air")
 			$RichTextLabel3.text = str("TO TARGET", " : ", target)
 			apply_magnetism()
 			if velocity.y > -6.5:
@@ -219,16 +227,42 @@ func _physics_process(delta: float) -> void:
 			target = null
 			state = AIR
 	elif state == ON_TARGET and target != null:
-		temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
-		
-		if target.is_in_group("pole") or target.is_in_group("swing"):
-			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
-		if direction:
-			if not target.is_in_group("point") and not target.is_in_group("notch") and not target.is_in_group("pole") and not target.is_in_group("swing"):
-				temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk_rope")
-		elif not target.is_in_group("pole") and not target.is_in_group("swing"):
-			temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
+		if target.is_in_group("point"):
+			temp_sly.anim_tree.set("parameters/state/transition_request", "point")
+			temp_sly.anim_tree.set("parameters/point_state/transition_request", "point_idle")
+		elif target.is_in_group("rope"):
+			temp_sly.anim_tree.set("parameters/state/transition_request", "rope")
+			if direction:
+				temp_sly.anim_tree.set("parameters/rope_state/transition_request", "rope_walk")
+			else:
+				temp_sly.anim_tree.set("parameters/rope_state/transition_request", "rope_idle")
+		elif target.is_in_group("pole"):
+			temp_sly.anim_tree.set("parameters/state/transition_request", "pole")
+			if direction:
+				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_walk")
+			else:
+				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_idle")
+		elif target.is_in_group("swing"):
+			temp_sly.anim_tree.set("parameters/state/transition_request", "swing")
+			if direction:
+				temp_sly.anim_tree.set("parameters/swing_state/transition_request", "swing_idle")
+			else:
+				temp_sly.anim_tree.set("parameters/swing_state/transition_request", "swing_idle")
+		elif target.is_in_group("ledge"):
+			temp_sly.anim_tree.set("parameters/state/transition_request", "ledge")
+			temp_sly.anim_tree.set("parameters/ledge_state/transition_request", "ledge_idle")
+		#
+		#
+		#temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+		#temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
+		#
+		#if target.is_in_group("pole") or target.is_in_group("swing"):
+			#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
+		#if direction:
+			#if not target.is_in_group("point") and not target.is_in_group("notch") and not target.is_in_group("pole") and not target.is_in_group("swing"):
+				#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk_rope")
+		#elif not target.is_in_group("pole") and not target.is_in_group("swing"):
+			#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
 		target.player = self
 		jump_num = 0
 		air_mult = 1.0
@@ -298,12 +332,17 @@ func _physics_process(delta: float) -> void:
 		rot_container.rotation.y = lerp_angle(rot_container.rotation.y, atan2(dir.x, dir.z), 0.2)
 	else:
 		if target == null or not target.is_in_group("LOCK PLAYER ROT"):
+			if global_rotation != Vector3(0,0,0):
+				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.2)
 			#for rotating on point targets
 			rot_container.rotation.y += angle_difference * look_val
 			if not rot_container.rotation.x == 0.0:
 				rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
 			if not rot_container.rotation.z == 0.0:
 				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
+		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET:
+			$"Look_At Rotation".look_at(target.global_position + direction)
+			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
 		# for rope correction (re align to proper rotation)
 		if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
 			#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
@@ -460,15 +499,18 @@ func apply_target(delta):
 	
 		# Assign the best target after evaluating all options
 		if best_target != null:
-			if not best_target.is_in_group("pole"):
-				do_spin_animation()
+			if best_target.is_in_group("swing"):
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_swing")
+				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			elif not best_target.is_in_group("pole"):
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_spin")
+				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			else:
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_pole")
+				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 			target = best_target
 			
 	
-
-func do_spin_animation():
-	temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_spin")
-	temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 
 func apply_magnetism(): # the holy grail of magnetism
 	if target != null:  # No magnetism if jumping
@@ -480,6 +522,9 @@ func apply_magnetism(): # the holy grail of magnetism
 			var magnet_direction = (target.global_transform.origin - global_transform.origin).normalized()
 			if not state == ON_TARGET: 
 				state = TO_TARGET
+				if target.is_in_group("swing"):
+					global_rotation = lerp(global_rotation, target.global_rotation, 0.125)
+					
 					#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
 				if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 					velocity = Vector3.ZERO # perfect snapping
