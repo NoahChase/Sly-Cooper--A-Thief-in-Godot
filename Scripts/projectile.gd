@@ -6,7 +6,7 @@ func _ready() -> void:
 	$Timer.start(20.0)
 
 func _physics_process(delta: float) -> void:
-	position -= transform.basis.z * 1 * delta
+	position -= transform.basis.z * 10 * delta
 	if $RayCast3D.is_colliding():
 		var col = $RayCast3D.get_collider()
 		if not col.is_in_group("Player"):

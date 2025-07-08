@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://p0gyuhqkx2lp"]
+[gd_scene load_steps=6 format=3 uid="uid://p0gyuhqkx2lp"]
 
 [ext_resource type="Script" uid="uid://c7dds02n1ehgd" path="res://Scripts/projectile.gd" id="1_5ci83"]
 [ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="1_xtq5k"]
@@ -9,7 +9,12 @@ size = Vector3(0.25, 0.25, 0.5)
 [sub_resource type="BoxMesh" id="BoxMesh_5ci83"]
 size = Vector3(0.25, 0.25, 0.5)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ci83"]
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
 [node name="projectile" type="Node3D"]
+top_level = true
 script = ExtResource("1_5ci83")
 
 [node name="Hitbox" parent="." instance=ExtResource("1_xtq5k")]
@@ -28,6 +33,7 @@ target_position = Vector3(0, 0, -0.5)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_5ci83")
+surface_material_override/0 = SubResource("StandardMaterial3D_5ci83")
 
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
 [connection signal="area_exited" from="Hitbox" to="Hitbox" method="_on_area_exited"]

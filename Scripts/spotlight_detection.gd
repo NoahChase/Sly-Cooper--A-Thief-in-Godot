@@ -1,6 +1,6 @@
 extends Node3D
 @export var is_spotlight : bool
-@onready var spotlight = $Area3D/SpotLight3D
+@onready var spotlight = $Area3D/CollisionShape3D/SpotLight3D
 @onready var ray_follow_player = $"Look At Player/Ray Follow Player"
 @onready var look_at_player = $"Look At Player"
 @onready var player_detected = false

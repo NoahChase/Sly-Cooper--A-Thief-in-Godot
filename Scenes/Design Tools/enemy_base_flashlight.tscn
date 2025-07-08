@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://dd5jlx7gfenis"]
+
+[ext_resource type="Script" uid="uid://dkty77jclhlgg" path="res://Scripts/enemy_base_flashlight.gd" id="1_q5ydn"]
+[ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="2_kfhgq"]
+[ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="3_q4nxv"]
+[ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="4_e1dqi"]
+[ext_resource type="PackedScene" uid="uid://bibovwn6qb1d8" path="res://Scenes/Design Tools/gun.tscn" id="5_1lhpl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bj7m3"]
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbyxe"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kfhgq"]
+
+[node name="enemy_flashlight_generic" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container") groups=["Enemy"]]
+script = ExtResource("1_q5ydn")
+character_mesh = NodePath("MeshInstance3D")
+col_shape = NodePath("CollisionShape3D")
+flashlight = NodePath("Spotlight Detection")
+weapon = NodePath("gun")
+hp_container = NodePath("HP Container")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_bj7m3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tbyxe")
+debug_color = Color(0, 1, 0, 0.419608)
+
+[node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("2_kfhgq")]
+hurtboxes = [NodePath("Hurtbox")]
+
+[node name="Hurtbox" parent="HP Container" instance=ExtResource("3_q4nxv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="HP Container/Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_tbyxe")
+debug_color = Color(0, 1, 0, 0.419608)
+
+[node name="Spotlight Detection" parent="." instance=ExtResource("4_e1dqi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.125)
+
+[node name="gun" parent="." instance=ExtResource("5_1lhpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.5)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+avoidance_enabled = true
+radius = 2.0
+
+[node name="Point Mesh" type="MeshInstance3D" parent="."]
+top_level = true
+mesh = SubResource("CapsuleMesh_kfhgq")
+
+[node name="Point Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Point Timer" to="." method="_on_point_timer_timeout"]
