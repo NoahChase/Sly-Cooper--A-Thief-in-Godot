@@ -10,6 +10,7 @@ size = Vector3(0.25, 0.25, 0.5)
 size = Vector3(0.25, 0.25, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ci83"]
+blend_mode = 1
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
@@ -19,6 +20,8 @@ script = ExtResource("1_5ci83")
 
 [node name="Hitbox" parent="." instance=ExtResource("1_xtq5k")]
 active = true
+do_kb = true
+kb_distance = 6.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("BoxShape3D_5ci83")
@@ -30,6 +33,7 @@ one_shot = true
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
 target_position = Vector3(0, 0, -0.5)
+hit_from_inside = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_5ci83")

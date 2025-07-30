@@ -38,8 +38,10 @@ func _process(delta: float) -> void:
 				if distance.length() <= 1.0:
 					player.rotation.x = lerp(player.rotation.x, target_point.rotation.x, 1.0 - align_lerp_val)
 					player.rotation.z = lerp(player.rotation.z, target_point.rotation.z, 1.0 - align_lerp_val)
-				
+		#else:
+			#player = target_point.player
 	else:
+		#player = null ## gets player off the hook swing when they're hit in combat, stunned, or shot
 		align_lerp_val = 1.0
 
 func _physics_process(delta: float) -> void:

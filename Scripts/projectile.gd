@@ -1,16 +1,20 @@
 extends Node3D
 @onready var shoot
 @onready var hitbox = $Hitbox
+@onready var position_set = false
+@export var dont_shoot_parent = CharacterBody3D
 
 func _ready() -> void:
 	$Timer.start(20.0)
+	#print("projectile dont shoot parent = ", dont_shoot_parent)
+	hitbox.dont_shoot_parent = dont_shoot_parent
 
 func _physics_process(delta: float) -> void:
-	position -= transform.basis.z * 10 * delta
+	position -= transform.basis.z * 15 * delta
 	if $RayCast3D.is_colliding():
 		var col = $RayCast3D.get_collider()
 		if not col.is_in_group("Player"):
-			print("bullet ray collided")
+			#print("bullet ray collided")
 			queue_free()
 
 	if not hitbox.active:

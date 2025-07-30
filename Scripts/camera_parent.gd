@@ -11,14 +11,16 @@ extends Node3D
 
 
 @onready var handling_obstruction = false
+
 var distance = Vector3()
 @onready var avg_distance = 1
 @onready var mouse_motion
 
-@onready var cam_right = $"Camera Target/Camera3D/Cam Right"
-@onready var cam_left = $"Camera Target/Camera3D/Cam Left"
-@onready var cam_up = $"Camera Target/Camera3D/Cam Up"
-@onready var cam_down = $"Camera Target/Camera3D/Cam Down"
+#@onready var cam_right = $"Camera Target/Camera3D/Cam Right"
+#@onready var cam_left = $"Camera Target/Camera3D/Cam Left"
+#@onready var cam_up = $"Camera Target/Camera3D/Cam Up"
+#@onready var cam_down = $"Camera Target/Camera3D/Cam Down"
+@onready var cam_container = $"Camera Target/Camera Container"
 
 var yaw = float()
 var pitch = float()
@@ -65,7 +67,7 @@ func _physics_process(delta):
 		var wall_detect = camera_player.ray_to_cam.get_collider()
 		var wall_distance = wall_detect.position - camera.global_position
 		if not wall_detect.is_in_group("player"):
-			camera.global_transform.origin = lerp(camera.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.8)
+			cam_container.global_transform.origin = lerp(cam_container.global_transform.origin, camera_player.ray_to_cam.get_collision_point(), 0.4)
 			
 	
 	if camera_player.direction:

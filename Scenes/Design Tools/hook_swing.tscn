@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b4athtlke2t2e"]
+[gd_scene load_steps=12 format=3 uid="uid://b4athtlke2t2e"]
 
 [ext_resource type="Script" uid="uid://c8t6q4glc6o27" path="res://Scripts/hook_swing.gd" id="1_iriet"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_iojh8"]
@@ -26,31 +26,18 @@ size = Vector3(0.125, 0.125, 2)
 [sub_resource type="BoxMesh" id="BoxMesh_neeus"]
 size = Vector3(0.2, 0.2, 0.2)
 
-[sub_resource type="Gradient" id="Gradient_0olf0"]
-colors = PackedColorArray(0.796243, 0.796243, 0.796243, 1, 1, 1, 1, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_onv10"]
-noise_type = 2
-seed = 3
-frequency = 0.004
-fractal_gain = -4.87
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fbnoq"]
-width = 128
-height = 128
-seamless = true
-color_ramp = SubResource("Gradient_0olf0")
-noise = SubResource("FastNoiseLite_onv10")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rmciy"]
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(1, 0.853333, 0.45, 1)
-albedo_texture = SubResource("NoiseTexture2D_fbnoq")
-metallic_specular = 1.0
-roughness = 0.5
+albedo_color = Color(1, 0.85, 0.4, 1)
+metallic = 0.01
+roughness = 0.01
+rim_enabled = true
+rim = 0.25
 clearcoat_enabled = true
-clearcoat_roughness = 1.0
+clearcoat_roughness = 0.33
+ao_enabled = true
+ao_light_affect = 1.0
 
 [sub_resource type="TorusMesh" id="TorusMesh_mi5h1"]
 inner_radius = 0.125

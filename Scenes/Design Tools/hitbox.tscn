@@ -4,7 +4,6 @@
 
 [node name="Hitbox" type="Area3D" groups=["hitbox"]]
 script = ExtResource("1_tpj3t")
-hit_time = 0.5
 
 [node name="Hit Flash Timer" type="Timer" parent="."]
 one_shot = true

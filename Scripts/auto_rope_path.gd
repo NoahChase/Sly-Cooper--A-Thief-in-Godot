@@ -66,14 +66,14 @@ func _ready():
 			var sag_value = sag_step * multiplier
 			sag_points[i].y = return_points[i].y - sag_value
 
-		# Debugging output
-		print("Median: ", median_index)
-		print("Highest y value: ", highest_y)
-		print("Lowest y value: ", lowest_y)
-		print("Point Distance: ", point_distance)
-		print("Sag Step: ", sag_step)
-		print("Stored return points: ", return_points)
-		print("Stored sag points: ", sag_points)
+		## Debugging output
+		#print("Median: ", median_index)
+		#print("Highest y value: ", highest_y)
+		#print("Lowest y value: ", lowest_y)
+		#print("Point Distance: ", point_distance)
+		#print("Sag Step: ", sag_step)
+		#print("Stored return points: ", return_points)
+		#print("Stored sag points: ", sag_points)
 		
 
 func _physics_process(delta: float) -> void:
@@ -84,7 +84,8 @@ func _physics_process(delta: float) -> void:
 			return
 		else:
 			if target_point.is_selected:
-				move_progress(delta)
+				if player.target != null and not player.stunned: ## ensures rotation is fixed if player is shot or hit off the rope by an enemy
+					move_progress(delta)
 			else:
 				ball2player(delta)
 			bend_rope(delta)
@@ -170,7 +171,7 @@ func bend_rope(delta):
 					do_bend = false
 				
 			if do_bend:
-				lerp_factor = clamp(distance / (length / 1.9) * (1-val), val, 1.0 + val) * bend_mult
+				lerp_factor = clamp(distance / (length) * (1-val), val, 1.0 + val) * bend_mult
 				new_positions.append(sag_points[i].lerp(return_points[i], lerp_factor))
 		
 		if do_bend:
@@ -188,7 +189,7 @@ func move_progress(delta):
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
 	# Adjust progress along the path
-	path_follow.progress_ratio += delta / (length / 6.0) * prog_mult
+	path_follow.progress_ratio += delta / (length / 5.0) * prog_mult
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
 		lerp_val = 0.1
@@ -199,7 +200,7 @@ func move_progress(delta):
 
 func ball2player(delta):
 	# Get the closest offset on the curve
-	var closest_offset = path_3d.curve.get_closest_offset(player.global_position)
+	var closest_offset = path_3d.curve.get_closest_offset(Vector3(player.global_position.x, target_point.global_position.y, player.global_position.z))
 
 	# Find vertical difference, use left_stick_pressure rather than joystick_input.length()
 	var y_dif = (player.global_transform.origin.y - target_point.global_transform.origin.y) * player.left_stick_pressure
@@ -215,7 +216,7 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset / 1.5) / length, 0.25)
+		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 0.25:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset / player.gravmult) / length, 0.125)
 		else:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset * 0) / length, 1.0)
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset) / length, 1.0)

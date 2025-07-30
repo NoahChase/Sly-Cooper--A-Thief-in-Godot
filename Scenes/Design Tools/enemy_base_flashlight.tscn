@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://dd5jlx7gfenis"]
+[gd_scene load_steps=22 format=3 uid="uid://dd5jlx7gfenis"]
 
 [ext_resource type="Script" uid="uid://dkty77jclhlgg" path="res://Scripts/enemy_base_flashlight.gd" id="1_q5ydn"]
+[ext_resource type="Material" uid="uid://dwqiuv1phqxcu" path="res://Assets/Materials/outline_shader_material.tres" id="2_e1dqi"]
 [ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="2_kfhgq"]
 [ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="3_q4nxv"]
 [ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="4_e1dqi"]
 [ext_resource type="PackedScene" uid="uid://bibovwn6qb1d8" path="res://Scenes/Design Tools/gun.tscn" id="5_1lhpl"]
+[ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="6_q4nxv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bj7m3"]
 radial_segments = 7
@@ -12,51 +14,186 @@ rings = 1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tbyxe"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_q4nxv"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q4nxv"]
+radius = 0.6
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_kfhgq"]
 
-[node name="enemy_flashlight_generic" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container") groups=["Enemy"]]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kfhgq"]
+blend_mode = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q4nxv"]
+transparency = 1
+blend_mode = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_q4nxv"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e1dqi"]
+size = Vector3(2, 0.25, 0.25)
+
+[sub_resource type="PrismMesh" id="PrismMesh_1lhpl"]
+size = Vector3(0.75, 1, 0.5)
+
+[sub_resource type="PrismMesh" id="PrismMesh_q4nxv"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_e1dqi"]
+height = 2.125
+radius = 0.625
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1dqi"]
+blend_mode = 1
+no_depth_test = true
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1lhpl"]
+
+[node name="enemy_flashlight_generic" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container", "kb_parent") groups=["Enemy", "SLIP"]]
 script = ExtResource("1_q5ydn")
 character_mesh = NodePath("MeshInstance3D")
 col_shape = NodePath("CollisionShape3D")
 flashlight = NodePath("Spotlight Detection")
 weapon = NodePath("gun")
 hp_container = NodePath("HP Container")
+kb_parent = NodePath(".")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+simplify_path = true
+simplify_epsilon = 0.5
+avoidance_enabled = true
+radius = 2.0
+debug_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_overlay = ExtResource("2_e1dqi")
 mesh = SubResource("CapsuleMesh_bj7m3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tbyxe")
-debug_color = Color(0, 1, 0, 0.419608)
+
+[node name="Hitbox" parent="." node_paths=PackedStringArray("kb_excluded") instance=ExtResource("6_q4nxv")]
+do_kb = true
+kb_excluded = [NodePath("../HP Container")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.75)
+shape = SubResource("BoxShape3D_q4nxv")
+debug_color = Color(0.956863, 0, 0, 0.419608)
 
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("2_kfhgq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+get_kb = true
+damage_flash_time = 1.0
 hurtboxes = [NodePath("Hurtbox")]
 
 [node name="Hurtbox" parent="HP Container" instance=ExtResource("3_q4nxv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="HP Container/Hurtbox"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
-shape = SubResource("CapsuleShape3D_tbyxe")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HP Container/Hurtbox"]
+shape = SubResource("CapsuleShape3D_q4nxv")
 debug_color = Color(0, 1, 0, 0.419608)
 
 [node name="Spotlight Detection" parent="." instance=ExtResource("4_e1dqi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.125)
 
 [node name="gun" parent="." instance=ExtResource("5_1lhpl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.5)
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-avoidance_enabled = true
-radius = 2.0
-
-[node name="Point Mesh" type="MeshInstance3D" parent="."]
-top_level = true
-mesh = SubResource("CapsuleMesh_kfhgq")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.625)
 
 [node name="Point Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="Quickshot Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Quickshot Flash Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Melee Flash Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Attack Flash Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Stop Chase Timer" type="Timer" parent="."]
+
+[node name="Point Mesh" type="MeshInstance3D" parent="."]
+top_level = true
+mesh = SubResource("CapsuleMesh_kfhgq")
+surface_material_override/0 = SubResource("StandardMaterial3D_kfhgq")
+
+[node name="Flat Target Visual" type="MeshInstance3D" parent="."]
+top_level = true
+material_override = SubResource("StandardMaterial3D_q4nxv")
+mesh = SubResource("BoxMesh_q4nxv")
+
+[node name="arms" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_overlay = ExtResource("2_e1dqi")
+mesh = SubResource("BoxMesh_e1dqi")
+
+[node name="arrow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2.625, 0)
+visible = false
+mesh = SubResource("PrismMesh_1lhpl")
+
+[node name="pounce visual" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 0, 0)
+visible = false
+mesh = SubResource("PrismMesh_q4nxv")
+
+[node name="close_detection_area" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="close_detection_area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0625, 0)
+shape = SubResource("CylinderShape3D_e1dqi")
+debug_color = Color(1, 1, 0, 0.419608)
+
+[node name="Floor Ray" type="RayCast3D" parent="."]
+
+[node name="Wall Detection Raycast" type="RayCast3D" parent="."]
+transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, 0, 1, -0.4375)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Wall Detection Raycast2" type="RayCast3D" parent="Wall Detection Raycast"]
+transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.12941, -0.129409, 0.224144, 0.965926, 0.16238, -0.0937501, 0.0625)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast"]
+transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Ledge Detection Raycast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.5)
+target_position = Vector3(0, -2, 0)
+
+[node name="Roof Ledge Detection Raycast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5625, -0.4375)
+target_position = Vector3(0, 25, -1)
+
+[node name="Safe Position Raycast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9375, 0)
+target_position = Vector3(0, -2, 7)
+
+[node name="Safe Position" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+top_level = true
+material_override = SubResource("StandardMaterial3D_e1dqi")
+mesh = SubResource("SphereMesh_1lhpl")
+
+[node name="Last Safe Position" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+top_level = true
+
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
+[connection signal="area_exited" from="Hitbox" to="Hitbox" method="_on_area_exited"]
 [connection signal="timeout" from="Point Timer" to="." method="_on_point_timer_timeout"]
+[connection signal="timeout" from="Quickshot Timer" to="." method="_on_quickshot_timer_timeout"]
+[connection signal="timeout" from="Quickshot Flash Timer" to="." method="_on_quickshot_flash_timer_timeout"]
+[connection signal="timeout" from="Melee Flash Timer" to="." method="_on_melee_flash_timer_timeout"]
+[connection signal="timeout" from="Attack Flash Timer" to="." method="_on_attack_flash_timer_timeout"]
+[connection signal="timeout" from="Stop Chase Timer" to="." method="_on_stop_chase_timer_timeout"]
+[connection signal="body_entered" from="close_detection_area" to="." method="_on_close_detection_area_body_entered"]
+[connection signal="body_exited" from="close_detection_area" to="." method="_on_close_detection_area_body_exited"]

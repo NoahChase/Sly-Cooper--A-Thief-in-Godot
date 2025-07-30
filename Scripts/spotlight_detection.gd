@@ -10,7 +10,7 @@ var can_detect = false
 var detection_lost_timer_started = false
 
 func _physics_process(delta):
-	if not target == null:
+	if not target == null and target.is_in_group("Player"):
 		look_at_player.look_at(target.colshape.global_transform.origin)
 		if ray_follow_player.is_colliding():
 			var ray_follow_collider = ray_follow_player.get_collider()
@@ -24,7 +24,7 @@ func _physics_process(delta):
 		player_detected = false
 	
 	if player_detected:
-		$TestMesh.global_transform.origin = lerp($TestMesh.global_transform.origin, ray_follow_player.get_collision_point() + Vector3(0,-0.5,0), 0.25)
+		$TestMesh.global_transform.origin = lerp($TestMesh.global_transform.origin, ray_follow_player.get_collision_point() + Vector3(0,-0.5,0), 0.5)
 		can_detect = true
 		detection_lost_timer_started = false
 	else:

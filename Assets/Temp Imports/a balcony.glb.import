@@ -33,6 +33,20 @@ animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
+"materials": {
+"stone": {
+"use_external/enabled": true,
+"use_external/path": "uid://cqiaoxninm4yl"
+},
+"stone.001": {
+"use_external/enabled": true,
+"use_external/path": "uid://cqiaoxninm4yl"
+},
+"wood rail": {
+"use_external/enabled": true,
+"use_external/path": "uid://bgd370huhetyi"
+}
+},
 "nodes": {
 "PATH:Cube": {
 "mesh_instance/visibility_range_fade_mode": 1

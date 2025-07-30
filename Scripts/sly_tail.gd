@@ -38,6 +38,9 @@ extends Node3D
 
 @onready var lerp_val = 0.5
 
+# At the top of the script or in _ready
+var prev_tail_pos = Vector3()
+
 func _ready():
 	$metarig/Skeleton3D/IK_1_.start()
 	$metarig/Skeleton3D/IK_8_.start()
@@ -47,10 +50,11 @@ func _ready():
 	$metarig/Skeleton3D/IK_4_.start()
 	$metarig/Skeleton3D/IK_3_.start()
 	$metarig/Skeleton3D/IK_2_.start()
+	prev_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
 
 func _process(delta: float) -> void:
 	##in process to avoid shifting of position on player input. #NOTE Still jitters slightly going down poles, needs fixed!
-	global_position = sly_mesh.tail_001_attachment.global_transform.origin
+	global_position = sly_mesh.tail_001_attachment.global_position
 	ball_target.global_position = global_position
 
 func _physics_process(delta):
@@ -69,33 +73,39 @@ func _physics_process(delta):
 	ball_target.global_transform.basis = global_transform.basis
 	# Check handedness
 	#print("Correction determinant: ", correction.determinant())  # Should be close to +1
+	var current_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
+	var tail_velocity = (current_tail_pos - prev_tail_pos).length() / (delta / Engine.time_scale)
+	prev_tail_pos = current_tail_pos
+	var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
+	lerp_val = 0.5 * clamp(base_val, 0.45, 0.95)
+	# Tail rotations using quaternion slerp
+	_set_tail_rotation(ball_1, ball_target, lerp_val + 0.25)
+	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val))
+	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val - 0.0125))
+	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val - 0.025))
+	_set_tail_rotation(ball_5, ball_6, max(0.01, lerp_val - 0.05))
+	_set_tail_rotation(ball_4, ball_5, max(0.01, lerp_val - 0.1))
+	_set_tail_rotation(ball_3, ball_4, max(0.01, lerp_val - 0.125))
+	_set_tail_rotation(ball_2, ball_3, max(0.01, lerp_val - 0.15))
 
-	# Update tail segment rotations
-	ball_1.global_rotation = lerp_shortest_rotation(ball_1.global_rotation, ball_target.global_rotation, lerp_val)
-	ball_8.global_rotation = lerp_shortest_rotation(ball_8.global_rotation, ball_1.global_rotation, lerp_val - 0.05)
-	ball_7.global_rotation = lerp_shortest_rotation(ball_7.global_rotation, ball_8.global_rotation, lerp_val - 0.1)
-	ball_6.global_rotation = lerp_shortest_rotation(ball_6.global_rotation, ball_7.global_rotation, lerp_val - 0.15)
-	ball_5.global_rotation = lerp_shortest_rotation(ball_5.global_rotation, ball_6.global_rotation, lerp_val - 0.2)
-	ball_4.global_rotation = lerp_shortest_rotation(ball_4.global_rotation, ball_5.global_rotation, lerp_val - 0.25)
-	ball_3.global_rotation = lerp_shortest_rotation(ball_3.global_rotation, ball_4.global_rotation, lerp_val - 0.3)
-	ball_2.global_rotation = lerp_shortest_rotation(ball_2.global_rotation, ball_3.global_rotation, lerp_val - 0.35)
-
-	# Update tail segment positions
-	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position + Vector3(0, -0.03125, 0), lerp_val)
-	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.03125, 0), lerp_val - 0.05)
-	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.1)
-	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.15)
-	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.2)
-	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.25)
-	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.3)
-	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.0625, 0), lerp_val - 0.35)
+	# Tail positions remain the same as you had them
+	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position + Vector3(0, -0.03125, 0), lerp_val + 0.25)
+	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.03125, 0), max(0.01, lerp_val))
+	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.0125))
+	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.025))
+	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.05))
+	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.1))
+	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.125))
+	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.0625, 0), max(0.01, lerp_val - 0.15))
 
 
-func lerp_shortest_rotation(current, target, factor):
-	# lerp each axis separately. Annoying but it won't work otherwise.
-	var result = Vector3(
-		lerp_angle(current.x, target.x, factor),
-		lerp_angle(current.y, target.y, factor),
-		lerp_angle(current.z, target.z, factor)
-	)
-	return result
+func _set_tail_rotation(from_node: Node3D, to_node: Node3D, factor: float) -> void:
+	# Get current and target quaternions
+	var from_quat = from_node.global_transform.basis.get_rotation_quaternion()
+	var to_quat = to_node.global_transform.basis.get_rotation_quaternion()
+	
+	# Slerp between them
+	var slerped = from_quat.slerp(to_quat, factor)
+	
+	# Apply rotation while keeping current position
+	from_node.global_transform = Transform3D(slerped, from_node.global_transform.origin)

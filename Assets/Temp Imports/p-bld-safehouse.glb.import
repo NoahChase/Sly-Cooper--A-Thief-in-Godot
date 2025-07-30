@@ -32,6 +32,29 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={}
+_subresources={
+"materials": {
+"floor": {
+"use_external/enabled": true,
+"use_external/path": "uid://cqiaoxninm4yl"
+},
+"rail": {
+"use_external/enabled": true,
+"use_external/path": "uid://co5obcf2r17t"
+},
+"roof": {
+"use_external/enabled": true,
+"use_external/path": "uid://bjgvbcdijm5so"
+},
+"wall": {
+"use_external/enabled": true,
+"use_external/path": "uid://cqiaoxninm4yl"
+},
+"wood": {
+"use_external/enabled": false,
+"use_external/path": "uid://bgd370huhetyi"
+}
+}
+}
 gltf/naming_version=1
 gltf/embedded_image_handling=1
