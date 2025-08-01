@@ -17,6 +17,10 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://b16eksuqbi1ep"
 config/icon="uid://b16eksuqbi1ep"
 
+[debug]
+
+shapes/navigation/geometry_face_color=Color(0.501961, 1, 1, 0.156863)
+
 [display]
 
 window/size/viewport_width=1280

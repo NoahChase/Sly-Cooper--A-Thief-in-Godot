@@ -57,7 +57,7 @@ var cp_final = Vector3()
 var ledge_cooldown_timer := 0.0
 var joystick_move_mult = 1.0
 var manual_slip = false
-
+var sprinting = false
 func _ready() -> void:
 	#Engine.time_scale = 0.5
 	
@@ -108,6 +108,12 @@ func _physics_process(delta: float) -> void:
 	# keep for reading pressure, better on rope than joystick_input.length()
 	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
+	
+	if Input.is_action_pressed("shift"):
+		if state == FLOOR:
+			sprinting = true
+	if Input.is_action_just_released("shift") or state != FLOOR:
+		sprinting = false
 	
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
@@ -192,7 +198,7 @@ func _physics_process(delta: float) -> void:
 		#air animation fix animfix anim fix
 		temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
 		previous_jump_was_notch = false
-		if Input.is_action_pressed("shift"):
+		if sprinting:
 			speed_mult = 1.75
 		else:
 			speed_mult = 1.0
@@ -375,7 +381,7 @@ func _physics_process(delta: float) -> void:
 	elif horizontal > 0 and state == FLOOR:
 		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
 	
-	$RichTextLabel.text = str("floor max angle: ", floor_max_angle, "fps: ", Engine.get_frames_per_second(), "  jump_num: ",jump_num, "  prevnotch: ", previous_jump_was_notch, " mancam: ", manual_move_cam)
+	$RichTextLabel.text = str( "FPS: ", Engine.get_frames_per_second(), " | Sprinting = " , sprinting, " | Velocity = ", velocity.length())
 	if colliding_count <= 1:
 		ledge_detect(delta)
 	camera_smooth_follow(delta)
@@ -414,9 +420,9 @@ func state_handler():
 			target.player = null
 			target.is_selected = false
 			target = null
-		jump_num = 2
 		can_ledge = false
 		state = AIR
+		jump_num = 2
 
 func jump():
 	if state == TO_TARGET:
