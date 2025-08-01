@@ -91,7 +91,6 @@ func _physics_process(delta):
 
 	# Tail positions remain the same as you had them
 	bounce = lerp(bounce, (ball_1.global_position.y - ball_target.global_position.y) / lerp_val, lerp_val)
-	print(bounce)
 	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, 0.8)
 	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 2), 0), max(0.01, lerp_val + 0.075))
 	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 3), 0), max(0.01, lerp_val + 0.05))
