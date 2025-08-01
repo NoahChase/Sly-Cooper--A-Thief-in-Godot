@@ -18,6 +18,11 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var target
+@onready var potential_target
+@onready var body_found_target = false
+@onready var potential_target_in_range = false
+@onready var heard_enemy = false
+@onready var enemy_target
 @onready var new_nav_point = Node3D
 @onready var prev_nav_point = Node3D
 @onready var nav_distance = 0
@@ -25,10 +30,6 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 @onready var target_y_abs = 0.0
 @onready var SPEED_MULT = 1.0
 @onready var grav_mult = 1.0
-@onready var body_found_target = false
-@onready var target_in_range = false
-@onready var heard_enemy = false
-@onready var enemy_target
 @onready var do_180 = false
 @onready var move_to_nav_point = false
 @onready var do_quickshot = true
@@ -50,7 +51,10 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 									$"Wall Detection Raycast/Wall Detection Raycast3",
 									$"Wall Detection Raycast2",
 									$"Wall Detection Raycast2/Wall Detection Raycast2",
-									$"Wall Detection Raycast2/Wall Detection Raycast3"]
+									$"Wall Detection Raycast2/Wall Detection Raycast3",
+									$"Wall Detection Raycast3",
+									$"Wall Detection Raycast3/Wall Detection Raycast2",
+									$"Wall Detection Raycast3/Wall Detection Raycast3"]
 var flat_target
 var distance_to_target
 var previous_position
@@ -100,7 +104,6 @@ func _physics_process(delta):
 
 ## FINAL NAV DISTANCE TO TARGET
 	if target != null:
-		$"Flat Target Visual".global_transform.origin = target.global_transform.origin
 		final_nav_distance_to_target = (target.global_transform.origin - nav_agent.get_final_position()).length()
 		target_y_abs = abs(target.global_transform.origin.y - global_transform.origin.y)
 	else:
@@ -144,10 +147,10 @@ func _physics_process(delta):
 				flat_target = previous_position
 ## CHASE
 		CHASE:
-			#print("state CHASE")
+			print("state CHASE")
 			distance_to_target = (global_position - target.global_position).length()
-			nav_agent.target_position = target.global_position
-			
+			#nav_agent.target_position = target.global_position
+			#target = target
 			flashlight.target = target
 			flashlight.player_detected = true
 			
@@ -225,7 +228,7 @@ func _physics_process(delta):
 			SPEED_MULT = 1.0
 			weapon.shoot = false
 			weapon.look_at(flashlight.get_node("TestMesh").global_transform.origin + Vector3(0,0.5,0), Vector3.UP)
-			nav_agent.target_position = target.global_position
+			#nav_agent.target_position = target.global_position
 			var search_nav_distance = global_transform.origin - target.global_transform.origin
 			if search_nav_distance.length() < 5:
 				do_idle()
@@ -254,25 +257,19 @@ func _physics_process(delta):
 						state = IDLE_STILL
 						$"Point Timer".start(3.0)
 			
-			if target_in_range: 
-				just_hit = true
-				if target.is_on_floor():
-					if target.sprinting == true and target.velocity.length() > 5.0:
-						$"Just Hit Flash Timer".start(3.0)
-						print("Chase triggered: player is sprinting on ground")
-						do_chase()
-						return
 			
 			## detect player if they're sprinting near the enemy
 			if move_to_nav_point == false:
-				nav_agent.target_position = path_follow.global_position
-				if not target_in_range:
-					target = path_follow
+				#nav_agent.target_position = path_follow.global_position
+				target = path_follow # new breaks code
+				#if not target_in_range:
+					#target = path_follow
 			else:
 				#this line is fucking up if it's too far away
-				nav_agent.target_position = new_nav_point.global_position
-				if not target_in_range:
-					target = $"Point Mesh"
+				#nav_agent.target_position = new_nav_point.global_position
+				target = new_nav_point # new breaks code
+				#if not target_in_range:
+					#target = $"Point Mesh"
 			
 ## IDLE STILL
 	if state == IDLE_STILL:
@@ -282,8 +279,23 @@ func _physics_process(delta):
 		#print("custom dir set true HERE IDLE STILL")
 		SPEED_MULT = 0.0
 
+## NAV AGENT AND NAV TARGET
+	if state != CHASE:
+		if potential_target_in_range: 
+			just_hit = true
+			if potential_target != null and potential_target.is_on_floor():
+				if potential_target.sprinting == true and potential_target.velocity.length() > 5.0:
+					target = potential_target
+					$"Just Hit Flash Timer".start(3.0)
+					print("Chase triggered: player is sprinting on ground")
+					do_chase()
+	
+	nav_agent.target_position = target.global_position # new breaks code
+	$"Flat Target Visual".global_position = target.global_position
+
 ## DIRECTION
-	direction_manager()
+	if target != null:
+		direction_manager()
 	## Set Nav Agent
 	if return_to_safe_point == true and safe_point_found == true:
 		can_jump = false
@@ -361,7 +373,7 @@ func _physics_process(delta):
 
 ## DIRECTION MANAGER
 func direction_manager():
-	if target_in_range and state == IDLE:
+	if potential_target_in_range and state != CHASE:
 		#print("target in range but state is idle") #need to make different target variable. nav_target. then make custom direction do this. this way, we can talk about player and special nav points
 		return
 	
@@ -379,7 +391,7 @@ func direction_manager():
 				else:
 					do_custom_direciton = true
 					custom_direction = target.global_transform.origin
-					#print("custom dir set true HERE 2")
+					print("custom dir set true HERE 2")
 	else:
 		if dis_to_wall >= 1.25 and final_nav_distance_to_target > 4.0:
 			if target.is_in_group("Player"):
@@ -486,7 +498,7 @@ func hear_enemy_target():
 func hear_enemy_in_range():
 	for enemy_in_range in enemies_in_range:
 		if target == null or state != CHASE:
-			if enemy_in_range.target != null and enemy_in_range.target.is_in_group("Player") and enemy_in_range.state == CHASE and target_in_range:
+			if enemy_in_range.target != null and enemy_in_range.target.is_in_group("Player") and enemy_in_range.state == CHASE and potential_target_in_range:
 				target = enemy_in_range.target
 				#change to "do_180_turn" and "alert = true"
 				do_chase()
@@ -505,9 +517,9 @@ func do_chase():
 		if target.is_in_group("Player"):
 			if flashlight.target == null:
 				flashlight.target = target
-	if not target.is_in_group("Player"):
-		state = IDLE
-		return
+	#if not target.is_in_group("Player"):
+		#state = IDLE
+		#return
 	flashlight.spotlight.visible = true
 	state = CHASE
 func do_search():
@@ -540,11 +552,12 @@ func _on_melee_area_body_exited(body):
 		enemies_in_range.erase(body)
 func _on_med_detection_area_body_entered(body):
 	if body.is_in_group("Player"):
-		target = body
-		target_in_range = true
+		potential_target = body
+		potential_target_in_range = true
+		print("target in range, ", target)
 func _on_med_detection_area_body_exited(body):
 	if body.is_in_group("Player"):
-		target_in_range = false
+		potential_target_in_range = false
 		#if flashlight.target == body:
 			#flashlight.target = null
 		#target != body

@@ -51,8 +51,8 @@ height = 2.125
 radius = 0.625
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1lhpl"]
-height = 8.0
-radius = 6.0
+height = 10.0
+radius = 8.0
 
 [node name="enemy_flashlight_generic" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container", "kb_parent") groups=["Enemy", "SLIP"]]
 script = ExtResource("1_q5ydn")
@@ -189,6 +189,18 @@ transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast2"]
+transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Wall Detection Raycast3" type="RayCast3D" parent="."]
+transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, 0, 0.75, -0.4375)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Wall Detection Raycast2" type="RayCast3D" parent="Wall Detection Raycast3"]
+transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.12941, -0.129409, 0.224144, 0.965926, 0.16238, -0.0937501, 0.0625)
+target_position = Vector3(0, 0, -2.5)
+
+[node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast3"]
 transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
