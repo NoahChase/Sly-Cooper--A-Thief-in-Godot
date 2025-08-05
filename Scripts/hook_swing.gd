@@ -9,7 +9,7 @@ var look_at = null
 var look_away = null
 var dir_to_look
 var dir_no_look
-var target_x_rotation
+var target_x_rotation = 0.0
 
 var swing_velocity := 0.0
 var swing_strength := 0.0
@@ -69,26 +69,27 @@ func _physics_process(delta: float) -> void:
 			if look_at == look_2: 
 				player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", -swing_ratio)
 	else:
-		look_assigned = false
-		has_swinged_once = false
-		if player != null:
-			var dis_to_1 = (player.global_position - look_1.global_position).length()
-			var dis_to_2 = (player.global_position - look_2.global_position).length()
-			var dir_to_player = (player.global_position - rot_container.global_position).normalized()
-			
-			if player.global_position.y < rot_container.global_position.y - 2.0:
-				target_x_rotation = 0.0
-			else:
-				if dis_to_1 <= dis_to_2:
-					target_x_rotation = atan2(dir_to_player.y + 1.0, -dir_to_player.z)
-					#look_1.visible = true
-					#look_2.visible = false
+		if Update.count == 3:
+			look_assigned = false
+			has_swinged_once = false
+			if player != null:
+				var dis_to_1 = (player.global_position - look_1.global_position).length()
+				var dis_to_2 = (player.global_position - look_2.global_position).length()
+				var dir_to_player = (player.global_position - rot_container.global_position).normalized()
+				
+				if player.global_position.y < rot_container.global_position.y - 2.0:
+					target_x_rotation = 0.0
 				else:
-					target_x_rotation = atan2(-dir_to_player.y - 1.0, dir_to_player.z)
-					#look_2.visible = true
-					#look_1.visible = false
-			# Smoothly adjust X rotation to face the player
-			$"Rot Ghost".rotation.x = lerp($"Rot Ghost".rotation.x, target_x_rotation / PI, 0.025)
+					if dis_to_1 <= dis_to_2:
+						target_x_rotation = atan2(dir_to_player.y + 1.0, -dir_to_player.z)
+						#look_1.visible = true
+						#look_2.visible = false
+					else:
+						target_x_rotation = atan2(-dir_to_player.y - 1.0, dir_to_player.z)
+						#look_2.visible = true
+						#look_1.visible = false
+				# Smoothly adjust X rotation to face the player
+				$"Rot Ghost".rotation.x = lerp($"Rot Ghost".rotation.x, target_x_rotation / PI, 0.025)
 	rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
 	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-90), deg_to_rad(90))
 

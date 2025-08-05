@@ -1,16 +1,14 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://co5obcf2r17t"]
 
 [resource]
+shading_mode = 2
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.621524, 0.621524, 0.621523, 1)
-metallic = 0.5
-metallic_specular = 0.25
-roughness = 0.6
+albedo_color = Color(0.637843, 0.637843, 0.637843, 1)
+metallic = 0.1
+metallic_specular = 0.1
+roughness = 0.75
 rim_enabled = true
-rim = 0.1
-clearcoat_enabled = true
-clearcoat = 0.25
-clearcoat_roughness = 1.0
+rim_tint = 0.0
 ao_enabled = true
 ao_light_affect = 0.5

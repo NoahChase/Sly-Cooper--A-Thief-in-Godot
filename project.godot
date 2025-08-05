@@ -17,6 +17,10 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://b16eksuqbi1ep"
 config/icon="uid://b16eksuqbi1ep"
 
+[autoload]
+
+Update="*res://Scripts/UPDATE.gd"
+
 [debug]
 
 shapes/navigation/geometry_face_color=Color(0.501961, 1, 1, 0.156863)
@@ -146,11 +150,14 @@ triangle={
 [rendering]
 
 occlusion_culling/bvh_build_quality=0
+global_illumination/gi/use_half_resolution=true
+global_illumination/voxel_gi/quality=1
 environment/ssao/fadeout_from=30.0
 environment/ssao/fadeout_to=100.0
 environment/ssil/quality=1
 environment/ssil/fadeout_from=30.0
 environment/ssil/fadeout_to=100.0
+occlusion_culling/occlusion_rays_per_thread=256
 environment/volumetric_fog/volume_size=32
 environment/volumetric_fog/volume_depth=32
 occlusion_culling/use_occlusion_culling=true

@@ -52,7 +52,8 @@ func _physics_process(delta):
 						if Input.is_action_pressed("ui_down"):
 							path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
 			elif target != null:
-				ball2player()
+				if Update.count == 3:
+					ball2player()
 			
 				
 			path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)

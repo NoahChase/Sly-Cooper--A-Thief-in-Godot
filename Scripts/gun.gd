@@ -11,7 +11,7 @@ var aim_rng = RandomNumberGenerator.new()
 var aim_rng_num = 0.0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta: float) -> void:
 	if shoot:
 		if not anim.current_animation == "shoot":
 			anim.queue("shoot")

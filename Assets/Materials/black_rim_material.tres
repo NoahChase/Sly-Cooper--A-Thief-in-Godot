@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c1ms4rydgbgeh"]
+
+[ext_resource type="Shader" uid="uid://by43lwx6unxtm" path="res://Assets/Shaders/rim_light.gdshader" id="1_liou2"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_liou2")
+shader_parameter/rim_color = Color(0, 0, 0, 1)
+shader_parameter/rim_intensity = 0.5
+shader_parameter/rim_power = 2.0
+shader_parameter/rim_threshold = 0.1

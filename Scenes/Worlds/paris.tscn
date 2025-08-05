@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bath36ob6dj1b"]
+[gd_scene load_steps=51 format=3 uid="uid://bath36ob6dj1b"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dd5jlx7gfenis" path="res://Scenes/Design Tools/enemy_base_flashlight.tscn" id="7_6cvge"]
 [ext_resource type="PackedScene" uid="uid://bgstehumyyjb6" path="res://Assets/Temp Imports/a balcony.glb" id="7_u86sc"]
 [ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="8_awwuf"]
+[ext_resource type="Material" uid="uid://cg5fm5vb7hp40" path="res://Assets/Materials/rope.tres" id="10_bbu04"]
 [ext_resource type="Material" uid="uid://co5obcf2r17t" path="res://Assets/Materials/Rail.tres" id="10_gaw5t"]
 [ext_resource type="PackedScene" uid="uid://12jg0s5papwk" path="res://Assets/Temp Imports/world paris.glb" id="11_5n2g1"]
 [ext_resource type="PackedScene" uid="uid://dducx72fohnii" path="res://Assets/Temp Imports/car 2m.glb" id="11_gojqr"]
@@ -19,7 +20,6 @@
 [ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="13_awwuf"]
 [ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="14_ybblj"]
 [ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="15_awwuf"]
-[ext_resource type="PackedScene" uid="uid://p0gyuhqkx2lp" path="res://Scenes/Design Tools/projectile.tscn" id="16_ybblj"]
 [ext_resource type="PackedScene" uid="uid://ci6xsmwmv0meo" path="res://Assets/Temp Imports/p-bld-sly2-medtower-revised.glb" id="17_ww0qh"]
 [ext_resource type="PackedScene" uid="uid://b4athtlke2t2e" path="res://Scenes/Design Tools/hook_swing.tscn" id="23_27v8m"]
 [ext_resource type="PackedScene" uid="uid://fos6dir22w7d" path="res://Assets/Temp Imports/TEST-bld-4.glb" id="24_eumwj"]
@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://gni0aewdrdoq" path="res://Assets/Temp Imports/p-background-bld-1-.glb" id="32_8m1p0"]
 [ext_resource type="PackedScene" uid="uid://chc4w8olqxbcl" path="res://Assets/Temp Imports/p-bld-monolith.glb" id="34_a8jso"]
 [ext_resource type="PackedScene" uid="uid://c3pa3h60niddb" path="res://Assets/Temp Imports/p-bld-6.glb" id="35_aajgs"]
+[ext_resource type="PackedScene" uid="uid://bug0o34spxd8f" path="res://Assets/Temp Imports/d-rooftop-antenna.glb" id="36_erpqo"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a8jso"]
 radius = 0.125
@@ -57,37 +58,12 @@ _data = {
 }
 point_count = 11
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8m1p0"]
-diffuse_mode = 3
-specular_mode = 1
-albedo_color = Color(0.35, 0.285833, 0.1575, 1)
-roughness = 0.6
-rim_enabled = true
-rim = 0.5
-clearcoat_roughness = 1.0
-ao_enabled = true
-ao_light_affect = 0.5
-backlight = Color(1, 1, 1, 1)
-refraction_scale = 1.0
-
 [sub_resource type="Curve3D" id="Curve3D_2rpoe"]
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, -15, 7.29234, -14, 0, 0, 0, 0, 0, 0, -14, 6.9458, -13, 0, 0, 0, 0, 0, 0, -13, 6.75925, -12, 0, 0, 0, 0, 0, 0, -12, 6.73271, -11, 0, 0, 0, 0, 0, 0, -11, 6.86617, -10, 0, 0, 0, 0, 0, 0, -10, 7.15963, -9, 0, 0, 0, 0, 0, 0, -9, 7.61308, -8, 0, 0, 0, 0, 0, 0, -8, 8.22654, -7, 0, 0, 0, 0, 0, 0, -7, 9, -6),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rseyu"]
-diffuse_mode = 3
-specular_mode = 1
-albedo_color = Color(0.4, 0.326667, 0.18, 1)
-roughness = 0.75
-rim_enabled = true
-clearcoat_roughness = 1.0
-ao_enabled = true
-ao_light_affect = 0.5
-backlight = Color(1, 1, 1, 1)
-refraction_scale = 1.0
 
 [sub_resource type="Curve3D" id="Curve3D_b2g3t"]
 bake_interval = 512.0
@@ -144,7 +120,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456093, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.7, 0.75, 1, 1)
+light_color = Color(0.585, 0.66375, 0.9, 1)
 light_indirect_energy = 0.5
 light_bake_mode = 1
 shadow_enabled = true
@@ -165,10 +141,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.24022, 15.6216, 7.82282)
 camera_player = NodePath("../Player_ Sly")
 
 [node name="Spotlight Detection" parent="." instance=ExtResource("15_awwuf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 11.529)
-
-[node name="projectile" parent="." instance=ExtResource("16_ybblj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 9, 12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 11.8951)
+visible = false
 
 [node name="Thief Points" type="Node3D" parent="."]
 
@@ -235,7 +209,7 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
-material = SubResource("StandardMaterial3D_8m1p0")
+material = ExtResource("10_bbu04")
 
 [node name="Rope 2" type="Node3D" parent="Thief Points" node_paths=PackedStringArray("path_3d", "start_point", "end_point", "path_follow", "target_point", "player")]
 script = ExtResource("1_3ytsx")
@@ -301,7 +275,7 @@ path_continuous_u = true
 path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
-material = SubResource("StandardMaterial3D_rseyu")
+material = ExtResource("10_bbu04")
 
 [node name="Pole" type="Node3D" parent="Thief Points" node_paths=PackedStringArray("test_ball", "target")]
 script = ExtResource("3_0qql5")
@@ -439,9 +413,6 @@ transform = Transform3D(-0.0291615, -0.144091, -0.989136, 0.000512832, 0.989554,
 [node name="car 2m2" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
 transform = Transform3D(0.920012, 0.0443686, -0.389372, 0.00893545, 0.990938, 0.13403, 0.391789, -0.126788, 0.911278, 19.5607, 0.154036, -4.40887)
 
-[node name="car 2m3" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
-transform = Transform3D(0.927583, -0.0582793, 0.369043, 0.00893545, 0.990938, 0.13403, -0.37351, -0.121026, 0.919698, 24.5607, 7.15404, -13.4089)
-
 [node name="TEST-bld-4" parent="NavigationRegion3D" instance=ExtResource("24_eumwj")]
 transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 124.646, 0, -4.2349)
 
@@ -494,7 +465,7 @@ transform = Transform3D(0.173648, 0, 0.984807, 0, 1, 0, -0.984807, 0, 0.173648, 
 transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -38, 0, 26.5)
 
 [node name="enemy_flashlight_generic" parent="." node_paths=PackedStringArray("nav_parent", "path_follow") instance=ExtResource("7_6cvge")]
-transform = Transform3D(-0.999736, 0, 0.0229841, 0, 1, 0, -0.0229841, 0, -0.999736, -7.62954, 0, -10.2588)
+transform = Transform3D(-0.97162, 0, -0.23655, 0, 1, 0, 0.23655, 0, -0.97162, -5.12954, 0, -11.0187)
 nav_parent = NodePath("../Enemy Nav Points")
 path_follow = NodePath("../Enemy Path 1/PathFollow3D")
 nav_point_num = 4
@@ -526,6 +497,7 @@ transform = Transform3D(-0.104824, 0, -0.99445, 0, 1, 0, 0.99445, 0, -0.104824, 
 progress = 31.6954
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy Path 1/PathFollow3D"]
+visible = false
 mesh = SubResource("BoxMesh_6cvge")
 surface_material_override/0 = SubResource("StandardMaterial3D_6cvge")
 
@@ -585,6 +557,13 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 50.44, 6, -189.38)
 
 [node name="p-background-bld-1-5" parent="Background" instance=ExtResource("32_8m1p0")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 33.995, 10, -244.278)
+
+[node name="d-rooftop-antenna" parent="." instance=ExtResource("36_erpqo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10.1, 3)
+
+[node name="Target Point" parent="d-rooftop-antenna" groups=["point"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+visible = false
 
 [connection signal="area_entered" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_entered"]
 [connection signal="area_exited" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_exited"]

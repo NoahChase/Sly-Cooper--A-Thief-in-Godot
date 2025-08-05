@@ -1,14 +1,14 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bgd370huhetyi"]
 
 [resource]
+shading_mode = 2
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.359773, 0.268538, 0.0859702, 1)
+albedo_color = Color(0.6, 0.45, 0.15, 1)
+metallic_specular = 0.1
 roughness = 0.6
 rim_enabled = true
-rim = 0.5
-clearcoat_roughness = 1.0
+rim_tint = 0.0
 ao_enabled = true
 ao_light_affect = 0.5
-backlight = Color(1, 1, 1, 1)
 refraction_scale = 1.0

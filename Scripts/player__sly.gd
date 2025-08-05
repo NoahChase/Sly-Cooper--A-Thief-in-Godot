@@ -80,9 +80,12 @@ func _ready() -> void:
 # Solve for the horizontal speed to achieve the desired jump distance
 	var required_speed = desired_jump_distance / total_air_time
 	#$RichTextLabel4.text = str("floor max angle: ", floor_max_angle, "jump mult : ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
-
+#
 func _process(delta: float) -> void:
-	state_handler()
+	##state_handler()a
+	if state == ON_TARGET:
+		#keeps player from shifting on target with input (because this function is in _process(delta))
+		global_transform.origin = target.global_transform.origin
 
 
 func _physics_process(delta: float) -> void:
@@ -385,6 +388,7 @@ func _physics_process(delta: float) -> void:
 	if colliding_count <= 1:
 		ledge_detect(delta)
 	camera_smooth_follow(delta)
+	state_handler()
 	move_and_slide()
 	
 

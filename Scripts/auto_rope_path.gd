@@ -87,7 +87,8 @@ func _physics_process(delta: float) -> void:
 				if player.target != null and not player.stunned: ## ensures rotation is fixed if player is shot or hit off the rope by an enemy
 					move_progress(delta)
 			else:
-				ball2player(delta)
+				if Update.count == 3:
+					ball2player(delta)
 			bend_rope(delta)
 			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:
@@ -217,6 +218,6 @@ func ball2player(delta):
 
 	if length > 0:
 		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 0.25:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset / player.gravmult) / length, 0.125)
+			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult) / length
 		else:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset) / length, 1.0)
+			path_follow.progress_ratio = (closest_offset) / length

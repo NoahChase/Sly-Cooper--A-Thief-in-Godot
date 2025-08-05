@@ -11,20 +11,21 @@ func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		length = calculate_path_length(curve)
 	else:
-		distance_to_enemy = (enemy.global_transform.origin - target_mesh.global_transform.origin).length()
-		
-		if enemy.state == enemy.IDLE or enemy.state == enemy.IDLE_STILL:
-			if distance_to_enemy >= 2.0:
-				path_to_enemy(delta)
-			if distance_to_enemy < 2.0:
-				path_progress(delta)
+		if Update.count == 3:
+			distance_to_enemy = (enemy.global_transform.origin - target_mesh.global_transform.origin).length()
+			
+			if enemy.state == enemy.IDLE or enemy.state == enemy.IDLE_STILL:
+				if distance_to_enemy >= 2.0:
+					path_to_enemy(delta)
+				if distance_to_enemy < 2.0:
+					path_progress(delta)
+				else:
+					path_wait(delta)
 			else:
-				path_wait(delta)
-		else:
-			path_to_enemy(delta)
+				path_to_enemy(delta)
 
 func path_progress(delta):
-	path_follow.progress_ratio += (enemy.SPEED / 2 / length) * delta
+	path_follow.progress_ratio += (enemy.SPEED / length) * delta * 3
 	
 func path_to_enemy(delta):
 		# Get the closest offset on the curve
@@ -38,7 +39,7 @@ func path_to_enemy(delta):
 	var directional_offset = forward.dot(curve_forward)
 
 	if length > 0:
-		path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + directional_offset) / length, 1.0)
+		path_follow.progress_ratio = (closest_offset + directional_offset) / length
 	
 func path_wait(delta):
 	pass

@@ -1,4 +1,7 @@
-shader_type spatial;
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://daksscg4u88t"]
+
+[sub_resource type="Shader" id="Shader_614yt"]
+code = "shader_type spatial;
 render_mode blend_mix, cull_back;
 
 uniform vec4 rim_color : source_color = vec4(1.0, 1.0, 1.0, 1.0); // White rim
@@ -14,4 +17,12 @@ void fragment() {
     rim = pow(rim, rim_power);
     ALBEDO = rim_color.rgb;
     ALPHA = rim * rim_intensity;
-}
+}"
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_614yt")
+shader_parameter/rim_color = Color(1, 1, 1, 1)
+shader_parameter/rim_intensity = 0.04
+shader_parameter/rim_power = 0.04
+shader_parameter/rim_threshold = 0.4
