@@ -62,6 +62,12 @@ weapon = NodePath("gun")
 hp_container = NodePath("HP Container")
 kb_parent = NodePath(".")
 
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+simplify_path = true
+simplify_epsilon = 0.5
+avoidance_enabled = true
+debug_enabled = true
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_bj7m3")
@@ -82,11 +88,6 @@ kb_excluded = [NodePath("../HP Container")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.75)
 shape = SubResource("BoxShape3D_q4nxv")
 debug_color = Color(0.956863, 0, 0, 0.419608)
-
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Hitbox"]
-simplify_path = true
-simplify_epsilon = 0.5
-avoidance_enabled = true
 
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("2_kfhgq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
