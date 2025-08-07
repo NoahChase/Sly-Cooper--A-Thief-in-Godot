@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Sly Cooper: A Thief in Godot"
-run/main_scene="uid://bath36ob6dj1b"
+run/main_scene="uid://b7jlhjo3apaay"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://b16eksuqbi1ep"
@@ -29,7 +29,6 @@ shapes/navigation/geometry_face_color=Color(0.501961, 1, 1, 0.156863)
 
 window/size/viewport_width=1280
 window/size/viewport_height=960
-window/size/mode=3
 
 [global_group]
 

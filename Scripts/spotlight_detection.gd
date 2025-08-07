@@ -11,6 +11,9 @@ var detection_lost_timer_started = false
 
 func _physics_process(delta):
 	### Decal
+	if $"Area3D/Decal Wall Raycast".is_colliding():
+		var wall_col = $"Area3D/Decal Wall Raycast".get_collider()
+		$"Area3D/Decal Wall".global_position.y = wall_col.global_position.y
 	#if $Area3D/RayCast3D.is_colliding():
 		#var col = $Area3D/RayCast3D.get_collider()
 		#$"Area3D/RayCast3D/Decal Wall".global_position = col.global_position

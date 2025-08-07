@@ -62,24 +62,24 @@ spot_attenuation = 0.0
 spot_angle = 40.0
 spot_angle_attenuation = 0.05
 
-[node name="RayCast3D" type="RayCast3D" parent="Area3D"]
-target_position = Vector3(0, 0, -6)
-
-[node name="Decal Floor" type="Decal" parent="Area3D/RayCast3D"]
-transform = Transform3D(1, 0, 0, 0, 1, -4.68958e-13, 0, 4.68958e-13, 1, 0, 0.000732423, -3.0316)
-size = Vector3(6.25, 5.99072, 5.92691)
+[node name="Decal Floor" type="Decal" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, -4.68958e-13, 0, 4.68958e-13, 1, 0, 0.00537252, -3.0316)
+size = Vector3(6.25, 4, 5.92691)
 texture_albedo = ExtResource("2_torlo")
 normal_fade = 0.5
 upper_fade = 1.5
 lower_fade = 1.5
 
-[node name="Decal Wall" type="Decal" parent="Area3D/RayCast3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.19523e-09, -3.52734)
-size = Vector3(6.25, 6.92969, 6)
+[node name="Decal Wall" type="Decal" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -2.18558e-08, -2.99999)
+size = Vector3(6.25, 5.875, 6)
 texture_albedo = ExtResource("2_torlo")
 normal_fade = 0.5
 upper_fade = 1.5
 lower_fade = 1.5
+
+[node name="Decal Wall Raycast" type="RayCast3D" parent="Area3D"]
+target_position = Vector3(0, -0.75, -6)
 
 [node name="Look At Player" type="Node3D" parent="."]
 
