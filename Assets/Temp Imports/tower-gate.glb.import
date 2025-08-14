@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ci6xsmwmv0meo"
-path="res://.godot/imported/p-bld-sly2-medtower-revised.glb-716496d47ac6802f6325b27e0dd24e56.scn"
+uid="uid://c1tgnnekcc4lj"
+path="res://.godot/imported/tower-gate.glb-ae4236798d7d18e547ef09d73c52016b.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/p-bld-sly2-medtower-revised.glb"
-dest_files=["res://.godot/imported/p-bld-sly2-medtower-revised.glb-716496d47ac6802f6325b27e0dd24e56.scn"]
+source_file="res://Assets/Temp Imports/tower-gate.glb"
+dest_files=["res://.godot/imported/tower-gate.glb-ae4236798d7d18e547ef09d73c52016b.scn"]
 
 [params]
 
@@ -38,17 +38,9 @@ _subresources={
 "use_external/enabled": true,
 "use_external/path": "uid://co5obcf2r17t"
 },
-"roof slope": {
+"roof": {
 "use_external/enabled": true,
-"use_external/path": "uid://dvrcmspmi8qh3"
-},
-"roof top": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
-},
-"tower top": {
-"use_external/enabled": true,
-"use_external/path": "uid://b08apbedkcxkb"
+"use_external/path": "uid://bjgvbcdijm5so"
 },
 "wall": {
 "use_external/enabled": true,

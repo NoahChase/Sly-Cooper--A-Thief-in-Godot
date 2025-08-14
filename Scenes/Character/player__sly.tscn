@@ -1,13 +1,18 @@
-[gd_scene load_steps=27 format=3 uid="uid://c70l3ebt3x47f"]
+[gd_scene load_steps=31 format=3 uid="uid://c70l3ebt3x47f"]
 
 [ext_resource type="Script" uid="uid://bkicq7vwc604f" path="res://Scripts/player__sly.gd" id="1_jucx6"]
 [ext_resource type="PackedScene" uid="uid://dgc3kyslosely" path="res://Scenes/Character Mesh/sly_cooper_anims_4.tscn" id="3_ncpw6"]
 [ext_resource type="PackedScene" uid="uid://cm3ie3krms2au" path="res://Scenes/Character Mesh/sly_tail.tscn" id="3_r3pa2"]
 [ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="4_ncpw6"]
+[ext_resource type="Shader" uid="uid://7rk87gixbhfw" path="res://Assets/Shaders/outline.gdshader" id="4_skok1"]
 [ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="5_skok1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_r3pa2"]
 height = 1.625
+
+[sub_resource type="SphereMesh" id="SphereMesh_ncpw6"]
+radius = 0.25
+height = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p85ho"]
 transparency = 1
@@ -140,6 +145,19 @@ _data = {
 &"detect targets": SubResource("Animation_qgm1o")
 }
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c6wq5"]
+blend_mode = 1
+cull_mode = 2
+no_depth_test = true
+diffuse_mode = 3
+specular_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jj232"]
+render_priority = -1
+shader = ExtResource("4_skok1")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_width = 1.5
+
 [sub_resource type="SphereMesh" id="SphereMesh_s3532"]
 radius = 0.125
 height = 0.25
@@ -174,8 +192,12 @@ debug_shape_thickness = 1
 [node name="Body Mesh Container" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
+[node name="center mesh" type="MeshInstance3D" parent="Body Mesh Container"]
+visible = false
+mesh = SubResource("SphereMesh_ncpw6")
+
 [node name="SlyCooper_RigNoPhysics" type="MeshInstance3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1875, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8125, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_p85ho")
 mesh = SubResource("CapsuleMesh_11x8b")
@@ -217,67 +239,67 @@ libraries = {
 }
 
 [node name="Ledge Ray 1" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.6, 0)
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.5, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.6, 0)
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.5, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Cancel Ledge Ray" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0, -0.4, 0)
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.75, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0, -0.4, 0)
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.75, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Floor Ray" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray7" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.875, 0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0.125, 0.125)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray8" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.875, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0.125, -0.125)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray9" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.875, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, 0.125, -0.125)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray6" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.875, 0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, 0.125, 0.125)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray4" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, -0.875, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.125, 0)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray5" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.875, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.125, 0)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -0.25)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="Floor Ray3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0.25)
 target_position = Vector3(0, -0.5, 0)
 
 [node name="SlyCooper_Anims4" parent="Body Mesh Container" node_paths=PackedStringArray("player", "tail_ik") instance=ExtResource("3_ncpw6")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -1, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 player = NodePath("../..")
 tail_ik = NodePath("../../sly_tail")
 
@@ -308,13 +330,13 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.875, 0)
 visible = false
 mesh = SubResource("CylinderMesh_lkte6")
 surface_material_override/0 = SubResource("StandardMaterial3D_nt6o0")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="Target Area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.875, 0)
 shape = SubResource("ConvexPolygonShape3D_nt6o0")
 disabled = true
 
@@ -327,6 +349,8 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 top_level = true
 visible = false
+material_override = SubResource("StandardMaterial3D_c6wq5")
+material_overlay = SubResource("ShaderMaterial_jj232")
 mesh = SubResource("SphereMesh_s3532")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]

@@ -1,4 +1,6 @@
-[gd_resource type="Environment" load_steps=8 format=3 uid="uid://ch3alxhyfv1n0"]
+[gd_resource type="Environment" load_steps=9 format=3 uid="uid://ch3alxhyfv1n0"]
+
+[ext_resource type="Texture2D" uid="uid://ce1j1iow4d76l" path="res://Assets/Temp Imports/sky4.jpg" id="1_xdm0e"]
 
 [sub_resource type="Shader" id="Shader_4xowi"]
 code = "
@@ -15,6 +17,8 @@ uniform sampler2D sky_cover : filter_linear, source_color, hint_default_black;
 uniform vec4 sky_cover_modulate : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform vec4 ground_bottom_color : source_color = vec4(0.2, 0.169, 0.133, 1.0);
 uniform vec4 ground_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
+uniform samplerCube skybox_tex : filter_linear, source_color;
+uniform float skybox_blend : hint_range(0.0, 1.0) = 0.5; // 0 = only procedural, 1 = only skybox
 uniform float ground_curve : hint_range(0, 1) = 0.02;
 uniform float ground_energy = 1.0;
 uniform float sun_angle_max = 30.0;
@@ -137,20 +141,22 @@ noise = SubResource("FastNoiseLite_4xowi")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
-shader_parameter/sky_top_color = Color(0.034, 0.068, 0.17, 1)
+shader_parameter/sky_top_color = Color(0.04, 0.08, 0.2, 1)
 shader_parameter/sky_horizon_color = Color(0.160417, 0.1225, 0.35, 1)
 shader_parameter/sky_curve = 0.2
 shader_parameter/sky_energy = 1.0
-shader_parameter/sky_cover_modulate = Color(1, 1, 1, 1)
-shader_parameter/ground_bottom_color = Color(0, 0.0283333, 0.17, 1)
+shader_parameter/sky_cover = ExtResource("1_xdm0e")
+shader_parameter/sky_cover_modulate = Color(0.5, 0.5, 1, 0.392157)
+shader_parameter/ground_bottom_color = Color(0, 0.00849995, 0.17, 1)
 shader_parameter/ground_horizon_color = Color(0.160784, 0.121569, 0.34902, 1)
+shader_parameter/skybox_blend = 0.5
 shader_parameter/ground_curve = 0.02
 shader_parameter/ground_energy = 1.0
 shader_parameter/sun_angle_max = 0.523599
 shader_parameter/sun_curve = 0.0
 shader_parameter/exposure = 1.0
-shader_parameter/cloud_color = Color(0.225, 0.225, 0.45, 0.392157)
-shader_parameter/cloud_distance = 0.02
+shader_parameter/cloud_color = Color(0.25, 0.2625, 0.5, 0.392157)
+shader_parameter/cloud_distance = 0.03
 shader_parameter/cloud_direction = Vector2(-1, 0.5)
 shader_parameter/cloud_direction2 = Vector2(0.5, -1)
 shader_parameter/cloud_scale = Vector2(0.02, 0.02)
@@ -167,7 +173,7 @@ background_mode = 2
 background_color = Color(0.0862745, 0.121569, 0.25098, 1)
 sky = SubResource("Sky_r3fl7")
 ambient_light_source = 3
-ambient_light_color = Color(0.6, 0.666667, 1, 1)
+ambient_light_color = Color(0.45, 0.5625, 0.9, 1)
 ambient_light_sky_contribution = 0.5
 reflected_light_source = 2
 ssao_enabled = true
@@ -179,7 +185,6 @@ glow_normalized = true
 glow_bloom = 0.1
 fog_enabled = true
 fog_light_color = Color(0, 0.03, 0.18, 1)
-fog_density = 0.02
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.005

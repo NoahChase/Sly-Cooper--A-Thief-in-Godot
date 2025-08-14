@@ -1,9 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cg5fm5vb7hp40"]
-
-[ext_resource type="Material" uid="uid://daksscg4u88t" path="res://Assets/Materials/rim_shader_material.tres" id="1_4ponj"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cg5fm5vb7hp40"]
 
 [resource]
-next_pass = ExtResource("1_4ponj")
 shading_mode = 2
 diffuse_mode = 3
 specular_mode = 1

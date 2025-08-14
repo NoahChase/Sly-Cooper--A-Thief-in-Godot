@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://drluumk324478" path="res://Assets/Temp Imports/light_decal.png" id="2_torlo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_torlo"]
-radius = 3.0
+radius = 2.75
 
 [sub_resource type="BoxMesh" id="BoxMesh_bfkpc"]
 size = Vector3(0.5, 0.5, 0.5)
@@ -84,6 +84,7 @@ target_position = Vector3(0, -0.75, -6)
 [node name="Look At Player" type="Node3D" parent="."]
 
 [node name="Look At Reference" type="MeshInstance3D" parent="Look At Player"]
+visible = false
 mesh = SubResource("BoxMesh_bfkpc")
 surface_material_override/0 = SubResource("StandardMaterial3D_torlo")
 

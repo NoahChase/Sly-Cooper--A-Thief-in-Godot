@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=53 format=3 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -30,12 +30,13 @@
 [ext_resource type="PackedScene" uid="uid://bvxcep02onba8" path="res://Assets/Temp Imports/p-bld-5.glb" id="29_7sovt"]
 [ext_resource type="PackedScene" uid="uid://8pkcvg7i65a0" path="res://Assets/Temp Imports/p-bld-hotel.glb" id="30_2rpoe"]
 [ext_resource type="PackedScene" uid="uid://ctq3vop8jsw26" path="res://Assets/Temp Imports/bld-watertower.glb" id="30_gaw5t"]
-[ext_resource type="PackedScene" uid="uid://dbmdl0x1xqffl" path="res://Assets/Temp Imports/p-bld-disco.glb" id="31_gaw5t"]
 [ext_resource type="Script" uid="uid://qnsjwbapmk76" path="res://Scripts/enemy_walking_path.gd" id="31_rseyu"]
 [ext_resource type="PackedScene" uid="uid://gni0aewdrdoq" path="res://Assets/Temp Imports/p-background-bld-1-.glb" id="32_8m1p0"]
+[ext_resource type="Texture2D" uid="uid://7o85xs4kc3q1" path="res://Assets/Temp Imports/moon.png" id="33_bbu04"]
 [ext_resource type="PackedScene" uid="uid://chc4w8olqxbcl" path="res://Assets/Temp Imports/p-bld-monolith.glb" id="34_a8jso"]
 [ext_resource type="PackedScene" uid="uid://c3pa3h60niddb" path="res://Assets/Temp Imports/p-bld-6.glb" id="35_aajgs"]
 [ext_resource type="PackedScene" uid="uid://bug0o34spxd8f" path="res://Assets/Temp Imports/d-rooftop-antenna.glb" id="36_erpqo"]
+[ext_resource type="PackedScene" uid="uid://c1tgnnekcc4lj" path="res://Assets/Temp Imports/tower-gate.glb" id="37_bbu04"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a8jso"]
 radius = 0.125
@@ -113,6 +114,17 @@ emission_enabled = true
 emission = Color(0.7, 0.595, 0.28, 1)
 emission_energy_multiplier = 2.0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7t0kj"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.5, 0.625, 1, 0.490196)
+albedo_texture = ExtResource("33_bbu04")
+billboard_mode = 1
+grow_amount = -16.0
+
 [node name="Paris" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -120,7 +132,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456093, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.665, 0.7125, 0.95, 1)
+light_color = Color(0.4875, 0.553125, 0.75, 1)
 light_indirect_energy = 0.5
 light_bake_mode = 1
 shadow_enabled = true
@@ -187,7 +199,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175332, -0.00776115, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999823, -0.00175332, -0.00776114, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -360,6 +372,9 @@ smooth_faces = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 13.5, 4)
 player = NodePath("../../Player_ Sly")
 
+[node name="Target Point" parent="Thief Points/Hook Swing" groups=["point"] instance=ExtResource("2_0qql5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4375, 0)
+
 [node name="Target Point" parent="Thief Points" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 29.3349, 4, -0.75)
 
@@ -417,7 +432,7 @@ transform = Transform3D(0.920012, 0.0443686, -0.389372, 0.00893545, 0.990938, 0.
 transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 124.646, 0, -4.2349)
 
 [node name="window-box-1" parent="NavigationRegion3D" instance=ExtResource("25_eqm20")]
-transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 8.29196, 4, -1)
+transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 8.42269, 4.1875, 0.494292)
 
 [node name="p-bld-4" parent="NavigationRegion3D" instance=ExtResource("3_oqbgp")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -13, 0, -15)
@@ -441,10 +456,7 @@ transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 90.1865,
 transform = Transform3D(1, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 1, -124.897, 0, 53.3833)
 
 [node name="p-bld-hotel" parent="NavigationRegion3D" instance=ExtResource("30_2rpoe")]
-transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, -57.577, 0, 3.85268)
-
-[node name="p-bld-disco" parent="NavigationRegion3D" instance=ExtResource("31_gaw5t")]
-transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 14.875, 0, 212.033)
+transform = Transform3D(0.766044, 0, -0.642788, 0, 1, 0, 0.642788, 0, 0.766044, -59.5879, 0, 2.16536)
 
 [node name="p-bld-aframe" parent="NavigationRegion3D" instance=ExtResource("27_3b4m0")]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 18, 0, 24)
@@ -456,13 +468,13 @@ transform = Transform3D(3.57628e-07, 0, 1, 0, 1, 0, -1, 0, 3.57628e-07, 7, 0, 0)
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 18, 0, 24)
 
 [node name="bld-watertower" parent="NavigationRegion3D" instance=ExtResource("30_gaw5t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.5, 8, -12.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -67.75, 4.5, 42.1875)
 
 [node name="p-bld-monolith" parent="NavigationRegion3D" instance=ExtResource("34_a8jso")]
 transform = Transform3D(0.173648, 0, 0.984807, 0, 1, 0, -0.984807, 0, 0.173648, -7.87187, 0, 26.6955)
 
 [node name="p-bld-6" parent="NavigationRegion3D" instance=ExtResource("35_aajgs")]
-transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -38, 0, 26.5)
+transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -41.6405, 0, 29.3056)
 
 [node name="enemy_flashlight_generic" parent="." node_paths=PackedStringArray("nav_parent", "path_follow") instance=ExtResource("7_6cvge")]
 transform = Transform3D(-0.97162, 0, -0.23655, 0, 1, 0, 0.23655, 0, -0.97162, -5.12954, 0, -11.0187)
@@ -519,26 +531,37 @@ surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
 [node name="Background" type="Node3D" parent="."]
 
+[node name="moon" type="Sprite3D" parent="Background"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -612.688, 491, -1087.69)
+material_override = SubResource("StandardMaterial3D_7t0kj")
+cast_shadow = 0
+pixel_size = 0.125
+billboard = 1
+shaded = true
+double_sided = false
+no_depth_test = true
+texture = ExtResource("33_bbu04")
+
 [node name="Sprite3D4" type="Sprite3D" parent="Background"]
-transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 848.5, -4.5, 25)
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 848.5, -13.1875, 25)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D" type="Sprite3D" parent="Background"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, -4.5, -794)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, -13.1875, -794)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D2" type="Sprite3D" parent="Background"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -785.5, -4.5, 24)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -785.5, -13.1875, 24)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D3" type="Sprite3D" parent="Background"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 30, -4.5, 844.5)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 30, -13.1875, 844.5)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
@@ -564,6 +587,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10.1, 3)
 [node name="Target Point" parent="d-rooftop-antenna" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = false
+
+[node name="tower-gate" parent="." instance=ExtResource("37_bbu04")]
+transform = Transform3D(-1.49012e-08, 0, 1, 0, 1, 0, -1, 0, -1.49012e-08, -54.3125, 0, 61.1875)
 
 [connection signal="area_entered" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_entered"]
 [connection signal="area_exited" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_exited"]

@@ -238,15 +238,18 @@ func do_chase():
 	stop_chase = false
 	if target.is_in_group("Player"):
 		flashlight.target = target
+		just_hit = false
 		state = CHASE
 		return
 	elif potential_target.is_in_group("Player"):
 		target = potential_target
 		flashlight.target = target
+		just_hit = false
 		state = CHASE
 		return
 	elif flashlight.target.is_in_group("Player"):
 		target = flashlight.target
+		just_hit = false
 		state = CHASE
 		return
 	if target == null or not target.is_in_group("Player"):
@@ -405,7 +408,7 @@ func direction_manager():
 
 	if wall_detected == false:
 		if not is_on_wall():
-			if final_nav_distance_to_target > 4.0:
+			if final_nav_distance_to_target > 2.0:
 				if target.is_in_group("Player"): #possibly if player is lower than target, set do_custom_direction == true (so enemy can jump off roof to get player)
 					if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 						do_custom_direciton = true
@@ -416,7 +419,7 @@ func direction_manager():
 					custom_direction = target.global_transform.origin
 					print("custom dir set true HERE 2")
 	else:
-		if dis_to_wall >= 1.25 and final_nav_distance_to_target > 4.0:
+		if dis_to_wall >= 1.25 and final_nav_distance_to_target > 2.0:
 			if target.is_in_group("Player"):
 				if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 					do_custom_direciton = true
@@ -428,6 +431,9 @@ func direction_manager():
 				print("custom dir set true HERE 4")
 
 	if do_custom_direciton == true:
+		if target == new_nav_point:
+			just_hit = true #keeps from jumping when shouldn't
+			do_custom_direciton = false
 		if custom_direction_locked == false:
 			if target.global_transform.origin == nav_agent.get_final_position():
 				do_custom_direciton = false
@@ -547,10 +553,11 @@ func _on_med_detection_area_body_exited(body):
 
 
 ## TIMERS
-func _on_point_timer_timeout() -> void:
+func _on_point_timer_timeout() -> void: # reset state to idle or chase from idle_still 
 	gen_nav_rng()
 	print("do idle on point timer timeout")
-	state_manager() ## Formerly was state = IDLE
+	if state != CHASE:
+		state = IDLE
 	move_to_nav_point = false
 func _on_quickshot_timer_timeout() -> void:
 	do_quickshot = true

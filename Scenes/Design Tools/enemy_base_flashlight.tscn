@@ -66,7 +66,6 @@ kb_parent = NodePath(".")
 simplify_path = true
 simplify_epsilon = 0.5
 avoidance_enabled = true
-debug_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -173,11 +172,11 @@ transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, 0, 1, -0
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast2" type="RayCast3D" parent="Wall Detection Raycast"]
-transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.12941, -0.129409, 0.224144, 0.965926, 0.16238, -0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, -0.433013, -0.533494, -0.808013, 0.250001, -0.249999, 0.433013, 0.866025, 0.16238, -0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast"]
-transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, 0.433013, -0.533494, -0.808013, -0.250001, 0.249999, -0.433013, 0.866025, -0.16238, 0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast2" type="RayCast3D" parent="."]
@@ -185,11 +184,11 @@ transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, 0, 0.562
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast2" type="RayCast3D" parent="Wall Detection Raycast2"]
-transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.12941, -0.129409, 0.224144, 0.965926, 0.16238, -0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, -0.433013, -0.533494, -0.808013, 0.250001, -0.249999, 0.433013, 0.866025, 0.16238, -0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast2"]
-transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, 0.433013, -0.533494, -0.808013, -0.250001, 0.249999, -0.433013, 0.866025, -0.16238, 0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast3" type="RayCast3D" parent="."]
@@ -197,11 +196,11 @@ transform = Transform3D(-0.866025, 0.5, 0, -0.5, -0.866025, 0, 0, 0, 1, 0, 0.75,
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast2" type="RayCast3D" parent="Wall Detection Raycast3"]
-transform = Transform3D(-0.851271, 0.474445, -0.224144, -0.508519, -0.851271, 0.12941, -0.129409, 0.224144, 0.965926, 0.16238, -0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, -0.433013, -0.533494, -0.808013, 0.250001, -0.249999, 0.433013, 0.866025, 0.16238, -0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Wall Detection Raycast3" type="RayCast3D" parent="Wall Detection Raycast3"]
-transform = Transform3D(-0.851271, 0.474445, 0.224144, -0.508519, -0.851271, -0.12941, 0.129409, -0.224144, 0.965926, -0.16238, 0.0937501, 0.0625)
+transform = Transform3D(-0.808013, 0.39952, 0.433013, -0.533494, -0.808013, -0.250001, 0.249999, -0.433013, 0.866025, -0.16238, 0.0937501, 0.0625)
 target_position = Vector3(0, 0, -2.5)
 
 [node name="Ledge Detection Raycast" type="RayCast3D" parent="."]

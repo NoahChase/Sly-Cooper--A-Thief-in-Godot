@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drluumk324478"
-path.s3tc="res://.godot/imported/light_decal.png-fa13a2ed010b48c6e919269463136bf2.s3tc.ctex"
+uid="uid://ce1j1iow4d76l"
+path.s3tc="res://.godot/imported/sky4.jpg-814480a13b4ff28681e70dacea5c3166.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Temp Imports/light_decal.png"
-dest_files=["res://.godot/imported/light_decal.png-fa13a2ed010b48c6e919269463136bf2.s3tc.ctex"]
+source_file="res://Assets/Temp Imports/sky4.jpg"
+dest_files=["res://.godot/imported/sky4.jpg-814480a13b4ff28681e70dacea5c3166.s3tc.ctex"]
 
 [params]
 

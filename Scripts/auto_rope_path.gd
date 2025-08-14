@@ -88,7 +88,8 @@ func _physics_process(delta: float) -> void:
 					move_progress(delta)
 			else:
 				if Update.count == 3:
-					ball2player(delta)
+					if player.target == null:
+						ball2player(delta)
 			bend_rope(delta)
 			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:

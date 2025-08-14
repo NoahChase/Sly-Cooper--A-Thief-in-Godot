@@ -60,6 +60,7 @@ var manual_slip = false
 var sprinting = false
 func _ready() -> void:
 	#Engine.time_scale = 0.5
+	rot_container.position = Vector3(0,0,0)
 	
 	temp_sly.cane_hitbox.kb_excluded.append(hp_container)
 	temp_sly.cane_hitbox.kb_parent = rot_container #set up kb_parent for hitbox (better knockback direction)
@@ -164,7 +165,7 @@ func _physics_process(delta: float) -> void:
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
 		#air animation fix animfix anim fix
-		temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.25, 0.125), 0.2)
+		#temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.25, 0.125), 0.2)
 		jump_from_floor_anim = false
 		can_ledge = false
 		temp_sly.anim_tree.set("parameters/state/transition_request", "air")
@@ -199,7 +200,7 @@ func _physics_process(delta: float) -> void:
 			
 	else:
 		#air animation fix animfix anim fix
-		temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
+		#temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
 		previous_jump_was_notch = false
 		if sprinting:
 			speed_mult = 1.75
@@ -246,6 +247,7 @@ func _physics_process(delta: float) -> void:
 			velocity += get_gravity() * delta * gravmult
 			#if target == null or velocity.y > 0:
 				#state = AIR
+		#elif distance to target > 1.0 and timer stopped: AIR
 		else:
 			print("Sly moved too slow for target")
 			target = null
@@ -613,7 +615,7 @@ func camera_smooth_follow(delta):
 	camera_parent.cam_container.position = lerp(camera_parent.cam_container.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
 	# offset for camera parent to follow 
-	var tform = sly_mesh.global_transform.origin - rot_container.global_transform.basis.z * tform_mult
+	var tform = (sly_mesh.global_transform.origin - rot_container.global_transform.basis.z * tform_mult)
 	# Predict ahead based on velocity and lerp_val
 	if state != ON_TARGET:
 		tform.x += velocity.x * (delta / lerp_val) + lerp_val
