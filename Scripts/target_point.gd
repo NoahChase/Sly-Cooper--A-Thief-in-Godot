@@ -2,11 +2,13 @@ extends StaticBody3D
 @onready var is_selected = false
 @export var player : CharacterBody3D
 @export var adj_fov = false
+@export var invisible = true
 @onready var mesh = $MeshInstance3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	visible = false
+	if invisible:
+		visible = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
