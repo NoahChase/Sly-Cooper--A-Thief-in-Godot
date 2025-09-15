@@ -1,4 +1,8 @@
 extends StaticBody3D
+
+signal player_found(player)
+signal player_lost()
+
 @onready var is_selected = false
 @export var player : CharacterBody3D
 @export var adj_fov = false
@@ -9,17 +13,12 @@ extends StaticBody3D
 func _ready() -> void:
 	if invisible:
 		visible = false
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(delta: float) -> void:
-	if player == null:
-		is_selected = false
-	else:
-		is_selected = true
-	#mesh.visible = false
-	#
-	#if is_selected:
-		#mesh.visible = false
-	#else:
-		#mesh.visible = true
+		
+func assign_player(p: CharacterBody3D):
+	player = p
+	is_selected = true
+	emit_signal("player_found", player)
+func unassign_player():
+	player = null
+	is_selected = false
+	emit_signal("player_lost")

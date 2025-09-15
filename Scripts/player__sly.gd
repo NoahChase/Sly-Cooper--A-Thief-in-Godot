@@ -1,6 +1,12 @@
 extends CharacterBody3D
 ## In GitHub, Belongs to Character Sly Cooper Branch
 
+##signals
+signal target_in_range(target)
+signal target_not_in_range(target)
+signal target_acquired(target_ball)
+signal target_released(target_ball)
+
 ## const
 const SPEED = 4.0 #3.52 for 3.4m #4.03 jump distance 4m
 const JUMP_VELOCITY = 8.0 #single jump 2m, cozy double jump 3m
@@ -58,6 +64,7 @@ var ledge_cooldown_timer := 0.0
 var joystick_move_mult = 1.0
 var manual_slip = false
 var sprinting = false
+
 func _ready() -> void:
 	#Engine.time_scale = 0.5
 	rot_container.position = Vector3(0,0,0)
@@ -88,8 +95,14 @@ func _process(delta: float) -> void:
 		#keeps player from shifting on target with input (because this function is in _process(delta))
 		global_transform.origin = target.global_transform.origin
 
-
 func _physics_process(delta: float) -> void:
+	## Special Inputs that need to be here instead of in their own function
+	if Input.is_action_pressed("shift"):
+		if state == FLOOR:
+			sprinting = true
+	if Input.is_action_just_released("shift") or state != FLOOR:
+		sprinting = false
+	
 	var colliding_count = 0  # Reset every frame
 	manual_slip = false
 	for ray in floor_rays:
@@ -113,27 +126,7 @@ func _physics_process(delta: float) -> void:
 	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
 	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
 	
-	if Input.is_action_pressed("shift"):
-		if state == FLOOR:
-			sprinting = true
-	if Input.is_action_just_released("shift") or state != FLOOR:
-		sprinting = false
-	
-	if Input.is_action_just_pressed("esc"):
-		get_tree().quit()
-	
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept"):
-		jump()
-	
-	if Input.is_action_just_pressed("square"):
-		temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
-		temp_sly.cane_hitbox.hit_timer.start(temp_sly.cane_hitbox.hit_time)
-		#temp_sly.cane_hitbox.active = true
 
-	if Input.is_action_just_pressed("circle") and state == AIR and not stunned:
-		#$"Body Mesh Container/AnimationPlayer".play("spin")
-		$"Target Area/AnimationPlayer".play("detect targets")
 	if $"Target Area/CollisionShape3D3".disabled == false and state == AIR:
 		apply_target(delta)
 		apply_magnetism()
@@ -226,7 +219,7 @@ func _physics_process(delta: float) -> void:
 			# we also need to add a condition for the hook swing, probably on that script instead. if its target is too far from the pivot, cancel
 			var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
 			if distance_to_player <= 0.5 and can_ledge == false:
-				target.player = self
+				target.assign_player(self)
 			jump_num = 0
 			air_mult = 0.0
 			
@@ -250,6 +243,7 @@ func _physics_process(delta: float) -> void:
 		#elif distance to target > 1.0 and timer stopped: AIR
 		else:
 			print("Sly moved too slow for target")
+			emit_signal("target_released", target)
 			target = null
 			state = AIR
 	elif state == ON_TARGET and target != null:
@@ -289,7 +283,7 @@ func _physics_process(delta: float) -> void:
 				#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk_rope")
 		#elif not target.is_in_group("pole") and not target.is_in_group("swing"):
 			#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
-		target.player = self
+		target.assign_player(self)
 		jump_num = 0
 		air_mult = 1.0
 		manual_move_cam = true
@@ -302,6 +296,7 @@ func _physics_process(delta: float) -> void:
 			state = AIR
 	else:
 		last_target = target
+		emit_signal("target_released", target)
 		target = null
 		if ! previous_jump_was_notch:
 			manual_move_cam = false
@@ -394,6 +389,25 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("esc"):
+		get_tree().quit()
+	
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept"):
+		if $"Jump Input Buffer".is_stopped():
+			jump()
+	
+	if Input.is_action_just_pressed("square"):
+		temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
+		temp_sly.cane_hitbox.hit_timer.start(temp_sly.cane_hitbox.hit_time)
+		#temp_sly.cane_hitbox.active = true
+
+	if Input.is_action_just_pressed("circle") and state == AIR and not stunned:
+		#$"Body Mesh Container/AnimationPlayer".play("spin")
+		$"Target Area/AnimationPlayer".play("detect targets")
+		
+
 func state_handler():
 	if hp_container.can_take_damage == false:
 		if not is_on_floor() or state != FLOOR:
@@ -407,13 +421,15 @@ func state_handler():
 	elif target != null and can_ledge == false:
 		var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
 		if distance_to_player <= 0.125:
-			target.player = self
+			emit_signal("target_acquired", target)
+			target.assign_player(self)
 			state = ON_TARGET
 			#keeps player from shifting on target with input (because this function is in _process(delta))
 			global_transform.origin = target.global_transform.origin
 		else:
 			state = TO_TARGET
 		if state == ON_TARGET and distance_to_player > 0.5:
+			emit_signal("target_released", target)
 			state = AIR
 	elif not is_on_floor() and state != ON_TARGET and state != TO_TARGET:
 		state = AIR
@@ -423,8 +439,9 @@ func state_handler():
 	
 	if stunned:
 		if not target == null:
-			target.player = null
-			target.is_selected = false
+			emit_signal("target_released", target)
+			#target.player = null
+			#target.is_selected = false
 			target = null
 		can_ledge = false
 		state = AIR
@@ -439,6 +456,7 @@ func jump():
 	if not previous_jump_was_notch:
 		jump_mult = 1.0
 	if jump_num < 2:
+		$"Jump Input Buffer".start(0.1)
 		temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 		if state == FLOOR:
 			#temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
@@ -451,6 +469,7 @@ func jump():
 			jump_num = 0
 			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_TARGET:
+			emit_signal("target_released", target)
 			target.player = null
 			last_target = target
 			target = null
@@ -461,12 +480,21 @@ func jump():
 		elif state != TO_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
-			if velocity.y >= 0:
+			if velocity.y >= 2.75:
+				velocity.y += 2.75 / (velocity.y / 2.75)
+			elif velocity.y >= 0:
 				velocity.y += 2.75
 			elif velocity.y <= -6.5:
-				velocity.y += (-velocity.y/2) + 2.75
+				velocity.y += (-velocity.y/2.75) + 2.75
 			else:
 				velocity.y += (-velocity.y) + 2.75
+#			old, high jump at 3m, but jumping high also got sly as far as jumping long
+			#if velocity.y >= 0:
+				#velocity.y += 2.75
+			#elif velocity.y <= -6.5:
+				#velocity.y += (-velocity.y/2) + 2.75
+			#else:
+				#velocity.y += (-velocity.y) + 2.75
 				
 		temp_sly.anim_tree.set("parameters/OneShot/active", false) #ensures the one shot triggers on the next line
 		temp_sly.anim_tree.set("parameters/OneShot/request", 1)
@@ -522,25 +550,14 @@ func apply_target(delta):
 		pass
 	else:
 		var predicted_position = global_transform.origin + velocity * delta
-		var best_target = null
-		var best_score = -INF  # Higher score means a better target
-	
-		var weight_distance_reduction = 1.0  # Adjust this to prioritize speed vs. closeness
-		var weight_closeness = 8.0           # Higher = prioritize closer targets
-	
+		var best_target: Node3D = null
+		var best_distance := INF
+		
 		for potential_target in target_points:
 			var current_distance = basis_offset.global_transform.origin.distance_to(potential_target.global_transform.origin)
-			var predicted_distance = predicted_position.distance_to(potential_target.global_transform.origin)
-			var distance_reduction = current_distance - predicted_distance
-	
-			# Avoid division by zero if current_distance is extremely small
-			var closeness_score = 1.0 / max(current_distance, 0.001)
-	
-			# Combined scoring function
-			var score = (distance_reduction * weight_distance_reduction) + (closeness_score * weight_closeness)
-	
-			if score > best_score:
-				best_score = score
+		
+			if current_distance < best_distance:
+				best_distance = current_distance
 				best_target = potential_target
 	
 		# Assign the best target after evaluating all options
@@ -587,6 +604,7 @@ func apply_magnetism(): # the holy grail of magnetism
 					elif global_transform.origin.y < target.global_transform.origin.y:
 						velocity.y = lerp(velocity.y, magnet_direction.y * 8, 0.3)
 				else:
+					emit_signal("target_released", target)
 					state = AIR
 					last_target = target
 					target = null
@@ -676,3 +694,12 @@ func _on_target_area_body_exited(body: Node3D) -> void:
 	if body.is_in_group("target"):
 		print("body removed")
 		target_points.erase(body)
+
+func _on_target_range_area_body_entered(body: Node3D) -> void:
+	if body.is_in_group("target"):
+		emit_signal("target_in_range", body)
+		#body.assign_player(self)
+func _on_target_range_area_body_exited(body: Node3D) -> void:
+	if body.is_in_group("target"):
+		emit_signal("target_not_in_range", body)
+		#body.player = null

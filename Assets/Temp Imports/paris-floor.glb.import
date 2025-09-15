@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cod8vf1nbaddf"
-path="res://.godot/imported/p-bld-9.glb-bf75f2ec6d32afc2f347d97031c05103.scn"
+uid="uid://c3g1kbmntlepc"
+path="res://.godot/imported/paris-floor.glb-1a962aabbda7e278a4bfc3faa306c16c.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/p-bld-9.glb"
-dest_files=["res://.godot/imported/p-bld-9.glb-bf75f2ec6d32afc2f347d97031c05103.scn"]
+source_file="res://Assets/Temp Imports/paris-floor.glb"
+dest_files=["res://.godot/imported/paris-floor.glb-1a962aabbda7e278a4bfc3faa306c16c.scn"]
 
 [params]
 
@@ -32,21 +32,6 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"materials": {
-"rail.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://co5obcf2r17t"
-},
-"roof.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://bjgvbcdijm5so"
-},
-"wall.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
-}
-}
-}
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

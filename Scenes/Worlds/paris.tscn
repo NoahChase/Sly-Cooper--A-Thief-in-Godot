@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=3 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=66 format=3 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -14,26 +14,26 @@
 [ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="8_awwuf"]
 [ext_resource type="Material" uid="uid://cg5fm5vb7hp40" path="res://Assets/Materials/rope.tres" id="10_bbu04"]
 [ext_resource type="Material" uid="uid://co5obcf2r17t" path="res://Assets/Materials/Rail.tres" id="10_gaw5t"]
-[ext_resource type="PackedScene" uid="uid://12jg0s5papwk" path="res://Assets/Temp Imports/world paris.glb" id="11_5n2g1"]
 [ext_resource type="PackedScene" uid="uid://dducx72fohnii" path="res://Assets/Temp Imports/car 2m.glb" id="11_gojqr"]
 [ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="12_u86sc"]
 [ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="13_awwuf"]
 [ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="14_ybblj"]
 [ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="15_awwuf"]
-[ext_resource type="PackedScene" uid="uid://ci6xsmwmv0meo" path="res://Assets/Temp Imports/p-bld-sly2-medtower-revised.glb" id="17_ww0qh"]
 [ext_resource type="PackedScene" uid="uid://b4athtlke2t2e" path="res://Scenes/Design Tools/hook_swing.tscn" id="23_27v8m"]
 [ext_resource type="PackedScene" uid="uid://fos6dir22w7d" path="res://Assets/Temp Imports/TEST-bld-4.glb" id="24_eumwj"]
 [ext_resource type="PackedScene" uid="uid://plnholfc6rmt" path="res://Assets/Temp Imports/window-box-1.glb" id="25_eqm20"]
 [ext_resource type="PackedScene" uid="uid://ckw51qtg0o807" path="res://Assets/Temp Imports/p-bld-aframe.glb" id="27_3b4m0"]
 [ext_resource type="PackedScene" uid="uid://myl3ixjipebl" path="res://Assets/Temp Imports/TEST roof.glb" id="28_3b4m0"]
+[ext_resource type="PackedScene" uid="uid://cj7556td5ipmq" path="res://Assets/Temp Imports/PARIS.glb" id="28_gesgi"]
 [ext_resource type="PackedScene" uid="uid://csdmh5d3ejlwh" path="res://Assets/Temp Imports/a measured aframe test.glb" id="29_2rpoe"]
 [ext_resource type="PackedScene" uid="uid://bvxcep02onba8" path="res://Assets/Temp Imports/p-bld-5.glb" id="29_7sovt"]
+[ext_resource type="PackedScene" uid="uid://cf5wmy3ddaxgd" path="res://Assets/Temp Imports/p-bld-sly2-medtower.glb" id="29_bmssu"]
 [ext_resource type="PackedScene" uid="uid://8pkcvg7i65a0" path="res://Assets/Temp Imports/p-bld-hotel.glb" id="30_2rpoe"]
 [ext_resource type="PackedScene" uid="uid://ctq3vop8jsw26" path="res://Assets/Temp Imports/bld-watertower.glb" id="30_gaw5t"]
 [ext_resource type="Script" uid="uid://qnsjwbapmk76" path="res://Scripts/enemy_walking_path.gd" id="31_rseyu"]
 [ext_resource type="PackedScene" uid="uid://gni0aewdrdoq" path="res://Assets/Temp Imports/p-background-bld-1-.glb" id="32_8m1p0"]
 [ext_resource type="Texture2D" uid="uid://7o85xs4kc3q1" path="res://Assets/Temp Imports/moon.png" id="33_bbu04"]
-[ext_resource type="PackedScene" uid="uid://chc4w8olqxbcl" path="res://Assets/Temp Imports/p-bld-monolith.glb" id="34_a8jso"]
+[ext_resource type="Material" uid="uid://j0ntykgdka1q" path="res://Assets/Materials/light_emis.tres" id="33_gesgi"]
 [ext_resource type="PackedScene" uid="uid://c3pa3h60niddb" path="res://Assets/Temp Imports/p-bld-6.glb" id="35_aajgs"]
 [ext_resource type="PackedScene" uid="uid://bug0o34spxd8f" path="res://Assets/Temp Imports/d-rooftop-antenna.glb" id="36_erpqo"]
 [ext_resource type="PackedScene" uid="uid://c1tgnnekcc4lj" path="res://Assets/Temp Imports/tower-gate.glb" id="37_bbu04"]
@@ -45,6 +45,8 @@
 [ext_resource type="PackedScene" uid="uid://6an3ecwiio4q" path="res://Assets/Temp Imports/testslop1.glb" id="43_vf2bg"]
 [ext_resource type="PackedScene" uid="uid://dyllawyuuynpi" path="res://Assets/Temp Imports/gate.glb" id="44_phes7"]
 [ext_resource type="PackedScene" uid="uid://tvp6p2l4uibo" path="res://Assets/Temp Imports/p-bld-tower.glb" id="45_v6agn"]
+[ext_resource type="PackedScene" uid="uid://bk6fkbu7cptbq" path="res://Assets/Temp Imports/p-bld-11.glb" id="46_jevjf"]
+[ext_resource type="PackedScene" uid="uid://b0k1ejmlkqlca" path="res://Assets/Temp Imports/p-bld-med-classic.glb" id="47_gesgi"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a8jso"]
 radius = 0.125
@@ -123,14 +125,22 @@ height = 0.5
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_617rq"]
 emission_enabled = true
 emission = Color(0.7, 0.595, 0.28, 1)
-emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_bmssu"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ac36"]
+emission_enabled = true
+emission = Color(0.7, 0.595, 0.28, 1)
+emission_energy_multiplier = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7t0kj"]
 transparency = 1
 shading_mode = 0
 disable_ambient_light = true
 disable_fog = true
-albedo_color = Color(0.35, 0.5125, 1, 1)
+albedo_color = Color(0.35, 0.566667, 1, 1)
 albedo_texture = ExtResource("33_bbu04")
 billboard_mode = 1
 grow_amount = -16.0
@@ -142,7 +152,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456093, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.525, 0.58125, 0.75, 1)
+light_color = Color(0.5625, 0.625, 0.75, 1)
 light_indirect_energy = 0.5
 light_bake_mode = 1
 shadow_enabled = true
@@ -156,7 +166,7 @@ size = Vector3(758.704, 181.617, 796.222)
 data = ExtResource("1_pr2ko")
 
 [node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("2_25okp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.162, 12.7, 4.726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.838, 17.7, 24.726)
 camera_parent = NodePath("../Camera Parent")
 
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("3_617rq")]
@@ -165,7 +175,6 @@ camera_player = NodePath("../Player_ Sly")
 
 [node name="Spotlight Detection" parent="." instance=ExtResource("15_awwuf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 11.8951)
-visible = false
 
 [node name="Thief Points" type="Node3D" parent="."]
 
@@ -216,6 +225,7 @@ loop = false
 
 [node name="Target Point" parent="Thief Points/Rope/Path3D/PathFollow3D" groups=["LOCK PLAYER ROT", "rope"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(-0.999968, 0, -0.00795753, 0, 1, 0, 0.00795753, 0, -0.999968, 0, 0.1, 0)
+invisible = false
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Points/Rope"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, -0.05, -0.05)
@@ -282,6 +292,7 @@ loop = false
 
 [node name="Target Point" parent="Thief Points/Rope 2/Path3D/PathFollow3D" groups=["LOCK PLAYER ROT", "rope"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0.1, 0)
+invisible = false
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Points/Rope 2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.05, -0.05)
@@ -310,7 +321,6 @@ end_clamp = 0.7
 reversed = true
 
 [node name="Path3D" type="Path3D" parent="Thief Points/Pole"]
-visible = false
 curve = SubResource("Curve3D_b2g3t")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Pole/Path3D"]
@@ -322,6 +332,7 @@ loop = false
 
 [node name="Target Point" parent="Thief Points/Pole/Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.25, 0)
+invisible = false
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Points/Pole"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
@@ -354,7 +365,6 @@ curve = SubResource("Curve3D_0qql5")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Safehouse Pole/Path3D"]
 transform = Transform3D(-0.000141143, 0.999812, 0.0187038, 0.0407414, 0.0186938, -0.998993, -0.999167, 0.000621013, -0.0407369, -6.49758, 7.05404, 6.45906)
-visible = false
 progress = 2.76457
 loop = false
 
@@ -362,6 +372,7 @@ loop = false
 
 [node name="Target Point" parent="Thief Points/Safehouse Pole/Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(1, -2.6077e-08, -2.98023e-08, 3.72529e-09, 1, 1.67638e-08, -2.98023e-08, 4.84288e-08, 1, 0.029, -0.25, 0)
+invisible = false
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Points/Safehouse Pole"]
 material_override = ExtResource("10_gaw5t")
@@ -387,18 +398,18 @@ player = NodePath("../../Player_ Sly")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4375, 0)
 
 [node name="Target Point4" parent="Thief Points" groups=["point"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 32.6138, 5, -4.96596)
+transform = Transform3D(0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819152, 33.4933, 4.59741, -3.34022)
 invisible = false
 
 [node name="Target Point" parent="Thief Points" groups=["point"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 29.1648, 4.25, -1.83296)
+transform = Transform3D(0.766044, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.766044, 29.7805, 4.38391, -0.29133)
 invisible = false
 
 [node name="Target Point3" parent="Thief Points" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 8.3349, 6, -13.75)
 
 [node name="Target Point2" parent="Thief Points" groups=["point"] instance=ExtResource("2_0qql5")]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 123.665, 4, -3.25)
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 173.665, 4, -3.25)
 
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("12_u86sc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.79588, 11.2578, 6)
@@ -421,23 +432,6 @@ debug_color = Color(1, 0, 0, 1)
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_8lmr3")
 
-[node name="world paris" parent="NavigationRegion3D" instance=ExtResource("11_5n2g1")]
-
-[node name="world paris" parent="NavigationRegion3D/world paris" instance=ExtResource("11_5n2g1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0, 0)
-
-[node name="world paris" parent="NavigationRegion3D/world paris/world paris" instance=ExtResource("11_5n2g1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 70)
-
-[node name="world paris" parent="NavigationRegion3D/world paris/world paris/world paris" instance=ExtResource("11_5n2g1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, 0)
-
-[node name="world paris2" parent="NavigationRegion3D" instance=ExtResource("11_5n2g1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 0, 0)
-
-[node name="world paris2" parent="NavigationRegion3D/world paris2" instance=ExtResource("11_5n2g1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 70)
-
 [node name="car 2m" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
 transform = Transform3D(-0.0291615, -0.144091, -0.989136, 0.000512832, 0.989554, -0.144166, 0.999575, -0.00471144, -0.0287834, 13.414, 0.127338, 2.47111)
 
@@ -445,38 +439,35 @@ transform = Transform3D(-0.0291615, -0.144091, -0.989136, 0.000512832, 0.989554,
 transform = Transform3D(0.920012, 0.0443686, -0.389372, 0.00893545, 0.990938, 0.13403, 0.391789, -0.126788, 0.911278, 19.5607, 0.154036, -4.40887)
 
 [node name="TEST-bld-4" parent="NavigationRegion3D" instance=ExtResource("24_eumwj")]
-transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 124.646, 0, -4.2349)
+transform = Transform3D(-0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, -0.866026, 174.646, 0, -4.2349)
 
 [node name="window-box-1" parent="NavigationRegion3D" instance=ExtResource("25_eqm20")]
 transform = Transform3D(0.996195, 0, 0.0871557, 0, 1, 0, -0.0871557, 0, 0.996195, 8.42269, 4.1875, 0.494292)
 
 [node name="p-bld-4" parent="NavigationRegion3D" instance=ExtResource("3_oqbgp")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -13, 0, -15)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -13, 0.2, -15)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/p-bld-4"]
 transform = Transform3D(0.976296, 0, 0.21644, 0, 1, 0, -0.21644, 0, 0.976296, 18.9002, 3, 3.86839)
 mesh = SubResource("BoxMesh_u6lno")
 
-[node name="p-bld-sly2-medtower-revised" parent="NavigationRegion3D" instance=ExtResource("17_ww0qh")]
-transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 19, 0.2, 5)
-
 [node name="p-bld-safehouse2" parent="NavigationRegion3D" instance=ExtResource("6_617rq")]
 transform = Transform3D(0.996158, 0, 0.087573, 0, 1, 0, -0.087573, 0, 0.996158, 0, 0.2, 0)
 
 [node name="TEST roof" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(-0.766044, 0, -0.642787, 0, 1, 0, 0.642787, 0, -0.766044, 78.1513, 0.2, 4.43582)
+transform = Transform3D(0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573576, 158.796, 0.200004, 39.8194)
 
 [node name="TEST roof2" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(-0.766044, 0, -0.642787, 0, 1, 0, 0.642787, 0, -0.766044, 80.7224, 0.2, 7.5)
+transform = Transform3D(0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573576, 162.073, 0.200004, 37.5251)
 
 [node name="TEST roof3" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(-0.766044, 0, -0.642787, 0, 1, 0, 0.642787, 0, -0.766044, 83.2935, 0.2, 10.5642)
+transform = Transform3D(0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573576, 165.349, 0.200004, 35.2308)
 
 [node name="p-bld-5" parent="NavigationRegion3D" instance=ExtResource("29_7sovt")]
-transform = Transform3D(1, 0, 1.78814e-07, 0, 1, 0, -1.78814e-07, 0, 1, -124.897, 0, 53.3833)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, -101.897, 0, 35.3833)
 
 [node name="p-bld-hotel" parent="NavigationRegion3D" instance=ExtResource("30_2rpoe")]
-transform = Transform3D(0.573576, 0, -0.819152, 0, 1, 0, 0.819152, 0, 0.573576, -74.5469, 0, 9.9344)
+transform = Transform3D(0.642787, 0, -0.766045, 0, 1, 0, 0.766045, 0, 0.642787, -71.5469, 0, -2.0656)
 
 [node name="p-bld-aframe" parent="NavigationRegion3D" instance=ExtResource("27_3b4m0")]
 transform = Transform3D(-0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, -0.422618, 18, 0, 24)
@@ -488,22 +479,30 @@ transform = Transform3D(3.57628e-07, 0, 1, 0, 1, 0, -1, 0, 3.57628e-07, 7, 0, 0)
 transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 18, 0.0625, 24)
 
 [node name="bld-watertower" parent="NavigationRegion3D" instance=ExtResource("30_gaw5t")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -88.455, 10.5, 70.7999)
-
-[node name="p-bld-monolith" parent="NavigationRegion3D" instance=ExtResource("34_a8jso")]
-transform = Transform3D(0.173648, 0, 0.984807, 0, 1, 0, -0.984807, 0, 0.173648, -10.479, 0, 24.2049)
+transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, -42.455, 7.5, 24.8)
 
 [node name="p-bld-6" parent="NavigationRegion3D" instance=ExtResource("35_aajgs")]
-transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, -40.7771, 0, 31.5351)
+transform = Transform3D(-0.766044, 0, -0.642787, 0, 1, 0, 0.642787, 0, -0.766044, -42.7771, 2, 24.5351)
 
 [node name="TEST roof4" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(0.766044, 0, 0.642787, 0, 1, 0, -0.642787, 0, 0.766044, 95.5503, 0.2, 0.279579)
+transform = Transform3D(-0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, -0.573576, 158.899, 0.200004, 25.3744)
 
 [node name="TEST roof5" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(0.766044, 0, 0.642787, 0, 1, 0, -0.642787, 0, 0.766044, 92.9791, 0.2, -2.7846)
+transform = Transform3D(-0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, -0.573576, 155.623, 0.200004, 27.6685)
 
 [node name="TEST roof6" parent="NavigationRegion3D" instance=ExtResource("28_3b4m0")]
-transform = Transform3D(0.766044, 0, 0.642787, 0, 1, 0, -0.642787, 0, 0.766044, 90.408, 0.2, -5.84877)
+transform = Transform3D(-0.573576, 0, 0.819152, 0, 1, 0, -0.819152, 0, -0.573576, 152.346, 0.200004, 29.9627)
+
+[node name="car 2m3" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
+transform = Transform3D(0.390522, 0, -0.920594, 0, 1, 0, 0.920594, 0, 0.390523, 41.5818, -0.0835818, 33.7918)
+
+[node name="car 2m4" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
+transform = Transform3D(-0.718836, -0.0422611, -0.693895, -0.0557657, 0.99844, -0.00303912, 0.69294, 0.0365109, -0.720071, 50.8853, -0.327672, 45.7089)
+
+[node name="PARIS" parent="NavigationRegion3D" instance=ExtResource("28_gesgi")]
+
+[node name="p-bld-sly2-medtower" parent="NavigationRegion3D" instance=ExtResource("29_bmssu")]
+transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 19, 0.2, 5)
 
 [node name="enemy_flashlight_generic" parent="." node_paths=PackedStringArray("nav_parent", "path_follow") instance=ExtResource("7_6cvge")]
 transform = Transform3D(-0.97162, 0, -0.23655, 0, 1, 0, 0.23655, 0, -0.97162, -5.12954, 0, -11.0187)
@@ -556,7 +555,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7482, 4, -13.6377)
 cast_shadow = 0
 mesh = SubResource("CylinderMesh_25okp")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
+surface_material_override/0 = ExtResource("33_gesgi")
+
+[node name="lamp emis2" type="MeshInstance3D" parent="Emis Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.7814, 4.15236, -0.29188)
+mesh = SubResource("SphereMesh_bmssu")
+surface_material_override/0 = SubResource("StandardMaterial3D_1ac36")
+
+[node name="lamp emis4" type="MeshInstance3D" parent="Emis Lights"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 33.4954, 4.36586, -3.34117)
+mesh = SubResource("SphereMesh_bmssu")
+surface_material_override/0 = SubResource("StandardMaterial3D_1ac36")
 
 [node name="Background" type="Node3D" parent="."]
 
@@ -610,6 +619,12 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 50.44, 6, -189.38)
 [node name="p-background-bld-1-5" parent="Background" instance=ExtResource("32_8m1p0")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 33.995, 10, -244.278)
 
+[node name="p-background-bld-1-6" parent="Background" instance=ExtResource("32_8m1p0")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.495, 11.5, -307.278)
+
+[node name="p-background-bld-1-7" parent="Background" instance=ExtResource("32_8m1p0")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -24.505, 16, -373.278)
+
 [node name="d-rooftop-antenna" parent="." instance=ExtResource("36_erpqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10.1, 3)
 
@@ -618,31 +633,37 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 visible = false
 
 [node name="tower-gate" parent="." instance=ExtResource("37_bbu04")]
-transform = Transform3D(-0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, -0.965926, -41.2289, 0, 92.236)
+transform = Transform3D(-0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, -0.965926, -31.2289, 0, 93.236)
 
 [node name="gate" parent="tower-gate" instance=ExtResource("44_phes7")]
 transform = Transform3D(-1, 0, 7.45058e-08, 0, 1, 0, -7.45058e-08, 0, -1, 2.29113, 0, 0.0196991)
 
 [node name="p-bld-sly2-low-1" parent="." instance=ExtResource("38_7t0kj")]
-transform = Transform3D(-0.573576, 0, 0.819151, 0, 1, 0, -0.819151, 0, -0.573576, 76.994, 0, 29.6554)
+transform = Transform3D(-0.573576, 0, 0.819151, 0, 1, 0, -0.819151, 0, -0.573576, 194.994, 0, 13.6554)
 
 [node name="p-bld-8" parent="." instance=ExtResource("39_u6lno")]
-transform = Transform3D(-0.906308, 0, 0.422619, 0, 1, 0, -0.422619, 0, -0.906308, -80.3189, 0, 45.0736)
+transform = Transform3D(-0.0652294, 0, -0.997871, 0, 1, 0, 0.997871, 0, -0.0652294, -90.531, 0, 71.282)
 
 [node name="p-bld-9" parent="." instance=ExtResource("40_tl28b")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 47.3773, 0, -11.5283)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 43.662, 0.2, -7.646)
 
 [node name="p-bld-sly2-long" parent="." instance=ExtResource("41_07pv0")]
-transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 48.5792, 0, 9.59442)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 48.564, 0.2, 9.768)
 
 [node name="p-topper-" parent="." instance=ExtResource("42_cl5j1")]
-transform = Transform3D(0.422618, 0, 0.906308, 0, 1, 0, -0.906308, 0, 0.422618, -59.7031, 0, 100.914)
+transform = Transform3D(0.0871554, 0, 0.996195, 0, 1, 0, -0.996195, 0, 0.0871554, -42.7031, 0, 111.914)
 
 [node name="testslop1" parent="." instance=ExtResource("43_vf2bg")]
-transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, -63.5301, 0, 65.0371)
+transform = Transform3D(0.965926, 0, 0.25882, 0, 1, 0, -0.25882, 0, 0.965926, -66.53, 0, 41.0371)
 
 [node name="p-bld-tower" parent="." instance=ExtResource("45_v6agn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95, 0, 50)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73, 0, 30)
+
+[node name="p-bld-11" parent="." instance=ExtResource("46_jevjf")]
+transform = Transform3D(-0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, -0.819152, 44.9326, 0, 41.7862)
+
+[node name="p-bld-med-classic" parent="." instance=ExtResource("47_gesgi")]
+transform = Transform3D(0.342021, 0, -0.939692, 0, 1, 0, 0.939692, 0, 0.342021, -162.854, 0, 61.4712)
 
 [connection signal="area_entered" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_entered"]
 [connection signal="area_exited" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_exited"]

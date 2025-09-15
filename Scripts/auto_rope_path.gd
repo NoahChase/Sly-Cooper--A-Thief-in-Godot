@@ -18,6 +18,7 @@ extends Node3D
 
 @onready var val = 1.0
 @onready var prog_mult = 0.0
+@onready var player_on_target = false
 
 var old_forward = null
 var lerp_val = 0.0
@@ -29,6 +30,8 @@ func _ready():
 		update_curve()
 	if end_point and target_point:
 		look_at_target(target_point, end_point.global_position)
+	player.target_acquired.connect(_on_player_target_acquired)
+	player.target_released.connect(_on_player_target_released)
 
 	if path_3d:
 		length = calculate_path_length(path_3d.curve)
@@ -79,18 +82,20 @@ func _ready():
 func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		# Runtime
-		var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
-		if dis_2_plyr > length:
-			return
-		else:
-			if target_point.is_selected:
-				if player.target != null and not player.stunned: ## ensures rotation is fixed if player is shot or hit off the rope by an enemy
-					move_progress(delta)
+		bend_rope(delta)
+		if player_on_target == false:
+			var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
+			if dis_2_plyr > length:
+				return
 			else:
 				if Update.count == 3:
 					if player.target == null:
 						ball2player(delta)
-			bend_rope(delta)
+		else:
+			if player.target != null and not player.stunned: ## ensures rotation is fixed if player is shot or hit off the rope by an enemy
+				move_progress(delta)
+			
+			
 			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:
 		if update_tool:
@@ -161,7 +166,7 @@ func bend_rope(delta):
 			var distance = return_points[i].distance_to(target_pos)
 			var lerp_factor
 		
-			if target_point.is_selected:
+			if target_point.player != null:
 				val = lerp(val, 0.0, 0.01)
 				bend_mult = lerp(bend_mult, 1.0, 0.015)
 				if val == 0.0:
@@ -222,3 +227,14 @@ func ball2player(delta):
 			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult) / length
 		else:
 			path_follow.progress_ratio = (closest_offset) / length
+
+
+func _on_player_target_acquired(target_ball):
+	if target_ball == target_point:
+		print("Player attached to rope")
+		player_on_target = true
+
+func _on_player_target_released(target_ball):
+	if target_ball == target_point:
+		print("Player released rope")
+		player_on_target = false

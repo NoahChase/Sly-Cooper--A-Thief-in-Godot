@@ -14,7 +14,7 @@ config/name="Sly Cooper: A Thief in Godot"
 run/main_scene="uid://b7jlhjo3apaay"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="uid://difhenurfhq55"
+boot_splash/image="uid://pcq4og8s3lyk"
 config/icon="uid://b16eksuqbi1ep"
 
 [autoload]

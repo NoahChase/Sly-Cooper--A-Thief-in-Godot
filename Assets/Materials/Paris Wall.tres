@@ -4,10 +4,8 @@
 shading_mode = 2
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.75, 0.74375, 0.7125, 1)
-metallic = 0.1
-metallic_specular = 0.1
-roughness = 0.75
+albedo_color = Color(0.7, 0.7, 0.665, 1)
+metallic_specular = 0.0
 rim_enabled = true
 rim = 0.1
 rim_tint = 1.0

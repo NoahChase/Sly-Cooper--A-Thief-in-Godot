@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cf5wmy3ddaxgd"
-path="res://.godot/imported/p-bld-sly2-medtower.glb-8a6804d18c851b9a93a9b05b6bf769b7.scn"
+uid="uid://cj7556td5ipmq"
+path="res://.godot/imported/PARIS.glb-a4272d4432ebd7d636d5e159449c129a.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/p-bld-sly2-medtower.glb"
-dest_files=["res://.godot/imported/p-bld-sly2-medtower.glb-8a6804d18c851b9a93a9b05b6bf769b7.scn"]
+source_file="res://Assets/Temp Imports/PARIS.glb"
+dest_files=["res://.godot/imported/PARIS.glb-a4272d4432ebd7d636d5e159449c129a.scn"]
 
 [params]
 
@@ -34,21 +34,9 @@ animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
-"roof slope": {
+"ground": {
 "use_external/enabled": true,
-"use_external/path": "uid://dvrcmspmi8qh3"
-},
-"roof top": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
-},
-"tower top": {
-"use_external/enabled": true,
-"use_external/path": "uid://b08apbedkcxkb"
-},
-"wall": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
+"use_external/path": "uid://ci6u1vuvtooqq"
 }
 }
 }

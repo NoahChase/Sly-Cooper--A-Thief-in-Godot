@@ -4,6 +4,7 @@ extends Node3D
 @onready var look_2 = $"Look At 2"
 @onready var rot_container = $"Rot Container"
 @onready var look_assigned = false
+@onready var player_on_target = false
 @export var player: CharacterBody3D
 var look_at = null
 var look_away = null
@@ -46,9 +47,22 @@ var align_lerp_val = 1.0
 		#look_assigned = false
 		#has_swinged_once = false
 		#align_lerp_val = 1.0
-
+func _ready() -> void:
+	player.target_acquired.connect(_on_player_target_acquired)
+	player.target_released.connect(_on_player_target_released)
+	
 func _physics_process(delta: float) -> void:
-	if target_point.is_selected:
+	if player_on_target == false:
+		$"Look At 1".visible = false
+		$"Look At 2".visible = false
+		align_lerp_val = 1.0
+		look_assigned = false
+		has_swinged_once = false
+		target_x_rotation = 0.0
+		$"Rot Ghost".rotation.x = target_x_rotation
+		rot_container.rotation.x = 0.0
+		return
+	else:
 		#print(has_swinged_once)
 		if player != null:
 			# Align the player rotation and position
@@ -86,15 +100,6 @@ func _physics_process(delta: float) -> void:
 				player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", swing_ratio)
 			if look_at == look_2: 
 				player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", -swing_ratio)
-	else:
-		$"Look At 1".visible = false
-		$"Look At 2".visible = false
-		align_lerp_val = 1.0
-		look_assigned = false
-		has_swinged_once = false
-		target_x_rotation = 0.0
-		$"Rot Ghost".rotation.x = target_x_rotation
-	
 	rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
 	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-90), deg_to_rad(90))
 
@@ -144,3 +149,13 @@ func update_swing(delta):
 	swing_velocity += total_force * 0.3
 	swing_velocity *= damping
 	$"Rot Ghost".rotation.x += swing_velocity * delta
+
+func _on_player_target_acquired(target_ball):
+	if target_ball == target_point:
+		print("Player attached to rope")
+		player_on_target = true
+
+func _on_player_target_released(target_ball):
+	if target_ball == target_point:
+		print("Player released rope")
+		player_on_target = false
