@@ -46,6 +46,10 @@ _subresources={
 "use_external/enabled": true,
 "use_external/path": "uid://bjgvbcdijm5so"
 },
+"roof line": {
+"use_external/enabled": true,
+"use_external/path": "uid://cl40r0faqkrd5"
+},
 "wall": {
 "use_external/enabled": true,
 "use_external/path": "uid://cqiaoxninm4yl"

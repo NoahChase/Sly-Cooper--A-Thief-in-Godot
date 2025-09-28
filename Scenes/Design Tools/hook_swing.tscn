@@ -48,7 +48,7 @@ ring_segments = 6
 [sub_resource type="BoxMesh" id="BoxMesh_swx7s"]
 size = Vector3(0.25, 0.25, 0.25)
 
-[node name="Hook Swing" type="Node3D"]
+[node name="Hook Swing" type="Node3D" groups=["LOCK PLAYER ROT"]]
 script = ExtResource("1_iriet")
 
 [node name="Look At 1" type="MeshInstance3D" parent="."]
@@ -65,6 +65,7 @@ mesh = SubResource("SphereMesh_j75q4")
 
 [node name="Target Point" parent="Rot Container" groups=["LOCK PLAYER ROT", "swing"] instance=ExtResource("2_iojh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+invisible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rot Container"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -1, 0)

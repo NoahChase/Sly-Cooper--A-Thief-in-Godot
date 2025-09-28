@@ -1,9 +1,20 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dwqiuv1phqxcu"]
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://dwqiuv1phqxcu"]
 
+[ext_resource type="Shader" uid="uid://b0axti1avktul" path="res://Assets/Shaders/outline_shine.gdshader" id="1_cfhnj"]
 [ext_resource type="Shader" uid="uid://7rk87gixbhfw" path="res://Assets/Shaders/outline.gdshader" id="1_ejxmp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cfhnj"]
+render_priority = 2
+shader = ExtResource("1_cfhnj")
+shader_parameter/outline_color_lit = Color(0.49, 0.5425, 0.7, 0.392157)
+shader_parameter/outline_color_unlit = Color(0.09, 0.1425, 0.3, 0.392157)
+shader_parameter/outline_width = 3.0
+shader_parameter/outline_step = 0.5
+shader_parameter/light_direction = Vector3(0, -1, 0.125)
 
 [resource]
 render_priority = 0
+next_pass = SubResource("ShaderMaterial_cfhnj")
 shader = ExtResource("1_ejxmp")
 shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_width = 1.5
+shader_parameter/outline_width = 6.0

@@ -64,6 +64,7 @@ var ledge_cooldown_timer := 0.0
 var joystick_move_mult = 1.0
 var manual_slip = false
 var sprinting = false
+var did_target_jump = false
 
 func _ready() -> void:
 	#Engine.time_scale = 0.5
@@ -134,11 +135,12 @@ func _physics_process(delta: float) -> void:
 ## States
 	if state == FLOOR:
 		#collision_detect() #put node at player's feet, leave it when they jump
-		if jump_from_floor_anim == false:
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+		#if jump_from_floor_anim == false:
+			#temp_sly.anim_tree.set("parameters/OneShot/request", 3)
 		can_ledge = false
 		air_mult = 1.0
-		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
+		if not temp_sly.anim_tree.get("parameters/jump_state/transition_request") == "jump_floor":
+			temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
 		if not direction:
 			var any_not_colliding = false
 			for ray in floor_rays:
@@ -157,11 +159,11 @@ func _physics_process(delta: float) -> void:
 		jump_mult = 1.0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
-		#air animation fix animfix anim fix
 		#temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.25, 0.125), 0.2)
 		jump_from_floor_anim = false
 		can_ledge = false
-		temp_sly.anim_tree.set("parameters/state/transition_request", "air")
+		if not temp_sly.anim_tree.get("parameters/jump_state/transition_request") == "jump_air_forward":
+			temp_sly.anim_tree.set("parameters/state/transition_request", "air")
 		#var forward = -rot_container.global_transform.basis.z
 
 		speed_mult = 1.0
@@ -247,6 +249,7 @@ func _physics_process(delta: float) -> void:
 			target = null
 			state = AIR
 	elif state == ON_TARGET and target != null:
+		did_target_jump = false
 		if target.is_in_group("point"):
 			temp_sly.anim_tree.set("parameters/state/transition_request", "point")
 			temp_sly.anim_tree.set("parameters/point_state/transition_request", "point_idle")
@@ -300,8 +303,6 @@ func _physics_process(delta: float) -> void:
 		target = null
 		if ! previous_jump_was_notch:
 			manual_move_cam = false
-
-	
 
 	# Direction:
 	# Get the camera's yaw angle
@@ -362,8 +363,9 @@ func _physics_process(delta: float) -> void:
 			if not rot_container.rotation.z == 0.0:
 				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
 		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET:
-			$"Look_At Rotation".look_at(target.global_position + direction)
-			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+			if not target.is_in_group("swing") and not target.is_in_group("rope"):
+				$"Look_At Rotation".look_at(target.global_position + direction)
+				rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
 		# for rope correction (re align to proper rotation)
 		if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
 			#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
@@ -392,6 +394,11 @@ func _physics_process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("esc"):
 		get_tree().quit()
+	
+	# Debug super jump
+	if Input.is_action_just_pressed("lalt"):
+		if $"Jump Input Buffer".is_stopped():
+			velocity.y += JUMP_VELOCITY * 2
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept"):
@@ -457,18 +464,20 @@ func jump():
 		jump_mult = 1.0
 	if jump_num < 2:
 		$"Jump Input Buffer".start(0.1)
-		temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
+		
 		if state == FLOOR:
-			#temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			jump_from_floor_anim = true
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_LEDGE:
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			ledge_cooldown_timer = 0.2
 			state = AIR
 			jump_num = 0
 			velocity.y += JUMP_VELOCITY * jump_mult
 		elif state == ON_TARGET:
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			emit_signal("target_released", target)
 			target.player = null
 			last_target = target
@@ -476,7 +485,6 @@ func jump():
 			velocity.y += JUMP_VELOCITY * jump_mult
 			jump_num = 0
 			state = AIR
-			
 		elif state != TO_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
@@ -496,10 +504,17 @@ func jump():
 			#else:
 				#velocity.y += (-velocity.y) + 2.75
 				
-		temp_sly.anim_tree.set("parameters/OneShot/active", false) #ensures the one shot triggers on the next line
-		temp_sly.anim_tree.set("parameters/OneShot/request", 1)
-		
-	#jump_mult = 1.0 ik why this is here
+		_trigger_jump_end()
+
+
+func _trigger_jump_end() -> void:
+	# reset then request, but deferred so it survives this frame
+	temp_sly.anim_tree.set("parameters/OneShot/active", false)
+	call_deferred("_fire_jump_oneshot")
+
+
+func _fire_jump_oneshot() -> void:
+	temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 
 func collision_detect():
 	$"collision point".global_transform.origin = self.global_transform.origin
@@ -588,6 +603,15 @@ func apply_magnetism(): # the holy grail of magnetism
 					global_rotation = lerp(global_rotation, target.global_rotation, 0.125)
 					
 					#velocity = lerp(velocity, magnet_direction * SPEED * 2.25 + Vector3(0,0.0 * SPEED * 2.25,0), 0.1 / (distance_to_player + 0.1))
+				
+				#jump boost and falling help
+				if temp_sly.anim_tree.get("parameters/OneShot/active"):
+					if velocity.y < -6.5:
+						velocity.y = -6.5
+					if did_target_jump == false:
+						if not target.is_in_group("pole") and not target.is_in_group("hook"):
+							target_jump()
+						
 				if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 					velocity = Vector3.ZERO # perfect snapping
 					#$CollisionShape3D.disabled = true
@@ -608,11 +632,23 @@ func apply_magnetism(): # the holy grail of magnetism
 					state = AIR
 					last_target = target
 					target = null
+					did_target_jump = false
 			else:
 				velocity = Vector3.ZERO # perfect snapping
 				global_transform.origin = target.global_transform.origin
 			
-	
+
+func target_jump():
+	if velocity.y >= 2.75:
+		velocity.y += 2.75 / (velocity.y / 2.75)
+	elif velocity.y >= 0:
+		velocity.y += 2.75
+	elif velocity.y <= -6.5:
+		velocity.y += (-velocity.y/2.75) + 2.75
+	else:
+		velocity.y += (-velocity.y) + 2.75
+	did_target_jump = true
+
 func camera_smooth_follow(delta):
 	var cam_speed = 182.5
 	var cam_timer = clamp(delta * cam_speed / 20, 0, 1)
@@ -624,11 +660,11 @@ func camera_smooth_follow(delta):
 	var lerp_val
 	
 	lerp_val = 0.05
-	var add = 5.5 #4.5 is distance from camera to player, 1.0 buffer makes for 5.5
+	var add = 5.5 #(this is +1 for buffer, so it's 4.5) (with the tform_mult, it's 4.0)
 	var y_add = 0.5
 	cam_max = 0
 	cam_min = 0
-	tform_mult = .5
+	tform_mult = .5 #0.5 added to camera
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera_parent.cam_container.position = lerp(camera_parent.cam_container.position, Vector3(0,0.5, camera_length + add), 0.175)
 	
@@ -688,11 +724,11 @@ func camera_smooth_follow(delta):
 
 func _on_target_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("target"):
-		print("body added")
+		#print("body added")
 		target_points.append(body)
 func _on_target_area_body_exited(body: Node3D) -> void:
 	if body.is_in_group("target"):
-		print("body removed")
+		#print("body removed")
 		target_points.erase(body)
 
 func _on_target_range_area_body_entered(body: Node3D) -> void:

@@ -55,10 +55,10 @@ func _physics_process(delta):
 					path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002
 				if Input.is_action_pressed("ui_down"):
 					path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
-			path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
 	else:
 		if path and update_tool:
 			length = calculate_path_length(path.curve)
+	path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
 	
 
 # Editor Functions

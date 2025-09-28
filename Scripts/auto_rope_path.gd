@@ -166,7 +166,7 @@ func bend_rope(delta):
 			var distance = return_points[i].distance_to(target_pos)
 			var lerp_factor
 		
-			if target_point.player != null:
+			if player_on_target == true:
 				val = lerp(val, 0.0, 0.01)
 				bend_mult = lerp(bend_mult, 1.0, 0.015)
 				if val == 0.0:
@@ -191,7 +191,8 @@ func move_progress(delta):
 	var forward = angle_diff < deg_to_rad(90) or angle_diff > deg_to_rad(270)
 	var target_rotation = path_follow.global_rotation.y + (PI if not forward else 0.0)
 	# Lerp rotation towards the target rotation
-	player.rot_container.global_rotation.y = lerp(player.rot_container.global_rotation.y, target_rotation, lerp_val)
+	if player.state == player.ON_TARGET:
+		player.rot_container.global_rotation.y = lerp(player.rot_container.global_rotation.y, target_rotation, lerp_val)
 	# Determine movement multiplier
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)

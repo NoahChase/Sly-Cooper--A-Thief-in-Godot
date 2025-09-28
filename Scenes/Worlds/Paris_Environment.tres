@@ -146,7 +146,7 @@ noise = SubResource("FastNoiseLite_4xowi")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
 shader_parameter/sky_top_color = Color(0.015, 0.03625, 0.1, 1)
-shader_parameter/sky_horizon_color = Color(0.096, 0.06, 0.3, 1)
+shader_parameter/sky_horizon_color = Color(0.1, 0.06, 0.3, 1)
 shader_parameter/sky_curve = 0.125
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover = ExtResource("1_xdm0e")

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cod8vf1nbaddf"
-path="res://.godot/imported/p-bld-9.glb-bf75f2ec6d32afc2f347d97031c05103.scn"
+uid="uid://bnx8l7i54rnt"
+path="res://.godot/imported/arch.fbx-ad864d2aee5570c27836d6ab7f1b735c.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/p-bld-9.glb"
-dest_files=["res://.godot/imported/p-bld-9.glb-bf75f2ec6d32afc2f347d97031c05103.scn"]
+source_file="res://Assets/Temp Imports/arch.fbx"
+dest_files=["res://.godot/imported/arch.fbx-ad864d2aee5570c27836d6ab7f1b735c.scn"]
 
 [params]
 
@@ -28,25 +28,18 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=false
+animation/trimming=true
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
-"rail.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://co5obcf2r17t"
-},
-"roof.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://cl40r0faqkrd5"
-},
-"wall.001": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
+"lambert1": {
+"use_external/enabled": false,
+"use_external/path": "uid://dwqiuv1phqxcu"
 }
 }
 }
-gltf/naming_version=1
-gltf/embedded_image_handling=1
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1

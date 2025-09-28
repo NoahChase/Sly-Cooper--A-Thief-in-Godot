@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://c4mn85fobgsha"
-path="res://.godot/imported/p-bld-safehouse.glb-2f0f8a06658c33ad5dfa48e5bd5dbfd9.scn"
+uid="uid://dqfae8fjcs7q"
+path="res://.godot/imported/p-bld-13.glb-3c6a99f38dbe484fab93480e60892a9f.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/p-bld-safehouse.glb"
-dest_files=["res://.godot/imported/p-bld-safehouse.glb-2f0f8a06658c33ad5dfa48e5bd5dbfd9.scn"]
+source_file="res://Assets/Temp Imports/p-bld-13.glb"
+dest_files=["res://.godot/imported/p-bld-13.glb-3c6a99f38dbe484fab93480e60892a9f.scn"]
 
 [params]
 
@@ -34,14 +34,6 @@ animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
-"bottom wall": {
-"use_external/enabled": true,
-"use_external/path": "uid://dvrcmspmi8qh3"
-},
-"floor": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
-},
 "rail": {
 "use_external/enabled": true,
 "use_external/path": "uid://co5obcf2r17t"
@@ -53,10 +45,6 @@ _subresources={
 "wall": {
 "use_external/enabled": true,
 "use_external/path": "uid://cqiaoxninm4yl"
-},
-"wood": {
-"use_external/enabled": false,
-"use_external/path": "uid://bgd370huhetyi"
 }
 }
 }

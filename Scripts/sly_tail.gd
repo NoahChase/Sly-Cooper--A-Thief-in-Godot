@@ -82,9 +82,9 @@ func _physics_process(delta):
 	bounce = lerp(bounce, (ball_1.global_position.y - ball_target.global_position.y) / lerp_val, lerp_val)
 	
 	# Tail rotations using quaternion slerp
-	_set_tail_rotation(ball_1, ball_target, 0.8)
-	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.075))
-	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.05))
+	_set_tail_rotation(ball_1, ball_target, 0.9)
+	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.085))
+	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.08))
 	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val - 0.0125))
 	_set_tail_rotation(ball_5, ball_6, max(0.01, lerp_val - 0.025))
 	_set_tail_rotation(ball_4, ball_5, max(0.01, lerp_val - 0.05))
@@ -93,9 +93,9 @@ func _physics_process(delta):
 
 	# Tail positions remain the same as you had them
 	
-	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, 0.8)
-	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 2), 0), max(0.01, lerp_val + 0.075))
-	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 3), 0), max(0.01, lerp_val + 0.05))
+	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, 0.9)
+	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 2), 0), max(0.01, lerp_val + 0.085))
+	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 3), 0), max(0.01, lerp_val + 0.08))
 	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.03 + (bounce / 4), 0), max(0.01, lerp_val - 0.0125))
 	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.04 + (bounce / 5), 0), max(0.01, lerp_val - 0.025))
 	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.05 + (bounce / 6), 0), max(0.01, lerp_val - 0.05))

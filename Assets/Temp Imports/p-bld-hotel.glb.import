@@ -38,11 +38,23 @@ _subresources={
 "use_external/enabled": true,
 "use_external/path": "uid://co5obcf2r17t"
 },
+"rail.001": {
+"use_external/enabled": true,
+"use_external/path": "uid://co5obcf2r17t"
+},
 "roof": {
 "use_external/enabled": true,
 "use_external/path": "uid://bjgvbcdijm5so"
 },
+"roof.001": {
+"use_external/enabled": true,
+"use_external/path": "uid://bjgvbcdijm5so"
+},
 "wall": {
+"use_external/enabled": true,
+"use_external/path": "uid://cqiaoxninm4yl"
+},
+"wall.001": {
 "use_external/enabled": true,
 "use_external/path": "uid://cqiaoxninm4yl"
 }

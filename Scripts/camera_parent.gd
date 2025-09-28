@@ -82,9 +82,9 @@ func _physics_process(delta):
 		if camera_player.target.adj_fov == true:
 			camera.fov = lerp(camera.fov, 75.0, 0.02)
 		else:
-			camera.fov = lerp(camera.fov, 65.0, 0.02)
+			camera.fov = lerp(camera.fov, 60.0, 0.02)
 	else:
-		camera.fov = lerp(camera.fov, 65.0, 0.02)
+		camera.fov = lerp(camera.fov, 60.0, 0.02)
 
 func rotate_yaw():
 	yaw += 1
