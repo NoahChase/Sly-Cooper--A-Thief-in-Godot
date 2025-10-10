@@ -4,12 +4,10 @@ render_mode blend_mix, cull_disabled, specular_disabled;
 //////////////////////
 // External textures / water params
 //////////////////////
-uniform sampler2D screen_texture : hint_screen_texture, source_color, repeat_disable;
-uniform sampler2D normal_map_texture : hint_normal;
+
 uniform float roughness : hint_range(0.0, 1.0) = 0.0;
 uniform float transparency : hint_range(0.0, 1.0) = 1.0;
 uniform vec3 water_color : source_color = vec3(0.0625, 0.1992, 0.3594);
-uniform float index_of_refraction = 1.333;
 
 //////////////////////
 // Wave uniforms
@@ -73,7 +71,7 @@ vec3 gerstner_normal(vec3 vertex, vec2 direction, float time, float speed, float
 
 	float x_normal = -direction.x * k * amplitude * cosfactor;
 	float z_normal = -direction.y * k * amplitude * cosfactor;
-	float y_normal = 1.0 - (steepness/k) * k * amplitude * sinfactor;
+	float y_normal = 0.5 - (steepness/k) * k * amplitude * sinfactor;
 
 	return vec3(x_normal, y_normal, z_normal);
 }

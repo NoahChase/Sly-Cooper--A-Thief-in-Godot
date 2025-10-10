@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dvk0x8co240cf"]
+
+[ext_resource type="Script" uid="uid://u6oqbxcp2kgb" path="res://Scripts/water_tiles.gd" id="1_gkh4l"]
+[ext_resource type="Material" uid="uid://0lfqdgecvqr8" path="res://Assets/Materials/WATER.tres" id="2_gkh4l"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_n1i26"]
+material = ExtResource("2_gkh4l")
+size = Vector2(20, 20)
+subdivide_width = 15
+subdivide_depth = 15
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gkh4l"]
+material = ExtResource("2_gkh4l")
+size = Vector2(20, 20)
+subdivide_width = 5
+subdivide_depth = 5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gv0bh"]
+material = ExtResource("2_gkh4l")
+size = Vector2(20, 20)
+
+[node name="Water" type="Node3D"]
+script = ExtResource("1_gkh4l")
+mesh_high = SubResource("PlaneMesh_n1i26")
+mesh_medium = SubResource("PlaneMesh_gkh4l")
+mesh_low = SubResource("PlaneMesh_gv0bh")
+player_path = null
+lod_distance_high = 80.0
+lod_distance_medium = 200.0
+spawn_count = 40
+spawn_distance = 20.0

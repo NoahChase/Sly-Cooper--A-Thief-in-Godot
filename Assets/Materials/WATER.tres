@@ -1,0 +1,191 @@
+[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://0lfqdgecvqr8"]
+
+[sub_resource type="Shader" id="Shader_bmssu"]
+code = "shader_type spatial;
+render_mode blend_mix, cull_back, specular_toon;
+
+uniform vec3 albedo : source_color;
+uniform vec4 wave_color_deep:source_color;
+uniform vec4 wave_color_shallow:source_color;
+uniform float roughness : hint_range(0.0, 1.0);
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+uniform float transparency : hint_range(0.0, 1.0, 0.05);
+uniform float normal_mult : hint_range(0.0, 1.0, 0.05);
+
+uniform float wave_speed;
+uniform float wave_speed2;
+
+uniform vec2 wave_direction;
+uniform vec2 wave_direction2;
+uniform float noise_scale = 1.0;
+uniform float height_scale = 1.0;
+uniform float height_scale_big = 2.0;
+uniform float blend_height = 0.5;
+uniform float blend_range  = 1.0;
+
+uniform float normal_eps = 0.05;
+uniform float normal_strength = 0.5;
+
+varying float height;
+varying vec3 world_pos;
+
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D texture_albedo_2 : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D wave : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D wave2 : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
+uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
+
+// Shaping the waves
+float combined_height(vec2 pos_xz) {
+	float time_step = 1.0 / 30.0;          // \"fps\"
+	float slow_time = floor(TIME / time_step) * time_step;
+
+	float small_waves =  texture(texture_albedo, (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.25)).r - texture(texture_albedo_2, (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.25)).r;
+	float big_waves = texture(wave, (pos_xz / noise_scale) + slow_time * wave_direction * wave_speed * 0.5).r - texture(wave2, (pos_xz / noise_scale) + slow_time * wave_direction2 * wave_speed2 * 0.5).r;
+	big_waves = big_waves * height_scale_big;
+	float h = big_waves + small_waves;
+	return (h * height_scale);
+}
+
+vec3 normal_map()
+{
+	float time_step = 1.0 / 30.0;          // \"fps\"
+	float slow_time = floor(TIME / time_step) * time_step;
+
+	vec3 small_waves_normal = texture(texture_albedo, (world_pos.xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.25)).rgb - texture(texture_albedo_2, (world_pos.xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.25)).rgb;
+	vec3 large_waves_normal = texture(wave, (world_pos.xz / noise_scale) + slow_time * wave_direction * wave_speed * 0.5).rgb - texture(wave2, (world_pos.xz / noise_scale) + slow_time * wave_direction2 * wave_speed2 * 0.5).rgb;
+
+	return ((small_waves_normal * large_waves_normal) + (small_waves_normal + large_waves_normal))/2.0;
+}
+
+// Vertex displacement
+void vertex() {
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+
+	float hC = combined_height(world_pos.xz);
+	VERTEX.y += hC;
+	height = VERTEX.y;
+
+	float eps = normal_eps;
+
+	float hL = combined_height(world_pos.xz - vec2(eps, 0.0));
+	float hR = combined_height(world_pos.xz + vec2(eps, 0.0));
+	float hD = combined_height(world_pos.xz - vec2(0.0, eps));
+	float hU = combined_height(world_pos.xz + vec2(0.0, eps));
+
+	float dhdx = (hR - hL) / (2.0 * eps);
+	float dhdz = (hU - hD) / (2.0 * eps);
+
+	vec3 final_normal = normal_map();
+	NORMAL = normalize(vec3((-dhdx * -final_normal.r) * normal_strength, 1.0, (-dhdz * -final_normal.r) * normal_strength));
+}
+
+void fragment() {
+	// Height-based water color
+	float hblend = smoothstep(blend_range - blend_height, blend_range + blend_height, height);
+	vec3 base_color = mix(wave_color_deep.rgb, wave_color_shallow.rgb, hblend);
+	vec3 final_normal = normal_map();
+	NORMAL_MAP = normalize(final_normal);
+	NORMAL_MAP_DEPTH = 0.005;
+	ALBEDO = base_color + (albedo * (final_normal.r * normal_mult));
+	SPECULAR = specular;
+	ROUGHNESS = roughness;
+	ALPHA = transparency;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mwt3f"]
+seed = 7
+domain_warp_enabled = true
+domain_warp_amplitude = 32.0
+domain_warp_frequency = 0.015
+domain_warp_fractal_lacunarity = 0.34
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8x8ud"]
+width = 1024
+height = 1024
+in_3d_space = true
+seamless = true
+as_normal_map = true
+bump_strength = 16.0
+noise = SubResource("FastNoiseLite_mwt3f")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0lmjb"]
+domain_warp_enabled = true
+domain_warp_amplitude = 32.0
+domain_warp_frequency = 0.015
+domain_warp_fractal_lacunarity = 0.34
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xslp6"]
+width = 1024
+height = 1024
+in_3d_space = true
+seamless = true
+as_normal_map = true
+bump_strength = 16.0
+noise = SubResource("FastNoiseLite_0lmjb")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bmssu"]
+noise_type = 3
+seed = 10
+frequency = 0.0125
+offset = Vector3(15.6, -30.5, 0)
+fractal_octaves = 1
+cellular_return_type = 3
+domain_warp_enabled = true
+domain_warp_amplitude = 32.0
+domain_warp_frequency = 0.015
+domain_warp_fractal_lacunarity = 1.155
+domain_warp_fractal_gain = 0.995
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ac36"]
+in_3d_space = true
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_bmssu")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1ac36"]
+noise_type = 3
+seed = 5
+frequency = 0.0125
+offset = Vector3(-30.95, 4.65, 0)
+fractal_octaves = 1
+fractal_gain = -12.68
+cellular_return_type = 2
+domain_warp_amplitude = 32.0
+domain_warp_frequency = 0.015
+domain_warp_fractal_lacunarity = 1.405
+domain_warp_fractal_gain = 0.925
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cqli"]
+in_3d_space = true
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_1ac36")
+
+[resource]
+render_priority = 0
+shader = SubResource("Shader_bmssu")
+shader_parameter/albedo = Color(0.158333, 0.15, 0.2, 1)
+shader_parameter/wave_color_deep = Color(0.15, 0.14, 0.2, 1)
+shader_parameter/wave_color_shallow = Color(0.1875, 0.197917, 0.25, 1)
+shader_parameter/roughness = 0.0
+shader_parameter/specular = 0.15
+shader_parameter/transparency = 0.75
+shader_parameter/normal_mult = 0.75
+shader_parameter/wave_speed = 0.063
+shader_parameter/wave_speed2 = -0.063
+shader_parameter/wave_direction = Vector2(-0.25, 0.25)
+shader_parameter/wave_direction2 = Vector2(-0.25, 0.25)
+shader_parameter/noise_scale = 250.0
+shader_parameter/height_scale = 1.5
+shader_parameter/height_scale_big = 7.0
+shader_parameter/blend_height = 1.5
+shader_parameter/blend_range = 0.75
+shader_parameter/normal_eps = 1.0
+shader_parameter/normal_strength = 0.5
+shader_parameter/texture_albedo = SubResource("NoiseTexture2D_8x8ud")
+shader_parameter/texture_albedo_2 = SubResource("NoiseTexture2D_xslp6")
+shader_parameter/wave = SubResource("NoiseTexture2D_1ac36")
+shader_parameter/wave2 = SubResource("NoiseTexture2D_0cqli")

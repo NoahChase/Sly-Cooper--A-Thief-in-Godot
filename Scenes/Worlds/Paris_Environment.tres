@@ -92,7 +92,10 @@ void sky() {
 
 	vec2 sky_uv = EYEDIR.xz / EYEDIR.y;
 
-	vec3 clouds = texture(cloud_texture, (sky_uv*cloud_scale) + (TIME*cloud_direction*cloud_speed*.01)).rgb - texture(cloud_texture2, (sky_uv * cloud_scale) + (TIME * cloud_direction2 * cloud_speed2*.01)).rgb;
+	float time_step = 1.0 / 30.0;          // \"fps\"
+	float slow_time = floor(TIME / time_step) * time_step;
+
+	vec3 clouds = texture(cloud_texture, (sky_uv*cloud_scale) + (slow_time*cloud_direction*cloud_speed*.01)).rgb - texture(cloud_texture2, (sky_uv * cloud_scale) + (slow_time * cloud_direction2 * cloud_speed2*.01)).rgb;
 	clouds = clouds - smoothstep(0.0, EYEDIR.y, cloud_distance);
 	float raw_cloud_brightness = max(clouds.r, max(clouds.g, clouds.b));
 	float cloud_alpha = smoothstep(0.0, 0.8, raw_cloud_brightness) * cloud_color.a;
@@ -146,8 +149,8 @@ noise = SubResource("FastNoiseLite_4xowi")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
 shader_parameter/sky_top_color = Color(0.015, 0.03625, 0.1, 1)
-shader_parameter/sky_horizon_color = Color(0.1, 0.06, 0.3, 1)
-shader_parameter/sky_curve = 0.125
+shader_parameter/sky_horizon_color = Color(0.09375, 0.075, 0.3, 1)
+shader_parameter/sky_curve = 0.1
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover = ExtResource("1_xdm0e")
 shader_parameter/sky_cover_modulate = Color(0.45, 0.541667, 1, 0.588235)
@@ -162,7 +165,7 @@ shader_parameter/exposure = 1.0
 shader_parameter/cloud_color = Color(0.225, 0.29375, 0.5, 0.294118)
 shader_parameter/cloud_distance = 0.025
 shader_parameter/cloud_direction = Vector2(0.75, 0.125)
-shader_parameter/cloud_direction2 = Vector2(0.25, 0.5)
+shader_parameter/cloud_direction2 = Vector2(0.3, 0.2)
 shader_parameter/cloud_scale = Vector2(0.025, 0.025)
 shader_parameter/cloud_speed = 0.5
 shader_parameter/cloud_speed2 = 0.25
@@ -189,6 +192,7 @@ glow_normalized = true
 glow_bloom = 0.1
 fog_enabled = true
 fog_light_color = Color(0.009, 0.05175, 0.18, 1)
+fog_density = 0.005
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.005
