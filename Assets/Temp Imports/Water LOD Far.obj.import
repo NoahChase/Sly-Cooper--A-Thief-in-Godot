@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b1tlpu5vq1xfd"
+path="res://.godot/imported/Water LOD Far.obj-6694a4b4731bf15991b6c339cc380e93.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Water LOD Far.obj-6694a4b4731bf15991b6c339cc380e93.mesh"]
+
+source_file="res://Assets/Temp Imports/Water LOD Far.obj"
+dest_files=["res://.godot/imported/Water LOD Far.obj-6694a4b4731bf15991b6c339cc380e93.mesh", "res://.godot/imported/Water LOD Far.obj-6694a4b4731bf15991b6c339cc380e93.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

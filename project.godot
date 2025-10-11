@@ -30,6 +30,7 @@ shapes/navigation/geometry_face_color=Color(0.501961, 1, 1, 0.156863)
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
+window/vsync/vsync_mode=0
 
 [global_group]
 

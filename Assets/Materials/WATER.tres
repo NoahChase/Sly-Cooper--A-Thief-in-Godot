@@ -38,7 +38,7 @@ uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
 
 // Shaping the waves
 float combined_height(vec2 pos_xz) {
-	float time_step = 1.0 / 30.0;          // \"fps\"
+	float time_step = 1.0 / 30.0;          // \\\"fps\\\"
 	float slow_time = floor(TIME / time_step) * time_step;
 
 	float small_waves =  texture(texture_albedo, (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.25)).r - texture(texture_albedo_2, (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.25)).r;
@@ -50,7 +50,7 @@ float combined_height(vec2 pos_xz) {
 
 vec3 normal_map()
 {
-	float time_step = 1.0 / 30.0;          // \"fps\"
+	float time_step = 1.0 / 30.0;          // \\\"fps\\\"
 	float slow_time = floor(TIME / time_step) * time_step;
 
 	vec3 small_waves_normal = texture(texture_albedo, (world_pos.xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.25)).rgb - texture(texture_albedo_2, (world_pos.xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.25)).rgb;
@@ -92,8 +92,7 @@ void fragment() {
 	SPECULAR = specular;
 	ROUGHNESS = roughness;
 	ALPHA = transparency;
-}
-"
+}"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_mwt3f"]
 seed = 7
