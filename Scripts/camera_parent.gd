@@ -59,8 +59,8 @@ func _physics_process(delta):
 	camera_target.rotation.y = lerp(camera_target.rotation.y, yaw, delta * 15)
 	camera_target.rotation.x = lerp(camera_target.rotation.x, pitch, delta * 15)
 	pitch = clamp(pitch, deg_to_rad(pitch_min), deg_to_rad(pitch_max))
-	yaw_sens = 1.33
-	pitch_sens = 1.33
+	yaw_sens = 1.125
+	pitch_sens = 1.125
 	
 	
 	if camera_player.ray_to_cam.is_colliding():

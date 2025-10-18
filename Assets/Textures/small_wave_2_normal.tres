@@ -1,0 +1,25 @@
+[gd_resource type="NoiseTexture2D" load_steps=3 format=3 uid="uid://daanhhl4ste5k"]
+
+[sub_resource type="Gradient" id="Gradient_jq4s7"]
+interpolation_mode = 2
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0, 0.555085)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bmssu"]
+noise_type = 3
+seed = 10
+frequency = 0.02
+offset = Vector3(15.6, -30.5, 0)
+fractal_octaves = 1
+cellular_return_type = 3
+domain_warp_enabled = true
+domain_warp_amplitude = 32.0
+domain_warp_frequency = 0.015
+domain_warp_fractal_lacunarity = 1.155
+domain_warp_fractal_gain = 0.995
+
+[resource]
+in_3d_space = true
+seamless = true
+color_ramp = SubResource("Gradient_jq4s7")
+noise = SubResource("FastNoiseLite_bmssu")

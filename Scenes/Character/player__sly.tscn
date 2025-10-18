@@ -255,15 +255,15 @@ transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.5, -0
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Cancel Ledge Ray" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.75, -0.125)
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.7, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.75, -0.125)
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.7, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Floor Ray" type="RayCast3D" parent="Body Mesh Container"]
@@ -307,6 +307,22 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 player = NodePath("../..")
 tail_ik = NodePath("../../sly_tail")
 
+[node name="Stair Ray Low" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.3)
+target_position = Vector3(0, 0, -0.4)
+
+[node name="Stair Ray Low2" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.3)
+target_position = Vector3(0, 0, -0.4)
+
+[node name="Stair Ray Low3" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.1, 0.6, -0.3)
+target_position = Vector3(0, 0, -0.45)
+
+[node name="Stair Ray Low4" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.1, 0.6, -0.3)
+target_position = Vector3(0, 0, -0.45)
+
 [node name="True Player Rotation" type="Node3D" parent="."]
 visible = false
 
@@ -330,6 +346,7 @@ player = NodePath("..")
 sly_mesh = NodePath("../Body Mesh Container/SlyCooper_Anims4")
 
 [node name="Target Area" type="Area3D" parent="."]
+visible = false
 collision_layer = 2
 collision_mask = 2
 
@@ -364,7 +381,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
-visible = false
 offset_top = 136.0
 offset_right = 167.0
 offset_bottom = 224.0
@@ -372,7 +388,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="."]
-visible = false
 offset_left = 11.0
 offset_top = 322.0
 offset_right = 626.0
@@ -381,15 +396,11 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
-visible = false
 offset_top = 181.0
 offset_right = 615.0
 offset_bottom = 801.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
-
-[node name="Pounce Timer" type="Timer" parent="."]
-one_shot = true
 
 [node name="ray v container" type="Node3D" parent="."]
 top_level = true
@@ -426,15 +437,23 @@ shape = SubResource("CapsuleShape3D_c6wq5")
 debug_color = Color(0, 1, 0, 0.419608)
 
 [node name="Target Range Area" type="Area3D" parent="."]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Target Range Area"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 shape = SubResource("CylinderShape3D_skok1")
 
+[node name="Pounce Timer" type="Timer" parent="."]
+one_shot = true
+
 [node name="Jump Input Buffer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Air Wait Timer" type="Timer" parent="."]
 one_shot = true
 
 [connection signal="body_entered" from="Target Area" to="." method="_on_target_area_body_entered"]
 [connection signal="body_exited" from="Target Area" to="." method="_on_target_area_body_exited"]
 [connection signal="body_entered" from="Target Range Area" to="." method="_on_target_range_area_body_entered"]
 [connection signal="body_exited" from="Target Range Area" to="." method="_on_target_range_area_body_exited"]
+[connection signal="timeout" from="Air Wait Timer" to="." method="_on_air_wait_timer_timeout"]

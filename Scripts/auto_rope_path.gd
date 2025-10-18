@@ -225,7 +225,7 @@ func ball2player(delta):
 
 	if length > 0:
 		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 0.25:
-			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult) / length
+			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult * 1.5) / length
 		else:
 			path_follow.progress_ratio = (closest_offset) / length
 

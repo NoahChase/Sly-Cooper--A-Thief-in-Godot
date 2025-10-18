@@ -73,13 +73,14 @@ func _physics_process(delta):
 	ball_target.global_transform.basis = global_transform.basis
 	# Check handedness
 	#print("Correction determinant: ", correction.determinant())  # Should be close to +1
-	
-	var current_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
-	var tail_velocity = (current_tail_pos - prev_tail_pos).length() / (delta / Engine.time_scale)
-	prev_tail_pos = current_tail_pos
-	var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
-	lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
-	bounce = lerp(bounce, (ball_1.global_position.y - ball_target.global_position.y) / lerp_val, lerp_val)
+	if Update.count == 1 or Update.count == 3 or Update.count == 5:
+		var current_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
+		var tail_velocity = (current_tail_pos - prev_tail_pos).length() / (delta / Engine.time_scale)
+		prev_tail_pos = current_tail_pos
+		
+		var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
+		lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
+		bounce = lerp(bounce, ((ball_1.global_position.y - ball_target.global_position.y) * 2.0) / lerp_val, lerp_val)
 	
 	# Tail rotations using quaternion slerp
 	_set_tail_rotation(ball_1, ball_target, 0.9)

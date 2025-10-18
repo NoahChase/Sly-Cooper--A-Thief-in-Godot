@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=3 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=73 format=3 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -44,7 +44,6 @@
 [ext_resource type="PackedScene" uid="uid://tvp6p2l4uibo" path="res://Assets/Temp Imports/p-bld-tower.glb" id="45_v6agn"]
 [ext_resource type="VoxelGIData" uid="uid://bef3kfe5pg7cf" path="res://Scenes/Worlds/Paris.VoxelGI2_data.res" id="46_bmssu"]
 [ext_resource type="PackedScene" uid="uid://bk6fkbu7cptbq" path="res://Assets/Temp Imports/p-bld-11.glb" id="46_jevjf"]
-[ext_resource type="Material" uid="uid://0lfqdgecvqr8" path="res://Assets/Materials/WATER.tres" id="47_bmssu"]
 [ext_resource type="PackedScene" uid="uid://dvk0x8co240cf" path="res://Scenes/Env. Tools/water.tscn" id="48_1ac36"]
 [ext_resource type="PackedScene" uid="uid://dqfae8fjcs7q" path="res://Assets/Temp Imports/p-bld-13.glb" id="48_bmssu"]
 [ext_resource type="PackedScene" uid="uid://7d7cdjf5qpri" path="res://Assets/Temp Imports/p-bld-14.glb" id="49_1ac36"]
@@ -146,17 +145,10 @@ transparency = 1
 shading_mode = 0
 disable_ambient_light = true
 disable_fog = true
-albedo_color = Color(0.4, 0.6, 1, 1)
+albedo_color = Color(0.35, 0.566667, 1, 1)
 albedo_texture = ExtResource("33_bbu04")
 billboard_mode = 1
 grow_amount = -16.0
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_eo8k6"]
-lightmap_size_hint = Vector2i(4002, 4002)
-material = ExtResource("47_bmssu")
-size = Vector2(800, 800)
-subdivide_width = 500
-subdivide_depth = 500
 
 [node name="Paris" type="Node3D"]
 
@@ -165,8 +157,8 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456093, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.49, 0.56, 0.7, 1)
-light_indirect_energy = 0.5
+light_color = Color(0.455, 0.536667, 0.7, 1)
+light_indirect_energy = 0.25
 light_bake_mode = 1
 shadow_enabled = true
 shadow_normal_bias = 5.0
@@ -233,7 +225,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175332, -0.00776115, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999823, -0.00175332, -0.00776114, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -761,16 +753,9 @@ subdiv = 0
 size = Vector3(1686.5, 20, 1663)
 data = ExtResource("46_bmssu")
 
-[node name="waves custom" type="MeshInstance3D" parent="Background"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, -6, -11.6)
-visible = false
-cast_shadow = 0
-mesh = SubResource("PlaneMesh_eo8k6")
-
 [node name="Water" parent="Background" instance=ExtResource("48_1ac36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
 player_path = NodePath("../../Player_ Sly")
-lod_distance_medium = 150.0
 
 [node name="arch_10m_nocol" parent="Background" instance=ExtResource("49_p4poh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 8, -15)
