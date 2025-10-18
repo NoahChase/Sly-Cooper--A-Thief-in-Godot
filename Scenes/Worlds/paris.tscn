@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=70 format=3 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -47,12 +47,9 @@
 [ext_resource type="PackedScene" uid="uid://dvk0x8co240cf" path="res://Scenes/Env. Tools/water.tscn" id="48_1ac36"]
 [ext_resource type="PackedScene" uid="uid://dqfae8fjcs7q" path="res://Assets/Temp Imports/p-bld-13.glb" id="48_bmssu"]
 [ext_resource type="PackedScene" uid="uid://7d7cdjf5qpri" path="res://Assets/Temp Imports/p-bld-14.glb" id="49_1ac36"]
-[ext_resource type="PackedScene" uid="uid://bmio0h1addvc2" path="res://Assets/Temp Imports/arch_10m_nocol.fbx" id="49_p4poh"]
 [ext_resource type="PackedScene" uid="uid://dkqjhbqay4umi" path="res://Assets/Temp Imports/p-bld-15.glb" id="50_0cqli"]
 [ext_resource type="PackedScene" uid="uid://2jbku0idg7h0" path="res://Assets/Temp Imports/Skylight-colonly fix.fbx" id="51_8x8ud"]
 [ext_resource type="PackedScene" uid="uid://rch7yc5vwpub" path="res://Assets/Temp Imports/Pipe_V2.fbx" id="51_yxbvy"]
-[ext_resource type="PackedScene" uid="uid://cxpekck17ukel" path="res://Assets/Temp Imports/Pipe_V1.fbx" id="52_xslp6"]
-[ext_resource type="PackedScene" uid="uid://bw7dpuldwfevv" path="res://Assets/Temp Imports/car_V2 (smooth unfin).fbx" id="54_eo8k6"]
 [ext_resource type="PackedScene" uid="uid://b8goy5hpuw2ix" path="res://Assets/Temp Imports/Whirlybird_colonly.fbx" id="55_eo8k6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a8jso"]
@@ -225,7 +222,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175332, -0.00776114, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999823, -0.00175332, -0.00776115, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -541,7 +538,7 @@ transform = Transform3D(-0.718836, -0.0422611, -0.693895, -0.0557657, 0.99844, -
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 19, 0.2, 5)
 
 [node name="d-rooftop-antenna" parent="NavigationRegion3D" instance=ExtResource("36_erpqo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10.1, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 10.1, -3)
 
 [node name="Target Point" parent="NavigationRegion3D/d-rooftop-antenna" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -757,9 +754,6 @@ data = ExtResource("46_bmssu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
 player_path = NodePath("../../Player_ Sly")
 
-[node name="arch_10m_nocol" parent="Background" instance=ExtResource("49_p4poh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 8, -15)
-
 [node name="car" parent="." instance=ExtResource("44_v6agn")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 48.7412, 0, 38.0341)
 
@@ -767,13 +761,7 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 transform = Transform3D(0.173648, -0.0293186, 0.984371, 4.65661e-10, 0.999557, 0.0297709, -0.984808, -0.00516966, 0.173571, 20.4741, 6.15775, 4.15502)
 
 [node name="Pipe_V2" parent="." instance=ExtResource("51_yxbvy")]
-transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -14.9659, 7, -15.7412)
-
-[node name="Pipe_V1" parent="." instance=ExtResource("52_xslp6")]
-transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -12.0341, 7, -17.2588)
-
-[node name="car_V2 (smooth unfin)" parent="." instance=ExtResource("54_eo8k6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 8, -17)
+transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -14, 7, -17)
 
 [node name="Whirlybird_colonly" parent="." instance=ExtResource("55_eo8k6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 8.09725, -7.5)
