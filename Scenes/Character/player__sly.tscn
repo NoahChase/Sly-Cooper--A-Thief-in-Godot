@@ -311,17 +311,25 @@ tail_ik = NodePath("../../sly_tail")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -0.3)
 target_position = Vector3(0, 0, -0.4)
 
-[node name="Stair Ray Low2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.3)
+[node name="Stair Ray Low5" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.252, -0.3)
 target_position = Vector3(0, 0, -0.4)
 
+[node name="Stair Ray Low6" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.3)
+target_position = Vector3(0, 0, -0.4)
+
+[node name="Stair Ray Low2" type="RayCast3D" parent="Body Mesh Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.3)
+target_position = Vector3(0, 0, -0.65)
+
 [node name="Stair Ray Low3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.1, 0.6, -0.3)
-target_position = Vector3(0, 0, -0.45)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.1, 0.5, -0.3)
+target_position = Vector3(0, 0, -0.65)
 
 [node name="Stair Ray Low4" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.1, 0.6, -0.3)
-target_position = Vector3(0, 0, -0.45)
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.1, 0.5, -0.3)
+target_position = Vector3(0, 0, -0.65)
 
 [node name="True Player Rotation" type="Node3D" parent="."]
 visible = false
@@ -414,6 +422,7 @@ target_position = Vector3(0, -5, 0)
 mesh = SubResource("SphereMesh_lkte6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ray v container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 mesh = SubResource("BoxMesh_lkte6")
 
 [node name="collision point" type="Node3D" parent="."]

@@ -70,6 +70,16 @@ var did_target_jump = false
 var ascending_stairs = false
 var was_on_floor = true
 
+#temporal buffer (frame buffers)
+var stair_grace_frames := 3
+var stair_miss_counter := 0
+
+var floor_grace_time := 0.15
+var floor_grace_timer := 0.0
+
+var coyote_time_max = 3
+var coyote_time = 0
+
 func _ready() -> void:
 	#Engine.time_scale = 0.5
 	rot_container.position = Vector3(0,0,0)
@@ -122,6 +132,7 @@ func _physics_process(delta: float) -> void:
 	
 ## States
 	if state == FLOOR:
+		#print("state = floor")
 		velocity += get_gravity() * delta * gravmult
 		#collision_detect() #put node at player's feet, leave it when they jump
 		#if jump_from_floor_anim == false:
@@ -148,6 +159,8 @@ func _physics_process(delta: float) -> void:
 		jump_mult = 1.0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
+		#air_miss_counter = 0
+		#print("state = air")
 		ascending_stairs = false
 		#temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.25, 0.125), 0.2)
 		jump_from_floor_anim = false
@@ -238,6 +251,7 @@ func _physics_process(delta: float) -> void:
 			emit_signal("target_released", target)
 			target = null
 			state = AIR
+			print("state AIR from TO TARGET")
 	elif state == ON_TARGET and target != null:
 		did_target_jump = false
 		if target.is_in_group("point"):
@@ -287,6 +301,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 		if target == null:
 			state = AIR
+			print("state AIR from ON TARGET")
 	else:
 		last_target = target
 		emit_signal("target_released", target)
@@ -373,12 +388,6 @@ func _physics_process(delta: float) -> void:
 	elif horizontal > 0 and state == FLOOR:
 		camera_parent.yaw -= velocity.length() / 5.5 * delta * horizontal
 	
-	$RichTextLabel.text = str( "FPS: ", Engine.get_frames_per_second(), " | Sprinting = " , sprinting, " | Ascending Stairs = ", ascending_stairs, " | Velocity = ", velocity.length())
-	
-	
-	move_and_slide()
-	
-	
 	var colliding_count = 0  # Reset every frame
 	manual_slip = false
 	for ray in floor_rays:
@@ -386,7 +395,8 @@ func _physics_process(delta: float) -> void:
 			colliding_count += 1
 			if ray.get_collider().is_in_group("SLIP"):
 				manual_slip = true
-	
+	if colliding_count == 0:
+		coyote_time = coyote_time_max
 	# Decide angle *after* all rays are checked
 	if velocity.y <= 0 and colliding_count <= 2:
 		floor_max_angle = deg_to_rad(0.0)
@@ -394,15 +404,20 @@ func _physics_process(delta: float) -> void:
 	elif manual_slip:
 		floor_max_angle = deg_to_rad(0.0)
 		ascending_stairs = false
+	elif colliding_count <= 2:
+		ascending_stairs = false
 	else:
 		floor_max_angle = deg_to_rad(45.0)
 		stair_detect(delta)
-	
 	if colliding_count <= 1:
 		ledge_detect(delta)
 		
-	state_handler()
+	state_handler(delta)
 	camera_smooth_follow(delta)
+	
+	move_and_slide()
+	$RichTextLabel.text = str( "FPS: ", Engine.get_frames_per_second(), " | Sprinting = " , sprinting, " | Ascending Stairs = ", ascending_stairs, " | Velocity = ", velocity.length())
+
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("esc"):
@@ -428,7 +443,7 @@ func _input(event: InputEvent) -> void:
 		$"Target Area/AnimationPlayer".play("detect targets")
 		
 
-func state_handler():
+func state_handler(delta):
 # Stun Logic
 	if hp_container.can_take_damage == false:
 		if not is_on_floor() or state != FLOOR:
@@ -440,44 +455,63 @@ func state_handler():
 # State Logic
 	if can_ledge:
 		state = ON_LEDGE
-	elif target != null and not can_ledge:
-		var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
-		if distance_to_player <= 0.125:
-			emit_signal("target_acquired", target)
-			target.assign_player(self)
-			state = ON_TARGET
-			global_transform.origin = target.global_transform.origin
-		else:
-			state = TO_TARGET
-		if state == ON_TARGET and distance_to_player > 0.5:
-			emit_signal("target_released", target)
-			state = AIR
-			print("air 1")
 	# Fix air/floor stutter
-	else:
-		if not is_on_floor() and state != ON_TARGET and state != TO_TARGET:
+	elif state == AIR:
+		if is_on_floor():
+			jump_num = 0
+			state = FLOOR
+	elif state == FLOOR:
+		if not is_on_floor():
+			# Only count coyote time if truly leaving floor (not on stairs or wall)
 			if not ascending_stairs:
-				if not was_on_floor:
+				if velocity.y > 0:
 					state = AIR
+					print("not on floor, vel.y > 0, state = AIR")
+					return
+				if coyote_time < coyote_time_max:
+					coyote_time += 1
+					print("coyote +1")
 				else:
-					if velocity.y <= 0:
-						if $"Air Wait Timer".is_stopped():
-							$"Air Wait Timer".start(0.125)
-							print("hesitating to do air, wait timer started, ", $"Air Wait Timer".time_left)
+					print("no coyote time, proceeding")
+					if floor_grace_timer <= 0.0:
+						floor_grace_timer = floor_grace_time
 					else:
+						floor_grace_timer -= delta
+					if floor_grace_timer <= 0.0:
 						state = AIR
-
-			# no longer on floor
-			was_on_floor = false
-		elif is_on_floor():
-			if not $"Air Wait Timer".is_stopped():
-				$"Air Wait Timer".stop()
-				print("grounded again — timer canceled")
+						print("state switched to air, wait time finished")
+						return
+			else:
+				# Player is touching stairs or a wall, reset coyote time
+				coyote_time = 0
+				print("coyote 0, 1")
+		else:
+			coyote_time = 0
+			print("coyote 0, 2")
+			if floor_grace_timer != 0.0:
+				floor_grace_timer = 0.0
 			stunned = false
 			state = FLOOR
 			was_on_floor = true
-			print("state = floor")
+	# Fix air/floor stutter
+	else:
+		if target != null and not can_ledge:
+			var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
+			if distance_to_player <= 0.125:
+				emit_signal("target_acquired", target)
+				target.assign_player(self)
+				state = ON_TARGET
+				global_transform.origin = target.global_transform.origin
+			else:
+				state = TO_TARGET
+			if state == ON_TARGET and distance_to_player > 0.5:
+				emit_signal("target_released", target)
+				state = AIR
+				print("air 1")
+				return
+			
 
+	#print("air miss counter = ", air_miss_counter)
 # Stunned Effects
 	if stunned:
 		if target != null:
@@ -488,6 +522,10 @@ func state_handler():
 		jump_num = 2
 
 func jump():
+	if state == AIR and jump_num == 0:
+		floor_grace_timer = 0.0
+		jump_num = 1
+		print("fixed jump num == 0 when jumping in the air!")
 	print("jump num = ", jump_num)
 	if state == TO_TARGET:
 		return
@@ -496,7 +534,7 @@ func jump():
 	jump_num += 1
 	if not previous_jump_was_notch:
 		jump_mult = 1.0
-	if jump_num < 2:
+	if jump_num <= 2:
 		$"Jump Input Buffer".start(0.1)
 		ascending_stairs = false
 		if state == FLOOR:
@@ -504,12 +542,14 @@ func jump():
 			jump_from_floor_anim = true
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y += JUMP_VELOCITY * jump_mult
+			print("jump floor")
 		elif state == ON_LEDGE:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			ledge_cooldown_timer = 0.2
 			state = AIR
 			jump_num = 0
 			velocity.y += JUMP_VELOCITY * jump_mult
+			print("jump ledge")
 		elif state == ON_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			emit_signal("target_released", target)
@@ -519,68 +559,127 @@ func jump():
 			velocity.y += JUMP_VELOCITY * jump_mult
 			jump_num = 0
 			state = AIR
+			print("jump on target")
 		elif state != TO_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
-			if velocity.y >= 2.75:
-				velocity.y += 2.75 / (velocity.y / 2.75)
+			if velocity.y >= 3:
+				velocity.y += 3 / (velocity.y / 3)
 			elif velocity.y >= 0:
-				velocity.y += 2.75
+				velocity.y += 3
 			elif velocity.y <= -6.5:
-				velocity.y += (-velocity.y/2.75) + 2.75
+				velocity.y += (-velocity.y/3) + 3
 			else:
-				velocity.y += (-velocity.y) + 2.75
-#			old, high jump at 3m, but jumping high also got sly as far as jumping long
-			#if velocity.y >= 0:
-				#velocity.y += 2.75
-			#elif velocity.y <= -6.5:
-				#velocity.y += (-velocity.y/2) + 2.75
-			#else:
-				#velocity.y += (-velocity.y) + 2.75
+				velocity.y += (-velocity.y) + 3
+			print("jump air")
 		temp_sly.anim_tree.call_deferred("set", "parameters/OneShot/request", 1)
 
 func collision_detect():
 	$"collision point".global_transform.origin = self.global_transform.origin
-	#
-	#var motion = velocity * delta
-	#if test_move(global_transform, motion):
-		#var collision = move_and_collide(motion)
-		#if collision:
-			#var point = collision.get_position()
-			#$"collision point".global_transform.origin = point
-			#$"collision point".visible = true
-		#else:
-			#$"collision point".visible = false
 	
 
 func stair_detect(delta):
 	if not $"Body Mesh Container/Stair Ray Low".is_colliding():
+		stair_miss_counter += 1
+		if stair_miss_counter >= stair_grace_frames:
+			ascending_stairs = false
 		return
-	var stair_col_point = Vector3()
+	
 	var can_stair = true
 	
-	if not direction: 
+	#if is_on_wall():
+		#can_stair = false
+		#print("stair wall failed")
+	print("vel.y = ", velocity.y)
+	if velocity.y < -0.28:
 		can_stair = false
+		print("stair velocity.y failed")
+	if state != FLOOR:
+		can_stair = false
+		print("stair AIR failed")
+	if left_stick_pressure < 0.01:
+		can_stair = false
+		print("stair left stick pressure failed")
+	if not direction:
+		can_stair = false
+		print("stair direction failed")
 	for ray in stair_rays:
 		if ray.is_colliding():
 			can_stair = false
-	if velocity.length() > 3.3:
+			print("stair wall ray failed")
+
+	var stair_horizontal = Vector3()
+	var stair_vertical = Vector3()
+	var stair_normal = Vector3()
+	var min_dot = 0.0
+	var max_dot = 0.81
+
+	# Pick the highest-priority ray
+	var ray = null
+	if $"Body Mesh Container/Stair Ray Low6".is_colliding():
+		ray = $"Body Mesh Container/Stair Ray Low6"
+	elif $"Body Mesh Container/Stair Ray Low5".is_colliding():
+		ray = $"Body Mesh Container/Stair Ray Low5"
+	elif $"Body Mesh Container/Stair Ray Low".is_colliding():
+		ray = $"Body Mesh Container/Stair Ray Low"
+	else:
 		can_stair = false
+		print("stair ray h failed")
+
+	if ray:
+		stair_horizontal = ray.get_collision_point()
+		stair_normal = ray.get_collision_normal()
+
+	# Reject shallow slopes
+	if stair_normal.dot(Vector3.UP) > max_dot:
+		can_stair = false
+		print("stair normal failed")
+	print("stair dot = ", stair_normal.dot(Vector3.UP))
+
+	# Temporal smoothing
+	if can_stair:
+		# Vertical ray for top of stair logic
+		var ray_v = $"ray v container/ray v"
+		var ray_v_container = $"ray v container"
+		ray_v_container.global_transform.origin = stair_horizontal
 		
-	if can_stair == false:
-		ascending_stairs = false
-		return
-		
-	if $"Body Mesh Container/Stair Ray Low".is_colliding():
-		if can_stair:
-			ascending_stairs = true
-			stair_col_point = $"Body Mesh Container/Stair Ray Low".get_collision_point()
-			global_position.y = lerp(global_position.y, stair_col_point.y, 0.5)
+		if ray_v.is_colliding():
+			var v_col = ray_v.get_collider()
+			if not v_col.is_in_group("Player"):
+				stair_vertical = ray_v.get_collision_point()
 		else:
+			can_stair = false
+			stair_miss_counter += 1
+			if stair_miss_counter >= stair_grace_frames:
+				ascending_stairs = false
+				print("ray v denied stairs")
+				floor_snap_length = 0.1
+				return
+		
+		stair_miss_counter = 0
+		ascending_stairs = true
+		
+		# --- Ascend stairs logic ---
+		floor_snap_length = 0.0
+		var distance_to_top = abs(stair_vertical.y - global_transform.origin.y)
+		var stair_direction = (stair_vertical - global_transform.origin).normalized()
+		if distance_to_top < 0.2:
+			distance_to_top = 0.2
+			print("helped distance to top, 0.2")
+		
+		if velocity.y < (stair_direction.y * distance_to_top) + 2:
+			if is_on_wall():
+				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top, 0.2) + 2.5)
+			else:
+				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top) + 2, 0.125 / (distance_to_top + 0.125))
+			print("ascending stairs")
+	else:
+		stair_miss_counter += 1
+		if stair_miss_counter >= stair_grace_frames:
 			ascending_stairs = false
-	else: 
-		ascending_stairs = false
-	
+			print("denied stairs")
+			floor_snap_length = 0.1
+			return
 
 func ledge_detect(delta):
 	var cp_ray_v = $"ray v container/ray v".get_collision_point()
@@ -691,14 +790,14 @@ func apply_magnetism(): # the holy grail of magnetism
 			
 
 func target_jump():
-	if velocity.y >= 2.75:
-		velocity.y += 2.75 / (velocity.y / 2.75)
+	if velocity.y >= 3:
+		velocity.y += 3 / (velocity.y / 3)
 	elif velocity.y >= 0:
-		velocity.y += 2.75
+		velocity.y += 3
 	elif velocity.y <= -6.5:
-		velocity.y += (-velocity.y/2.75) + 2.75
+		velocity.y += (-velocity.y/3) + 3
 	else:
-		velocity.y += (-velocity.y) + 2.75
+		velocity.y += (-velocity.y) + 3
 	did_target_jump = true
 
 func camera_smooth_follow(delta):

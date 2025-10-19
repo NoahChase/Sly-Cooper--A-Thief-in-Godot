@@ -101,9 +101,9 @@ func assign_look_at():
 	var dis_to_1 = (player_pos - look_1_pos).length()
 	var dis_to_2 = (player_pos - look_2_pos).length()
 	if dis_to_1 <= dis_to_2:
-		look_at = look_2
-	if dis_to_2 < dis_to_1:
 		look_at = look_1
+	if dis_to_2 < dis_to_1:
+		look_at = look_2
 	##align player's y rotation with the right direction
 	var look_at_pos = Vector3(look_at.global_position.x, 0, look_at.global_position.z)
 	dir_to_look = targ_pos - look_at_pos

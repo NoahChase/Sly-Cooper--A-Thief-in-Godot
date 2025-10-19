@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=73 format=3 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -50,6 +50,7 @@
 [ext_resource type="PackedScene" uid="uid://dkqjhbqay4umi" path="res://Assets/Temp Imports/p-bld-15.glb" id="50_0cqli"]
 [ext_resource type="PackedScene" uid="uid://2jbku0idg7h0" path="res://Assets/Temp Imports/Skylight-colonly fix.fbx" id="51_8x8ud"]
 [ext_resource type="PackedScene" uid="uid://rch7yc5vwpub" path="res://Assets/Temp Imports/Pipe_V2.fbx" id="51_yxbvy"]
+[ext_resource type="PackedScene" uid="uid://bn2dekovu8hwr" path="res://Assets/Temp Imports/Skylight-convcol.fbx" id="52_yxbvy"]
 [ext_resource type="PackedScene" uid="uid://b8goy5hpuw2ix" path="res://Assets/Temp Imports/Whirlybird_colonly.fbx" id="55_eo8k6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a8jso"]
@@ -106,6 +107,12 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(5, 4, 3), PackedInt32Arr
 
 [sub_resource type="BoxMesh" id="BoxMesh_u6lno"]
 size = Vector3(3, 0.5, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yxbvy"]
+size = Vector3(2, 0.2, 1.5)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_xslp6"]
+data = PackedVector3Array(-1, 0.1, 0.75, 1, 0.1, 0.75, -1, -0.1, 0.75, 1, 0.1, 0.75, 1, -0.1, 0.75, -1, -0.1, 0.75, 1, 0.1, -0.75, -1, 0.1, -0.75, 1, -0.1, -0.75, -1, 0.1, -0.75, -1, -0.1, -0.75, 1, -0.1, -0.75, 1, 0.1, 0.75, 1, 0.1, -0.75, 1, -0.1, 0.75, 1, 0.1, -0.75, 1, -0.1, -0.75, 1, -0.1, 0.75, -1, 0.1, -0.75, -1, 0.1, 0.75, -1, -0.1, -0.75, -1, 0.1, 0.75, -1, -0.1, 0.75, -1, -0.1, -0.75, 1, 0.1, 0.75, -1, 0.1, 0.75, 1, 0.1, -0.75, -1, 0.1, 0.75, -1, 0.1, -0.75, 1, 0.1, -0.75, -1, -0.1, 0.75, 1, -0.1, 0.75, -1, -0.1, -0.75, 1, -0.1, 0.75, 1, -0.1, -0.75, -1, -0.1, -0.75)
 
 [sub_resource type="Curve3D" id="Curve3D_6cvge"]
 closed = true
@@ -169,7 +176,7 @@ size = Vector3(222, 48, 201)
 data = ExtResource("1_pr2ko")
 
 [node name="Player_ Sly" parent="." node_paths=PackedStringArray("camera_parent") instance=ExtResource("2_25okp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107351, 9.7, -21.1636)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.10735, 10.7, 2.8364)
 camera_parent = NodePath("../Camera Parent")
 
 [node name="Camera Parent" parent="." node_paths=PackedStringArray("camera_player") instance=ExtResource("3_617rq")]
@@ -222,7 +229,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175332, -0.00776115, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999823, -0.00175332, -0.00776114, -5.90722e-08, 0.975269, -0.22034, 0.00795662, 0.220329, 0.975258, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -537,6 +544,16 @@ transform = Transform3D(-0.718836, -0.0422611, -0.693895, -0.0557657, 0.99844, -
 [node name="p-bld-sly2-medtower" parent="NavigationRegion3D" instance=ExtResource("29_bmssu")]
 transform = Transform3D(-0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, -0.984808, 19, 0.2, 5)
 
+[node name="02m bump" type="MeshInstance3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 10.2, 0)
+mesh = SubResource("BoxMesh_yxbvy")
+skeleton = NodePath("../d-rooftop-antenna")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/02m bump"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/02m bump/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_xslp6")
+
 [node name="d-rooftop-antenna" parent="NavigationRegion3D" instance=ExtResource("36_erpqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 10.1, -3)
 
@@ -752,19 +769,21 @@ data = ExtResource("46_bmssu")
 
 [node name="Water" parent="Background" instance=ExtResource("48_1ac36")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
-player_path = NodePath("../../Player_ Sly")
 
 [node name="car" parent="." instance=ExtResource("44_v6agn")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 48.7412, 0, 38.0341)
 
 [node name="Skylight-colonly fix" parent="." instance=ExtResource("51_8x8ud")]
-transform = Transform3D(0.173648, -0.0293186, 0.984371, 4.65661e-10, 0.999557, 0.0297709, -0.984808, -0.00516966, 0.173571, 20.4741, 6.15775, 4.15502)
+transform = Transform3D(0.173648, -0.0293186, 0.984371, 4.65661e-10, 0.999557, 0.0297709, -0.984808, -0.00516966, 0.173571, 21.4741, 6.15775, 4.15502)
 
 [node name="Pipe_V2" parent="." instance=ExtResource("51_yxbvy")]
 transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, -14, 7, -17)
 
 [node name="Whirlybird_colonly" parent="." instance=ExtResource("55_eo8k6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 8.09725, -7.5)
+
+[node name="Skylight-convcol" parent="." instance=ExtResource("52_yxbvy")]
+transform = Transform3D(0.17245, -0.0228163, 0.984754, -0.0213664, 0.99941, 0.0268975, -0.984786, -0.0256791, 0.171861, 18.9319, 6.0314, 3.67877)
 
 [connection signal="area_entered" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_entered"]
 [connection signal="area_exited" from="HP Container/Hurtbox" to="HP Container/Hurtbox" method="_on_area_exited"]

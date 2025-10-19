@@ -96,7 +96,7 @@ func _physics_process(delta: float) -> void:
 				move_progress(delta)
 			
 			
-			path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
+		path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
 	else:
 		if update_tool:
 			# Editor
@@ -192,7 +192,7 @@ func move_progress(delta):
 	var target_rotation = path_follow.global_rotation.y + (PI if not forward else 0.0)
 	# Lerp rotation towards the target rotation
 	if player.state == player.ON_TARGET:
-		player.rot_container.global_rotation.y = lerp(player.rot_container.global_rotation.y, target_rotation, lerp_val)
+		player.rot_container.global_rotation.y = lerp_angle(player.rot_container.global_rotation.y, target_rotation, lerp_val)
 	# Determine movement multiplier
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
