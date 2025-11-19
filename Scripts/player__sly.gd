@@ -71,13 +71,13 @@ var ascending_stairs = false
 var was_on_floor = true
 
 #temporal buffer (frame buffers)
-var stair_grace_frames := 3
+const stair_grace_frames := 20
 var stair_miss_counter := 0
 
-var floor_grace_time := 0.15
+const floor_grace_time := 0.25
 var floor_grace_timer := 0.0
 
-var coyote_time_max = 3
+const coyote_time_max = 5
 var coyote_time = 0
 
 func _ready() -> void:
@@ -396,7 +396,8 @@ func _physics_process(delta: float) -> void:
 			if ray.get_collider().is_in_group("SLIP"):
 				manual_slip = true
 	if colliding_count == 0:
-		coyote_time = coyote_time_max
+		floor_grace_timer = 0.01
+		#state = AIR
 	# Decide angle *after* all rays are checked
 	if velocity.y <= 0 and colliding_count <= 2:
 		floor_max_angle = deg_to_rad(0.0)
@@ -459,6 +460,13 @@ func state_handler(delta):
 	elif state == AIR:
 		if is_on_floor():
 			jump_num = 0
+			coyote_time = 0
+			stair_miss_counter = 0
+			print("coyote 0, state=air")
+			if floor_grace_timer != 0.0:
+				floor_grace_timer = 0.0
+			stunned = false
+			was_on_floor = true
 			state = FLOOR
 	elif state == FLOOR:
 		if not is_on_floor():
@@ -484,15 +492,16 @@ func state_handler(delta):
 			else:
 				# Player is touching stairs or a wall, reset coyote time
 				coyote_time = 0
-				print("coyote 0, 1")
+				print("coyote 0, ascending stairs")
 		else:
-			coyote_time = 0
-			print("coyote 0, 2")
-			if floor_grace_timer != 0.0:
-				floor_grace_timer = 0.0
-			stunned = false
-			state = FLOOR
-			was_on_floor = true
+			if not ascending_stairs:
+				coyote_time = 0
+				print("coyote 0, is_on_floor, not ascending stairs")
+				if floor_grace_timer != 0.0:
+					floor_grace_timer = 0.0
+				stunned = false
+				state = FLOOR
+				was_on_floor = true
 	# Fix air/floor stutter
 	else:
 		if target != null and not can_ledge:
@@ -520,6 +529,13 @@ func state_handler(delta):
 		can_ledge = false
 		state = AIR
 		jump_num = 2
+		if is_on_floor():
+			state = FLOOR
+			coyote_time = 0
+			#print("coyote 0, 2")
+			if floor_grace_timer != 0.0:
+				floor_grace_timer = 0.0
+			stunned = false
 
 func jump():
 	if state == AIR and jump_num == 0:
@@ -563,14 +579,14 @@ func jump():
 		elif state != TO_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
-			if velocity.y >= 3:
-				velocity.y += 3 / (velocity.y / 3)
+			if velocity.y >= 3.5:
+				velocity.y += 3.5 / (velocity.y / 3.5)
 			elif velocity.y >= 0:
-				velocity.y += 3
+				velocity.y += 3.5
 			elif velocity.y <= -6.5:
-				velocity.y += (-velocity.y/3) + 3
+				velocity.y += (-velocity.y/3.5) + 3.5
 			else:
-				velocity.y += (-velocity.y) + 3
+				velocity.y += (-velocity.y) + 3.5
 			print("jump air")
 		temp_sly.anim_tree.call_deferred("set", "parameters/OneShot/request", 1)
 
@@ -611,8 +627,8 @@ func stair_detect(delta):
 	var stair_horizontal = Vector3()
 	var stair_vertical = Vector3()
 	var stair_normal = Vector3()
-	var min_dot = 0.0
-	var max_dot = 0.81
+	var min_dot = -0.1
+	var max_dot = 0.82
 
 	# Pick the highest-priority ray
 	var ray = null
@@ -669,9 +685,9 @@ func stair_detect(delta):
 		
 		if velocity.y < (stair_direction.y * distance_to_top) + 2:
 			if is_on_wall():
-				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top, 0.2) + 2.5)
+				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top, 0.25) + 2.5)
 			else:
-				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top) + 2, 0.125 / (distance_to_top + 0.125))
+				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top) + 2, 0.25 / (distance_to_top + 0.25))
 			print("ascending stairs")
 	else:
 		stair_miss_counter += 1
@@ -769,8 +785,8 @@ func apply_magnetism(): # the holy grail of magnetism
 					global_transform.origin = lerp(global_transform.origin, target.global_transform.origin, 0.2 / (distance_to_player + 0.2))
 				if global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
 					
-					velocity.x = lerp(velocity.x, magnet_direction.x * 4.0 * gravmult, 0.2)
-					velocity.z = lerp(velocity.z, magnet_direction.z * 4.0 * gravmult, 0.2)
+					velocity.x = lerp(velocity.x, magnet_direction.x * 4.0 * speed_mult * gravmult, 0.2)
+					velocity.z = lerp(velocity.z, magnet_direction.z * 4.0 * speed_mult * gravmult, 0.2)
 					
 					var horizontal_distance = Vector2(target.global_transform.origin.x - global_transform.origin.x, target.global_transform.origin.z - global_transform.origin.z).length()
 					
@@ -790,14 +806,14 @@ func apply_magnetism(): # the holy grail of magnetism
 			
 
 func target_jump():
-	if velocity.y >= 3:
-		velocity.y += 3 / (velocity.y / 3)
+	if velocity.y >= 4:
+		velocity.y += 4 / (velocity.y / 4)
 	elif velocity.y >= 0:
-		velocity.y += 3
+		velocity.y += 4
 	elif velocity.y <= -6.5:
-		velocity.y += (-velocity.y/3) + 3
+		velocity.y += (-velocity.y/4) + 4
 	else:
-		velocity.y += (-velocity.y) + 3
+		velocity.y += (-velocity.y) + 4
 	did_target_jump = true
 
 func camera_smooth_follow(delta):
@@ -839,7 +855,7 @@ func camera_smooth_follow(delta):
 	
 	#set move camera on high double jump
 	## Add raycast collider check here and ensure does not turn off early
-	if velocity.y >= 7 and jump_num > 0:
+	if velocity.y >= 8 and jump_num > 0:
 		jump_cam_trigger = true
 	elif velocity.y <= 0 or state != AIR:
 		jump_cam_trigger = false

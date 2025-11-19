@@ -85,7 +85,7 @@ func _physics_process(delta: float) -> void:
 		bend_rope(delta)
 		if player_on_target == false:
 			var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
-			if dis_2_plyr > length:
+			if dis_2_plyr > length * 1.5:
 				return
 			else:
 				if Update.count == 3:
@@ -224,7 +224,7 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 0.25:
+		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
 			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult * 1.5) / length
 		else:
 			path_follow.progress_ratio = (closest_offset) / length

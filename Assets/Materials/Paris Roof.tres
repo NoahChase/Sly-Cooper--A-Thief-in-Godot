@@ -1,10 +1,9 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bjgvbcdijm5so"]
 
 [resource]
-shading_mode = 2
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.275, 0.3125, 0.5, 1)
+albedo_color = Color(0.21, 0.245, 0.35, 1)
 metallic = 0.1
 metallic_specular = 0.1
 roughness = 0.75

@@ -1,0 +1,33 @@
+[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://bnewj3kvedjat"]
+
+[ext_resource type="Texture2D" uid="uid://dfydqblgpdmsn" path="res://Assets/Temp Imports/tempcarmelita/Carmelita_Animations7_CarmelitaBody_TestMaterialBody_BaseColor.png" id="1_i0vfn"]
+[ext_resource type="Shader" uid="uid://b0axti1avktul" path="res://Assets/Shaders/outline_shine.gdshader" id="2_mfv7l"]
+[ext_resource type="Shader" uid="uid://7rk87gixbhfw" path="res://Assets/Shaders/outline.gdshader" id="3_6ykxq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l31ti"]
+render_priority = 2
+shader = ExtResource("2_mfv7l")
+shader_parameter/outline_color_lit = Color(0.6, 0.51, 0.42, 0.392157)
+shader_parameter/outline_color_unlit = Color(0.4, 0.344, 0.12, 0.392157)
+shader_parameter/outline_width = 5.0
+shader_parameter/outline_step = 0.5
+shader_parameter/light_direction = Vector3(0, -1, 0.15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1y3ev"]
+render_priority = 3
+next_pass = SubResource("ShaderMaterial_l31ti")
+shader = ExtResource("3_6ykxq")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_width = 3.0
+
+[resource]
+next_pass = SubResource("ShaderMaterial_1y3ev")
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_i0vfn")
+roughness = 0.5
+rim_enabled = true
+ao_enabled = true
+ao_light_affect = 0.5
+ao_texture = ExtResource("1_i0vfn")
+ao_texture_channel = 4

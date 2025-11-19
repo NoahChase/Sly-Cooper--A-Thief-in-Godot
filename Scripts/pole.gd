@@ -28,7 +28,7 @@ func _physics_process(delta):
 	if not Engine.is_editor_hint():
 		if player_on_target == false:
 			var dis_2_plyr = (target.global_transform.origin - test_ball.global_transform.origin).length()
-			if dis_2_plyr > length:
+			if dis_2_plyr > length * 1.5:
 				return
 			else:
 				if Update.count == 3:

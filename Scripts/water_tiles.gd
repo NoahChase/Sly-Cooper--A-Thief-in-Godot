@@ -55,8 +55,8 @@ func _spawn_batch_editor():
 		var pos = _spawn_positions[i]
 		var mi = MeshInstance3D.new()
 		mi.mesh = mesh_close
-		mi.global_transform.origin = pos
 		add_child(mi)
+		mi.global_transform.origin = pos
 		mi.owner = get_tree().edited_scene_root
 		_editor_meshes.append(mi)
 	_current_index = end_index

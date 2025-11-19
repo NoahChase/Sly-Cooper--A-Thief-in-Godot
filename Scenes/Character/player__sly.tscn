@@ -181,7 +181,7 @@ height = 1.625
 height = 12.0
 radius = 12.0
 
-[node name="Player_ Sly" type="CharacterBody3D" groups=["Player", "SLIP"]]
+[node name="Player_Sly" type="CharacterBody3D" groups=["Player", "SLIP"]]
 floor_max_angle = 0.610865
 script = ExtResource("1_jucx6")
 
@@ -243,27 +243,27 @@ libraries = {
 }
 
 [node name="Ledge Ray 1" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.5, -0.125)
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.4, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.5, -0.125)
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.4, -0.125)
 target_position = Vector3(0, 0, -0.625)
 
 [node name="Cancel Ledge Ray" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.125)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.7, -0.125)
+transform = Transform3D(0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866026, 0, 0.6, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Cancel Ledge Ray 3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.7, -0.125)
+transform = Transform3D(0.866026, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866026, 0, 0.6, -0.125)
 target_position = Vector3(0, 0, -1)
 
 [node name="Floor Ray" type="RayCast3D" parent="Body Mesh Container"]
@@ -320,15 +320,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.3)
 target_position = Vector3(0, 0, -0.4)
 
 [node name="Stair Ray Low2" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -0.3)
 target_position = Vector3(0, 0, -0.65)
 
 [node name="Stair Ray Low3" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.1, 0.5, -0.3)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0.1, 0.8, -0.3)
 target_position = Vector3(0, 0, -0.65)
 
 [node name="Stair Ray Low4" type="RayCast3D" parent="Body Mesh Container"]
-transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.1, 0.5, -0.3)
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -0.1, 0.8, -0.3)
 target_position = Vector3(0, 0, -0.65)
 
 [node name="True Player Rotation" type="Node3D" parent="."]
