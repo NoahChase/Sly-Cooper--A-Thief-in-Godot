@@ -46,6 +46,7 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 @onready var prev_rng = INF
 @onready var enemies = []
 @onready var enemies_in_range = []
+
 @onready var wall_detection_rays = [$"Wall Detection Raycast", 
 									$"Wall Detection Raycast/Wall Detection Raycast2", 
 									$"Wall Detection Raycast/Wall Detection Raycast3",
@@ -55,6 +56,29 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 									$"Wall Detection Raycast3",
 									$"Wall Detection Raycast3/Wall Detection Raycast2",
 									$"Wall Detection Raycast3/Wall Detection Raycast3"]
+									
+
+@onready var floor_rays = [$"Floor Ray1", 
+							$"Floor Ray4", 
+							$"Floor Ray7", 
+							$"Floor Ray8", 
+							$"Floor Ray9", 
+							$"Floor Ray5", 
+							$"Floor Ray6", 
+							$"Floor Ray2", 
+							$"Floor Ray3"]
+
+@onready var stair_rays = [$"Stair Ray Low2", 
+							$"Stair Ray Low3", 
+							$"Stair Ray Low4"]
+
+var manual_slip = false
+var ascending_stairs = false
+#temporal buffer (frame buffers)
+const stair_grace_frames := 20
+var stair_miss_counter := 0
+
+
 var flat_target
 var distance_to_target
 var previous_position
@@ -71,10 +95,11 @@ var nav_direction = Vector3()
 var custom_direction = Vector3()
 var do_custom_direciton = false
 var custom_direction_locked = true
+var rng_idle_still_generated = false
 
 func _ready():
 	nav_rng = RandomNumberGenerator.new()
-	new_nav_point = nav_parent.get_node("Point 4")
+	new_nav_point = nav_parent.get_node("Point 2")
 	$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
 			
 
@@ -133,11 +158,11 @@ func _physics_process(delta):
 			detect_jump()
 	else:
 		can_jump = false
-		nav_agent.debug_enabled = true
+		#nav_agent.debug_enabled = true
 		$"Safe Position".material_override.albedo_color = Color(1, 1, 1)
 		direction = nav_agent.get_next_path_position() - global_position
 	direction = direction.normalized()
-
+	
 # ROTATION
 	var rot = weapon.rotation
 	rot.x = clamp(rot.x, deg_to_rad(-90), deg_to_rad(90))
@@ -180,10 +205,10 @@ func _physics_process(delta):
 	#print("dis to wall = ", dis_to_wall, " , do custom dir = ", do_custom_direciton)
 	#weapon.shoot = false # turn off shooting for to help debug
 
+	stair_ray_check(delta)
+
 # MOVE AND SLIDE
 	move_and_slide()
-
-
 
 ## STATE MANAGER
 func state_manager():
@@ -281,7 +306,7 @@ func state_execute():
 				flat_target = previous_position
 # CHASE
 		CHASE:
-			#print("state CHASE")
+			print("state CHASE")
 			distance_to_target = (global_position - target.global_position).length()
 			flashlight.target = target
 			flashlight.player_detected = true
@@ -350,7 +375,7 @@ func state_execute():
 					SPEED_MULT = 1.0
 # SEARCH
 		SEARCH:
-			#print("state SEARCH")
+			print("state SEARCH")
 			SPEED_MULT = 1.0
 			weapon.shoot = false
 			weapon.look_at(flashlight.get_node("TestMesh").global_transform.origin + Vector3(0,0.5,0), Vector3.UP)
@@ -360,11 +385,11 @@ func state_execute():
 				do_idle()
 				#if enemies_in_range.size() > 0:
 					#hear_enemy_in_range()
-			elif search_nav_distance.length() > 40:
+			elif search_nav_distance.length() > 15:
 				do_idle()
 # IDLE
 		IDLE:
-			#print("state IDLE")
+			print("state IDLE")
 			#if enemies.size() > 0:
 				#hear_enemy_target()
 			weapon.shoot = false
@@ -372,25 +397,28 @@ func state_execute():
 			
 			if not new_nav_point == null:
 				nav_distance = global_transform.origin - new_nav_point.global_transform.origin
-				if nav_distance.length() < 16:
-					move_to_nav_point = true
-				elif nav_distance.length() > 16:
+				if nav_distance.length() < 12:
+					if rng_idle_still_generated == false:
+						gen_idle_still_rng()
+					if nav_rng_int >= 1: #decide out of 10 if they should move to the idle still point
+						move_to_nav_point = true
+				elif nav_distance.length() > 12:
 					move_to_nav_point = false
-				if nav_distance.length() < 1:
+					rng_idle_still_generated = false
+				if nav_distance.length() < 2:
 					if $"Point Timer".is_stopped():
 						state = IDLE_STILL
 						$"Point Timer".start(3.0)
-			
-			
 			# target is path or point
 			if move_to_nav_point == false:
 				target = path_follow
 			else:
 				target = new_nav_point
+				rng_idle_still_generated = false
 			
 # IDLE STILL
 	if state == IDLE_STILL:
-		#print("state IDLE STILL")
+		print("state IDLE STILL")
 		do_custom_direciton = true
 		custom_direction = Vector3.ZERO
 		#print("custom dir set true HERE IDLE STILL")
@@ -478,7 +506,7 @@ func detect_jump():
 			jump_down()
 func jump_up():
 	var height_to_target = max(0, target.global_transform.origin.y - global_transform.origin.y)
-	var total_jump_height = height_to_target + 4.0
+	var total_jump_height = height_to_target + 2.0
 	velocity.y = sqrt(2 * gravity * grav_mult * total_jump_height)
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
@@ -531,7 +559,129 @@ func gen_nav_rng():
 		return
 	$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
 
+func gen_idle_still_rng():
+	nav_rng_int = nav_rng.randi_range(1, 10)
+	rng_idle_still_generated = true
 
+func stair_ray_check(delta):
+	var colliding_count = 0  # Reset every frame
+	manual_slip = false
+	for ray in floor_rays:
+		if ray.is_colliding():
+			colliding_count += 1
+			if ray.get_collider().is_in_group("SLIP"):
+				manual_slip = true
+	if velocity.y <= 0 and colliding_count <= 2:
+		floor_max_angle = deg_to_rad(0.0)
+		ascending_stairs = false
+	elif manual_slip:
+		floor_max_angle = deg_to_rad(0.0)
+		ascending_stairs = false
+	elif colliding_count <= 2:
+		ascending_stairs = false
+	else:
+		floor_max_angle = deg_to_rad(45.0)
+		stair_detect(delta)
+
+func stair_detect(delta):
+	if not $"Stair Ray Low".is_colliding():
+		stair_miss_counter += 1
+		if stair_miss_counter >= stair_grace_frames:
+			ascending_stairs = false
+		return
+	
+	var can_stair = true
+	
+	#if is_on_wall():
+		#can_stair = false
+		#print("stair wall failed")
+	print("vel.y = ", velocity.y)
+	if velocity.y < -0.28:
+		can_stair = false
+		print("enemy stair velocity.y failed")
+	if not is_on_floor():
+		can_stair = false
+		print("enemy stair AIR failed")
+	if not direction:
+		can_stair = false
+		print("enemy stair direction failed")
+	for ray in stair_rays:
+		if ray.is_colliding():
+			can_stair = false
+			print("enemy stair wall ray failed")
+
+	var stair_horizontal = Vector3()
+	var stair_vertical = Vector3()
+	var stair_normal = Vector3()
+	var min_dot = -0.1
+	var max_dot = 0.82
+
+	# Pick the highest-priority ray
+	var ray = null
+	if $"Stair Ray Low6".is_colliding():
+		ray = $"Stair Ray Low6"
+	elif $"Stair Ray Low5".is_colliding():
+		ray = $"Stair Ray Low5"
+	elif $"Stair Ray Low".is_colliding():
+		ray = $"Stair Ray Low"
+	else:
+		can_stair = false
+		print("enemy stair ray h failed")
+
+	if ray:
+		stair_horizontal = ray.get_collision_point()
+		stair_normal = ray.get_collision_normal()
+
+	## Reject shallow slopes
+	#if stair_normal.dot(Vector3.UP) > max_dot:
+		#can_stair = false
+		#print("enemy stair normal failed")
+	#print("enemy stair dot = ", stair_normal.dot(Vector3.UP))
+
+	# Temporal smoothing
+	if can_stair:
+		# Vertical ray for top of stair logic
+		var ray_v = $"ray v container/ray v"
+		var ray_v_container = $"ray v container"
+		ray_v_container.global_transform.origin = stair_horizontal
+		
+		if ray_v.is_colliding():
+			var v_col = ray_v.get_collider()
+			if not v_col.is_in_group("Player"):
+				stair_vertical = ray_v.get_collision_point()
+		else:
+			can_stair = false
+			stair_miss_counter += 1
+			if stair_miss_counter >= stair_grace_frames:
+				ascending_stairs = false
+				print("enemy ray v denied stairs")
+				floor_snap_length = 0.1
+				return
+		
+		stair_miss_counter = 0
+		ascending_stairs = true
+		
+		# --- Ascend stairs logic ---
+		floor_snap_length = 0.0
+		var distance_to_top = abs(stair_vertical.y - global_transform.origin.y)
+		var stair_direction = (stair_vertical - global_transform.origin).normalized()
+		if distance_to_top < 0.2:
+			distance_to_top = 0.2
+			print("enemy helped distance to top, 0.2")
+		
+		if velocity.y < (stair_direction.y * distance_to_top) + 2:
+			if is_on_wall():
+				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top, 0.25) + 2.5)
+			else:
+				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top) + 2, 0.25 / (distance_to_top + 0.25))
+			print("enemy ascending stairs")
+	else:
+		stair_miss_counter += 1
+		if stair_miss_counter >= stair_grace_frames:
+			ascending_stairs = false
+			print("enemy denied stairs")
+			floor_snap_length = 0.1
+			return
 
 ## AREAS
 func _on_close_detection_area_body_entered(body):

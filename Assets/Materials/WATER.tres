@@ -1,203 +1,94 @@
-[gd_resource type="ShaderMaterial" load_steps=14 format=3 uid="uid://0lfqdgecvqr8"]
+[gd_resource type="ShaderMaterial" load_steps=10 format=3 uid="uid://0lfqdgecvqr8"]
+
+[ext_resource type="Texture2D" uid="uid://bf7chtw1jw4td" path="res://Assets/Textures/final_small_wave_normal.tres" id="1_0lmjb"]
+[ext_resource type="Texture2D" uid="uid://bnl6nbdbg3g3u" path="res://Assets/Textures/wave.tres" id="1_jq4s7"]
 
 [sub_resource type="Shader" id="Shader_bmssu"]
 code = "shader_type spatial;
-render_mode blend_mix, depth_prepass_alpha, cull_back, diffuse_burley, specular_disabled;
+render_mode blend_mix, cull_back, diffuse_burley, specular_disabled;
 
-uniform vec3 albedo : source_color;
-uniform vec4 wave_color_deep : source_color;
-uniform vec4 wave_color_shallow : source_color;
-uniform float roughness : hint_range(0.0, 1.0);
-uniform float specular : hint_range(0.0, 1.0, 0.01);
-uniform float metallic : hint_range(0.0, 1.0, 0.1);
-uniform float transparency : hint_range(0.0, 1.0, 0.05);
-uniform float normal_mult : hint_range(0.0, 1.0, 0.01);
+uniform sampler2D wave_height_1;
+uniform sampler2D wave_height_2;
+uniform sampler2D normal_map_1 : hint_normal;
+uniform sampler2D normal_map_2 : hint_normal;
 
-uniform float wave_speed;
-uniform float wave_speed2;
-uniform vec2 wave_direction;
-uniform vec2 wave_direction2;
-uniform float noise_scale = 1.0;
-uniform float height_scale = 1.0;
-uniform float height_scale_big = 2.0;
-uniform float blend_height = 0.5;
-uniform float blend_range = 1.0;
+uniform float world_scale = 10.0;
 
-uniform float normal_strength = 0.5;
-uniform float normal_height = 1.0;
-//
-//uniform float water_level = 0.0;
-//uniform float depth_fade_distance = 5.0; // distance before fully transparent
+uniform float wave_speed_1 = 0.05;
+uniform float wave_speed_2 = 0.025;
+uniform float final_wave_speed = 0.5;
+uniform float wave_scale_1 = 2.0;
+uniform float wave_scale_2 = 1.0;
+uniform float final_wave_scale = 1.0;
 
-varying float height;
-varying vec3 world_pos;
+uniform float normal_mult = 0.1;
+uniform float normal_height = 0.4;
+uniform float normal_2_height = 0.3;
 
-uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
-uniform sampler2D texture_albedo_2 : source_color, filter_linear_mipmap, repeat_enable;
-uniform sampler2D wave : source_color, filter_linear_mipmap, repeat_enable;
-uniform sampler2D wave2 : source_color, filter_linear_mipmap, repeat_enable;
+// LOD tuning for performance
+uniform float normal_lod = 2.0;
 
-//-------------------------------------------------------------//
-// Convert heightmap to normal
-//-------------------------------------------------------------//
-vec3 get_normal_from_height(sampler2D tex, vec2 uv, float scale, float strength) {
-	vec2 texel = 1.0 / vec2(textureSize(tex, 0));
+uniform vec3 albedo : source_color = vec3(0.1, 0.2, 0.3);
+uniform float roughness = 0.05;
+uniform float transparency = 0.85;
+uniform float specular = 1.0;
+uniform float metallic = 0.5;
 
-	float hL = texture(tex, uv - vec2(texel.x, 0.0)).r;
-	float hR = texture(tex, uv + vec2(texel.x, 0.0)).r;
-	float hD = texture(tex, uv - vec2(0.0, texel.y)).r;
-	float hU = texture(tex, uv + vec2(0.0, texel.y)).r;
+uniform float distance_fade_min : hint_range(0.0, 4096.0, 0.01);
+uniform float distance_fade_max : hint_range(0.0, 4096.0, 0.01);
 
-	float dx = (hR - hL) * scale;
-	float dy = (hU - hD) * scale;
+varying vec3 v_world_pos;
 
-	return normalize(vec3(-dx * strength, -dy * strength, 1.0));
-}
-
-//-------------------------------------------------------------//
-// Combined height (used for vertex displacement)
-//-------------------------------------------------------------//
-float combined_height(vec2 pos_xz) {
-	float time_step = 1.0 / 60.0;
-	float slow_time = floor(TIME / time_step) * time_step;
-
-	////vec2 uv_small_1 = (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.125);
-	//vec2 uv_small_2 = (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.125);
-	vec2 uv_big_1   = (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.5);
-	//vec2 uv_big_2   = (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.5);
-//
-	//float small_waves =
-		//texture(texture_albedo_2, uv_small_2).r;
-	float big_waves =
-		texture(wave, uv_big_1).r * height_scale_big;
-
-	return (big_waves) * height_scale;
-}
-
-//-------------------------------------------------------------//
-// Vertex
-//-------------------------------------------------------------//
 void vertex() {
-	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	float hC = combined_height(world_pos.xz);
-	VERTEX.y += hC;
-	height = VERTEX.y;
+	v_world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+
+	// world-space UVs
+	vec2 uv1 = (v_world_pos.xz / world_scale) + TIME * wave_speed_1 * final_wave_speed;
+	vec2 uv2 = (v_world_pos.xz / world_scale) - TIME * wave_speed_2 * final_wave_speed;
+	// multiple layer vertex displacement
+	float h1 = texture(wave_height_1, uv1).r * wave_scale_1;
+	float h2 = texture(wave_height_2, uv2).r * wave_scale_2;
+	VERTEX.y += (h1 + h2) * final_wave_scale;
 }
 
-//-------------------------------------------------------------//
-// Fragment (handles normal blending and shading)
-//-------------------------------------------------------------//
 void fragment() {
-	float time_step = 1.0 / 30.0;
-	float slow_time = floor(TIME / time_step) * time_step;
-	vec2 pos_xz = world_pos.xz;
+	vec2 uv1 = (v_world_pos.xz / world_scale) + TIME * wave_speed_1 * final_wave_speed;
+	vec2 uv2 = (v_world_pos.xz / world_scale) - TIME * wave_speed_2 * final_wave_speed;
 
-	//vec2 uv_small_1 = (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.125);
-	vec2 uv_small_2 = (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.125);
-	vec2 uv_big_1   = (pos_xz / noise_scale) + (slow_time * wave_direction * wave_speed * 0.5);
-	//vec2 uv_big_2   = (pos_xz / noise_scale) + (slow_time * wave_direction2 * wave_speed2 * 0.5);
+	// Sample normal maps at lower LOD to save performance
+	vec3 n1 = textureLod(normal_map_1, uv1, normal_lod).rgb * 2.0 - 1.0;
+	vec3 n2 = textureLod(normal_map_2, uv2, normal_lod).rgb * 2.0 - 1.0;
 
-	// Generate dynamic normals
-	//vec3 small_normal_1 = get_normal_from_height(texture_albedo, uv_small_1, normal_height, normal_strength);
-	vec3 small_normal_2 = get_normal_from_height(texture_albedo_2, uv_small_2, normal_height, normal_strength);
-	vec3 big_normal_1   = get_normal_from_height(wave, uv_big_1, normal_height, normal_strength);
-	//vec3 big_normal_2   = get_normal_from_height(wave2, uv_big_2, normal_height, normal_strength);
+	// Scale XY perturbation
+	n1.xy *= normal_height;
+	n2.xy *= normal_2_height;
 
-	vec3 small_waves_normal = normalize(small_normal_2);
-	vec3 big_waves_normal   = normalize(big_normal_1);
-
-	// ✅ Combine normals HERE, where NORMAL exists
-	NORMAL = normalize(NORMAL + (small_waves_normal + big_waves_normal + big_waves_normal + big_waves_normal) * normal_mult);
-
+	// Blend normals
+	vec3 blended = normalize(n1 + n2);
 	
-	// Sample the same wave pattern used in vertex displacement
-	float small_waves = texture(texture_albedo_2, uv_small_2).r;
-	float big_waves   = texture(wave, uv_big_1).r;
-	// Mix them together and scale for subtle overlay
-	float wave_overlay = (big_waves * height_scale_big + small_waves) * height_scale * 0.5;
+	float dist = distance(VERTEX, VIEW);
+	float fade = smoothstep(distance_fade_min, distance_fade_max, dist);
 	
-	// Color blending
-	float hblend = smoothstep(blend_range - blend_height, blend_range + blend_height, height);
-	// Add this overlay to hblend to make color follow waves
-	float hblend_final = clamp(hblend + wave_overlay, 0.0, 1.0);
-	// Final color mix
-	vec3 base_color = mix(wave_color_deep.rgb, wave_color_shallow.rgb, hblend_final);
-	// Apply texture detail subtly on top for realism
-	vec3 wave_texture_overlay = vec3(texture(wave, uv_big_1).r);
-	base_color = mix(base_color, base_color * wave_texture_overlay, 0.25);
-	
-	//float depth = clamp((water_level - world_pos.y) / depth_fade_distance, 0.0, 1.0);
-	//float depth_alpha = 1.0 - depth; // 0 at surface, 1 deep down
-	
-	ALBEDO = base_color + (albedo * normal_mult);
-	METALLIC = metallic;
+	// Apply as additive screen-space normal
+	NORMAL = normalize(NORMAL + blended * normal_mult);
+
+	// Shading
+	ALBEDO = albedo;
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
+	METALLIC = metallic;
 	ALPHA = transparency;
-}"
+	ALPHA *= fade;
+}
+"
 
-[sub_resource type="Gradient" id="Gradient_mwt3f"]
-interpolation_mode = 2
-interpolation_color_space = 1
-colors = PackedColorArray(0.3, 0.3, 0.3, 1, 0.7, 0.7, 0.7, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_mwt3f"]
-seed = 7
-frequency = 0.025
-fractal_type = 3
-fractal_octaves = 3
-fractal_gain = -0.475
-fractal_weighted_strength = 0.3
-fractal_ping_pong_strength = 1.0
-domain_warp_enabled = true
-domain_warp_amplitude = 32.0
-domain_warp_frequency = 0.015
-domain_warp_fractal_lacunarity = 0.34
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8x8ud"]
-width = 256
-height = 256
-invert = true
-in_3d_space = true
-seamless = true
-bump_strength = 16.0
-color_ramp = SubResource("Gradient_mwt3f")
-noise = SubResource("FastNoiseLite_mwt3f")
-
-[sub_resource type="Gradient" id="Gradient_0lmjb"]
-interpolation_mode = 2
-interpolation_color_space = 1
-offsets = PackedFloat32Array(0.0847458, 0.375, 0.711538, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.3, 0.3, 0.3, 1, 0.7, 0.7, 0.7, 1, 1, 1, 1, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_0lmjb"]
-frequency = 0.1
-fractal_type = 3
-fractal_octaves = 3
-fractal_gain = -0.5
-fractal_ping_pong_strength = 1.0
-domain_warp_enabled = true
-domain_warp_amplitude = 32.0
-domain_warp_frequency = 0.015
-domain_warp_fractal_lacunarity = 0.34
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xslp6"]
-width = 256
-height = 256
-invert = true
-in_3d_space = true
-seamless = true
-bump_strength = 16.0
-color_ramp = SubResource("Gradient_0lmjb")
-noise = SubResource("FastNoiseLite_0lmjb")
-
-[sub_resource type="Gradient" id="Gradient_jq4s7"]
+[sub_resource type="Gradient" id="Gradient_0glgx"]
 interpolation_mode = 2
 interpolation_color_space = 1
 offsets = PackedFloat32Array(0, 0.3125, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.5, 0.5, 0.5, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_bmssu"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7dmu6"]
 seed = 7
 frequency = 0.015
 offset = Vector3(15.6, -30.5, 0)
@@ -209,63 +100,65 @@ domain_warp_frequency = 0.015
 domain_warp_fractal_lacunarity = 1.155
 domain_warp_fractal_gain = 0.995
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ac36"]
-width = 256
-height = 256
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jq4s7"]
+width = 64
+height = 64
 in_3d_space = true
 seamless = true
-color_ramp = SubResource("Gradient_jq4s7")
-noise = SubResource("FastNoiseLite_bmssu")
+as_normal_map = true
+color_ramp = SubResource("Gradient_0glgx")
+noise = SubResource("FastNoiseLite_7dmu6")
 
-[sub_resource type="Gradient" id="Gradient_85chf"]
+[sub_resource type="Gradient" id="Gradient_g80pu"]
 interpolation_mode = 2
 interpolation_color_space = 1
-offsets = PackedFloat32Array(0, 0.5)
+offsets = PackedFloat32Array(0.0847458, 0.375, 0.711538, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.3, 0.3, 0.3, 1, 0.7, 0.7, 0.7, 1, 1, 1, 1, 1)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_1ac36"]
-noise_type = 3
-seed = 5
-frequency = 0.04
-offset = Vector3(-30.95, 4.65, 0)
-fractal_octaves = 1
-fractal_gain = -12.68
-cellular_return_type = 2
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_53iab"]
+frequency = 0.1
+fractal_type = 3
+fractal_octaves = 3
+fractal_gain = -0.5
+fractal_ping_pong_strength = 1.0
+domain_warp_enabled = true
 domain_warp_amplitude = 32.0
 domain_warp_frequency = 0.015
-domain_warp_fractal_lacunarity = 1.405
-domain_warp_fractal_gain = 0.925
+domain_warp_fractal_lacunarity = 0.34
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cqli"]
-width = 256
-height = 256
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_85chf"]
+width = 64
+height = 64
+invert = true
 in_3d_space = true
 seamless = true
-color_ramp = SubResource("Gradient_85chf")
-noise = SubResource("FastNoiseLite_1ac36")
+as_normal_map = true
+bump_strength = 16.0
+color_ramp = SubResource("Gradient_g80pu")
+noise = SubResource("FastNoiseLite_53iab")
 
 [resource]
-render_priority = 1
+render_priority = 0
 shader = SubResource("Shader_bmssu")
-shader_parameter/albedo = Color(0, 0, 0, 1)
-shader_parameter/wave_color_deep = Color(0, 0, 0.15, 1)
-shader_parameter/wave_color_shallow = Color(0.12, 0.12, 0.2, 1)
-shader_parameter/roughness = 0.01
+shader_parameter/wave_height_1 = ExtResource("1_jq4s7")
+shader_parameter/wave_height_2 = ExtResource("1_0lmjb")
+shader_parameter/normal_map_1 = SubResource("NoiseTexture2D_jq4s7")
+shader_parameter/normal_map_2 = SubResource("NoiseTexture2D_85chf")
+shader_parameter/world_scale = 128.0
+shader_parameter/wave_speed_1 = 0.1
+shader_parameter/wave_speed_2 = 0.05
+shader_parameter/final_wave_speed = 0.33
+shader_parameter/wave_scale_1 = 2.5
+shader_parameter/wave_scale_2 = 1.0
+shader_parameter/final_wave_scale = 1.0
+shader_parameter/normal_mult = 0.125
+shader_parameter/normal_height = 0.5
+shader_parameter/normal_2_height = 0.5
+shader_parameter/normal_lod = 1.0
+shader_parameter/albedo = Color(0.375, 0.40625, 0.5, 1)
+shader_parameter/roughness = 0.05
+shader_parameter/transparency = 0.5
 shader_parameter/specular = 1.0
-shader_parameter/metallic = 0.4
-shader_parameter/transparency = 0.75
-shader_parameter/normal_mult = 0.06
-shader_parameter/wave_speed = 0.125
-shader_parameter/wave_speed2 = 0.063
-shader_parameter/wave_direction = Vector2(0.4, -0.2)
-shader_parameter/wave_direction2 = Vector2(0.4, -0.2)
-shader_parameter/noise_scale = 120.0
-shader_parameter/height_scale = 1.0
-shader_parameter/height_scale_big = 2.0
-shader_parameter/blend_height = 0.085
-shader_parameter/blend_range = 10.0
-shader_parameter/normal_strength = 1.625
-shader_parameter/normal_height = 1.625
-shader_parameter/texture_albedo = SubResource("NoiseTexture2D_8x8ud")
-shader_parameter/texture_albedo_2 = SubResource("NoiseTexture2D_xslp6")
-shader_parameter/wave = SubResource("NoiseTexture2D_1ac36")
-shader_parameter/wave2 = SubResource("NoiseTexture2D_0cqli")
+shader_parameter/metallic = 0.9
+shader_parameter/distance_fade_min = 50.0
+shader_parameter/distance_fade_max = 100.0

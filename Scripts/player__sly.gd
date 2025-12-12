@@ -496,7 +496,7 @@ func state_handler(delta):
 		else:
 			if not ascending_stairs:
 				coyote_time = 0
-				print("coyote 0, is_on_floor, not ascending stairs")
+				#print("coyote 0, is_on_floor, not ascending stairs")
 				if floor_grace_timer != 0.0:
 					floor_grace_timer = 0.0
 				stunned = false
@@ -579,14 +579,14 @@ func jump():
 		elif state != TO_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
 			air_mult = 1.0
-			if velocity.y >= 3.5:
-				velocity.y += 3.5 / (velocity.y / 3.5)
+			if velocity.y >= 3:
+				velocity.y += 3 / (velocity.y / 3)
 			elif velocity.y >= 0:
-				velocity.y += 3.5
+				velocity.y += 3.0
 			elif velocity.y <= -6.5:
-				velocity.y += (-velocity.y/3.5) + 3.5
+				velocity.y += (-velocity.y/3.25) + 3.25 #extra boost for falling
 			else:
-				velocity.y += (-velocity.y) + 3.5
+				velocity.y += (-velocity.y) + 3.25 #helper boost for longer jumps
 			print("jump air")
 		temp_sly.anim_tree.call_deferred("set", "parameters/OneShot/request", 1)
 

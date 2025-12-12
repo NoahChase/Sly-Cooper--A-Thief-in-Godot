@@ -28,6 +28,7 @@ var sag_points: Array #sagged down position of curve points
 func _ready():
 	if Engine.is_editor_hint():
 		update_curve()
+		return
 	if end_point and target_point:
 		look_at_target(target_point, end_point.global_position)
 	player.target_acquired.connect(_on_player_target_acquired)
@@ -225,7 +226,7 @@ func ball2player(delta):
 
 	if length > 0:
 		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
-			path_follow.progress_ratio = (closest_offset + directional_offset / player.gravmult * 1.5) / length
+			path_follow.progress_ratio = (closest_offset + (directional_offset) / player.gravmult * 1.625) / length
 		else:
 			path_follow.progress_ratio = (closest_offset) / length
 

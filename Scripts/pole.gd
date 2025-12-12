@@ -19,6 +19,8 @@ var speed = 0.001
 var previous_position : Vector3
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
 	#test_ball.mesh.visible = true
 	previous_position = path_follow_3d.global_transform.origin
 	target.target_acquired.connect(_on_player_target_acquired)
