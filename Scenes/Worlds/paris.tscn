@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
-[ext_resource type="VoxelGIData" uid="uid://f553vglevgdr" path="res://Scenes/Worlds/Paris.VoxelGI_data.res" id="1_pr2ko"]
+[ext_resource type="VoxelGIData" uid="uid://f553vglevgdr" path="res://Scenes/Worlds/paris.VoxelGI_data.res" id="1_pr2ko"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_0qql5"]
 [ext_resource type="PackedScene" uid="uid://c70l3ebt3x47f" path="res://Scenes/Character/player__sly.tscn" id="2_25okp"]
 [ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="3_0qql5"]
@@ -256,8 +256,6 @@ domain_warp_fractal_lacunarity = 1.155
 domain_warp_fractal_gain = 0.995
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jq4s7"]
-width = 64
-height = 64
 in_3d_space = true
 seamless = true
 as_normal_map = true
@@ -271,7 +269,7 @@ offsets = PackedFloat32Array(0.0847458, 0.375, 0.711538, 1)
 colors = PackedColorArray(0, 0, 0, 1, 0.3, 0.3, 0.3, 1, 0.7, 0.7, 0.7, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_53iab"]
-frequency = 0.1
+frequency = 0.05
 fractal_type = 3
 fractal_octaves = 3
 fractal_gain = -0.5
@@ -282,8 +280,8 @@ domain_warp_frequency = 0.015
 domain_warp_fractal_lacunarity = 0.34
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_85chf"]
-width = 64
-height = 64
+width = 256
+height = 256
 invert = true
 in_3d_space = true
 seamless = true
@@ -301,15 +299,15 @@ shader_parameter/normal_map_1 = SubResource("NoiseTexture2D_jq4s7")
 shader_parameter/normal_map_2 = SubResource("NoiseTexture2D_85chf")
 shader_parameter/world_scale = 128.0
 shader_parameter/wave_speed_1 = 0.1
-shader_parameter/wave_speed_2 = 0.05
-shader_parameter/final_wave_speed = 0.33
+shader_parameter/wave_speed_2 = 0.075
+shader_parameter/final_wave_speed = 0.175
 shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
 shader_parameter/normal_mult = 0.25
 shader_parameter/normal_height = 0.5
-shader_parameter/normal_2_height = 0.5
-shader_parameter/normal_lod = 1.0
+shader_parameter/normal_2_height = 0.25
+shader_parameter/normal_lod = 0.125
 shader_parameter/albedo = Color(0.425, 0.4775, 0.5, 1)
 shader_parameter/roughness = 0.05
 shader_parameter/transparency = 0.5
@@ -428,15 +426,15 @@ shader_parameter/normal_map_1 = SubResource("NoiseTexture2D_jq4s7")
 shader_parameter/normal_map_2 = SubResource("NoiseTexture2D_85chf")
 shader_parameter/world_scale = 128.0
 shader_parameter/wave_speed_1 = 0.1
-shader_parameter/wave_speed_2 = 0.05
-shader_parameter/final_wave_speed = 0.33
+shader_parameter/wave_speed_2 = 0.075
+shader_parameter/final_wave_speed = 0.175
 shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
 shader_parameter/normal_mult = 0.125
 shader_parameter/normal_height = 0.5
-shader_parameter/normal_2_height = 0.5
-shader_parameter/normal_lod = 1.0
+shader_parameter/normal_2_height = 0.25
+shader_parameter/normal_lod = 0.125
 shader_parameter/albedo = Color(0.2125, 0.2375, 0.25, 1)
 shader_parameter/edge_color = Color(0.3375, 0.4125, 0.45, 1)
 shader_parameter/edge_scale = 0.25
@@ -466,9 +464,15 @@ light_color = Color(0.3575, 0.430625, 0.65, 1)
 light_indirect_energy = 0.25
 light_bake_mode = 1
 shadow_enabled = true
-shadow_normal_bias = 5.0
+shadow_bias = 0.05
+shadow_normal_bias = 0.0
 shadow_opacity = 0.5
+shadow_blur = 2.5
+directional_shadow_split_1 = 0.25
+directional_shadow_split_2 = 0.5
+directional_shadow_split_3 = 0.75
 directional_shadow_blend_splits = true
+directional_shadow_max_distance = 50.0
 
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.71481, 18.3081, 42.4118)
@@ -937,7 +941,7 @@ target_mesh = NodePath("PathFollow3D/MeshInstance3D")
 length = 85.34
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Enemy Path 1"]
-transform = Transform3D(0.603711, 0, -0.797148, 0, 1, 0, 0.797148, 0, 0.603711, 9.30057, 0, 7.31846)
+transform = Transform3D(0.603708, 0, -0.79715, 0, 1, 0, 0.79715, 0, 0.603708, 9.30056, 0, 7.31851)
 progress = 45.3029
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy Path 1/PathFollow3D"]

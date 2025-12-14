@@ -19,8 +19,8 @@ domain_warp_fractal_lacunarity = 1.155
 domain_warp_fractal_gain = 0.995
 
 [resource]
-width = 128
-height = 128
+width = 256
+height = 256
 in_3d_space = true
 generate_mipmaps = false
 seamless = true

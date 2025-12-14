@@ -36,7 +36,7 @@ extends Node3D
 @onready var ik_2 = $"Ball Root/Ball_2/Node3D/ik_2"
 @onready var ik_2_end = $"Ball Root/Ball_2_end/Node3D/ik_2_end"
 
-@onready var lerp_val = 0.5
+@onready var lerp_val = 0.3
 @onready var bounce = 0.0
 # At the top of the script or in _ready
 var prev_tail_pos = Vector3()
@@ -79,29 +79,29 @@ func _physics_process(delta):
 		prev_tail_pos = current_tail_pos
 		
 		var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
-		lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
-		bounce = lerp(bounce, ((ball_1.global_position.y - ball_target.global_position.y) * 2.0) / lerp_val, lerp_val)
+		var bounce_lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
+		bounce = lerp(bounce, ((ball_1.global_position.y - ball_target.global_position.y) * 3.0) / bounce_lerp_val, bounce_lerp_val)
 	
 	# Tail rotations using quaternion slerp
 	_set_tail_rotation(ball_1, ball_target, 0.9)
-	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.085))
-	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.08))
-	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val - 0.0125))
-	_set_tail_rotation(ball_5, ball_6, max(0.01, lerp_val - 0.025))
-	_set_tail_rotation(ball_4, ball_5, max(0.01, lerp_val - 0.05))
-	_set_tail_rotation(ball_3, ball_4, max(0.01, lerp_val - 0.075))
-	_set_tail_rotation(ball_2, ball_3, max(0.01, lerp_val - 0.1))
+	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.5))
+	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.25))
+	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val + 0.125))
+	_set_tail_rotation(ball_5, ball_6, max(0.01, lerp_val))
+	_set_tail_rotation(ball_4, ball_5, max(0.01, lerp_val - 0.0125))
+	_set_tail_rotation(ball_3, ball_4, max(0.01, lerp_val - 0.025))
+	_set_tail_rotation(ball_2, ball_3, max(0.01, lerp_val - 0.05))
 
 	# Tail positions remain the same as you had them
 	
 	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, 0.9)
-	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 2), 0), max(0.01, lerp_val + 0.085))
-	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 3), 0), max(0.01, lerp_val + 0.08))
-	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.03 + (bounce / 4), 0), max(0.01, lerp_val - 0.0125))
-	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.04 + (bounce / 5), 0), max(0.01, lerp_val - 0.025))
-	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.05 + (bounce / 6), 0), max(0.01, lerp_val - 0.05))
-	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.06 + (bounce / 7), 0), max(0.01, lerp_val - 0.075))
-	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.06 + (bounce / 8), 0), max(0.01, lerp_val - 0.1))
+	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 2), 0), max(0.01, lerp_val + 0.5))
+	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 2), 0), max(0.01, lerp_val + 0.25))
+	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.03 + (bounce / 3), 0), max(0.01, lerp_val + 0.125))
+	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.04 + (bounce / 3), 0), max(0.01, lerp_val))
+	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.05 + (bounce / 4), 0), max(0.01, lerp_val - 0.0125))
+	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.06 + (bounce / 4), 0), max(0.01, lerp_val - 0.025))
+	ball_2.global_position = lerp(ball_2.global_position, ik_3.global_position + Vector3(0, -0.06 + (bounce / 5), 0), max(0.01, lerp_val - 0.05))
 
 
 func _set_tail_rotation(from_node: Node3D, to_node: Node3D, factor: float) -> void:

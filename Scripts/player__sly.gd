@@ -842,6 +842,10 @@ func camera_smooth_follow(delta):
 		tform.x += velocity.x * (delta / lerp_val) + lerp_val
 		tform.z += velocity.z * (delta / lerp_val) + lerp_val
 	elif target.is_in_group("rope"):
+		# predict velocity (better than true one for following)
+		
+		
+		
 		tform.x += velocity.x * (delta / lerp_val) + lerp_val
 		tform.z += velocity.z * (delta / lerp_val) + lerp_val
 	# Smoothly move the basis offset toward the predicted position
@@ -877,9 +881,9 @@ func camera_smooth_follow(delta):
 				#print("cam moved 4")
 				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1: # and not downward_raycast.is_colliding()
 				#print("cam moved 5")
-				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
+				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y - y_add, cam_timer * lerp_val * (abs(velocity.y) + 10.5))
 	else:
 		#print("cam moved 6")
 		$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer / PI)

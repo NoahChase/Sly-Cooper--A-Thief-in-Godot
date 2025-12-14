@@ -9,7 +9,7 @@ render_priority = 2
 shader = ExtResource("2_rkkeb")
 shader_parameter/outline_color_lit = Color(0.3, 0.31, 0.5, 0.392157)
 shader_parameter/outline_color_unlit = Color(0.12, 0.134, 0.4, 0.392157)
-shader_parameter/outline_width = 4.0
+shader_parameter/outline_width = 5.0
 shader_parameter/outline_step = 0.5
 shader_parameter/light_direction = Vector3(0, -1, 0.15)
 
@@ -18,7 +18,7 @@ render_priority = 3
 next_pass = SubResource("ShaderMaterial_t836l")
 shader = ExtResource("3_ydk4b")
 shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_width = 2.5
+shader_parameter/outline_width = 3.0
 
 [resource]
 next_pass = SubResource("ShaderMaterial_bftro")
