@@ -78,7 +78,7 @@ point_count = 11
 
 [sub_resource type="Curve3D" id="Curve3D_2rpoe"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -14.7841, 8.40897, -15.8195, 0, 0, 0, 0, 0, 0, -13.8111, 7.9858, -14.5921, 0, 0, 0, 0, 0, 0, -12.8381, 7.70465, -13.3646, 0, 0, 0, 0, 0, 0, -11.8651, 7.56551, -12.1372, 0, 0, 0, 0, 0, 0, -10.892, 7.56838, -10.9097, 0, 0, 0, 0, 0, 0, -9.91904, 7.71327, -9.68231, 0, 0, 0, 0, 0, 0, -8.94602, 8.00016, -8.45487, 0, 0, 0, 0, 0, 0, -7.97301, 8.42908, -7.22744, 0, 0, 0, 0, 0, 0, -7, 9, -6),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -14.9471, 8.62588, -15.7442, 0, 0, 0, 0, 0, 0, -13.9537, 8.13593, -14.5262, 0, 0, 0, 0, 0, 0, -12.9603, 7.79401, -13.3081, 0, 0, 0, 0, 0, 0, -11.9669, 7.60011, -12.0901, 0, 0, 0, 0, 0, 0, -10.9735, 7.55423, -10.8721, 0, 0, 0, 0, 0, 0, -9.98016, 7.65637, -9.65407, 0, 0, 0, 0, 0, 0, -8.98677, 7.90654, -8.43605, 0, 0, 0, 0, 0, 0, -7.99339, 8.30473, -7.21803, 0, 0, 0, 0, 0, 0, -7, 8.85094, -6),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 9
@@ -153,7 +153,7 @@ transparency = 1
 shading_mode = 0
 disable_ambient_light = true
 disable_fog = true
-albedo_color = Color(0.35, 0.5125, 1, 1)
+albedo_color = Color(0.4, 0.55, 1, 1)
 albedo_texture = ExtResource("33_bbu04")
 billboard_mode = 1
 billboard_keep_scale = true
@@ -304,10 +304,10 @@ shader_parameter/final_wave_speed = 0.175
 shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
-shader_parameter/normal_mult = 0.25
-shader_parameter/normal_height = 0.5
-shader_parameter/normal_2_height = 0.25
-shader_parameter/normal_lod = 0.125
+shader_parameter/normal_mult = 0.125
+shader_parameter/normal_height = 0.625
+shader_parameter/normal_2_height = 0.375
+shader_parameter/normal_lod = 0.5
 shader_parameter/albedo = Color(0.425, 0.4775, 0.5, 1)
 shader_parameter/roughness = 0.05
 shader_parameter/transparency = 0.5
@@ -432,9 +432,9 @@ shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
 shader_parameter/normal_mult = 0.125
-shader_parameter/normal_height = 0.5
-shader_parameter/normal_2_height = 0.25
-shader_parameter/normal_lod = 0.125
+shader_parameter/normal_height = 0.625
+shader_parameter/normal_2_height = 0.375
+shader_parameter/normal_lod = 0.5
 shader_parameter/albedo = Color(0.2125, 0.2375, 0.25, 1)
 shader_parameter/edge_color = Color(0.3375, 0.4125, 0.45, 1)
 shader_parameter/edge_scale = 0.25
@@ -568,13 +568,13 @@ curve_amplitude = 0.075
 num_segments = 8
 start_clamp = 0.05
 end_clamp = 0.95
-length = 12.81
+length = 12.86
 path_follow = NodePath("Path3D/PathFollow3D")
 target_point = NodePath("Path3D/PathFollow3D/Target Point")
 player = NodePath("../../Player_ Sly")
 
 [node name="start" type="Node3D" parent="Thief Points/Rope 2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 9, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 8.85094, -6)
 
 [node name="rope holder ball" type="MeshInstance3D" parent="Thief Points/Rope 2/start"]
 material_override = ExtResource("10_gaw5t")
@@ -586,7 +586,7 @@ mesh = SubResource("CylinderMesh_aajgs")
 surface_material_override/0 = ExtResource("10_gaw5t")
 
 [node name="end" type="Node3D" parent="Thief Points/Rope 2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.7841, 8.40897, -15.8195)
+transform = Transform3D(0.851103, -0.030034, -0.52414, 0.259359, 0.892082, 0.370032, 0.456462, -0.450875, 0.767043, -14.9471, 8.62588, -15.7442)
 
 [node name="rope holder ball" type="MeshInstance3D" parent="Thief Points/Rope 2/end"]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
@@ -602,7 +602,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_2rpoe")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/Rope 2/Path3D"]
-transform = Transform3D(-0.783643, -0.00114894, -0.621194, -1.24499e-05, 0.999957, -0.00183385, 0.621208, -0.00142933, -0.783624, -11.1724, 7.56755, -11.2634)
+transform = Transform3D(-0.774946, 0.0184398, -0.631741, -7.07804e-08, 0.999524, 0.0291765, 0.632024, 0.0226097, -0.774599, -11.296, 7.56912, -11.2674)
 progress = 5.9002
 loop = false
 

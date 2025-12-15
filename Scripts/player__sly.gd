@@ -849,9 +849,11 @@ func camera_smooth_follow(delta):
 		tform.x += velocity.x * (delta / lerp_val) + lerp_val
 		tform.z += velocity.z * (delta / lerp_val) + lerp_val
 	# Smoothly move the basis offset toward the predicted position
+	
 	$Basis_Offset.global_transform.origin.x = lerp($Basis_Offset.global_transform.origin.x, tform.x, lerp_val)
 	$Basis_Offset.global_transform.origin.z = lerp($Basis_Offset.global_transform.origin.z, tform.z, lerp_val)
 	# Smoothly update the camera's position to follow the basis offset
+	
 	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, cam_timer)
 	camera_parent.position.y = lerp(camera_parent.position.y, $Basis_Offset.global_transform.origin.y, 0.2)
 	camera_parent.position.z = lerp(camera_parent.position.z, $Basis_Offset.global_transform.origin.z, cam_timer)
