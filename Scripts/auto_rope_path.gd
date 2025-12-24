@@ -84,20 +84,31 @@ func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		# Runtime
 		bend_rope(delta)
-		if player_on_target == false:
-			var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
-			if dis_2_plyr > length * 1.5:
-				return
-			else:
+		
+		var dis_2_plyr = (player.global_transform.origin - target_point.global_transform.origin).length()
+		if dis_2_plyr > length * 1.5:
+			return
+		else:
+			if dis_2_plyr > 5.0:
 				if Update.count == 3:
 					if player.target == null:
 						ball2player(delta)
-		else:
-			if player.target != null and not player.stunned: ## ensures rotation is fixed if player is shot or hit off the rope by an enemy
-				move_progress(delta)
-			
+			else:
+				if player_on_target == false:
+					if dis_2_plyr > 0.25:
+						ball2player(delta)
+					else:
+						if player.state == player.TO_TARGET:
+							move_progress(delta)
+				else:
+					move_progress(delta)
 			
 		path_follow.progress_ratio = clamp(path_follow.progress_ratio, start_clamp, end_clamp)
+		
+		if path_follow.progress_ratio <= start_clamp + 0.001 or path_follow.progress_ratio >= end_clamp - 0.001:
+			target_point.at_end = true
+		else:
+			target_point.at_end = false
 	else:
 		if update_tool:
 			# Editor
@@ -191,14 +202,16 @@ func move_progress(delta):
 	var angle_diff = fposmod(player.true_player_rot.global_rotation.y - path_follow.global_rotation.y, TAU)
 	var forward = angle_diff < deg_to_rad(90) or angle_diff > deg_to_rad(270)
 	var target_rotation = path_follow.global_rotation.y + (PI if not forward else 0.0)
-	# Lerp rotation towards the target rotation
-	if player.state == player.ON_TARGET:
-		player.rot_container.global_rotation.y = lerp_angle(player.rot_container.global_rotation.y, target_rotation, lerp_val)
 	# Determine movement multiplier
 	var target_prog_mult = 1.0 if player.direction else 0.0
 	prog_mult = lerp(prog_mult, target_prog_mult * (-1.0 if not forward else 1.0), 0.1)
 	# Adjust progress along the path
-	path_follow.progress_ratio += delta / (length / 5.0) * prog_mult
+		# Lerp rotation towards the target rotation
+	if player.state == player.ON_TARGET:
+		player.rot_container.global_rotation.y = lerp_angle(player.rot_container.global_rotation.y, target_rotation, lerp_val)
+		path_follow.progress_ratio += delta / (length / 5.0) * prog_mult
+	else:
+		pass
 	# Reset lerp_val on direction switch
 	if old_forward != null and forward != old_forward:
 		lerp_val = 0.1
@@ -225,10 +238,13 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.global_transform.origin.y >= target_point.global_transform.origin.y:
-			path_follow.progress_ratio = (closest_offset + (directional_offset) / player.gravmult * 1.625) / length
-		else:
-			path_follow.progress_ratio = (closest_offset) / length
+		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 5:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult) / length, 0.1)
+		elif player.global_transform.origin.y >= target_point.global_transform.origin.y + 1:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 1.5) / length, 0.1)
+		elif player.state != player.TO_TARGET:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 1.25) / length, 0.1)
+		
 
 
 func _on_player_target_acquired(target_ball):

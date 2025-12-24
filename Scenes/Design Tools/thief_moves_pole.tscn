@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://dct52yylip5kv"]
+
+[ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="1_xbfvn"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_cnac8"]
+[ext_resource type="Material" uid="uid://co5obcf2r17t" path="res://Assets/Materials/Rail.tres" id="3_m5b8i"]
+
+[sub_resource type="Curve3D" id="Curve3D_xbfvn"]
+bake_interval = 512.0
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0.001, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="Thief Moves POLE" type="Node3D" node_paths=PackedStringArray("test_ball")]
+script = ExtResource("1_xbfvn")
+update_tool = true
+test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
+length = 10.0
+end_clamp = 0.8
+reversed = true
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_xbfvn")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-4.37095e-08, 0.999963, -4.37095e-08, 0, -4.37098e-08, -0.999956, -0.999957, -4.37098e-08, 1.9106e-15, 0, 4.11913, 0)
+progress = 4.17492
+loop = false
+
+[node name="Grip Offset" type="Node3D" parent="Path3D/PathFollow3D"]
+
+[node name="Target Point" parent="Path3D/PathFollow3D/Grip Offset" groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("2_cnac8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.25, 0)
+invisible = false
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
+material_override = ExtResource("3_m5b8i")
+polygon = PackedVector2Array(0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true

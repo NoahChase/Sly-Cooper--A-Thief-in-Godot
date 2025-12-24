@@ -9,7 +9,6 @@ extends Node3D
 @export var aim_pitch_max = 85
 @export var aim_pitch_min = -85 
 
-
 @onready var handling_obstruction = false
 
 var distance = Vector3()
@@ -48,9 +47,9 @@ func _physics_process(delta):
 # Dead zone
 	var dead_zone = 0.1
 	var stick_magnitude = stick_vector.length()
-	if stick_magnitude > dead_zone:
-		stick_vector = stick_vector.normalized() * ((stick_magnitude - dead_zone) / (1.0 - dead_zone))
-	else:
+	stick_magnitude = clamp(stick_magnitude, 0.0, 1.0)
+	print("stick mag = ", stick_magnitude)
+	if stick_magnitude < dead_zone:
 		stick_vector = Vector2.ZERO
 # Adjust yaw and pitch with dynamic scaling
 	yaw += stick_vector.x * yaw_sens * delta * 1.75
@@ -77,7 +76,7 @@ func _physics_process(delta):
 			if camera_player.floor_or_roof.is_in_group("floor"):
 				pitch = lerp(pitch, -0.125, 0.015)
 			else:
-				pitch = lerp(pitch, -0.5, 0.015)
+				pitch = lerp(pitch, -0.375, 0.015)
 	if camera_player.target != null and camera_player.can_ledge == false:
 		if camera_player.target.adj_fov == true:
 			camera.fov = lerp(camera.fov, 75.0, 0.02)

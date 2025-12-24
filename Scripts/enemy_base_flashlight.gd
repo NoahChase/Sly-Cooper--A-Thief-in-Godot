@@ -14,7 +14,7 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 @export var nav_point_num = 0
 @export var SPEED = 4.0
 @export var JUMP_VELOCITY = 2.0
-@export var chase_radius = 24.0
+@export var chase_radius = 16.0
 
 @onready var nav_agent = $NavigationAgent3D
 @onready var target
@@ -96,7 +96,8 @@ var custom_direction = Vector3()
 var do_custom_direciton = false
 var custom_direction_locked = true
 var rng_idle_still_generated = false
-
+var nav_generated_count = 0
+var nav_generated_max = 2
 func _ready():
 	nav_rng = RandomNumberGenerator.new()
 	new_nav_point = nav_parent.get_node("Point 2")
@@ -358,7 +359,7 @@ func state_execute():
 					SPEED_MULT = 0.0
 					weapon.look_at(aim_prediction, Vector3.UP)
 					if $"Quickshot Flash Timer".is_stopped():
-						$"Quickshot Flash Timer".start(1.0) # do_quickshot = true, $"Attack Flash Timer".start(1.5)
+						$"Quickshot Flash Timer".start(2.0) # do_quickshot = true, $"Attack Flash Timer".start(1.5)
 				else:
 					weapon.look_at(aim_prediction, Vector3.UP)
 					SPEED_MULT = 1.0
@@ -389,7 +390,7 @@ func state_execute():
 				do_idle()
 # IDLE
 		IDLE:
-			print("state IDLE")
+			#print("state IDLE")
 			#if enemies.size() > 0:
 				#hear_enemy_target()
 			weapon.shoot = false
@@ -506,7 +507,7 @@ func detect_jump():
 			jump_down()
 func jump_up():
 	var height_to_target = max(0, target.global_transform.origin.y - global_transform.origin.y)
-	var total_jump_height = height_to_target + 2.0
+	var total_jump_height = height_to_target + 4.0
 	velocity.y = sqrt(2 * gravity * grav_mult * total_jump_height)
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
@@ -554,9 +555,22 @@ func gen_nav_rng():
 	if nav_rng_int == 5:
 		new_nav_point = nav_parent.get_node("Point 5")
 	#print(nav_rng_int)
-	if new_nav_point == prev_nav_point:
-		gen_nav_rng()
-		return
+	if nav_generated_count >= nav_generated_max:
+		nav_generated_count = 0
+	else:
+		if new_nav_point == prev_nav_point:
+			if nav_rng_int == 1:
+				new_nav_point = nav_parent.get_node("Point 4")
+			if nav_rng_int == 2:
+				new_nav_point = nav_parent.get_node("Point 3")
+			if nav_rng_int == 3:
+				new_nav_point = nav_parent.get_node("Point 2")
+			if nav_rng_int == 4:
+				new_nav_point = nav_parent.get_node("Point 1")
+			if nav_rng_int == 5:
+				new_nav_point = nav_parent.get_node("Point 1")
+			nav_generated_count += 1
+			return 
 	$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
 
 func gen_idle_still_rng():

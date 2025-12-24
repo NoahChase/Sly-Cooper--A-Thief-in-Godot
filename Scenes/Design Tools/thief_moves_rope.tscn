@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3 uid="uid://d3wtbb3200gvy"]
+
+[ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_lb7r5"]
+[ext_resource type="Material" uid="uid://co5obcf2r17t" path="res://Assets/Materials/Rail.tres" id="2_y5p7l"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="3_bi2l7"]
+[ext_resource type="Material" uid="uid://cg5fm5vb7hp40" path="res://Assets/Materials/rope.tres" id="4_lq2sx"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_v4hwl"]
+radius = 0.125
+height = 0.25
+radial_segments = 16
+rings = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_a7ejk"]
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.33
+radial_segments = 16
+rings = 1
+
+[sub_resource type="Curve3D" id="Curve3D_ru5vu"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, -0.35, 0, 0, 0, 0, 0, 0, 0, 2, -0.6, 0, 0, 0, 0, 0, 0, 0, 1, -0.75, 0, 0, 0, 0, 0, 0, 0, 0, -0.8, 0, 0, 0, 0, 0, 0, 0, -1, -0.75, 0, 0, 0, 0, 0, 0, 0, -2, -0.6, 0, 0, 0, 0, 0, 0, 0, -3, -0.35, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 9
+
+[node name="Thief Moves ROPE" type="Node3D" node_paths=PackedStringArray("path_3d", "start_point", "end_point", "path_follow", "target_point")]
+script = ExtResource("1_lb7r5")
+update_tool = true
+path_3d = NodePath("Path3D")
+start_point = NodePath("end")
+end_point = NodePath("start")
+curve_amplitude = 0.05
+num_segments = 8
+start_clamp = 0.05
+end_clamp = 0.95
+length = 8.21
+path_follow = NodePath("Path3D/PathFollow3D")
+target_point = NodePath("Path3D/PathFollow3D/Target Point")
+
+[node name="start" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
+
+[node name="rope holder ball" type="MeshInstance3D" parent="start"]
+material_override = ExtResource("2_y5p7l")
+mesh = SubResource("SphereMesh_v4hwl")
+
+[node name="rope holder pole" type="MeshInstance3D" parent="start/rope holder ball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = SubResource("CylinderMesh_a7ejk")
+surface_material_override/0 = ExtResource("2_y5p7l")
+
+[node name="end" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="rope holder ball" type="MeshInstance3D" parent="end"]
+material_override = ExtResource("2_y5p7l")
+mesh = SubResource("SphereMesh_v4hwl")
+
+[node name="rope holder pole" type="MeshInstance3D" parent="end/rope holder ball"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = SubResource("CylinderMesh_a7ejk")
+surface_material_override/0 = ExtResource("2_y5p7l")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_ru5vu")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-1.62827e-07, -0.0499332, 0.998737, -1.86264e-09, 0.998663, 0.0499369, -0.999999, 6.27034e-09, -1.62715e-07, 4.28269e-06, -0.8, 0)
+progress = 4.10269
+loop = false
+
+[node name="Target Point" parent="Path3D/PathFollow3D" groups=["LOCK PLAYER ROT", "rope"] instance=ExtResource("3_bi2l7")]
+transform = Transform3D(1, 0, 0, 0, 0.99863, -0.052336, 0, 0.052336, 0.998629, 0, 0.075, 0)
+invisible = false
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.05, -0.05)
+polygon = PackedVector2Array(0, 0, 0, 0.1, 0.1, 0.1, 0.1, 0)
+mode = 2
+path_node = NodePath("../Path3D")
+path_interval_type = 0
+path_interval = 1.0
+path_simplify_angle = 0.0
+path_rotation = 2
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+smooth_faces = true
+material = ExtResource("4_lq2sx")

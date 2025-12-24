@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbvho1wtj8duu"]
+
+[ext_resource type="Script" uid="uid://d1fckp58lmgi" path="res://Scripts/follower.gd" id="1_b4i1p"]
+[ext_resource type="Script" uid="uid://0uf2s7b4f4w2" path="res://Scripts/motion_tracker.gd" id="2_hffwf"]
+
+[node name="Follower" type="Node3D" node_paths=PackedStringArray("motion_tracker")]
+script = ExtResource("1_b4i1p")
+motion_tracker = NodePath("Motion_Tracker")
+
+[node name="Motion_Tracker" type="Node3D" parent="."]
+script = ExtResource("2_hffwf")

@@ -13,7 +13,7 @@ var dir_no_look
 var target_x_rotation = 0.0
 
 var swing_velocity := 0.0
-var swing_strength := 0.0
+var swing_strength := 1.0
 var damping := 0.99
 var has_swinged_once := false  # Flag to track if the player has started swinging
 var target_swing = 0.0
@@ -22,31 +22,6 @@ var pushback = false
 var swing_ratio
 var align_lerp_val = 1.0
 
-#func _process(delta: float) -> void:
-	## in process to avoid inconsistent movement, was in physics process before
-	#if target_point.is_selected:
-		#if player != null:
-			#player.global_transform.origin = target_point.global_transform.origin
-			#if not look_assigned:
-				#assign_look_at()
-			#else:
-				#is_facing_toward()
-				## Align the player rotation and position
-				##target_point.rotation = rot_container.rotation
-				#player.rot_container.rotation.y = atan2(dir_to_look.x, dir_to_look.z) + rotation.y
-				## Player rotates to hook the closer they get, from 1 meter.
-				#var distance = player.global_transform.origin - target_point.global_transform.origin
-				#align_lerp_val = lerp(align_lerp_val, distance.length(), 0.025)
-				#if distance.length() <= 1.0:
-					#player.rotation.x = lerp(player.rotation.x,rot_container.global_rotation.x, 1.0 - align_lerp_val)
-					#player.rotation.z = lerp(player.rotation.z, rot_container.global_rotation.z, 1.0 - align_lerp_val)
-		##else:
-			##player = target_point.player
-	#else:
-		##player = null ## gets player off the hook swing when they're hit in combat, stunned, or shot
-		#look_assigned = false
-		#has_swinged_once = false
-		#align_lerp_val = 1.0
 func _ready() -> void:
 	player.target_acquired.connect(_on_player_target_acquired)
 	player.target_released.connect(_on_player_target_released)
@@ -55,10 +30,10 @@ func _physics_process(delta: float) -> void:
 	if player_on_target == false or player == null:
 		return
 	
-	if look_at == look_1:
-		$"Look At 1".visible = true
-	if look_at == look_2:
-		$"Look At 2".visible = true
+	#if look_at == look_1:
+		#$"Look At 1".visible = true
+	#if look_at == look_2:
+		#$"Look At 2".visible = true
 		
 	#player y rotation
 	player.rot_container.rotation.y = lerp_angle(player.rot_container.rotation.y, atan2(dir_to_look.x, dir_to_look.z) - rotation.y, 0.15)
@@ -77,17 +52,17 @@ func _physics_process(delta: float) -> void:
 		swing_strength = lerp(swing_strength, 0.0, 0.01)
 	if player.direction:
 		if pushback == false:
-			swing_strength = 1.5
+			swing_strength = 1.75
 	else:
 		swing_strength = 0.0
 	update_swing(delta)
-	swing_ratio = clamp(rot_container.rotation.x / deg_to_rad(75), -1.0, 1.0)
+	swing_ratio = clamp(rot_container.rotation.x / deg_to_rad(90), -1.0, 1.0)
 	if look_at == look_1:
 		player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", swing_ratio)
 	if look_at == look_2: 
 		player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", -swing_ratio)
 	rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
-	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-90), deg_to_rad(90))
+	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-60), deg_to_rad(60))
 
 func assign_look_at():
 	##determine which look node to use for the player's y rotation
@@ -121,20 +96,32 @@ func is_facing_toward():
 	return abs(angle_diff) < PI / 2
 
 func update_swing(delta):
-	var angle_diff = fposmod((player.true_player_rot.global_rotation.y - target_point.global_rotation.y) - rotation.y, TAU)
-	var swinging_forward = angle_diff < deg_to_rad(90) or angle_diff > deg_to_rad(270)
+	var angle_diff = fposmod(
+		(player.true_player_rot.global_rotation.y - target_point.global_rotation.y) - rotation.y,
+		TAU
+	)
+	var swinging_forward = angle_diff < deg_to_rad(70) or angle_diff > deg_to_rad(290)
 
 	var swing_input = swing_strength
-	
 	if not swinging_forward:
 		swing_input = -swing_strength
 
+	var max_angle = deg_to_rad(120.0)
+	var angle = abs($"Rot Ghost".rotation.x)
+
+	# 1 at center, 0 at +-60 (half of max_angle)
+	var fade = clamp(1.0 - (angle / max_angle / 1.125), 0.0, 0.90)
+	fade = fade * fade # optional, smoother
+
+	swing_input *= fade
+
 	var return_force = -$"Rot Ghost".rotation.x * abs(sin($"Rot Ghost".rotation.x))
 	var total_force = swing_input + return_force
-	
+
 	swing_velocity += total_force * 0.3
 	swing_velocity *= damping
 	$"Rot Ghost".rotation.x += swing_velocity * delta
+
 
 func _on_player_target_acquired(target_ball):
 	if target_ball == target_point and not player_on_target:
@@ -148,8 +135,10 @@ func _on_player_target_released(target_ball):
 		$"Look At 2".visible = false
 		align_lerp_val = 1.0
 		look_assigned = false
+		look_at = null
 		target_x_rotation = 0.0
 		$"Rot Ghost".rotation.x = target_x_rotation
 		rot_container.rotation.x = 0.0
+		swing_strength = 1.0
 		player_on_target = false
 		print("Player released rope")

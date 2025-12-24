@@ -1,4 +1,3 @@
-@tool
 extends Node3D
 @onready var lerp_val = 0.125
 @onready var bounce = 0.0

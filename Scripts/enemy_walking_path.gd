@@ -17,6 +17,8 @@ func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		length = calculate_path_length(curve)
 	else:
+		if not enemy:
+			return
 		if Update.count == 3:
 			distance_to_enemy = (enemy.global_transform.origin - target_mesh.global_transform.origin).length()
 			var distance_to_enemy_y = abs(enemy.global_transform.origin.y - target_mesh.global_transform.origin.y)

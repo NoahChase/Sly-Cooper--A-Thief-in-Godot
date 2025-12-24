@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://citrgink3q8r7"
+uid="uid://36w0xtmdvrue"
 path="res://.godot/imported/Carmelita_Animations7.glb-553d1f1ec5f229d21b198f8232709f86.scn"
 
 [deps]
@@ -32,21 +32,6 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"materials": {
-"BodyMat.1001": {
-"use_external/enabled": true,
-"use_external/path": "uid://bnewj3kvedjat"
-},
-"EyeMat.1001": {
-"use_external/enabled": true,
-"use_external/path": "uid://4r18yagxqqq"
-},
-"HeadMat.1001": {
-"use_external/enabled": true,
-"use_external/path": "uid://dcdj8rdtni3ux"
-}
-}
-}
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

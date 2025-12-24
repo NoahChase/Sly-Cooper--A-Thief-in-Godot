@@ -52,12 +52,14 @@ size = Vector3(0.25, 0.25, 0.25)
 script = ExtResource("1_iriet")
 
 [node name="Look At 1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -1)
+visible = false
 material_override = SubResource("StandardMaterial3D_kxfox")
 mesh = SubResource("SphereMesh_44ef5")
 
 [node name="Look At 2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 1)
+visible = false
 material_override = SubResource("StandardMaterial3D_ts64k")
 mesh = SubResource("SphereMesh_j75q4")
 

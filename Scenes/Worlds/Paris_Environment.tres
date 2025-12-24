@@ -148,8 +148,8 @@ noise = SubResource("FastNoiseLite_4xowi")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
-shader_parameter/sky_top_color = Color(0.005, 0.02875, 0.1, 1)
-shader_parameter/sky_horizon_color = Color(0.0895834, 0.075, 0.25, 1)
+shader_parameter/sky_top_color = Color(0, 0.025, 0.1, 1)
+shader_parameter/sky_horizon_color = Color(0.078125, 0.0625, 0.25, 1)
 shader_parameter/sky_curve = 0.125
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover = ExtResource("1_xdm0e")
@@ -180,10 +180,12 @@ background_mode = 2
 background_color = Color(0.0862745, 0.121569, 0.25098, 1)
 sky = SubResource("Sky_r3fl7")
 ambient_light_source = 3
-ambient_light_color = Color(0.1575, 0.230625, 0.45, 1)
+ambient_light_color = Color(0.3025, 0.364375, 0.55, 1)
 ambient_light_sky_contribution = 0.5
 reflected_light_source = 2
 ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 1.0
 ssil_radius = 2.0
 ssil_intensity = 0.5
 ssil_sharpness = 1.0

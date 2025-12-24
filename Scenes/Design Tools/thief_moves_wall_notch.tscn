@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://b28w7j06ng3ar"]
+
+[ext_resource type="Script" uid="uid://brps61jf3s3k7" path="res://Scripts/thief_moves_wall_notch.gd" id="1_shrtp"]
+[ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_62tpq"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_n11qh"]
+height = 0.0
+radius = 0.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_shrtp"]
+size = Vector3(1, 1, 0.1)
+
+[node name="thief_moves_wall_notch" type="Node3D" node_paths=PackedStringArray("target_point", "area", "area_col")]
+script = ExtResource("1_shrtp")
+target_point = NodePath("Target Point")
+area = NodePath("Area3D")
+area_col = NodePath("Area3D/CollisionShape3D")
+
+[node name="Target Point" parent="." groups=["LOCK PLAYER ROT", "point"] instance=ExtResource("2_62tpq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_n11qh")
+
+[node name="On Wall Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_shrtp")

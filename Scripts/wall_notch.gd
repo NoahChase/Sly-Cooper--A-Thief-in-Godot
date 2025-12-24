@@ -37,9 +37,11 @@ func _physics_process(delta):
 					player.jump_mult = jump_mult
 					player.previous_jump_was_notch = true
 					player.jump()
+					target_point.is_selected = false
 				elif player.direction:
 					player.jump_mult = jump_mult
 					player.previous_jump_was_notch = true
+					target_point.is_selected = false
 	else:
 		area_col.shape = SphereShape3D.new()
 		area_col.shape.radius = area_radius
