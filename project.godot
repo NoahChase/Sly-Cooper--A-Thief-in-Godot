@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Sly Cooper: A Thief in Godot"
-run/main_scene="uid://b7jlhjo3apaay"
+config/name="Sly-cooper--a-thief-in-godot-main (2)"
+run/main_scene="uid://csndptq2dn7ys"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="uid://pcq4og8s3lyk"

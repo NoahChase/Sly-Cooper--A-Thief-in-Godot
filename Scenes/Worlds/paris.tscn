@@ -1,4 +1,4 @@
-[gd_scene load_steps=171 format=4 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=173 format=4 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -57,6 +57,8 @@
 [ext_resource type="PackedScene" uid="uid://b8goy5hpuw2ix" path="res://Assets/Temp Imports/Whirlybird_colonly.fbx" id="55_eo8k6"]
 [ext_resource type="PackedScene" uid="uid://bal3t01ejdg7d" path="res://Assets/Temp Imports/fountain.glb" id="55_w61al"]
 [ext_resource type="Script" uid="uid://cmfrde1dglfth" path="res://Scripts/return_player_to_safe_point.gd" id="57_1u24f"]
+[ext_resource type="PackedScene" uid="uid://vjnxpg1bb3jo" path="res://Scenes/UI/DeathScreen.tscn" id="58_0ksea"]
+[ext_resource type="AudioStream" uid="uid://c4oeia67kvqp8" path="res://Assets/Music/Sly_2_OST_Episode_Menu_1_KLICKAUD.mp3" id="59_gw2uj"]
 
 [sub_resource type="Curve3D" id="Curve3D_6cvge"]
 closed = true
@@ -2170,7 +2172,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_v4hwl")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE6/Path3D"]
-transform = Transform3D(-0.942415, 0.0109055, 0.334144, 8.10229e-08, 0.999281, -0.0326152, -0.334367, -0.030737, -0.941787, 47.5084, 4.16926, 28.5549)
+transform = Transform3D(-0.942415, 0.0109055, 0.334144, 8.10229e-08, 0.999281, -0.0326152, -0.334367, -0.030737, -0.941786, 47.5084, 4.16926, 28.5549)
 progress = 4.10269
 loop = false
 
@@ -2744,7 +2746,7 @@ reversed = true
 curve = SubResource("Curve3D_ovoob")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE2/Path3D"]
-transform = Transform3D(-1.06654e-07, 0.999729, -0.0203502, 6.12972e-08, -0.0203508, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
+transform = Transform3D(-1.06654e-07, 0.999728, -0.0203502, 6.12972e-08, -0.0203508, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
 progress = 4.17492
 loop = false
 
@@ -3543,7 +3545,7 @@ reversed = true
 curve = SubResource("Curve3D_2qbwh")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE21/Path3D"]
-transform = Transform3D(0.610694, -0.791695, -0.0131044, -0.00903486, 0.00958097, -0.99985, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
+transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999849, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
 progress = 4.17492
 loop = false
 
@@ -4233,6 +4235,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.5, 0)
 shape = SubResource("BoxShape3D_0ksea")
 debug_color = Color(0.605674, 1.66051e-06, 3.85046e-07, 0.419608)
 debug_fill = false
+
+[node name="DeathScreen" parent="." instance=ExtResource("58_0ksea")]
+visible = false
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("59_gw2uj")
+volume_db = -8.83
+autoplay = true
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.07173, 12.766, 4.05441)
 
 [connection signal="body_entered" from="Thief Points/WALL NOTCH/Wall Notch/Area3D" to="Thief Points/WALL NOTCH/Wall Notch" method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Thief Points/WALL NOTCH/Wall Notch/Area3D" to="Thief Points/WALL NOTCH/Wall Notch" method="_on_area_3d_body_exited"]

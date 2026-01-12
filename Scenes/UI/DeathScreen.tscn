@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://vjnxpg1bb3jo"]
+
+[ext_resource type="Script" uid="uid://bul5gqb1u4y0k" path="res://Scripts/DeathScreen.gd" id="1_xkv6f"]
+
+[node name="DeathScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xkv6f")
+
+[node name="Death label" type="Label" parent="."]
+top_level = true
+visibility_layer = 1023
+layout_mode = 0
+offset_left = 897.0
+offset_top = 452.0
+offset_right = 966.0
+offset_bottom = 475.0
+text = "You Died"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Exit Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.028
+anchor_bottom = 0.053
+offset_left = 861.0
+offset_top = 582.0
+offset_right = 947.24
+offset_bottom = 591.76
+text = "Quit"
+
+[node name="Restart Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 861.0
+offset_top = 493.0
+offset_right = 1003.0
+offset_bottom = 563.0
+text = "Restart"
+
+[connection signal="pressed" from="Exit Button" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="Restart Button" to="." method="_on_restart_button_pressed"]

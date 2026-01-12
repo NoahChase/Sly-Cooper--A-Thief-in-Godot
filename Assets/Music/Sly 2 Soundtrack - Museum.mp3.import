@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://yfearjp8uqa6"
+path="res://.godot/imported/Sly 2 Soundtrack - Museum.mp3-c797e3c7388d335ce0dc4fd8127a4ef2.mp3str"
+
+[deps]
+
+source_file="res://Assets/Music/Sly 2 Soundtrack - Museum.mp3"
+dest_files=["res://.godot/imported/Sly 2 Soundtrack - Museum.mp3-c797e3c7388d335ce0dc4fd8127a4ef2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
