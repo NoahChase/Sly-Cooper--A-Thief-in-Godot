@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bal3t01ejdg7d"
-path="res://.godot/imported/fountain.glb-ac158b320fbf6461d776abbabe463cd7.scn"
+uid="uid://buo4vxtwdt2gp"
+path="res://.godot/imported/p-bld-sly2-medtower.glb-5cb3313b13a7d9089e491f74d3064e5b.scn"
 
 [deps]
 
-source_file="res://Assets/Temp Imports/fountain.glb"
-dest_files=["res://.godot/imported/fountain.glb-ac158b320fbf6461d776abbabe463cd7.scn"]
+source_file="res://Assets/Temp Imports/tempcarmelita/p-bld-sly2-medtower.glb"
+dest_files=["res://.godot/imported/p-bld-sly2-medtower.glb-5cb3313b13a7d9089e491f74d3064e5b.scn"]
 
 [params]
 
@@ -32,13 +32,6 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
-_subresources={
-"materials": {
-"Material": {
-"use_external/enabled": true,
-"use_external/path": "uid://cqiaoxninm4yl"
-}
-}
-}
+_subresources={}
 gltf/naming_version=1
 gltf/embedded_image_handling=1

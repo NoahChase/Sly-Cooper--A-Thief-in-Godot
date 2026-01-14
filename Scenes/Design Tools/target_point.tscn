@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://bj34qq52wpb60"]
+[gd_scene load_steps=15 format=3 uid="uid://bj34qq52wpb60"]
 
 [ext_resource type="Script" uid="uid://duw7xddv1s1bp" path="res://Scripts/target_point.gd" id="1_57eij"]
+[ext_resource type="Shader" uid="uid://b0axti1avktul" path="res://Assets/Shaders/outline_shine.gdshader" id="2_soa8h"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ij1nr"]
 radius = 0.125
@@ -32,7 +33,17 @@ seamless = true
 color_ramp = SubResource("Gradient_glyak")
 noise = SubResource("FastNoiseLite_frr4c")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odmcu"]
+render_priority = 2
+shader = ExtResource("2_soa8h")
+shader_parameter/outline_color_lit = Color(0.3, 0.35, 0.5, 0.392157)
+shader_parameter/outline_color_unlit = Color(0.09, 0.1425, 0.3, 0.392157)
+shader_parameter/outline_width = 6.0
+shader_parameter/outline_step = 0.5
+shader_parameter/light_direction = Vector3(0, -1, 0.15)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i8qnk"]
+next_pass = SubResource("ShaderMaterial_odmcu")
 transparency = 1
 diffuse_mode = 3
 specular_mode = 1
@@ -47,7 +58,7 @@ emission_energy_multiplier = 15.0
 emission_texture = SubResource("NoiseTexture2D_ryavi")
 clearcoat_roughness = 1.0
 distance_fade_mode = 1
-distance_fade_min_distance = 24.0
+distance_fade_min_distance = 20.0
 distance_fade_max_distance = 8.0
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_f30fa"]

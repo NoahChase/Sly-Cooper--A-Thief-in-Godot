@@ -45,6 +45,7 @@ swing=""
 Enemy=""
 SLIP=""
 roof=""
+CAMERA=""
 
 [input]
 

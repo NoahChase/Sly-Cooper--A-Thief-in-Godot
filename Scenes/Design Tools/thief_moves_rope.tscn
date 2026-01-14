@@ -20,10 +20,10 @@ rings = 1
 
 [sub_resource type="Curve3D" id="Curve3D_ru5vu"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, -0.35, 0, 0, 0, 0, 0, 0, 0, 2, -0.6, 0, 0, 0, 0, 0, 0, 0, 1, -0.75, 0, 0, 0, 0, 0, 0, 0, 0, -0.8, 0, 0, 0, 0, 0, 0, 0, -1, -0.75, 0, 0, 0, 0, 0, 0, 0, -2, -0.6, 0, 0, 0, 0, 0, 0, 0, -3, -0.35, 0, 0, 0, 0, 0, 0, 0, -4, 0, 0),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 3.15326, 2.20259, 0, 0, 0, 0, 0, 0, 0, 2.08622, 2.02935, 0, 0, 0, 0, 0, 0, 0, 1.01917, 1.96997, 0, 0, 0, 0, 0, 0, 0, -0.0478713, 2.02445, 0, 0, 0, 0, 0, 0, 0, -1.11492, 2.19279, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
-point_count = 9
+point_count = 5
 
 [node name="Thief Moves ROPE" type="Node3D" node_paths=PackedStringArray("path_3d", "start_point", "end_point", "path_follow", "target_point")]
 script = ExtResource("1_lb7r5")
@@ -67,7 +67,7 @@ surface_material_override/0 = ExtResource("2_y5p7l")
 curve = SubResource("Curve3D_ru5vu")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-1.62827e-07, -0.0499332, 0.998737, -1.86264e-09, 0.998663, 0.0499369, -0.999999, 6.27034e-09, -1.62715e-07, 4.28269e-06, -0.8, 0)
+transform = Transform3D(-4.37113e-08, 0.155821, 0.987768, 0, 0.987695, -0.155832, -0.999999, -6.81115e-09, -4.31767e-08, -0.922098, 2.16237, 0)
 progress = 4.10269
 loop = false
 

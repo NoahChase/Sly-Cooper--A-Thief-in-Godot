@@ -5,6 +5,7 @@ diffuse_mode = 3
 specular_mode = 1
 albedo_color = Color(0.475, 0.491667, 0.5, 1)
 roughness = 0.95
+normal_enabled = true
 rim_enabled = true
 rim = 0.1
 rim_tint = 1.0

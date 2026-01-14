@@ -36,7 +36,7 @@ extends Node3D
 @onready var ik_2 = $"Ball Root/Ball_2/Node3D/ik_2"
 @onready var ik_2_end = $"Ball Root/Ball_2_end/Node3D/ik_2_end"
 
-@onready var lerp_val = 0.3
+@onready var lerp_val = 0.35
 @onready var bounce = 0.0
 # At the top of the script or in _ready
 var prev_tail_pos = Vector3()

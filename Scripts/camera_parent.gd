@@ -48,7 +48,7 @@ func _physics_process(delta):
 	var dead_zone = 0.1
 	var stick_magnitude = stick_vector.length()
 	stick_magnitude = clamp(stick_magnitude, 0.0, 1.0)
-	print("stick mag = ", stick_magnitude)
+	#print("stick mag = ", stick_magnitude)
 	if stick_magnitude < dead_zone:
 		stick_vector = Vector2.ZERO
 # Adjust yaw and pitch with dynamic scaling

@@ -19,10 +19,10 @@ albedo_color = Color(0, 0, 0, 1)
 script = ExtResource("1_ktv51")
 area3d = NodePath("Area3D")
 area_col = NodePath("Area3D/CollisionShape3D")
-auto_jump = null
 
 [node name="Target Point" parent="." groups=["LOCK PLAYER ROT", "notch"] instance=ExtResource("2_5f0wb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+invisible = false
 
 [node name="Area3D" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)

@@ -21,12 +21,10 @@ func _physics_process(delta: float) -> void:
 func assign_player(p: CharacterBody3D):
 	player = p
 	is_selected = true
-	invisible = true
 	player.jump_mult = jump_mult
 	emit_signal("player_found", player)
 
 func unassign_player():
 	player = null
 	is_selected = false
-	invisible = false
 	emit_signal("player_lost")

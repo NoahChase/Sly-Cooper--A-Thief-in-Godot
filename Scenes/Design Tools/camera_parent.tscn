@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://xcipepk1meu"]
+[gd_scene load_steps=3 format=3 uid="uid://xcipepk1meu"]
 
 [ext_resource type="Script" uid="uid://e44htkl4q0ox" path="res://Scripts/camera_parent.gd" id="1_t1ixj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5bbg0"]
 
 [node name="Camera Parent" type="Node3D" node_paths=PackedStringArray("camera_target", "camera")]
 script = ExtResource("1_t1ixj")
@@ -12,9 +14,10 @@ camera = NodePath("Camera Target/Camera Container/Camera3D")
 [node name="Camera Container" type="Node3D" parent="Camera Target"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
-[node name="Camera3D" type="Camera3D" parent="Camera Target/Camera Container"]
+[node name="Camera3D" type="Camera3D" parent="Camera Target/Camera Container" groups=["CAMERA"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 fov = 60.0
+far = 9000.0
 
 [node name="Cam Right" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
@@ -27,3 +30,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Cam Down" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Camera Area3D" type="Area3D" parent="Camera Target/Camera Container/Camera3D" groups=["CAMERA"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera Target/Camera Container/Camera3D/Camera Area3D"]
+shape = SubResource("SphereShape3D_5bbg0")
+debug_fill = false

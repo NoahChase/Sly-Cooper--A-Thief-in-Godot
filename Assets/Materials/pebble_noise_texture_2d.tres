@@ -13,6 +13,5 @@ domain_warp_amplitude = 0.725
 domain_warp_fractal_gain = 0.13
 
 [resource]
-generate_mipmaps = false
 seamless = true
 noise = SubResource("FastNoiseLite_va7e5")

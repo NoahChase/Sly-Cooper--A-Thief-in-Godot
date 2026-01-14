@@ -5,7 +5,6 @@
 [ext_resource type="Material" uid="uid://co5obcf2r17t" path="res://Assets/Materials/Rail.tres" id="3_m5b8i"]
 
 [sub_resource type="Curve3D" id="Curve3D_xbfvn"]
-bake_interval = 512.0
 _data = {
 "points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0.001, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0),
 "tilts": PackedFloat32Array(0, 0, 0)
@@ -24,7 +23,7 @@ reversed = true
 curve = SubResource("Curve3D_xbfvn")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-4.37095e-08, 0.999963, -4.37095e-08, 0, -4.37098e-08, -0.999956, -0.999957, -4.37098e-08, 1.9106e-15, 0, 4.11913, 0)
+transform = Transform3D(-4.37095e-08, 0.999963, -4.37095e-08, 0, -4.37098e-08, -0.999956, -0.999957, -4.37098e-08, 1.9106e-15, 0, 4.1772, 0)
 progress = 4.17492
 loop = false
 

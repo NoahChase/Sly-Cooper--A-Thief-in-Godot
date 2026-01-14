@@ -27,7 +27,7 @@ var sag_points: Array #sagged down position of curve points
 
 func _ready():
 	if Engine.is_editor_hint():
-		update_curve()
+		#update_curve()
 		return
 	if end_point and target_point:
 		look_at_target(target_point, end_point.global_position)
@@ -81,6 +81,16 @@ func _ready():
 		
 
 func _physics_process(delta: float) -> void:
+	if not num_segments % 2 == 0:
+		print("--ROPE ERROR--")
+		print("Num Segments = ", str(num_segments))
+		print("- ", str(num_segments), " is an odd number and does not work with the rope tool.")
+		print("- Adding 1 to Num Segments to make it even!")
+		num_segments += 1
+		print("Num Segments = ", str(num_segments))
+		print("- To make Num Segments smaller, type a number in the Num Segments box instead of using the up and down arrows.")
+		print("--ROPE FIXED--")
+
 	if not Engine.is_editor_hint():
 		# Runtime
 		bend_rope(delta)

@@ -30,6 +30,8 @@ func _physics_process(delta):
 					if player.previous_jump_was_notch and player.last_target != target_point:
 						magnetize_target()
 			else:
+				if player.state != player.ON_TARGET:
+					return
 				var dir = target_point.global_position - $MeshInstance3D.global_position
 				target_point.rotation.y = atan2(dir.x, dir.z)
 				player.rot_container.rotation.y = lerp_angle(player.rot_container.rotation.y, target_point.rotation.y, 0.15)

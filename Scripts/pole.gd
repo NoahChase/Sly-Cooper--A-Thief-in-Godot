@@ -17,9 +17,10 @@ var tween : Tween
 
 var speed = 0.001
 var previous_position : Vector3
-
+var dis_2_plyr
 func _ready():
 	if Engine.is_editor_hint():
+		#path.curve = path.curve.duplicate() # to make curve unique (needs to be tested)
 		return
 	#test_ball.mesh.visible = true
 	previous_position = path_follow_3d.global_transform.origin
@@ -29,7 +30,7 @@ func _ready():
 func _physics_process(delta):
 	if not Engine.is_editor_hint():
 		if player_on_target == false:
-			var dis_2_plyr = (target.global_transform.origin - test_ball.global_transform.origin).length()
+			dis_2_plyr = (target.global_transform.origin - test_ball.global_transform.origin).length()
 			if dis_2_plyr > length * 1.5:
 				return
 			else:
@@ -44,7 +45,8 @@ func _physics_process(delta):
 			move_ball = false
 			var camera_direction = test_ball.global_transform.origin - target.camera_parent.camera.global_transform.origin
 			if target.state == target.ON_TARGET:
-				target.global_transform.origin = test_ball.global_transform.origin
+				var ball_pos = target.global_transform.origin
+				ball_pos = test_ball.global_transform.origin
 				#target.sly_container.rotation.y = lerp(target.sly_container.rotation.y, -test_ball.rotation.y, 0.1)
 			speed = 2.0
 			if reversed:
@@ -93,9 +95,18 @@ func ball2player():
 	
 	if not path or not path.curve:
 		return
-
+		
+	var vert_offset = 0.0
+	
+	if dis_2_plyr <= 0.5:
+		vert_offset = 0
+	elif dis_2_plyr <= 1:
+		vert_offset = dis_2_plyr
+	elif dis_2_plyr > 1:
+		vert_offset = 1
+	
 	# Get the closest offset on the curve
-	var closest_offset = path.curve.get_closest_offset(target.global_position)
+	var closest_offset = path.curve.get_closest_offset(target.global_position - Vector3(0, vert_offset, 0))
 	
 	# Convert offset to progress_ratio only if the rope isn't being manually moved
 	if length > 0:
