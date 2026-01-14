@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://csndptq2dn7ys"]
+
+[ext_resource type="Script" uid="uid://b5tpwd6mab1gs" path="res://Scripts/main_menu.gd" id="1_g18y6"]
+[ext_resource type="Texture2D" uid="uid://pcq4og8s3lyk" path="res://sly cooper classic title logo.png" id="2_mjmdf"]
+[ext_resource type="AudioStream" uid="uid://yfearjp8uqa6" path="res://Assets/Music/Sly 2 Soundtrack - Museum.mp3" id="3_72sra"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_g18y6")
+
+[node name="Start Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 875.0
+offset_top = 723.0
+offset_right = 1124.0
+offset_bottom = 815.0
+text = "Start Game"
+
+[node name="Control Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 883.0
+offset_top = 840.0
+offset_right = 1119.0
+offset_bottom = 942.0
+text = "Controls"
+
+[node name="Quit Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 876.0
+offset_top = 961.0
+offset_right = 1129.0
+offset_bottom = 1061.0
+text = "Quit"
+
+[node name="Loading Label" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 9.965
+anchor_bottom = 7.175
+offset_left = 983.0
+offset_top = 540.0
+offset_right = 646.4
+offset_bottom = 276.0
+text = "Loading"
+
+[node name="SlyCooperClassicTitleLogo" type="Sprite2D" parent="."]
+position = Vector2(1018, 357)
+scale = Vector2(0.350293, 0.319097)
+texture = ExtResource("2_mjmdf")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_72sra")
+autoplay = true
+
+[connection signal="pressed" from="Start Button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Control Button" to="." method="_on_control_button_pressed"]
+[connection signal="pressed" from="Quit Button" to="." method="_on_quit_button_pressed"]

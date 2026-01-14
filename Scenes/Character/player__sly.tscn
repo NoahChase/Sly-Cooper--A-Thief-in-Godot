@@ -444,6 +444,8 @@ mesh = SubResource("PrismMesh_nt6o0")
 skeleton = NodePath("../..")
 
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("4_ncpw6")]
+maxHP = 1
+hp = 1
 get_kb = true
 hurtboxes = [NodePath("Hurtbox")]
 

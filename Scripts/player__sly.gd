@@ -114,7 +114,7 @@ func _ready() -> void:
 	var required_speed = desired_jump_distance / total_air_time
 	print(required_speed)
 	#$RichTextLabel4.text = str("floor max angle: ", floor_max_angle, "jump mult : ", jump_mult, " jump: ", jump_vel," speed: ", required_speed, "jump trigger: ", jump_cam_trigger)
-
+	
 func _physics_process(delta: float) -> void:
 	if motion_tracker.velocity:
 		if motion_tracker.velocity.length() < 0.1:
