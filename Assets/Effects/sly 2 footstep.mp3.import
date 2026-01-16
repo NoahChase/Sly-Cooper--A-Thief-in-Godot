@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://icei3ak3od8t"
+path="res://.godot/imported/sly 2 footstep.mp3-1cebf21adf23f384c21bbfe9ad5f705f.mp3str"
+
+[deps]
+
+source_file="res://Assets/Effects/sly 2 footstep.mp3"
+dest_files=["res://.godot/imported/sly 2 footstep.mp3-1cebf21adf23f384c21bbfe9ad5f705f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
