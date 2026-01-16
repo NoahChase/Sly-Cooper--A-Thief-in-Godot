@@ -309,6 +309,7 @@ mesh = SubResource("BoxMesh_1lhpl")
 
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
 [connection signal="area_exited" from="Hitbox" to="Hitbox" method="_on_area_exited"]
+[connection signal="health_is_zero" from="HP Container" to="." method="_on_hp_container_health_is_zero"]
 [connection signal="timeout" from="Point Timer" to="." method="_on_point_timer_timeout"]
 [connection signal="timeout" from="Quickshot Timer" to="." method="_on_quickshot_timer_timeout"]
 [connection signal="timeout" from="Quickshot Flash Timer" to="." method="_on_quickshot_flash_timer_timeout"]

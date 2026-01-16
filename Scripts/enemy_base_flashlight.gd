@@ -745,3 +745,6 @@ func _on_custom_direction_timer_timeout() -> void:
 	custom_direction_locked = false
 func _on_just_hit_flash_timer_timeout() -> void:
 	just_hit = false
+
+func _on_hp_container_health_is_zero() -> void:
+	queue_free()

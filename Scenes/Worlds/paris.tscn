@@ -129,7 +129,7 @@ data = PackedVector3Array(-3, 3, 0.75, 3, 3, 0.75, -3, -3, 0.75, 3, 3, 0.75, 3, 
 
 [sub_resource type="Shader" id="Shader_bmssu"]
 code = "shader_type spatial;
-render_mode blend_mix, cull_back, diffuse_burley, specular_disabled;
+render_mode blend_mix, cull_back, diffuse_burley, specular_toon;
 
 uniform sampler2D DEPTH_TEXTURE: hint_depth_texture, filter_linear_mipmap;
 
@@ -974,9 +974,9 @@ shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
 shader_parameter/normal_mult = 0.125
-shader_parameter/normal_height = 0.625
-shader_parameter/normal_2_height = 0.375
-shader_parameter/normal_lod = 0.5
+shader_parameter/normal_height = 1.5
+shader_parameter/normal_2_height = 0.5
+shader_parameter/normal_lod = 1.0
 shader_parameter/albedo = Color(0.1275, 0.129375, 0.15, 1)
 shader_parameter/edge_color = Color(0.3375, 0.4125, 0.45, 1)
 shader_parameter/edge_scale = 0.25
@@ -1005,7 +1005,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456094, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.3575, 0.430625, 0.65, 1)
+light_color = Color(0.42, 0.49, 0.7, 1)
 light_indirect_energy = 0.25
 light_bake_mode = 1
 shadow_enabled = true
@@ -1696,7 +1696,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175603, -0.00777051, 5.86066e-07, 0.97526, -0.220346, 0.00796614, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999823, -0.00175603, -0.00777051, 5.86066e-07, 0.97526, -0.220346, 0.00796615, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -1831,7 +1831,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_vhdbp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE/Path3D"]
-transform = Transform3D(0.546182, 0.0342799, 0.836845, -6.54653e-06, 0.999008, -0.0409228, -0.837544, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
+transform = Transform3D(0.546182, 0.0342799, 0.836844, -6.54652e-06, 0.999008, -0.0409228, -0.837544, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
 progress = 4.10269
 loop = false
 
@@ -2172,7 +2172,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_v4hwl")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE6/Path3D"]
-transform = Transform3D(-0.942425, 0.0109035, 0.334114, 2.12848e-06, 0.999281, -0.0326064, -0.334338, -0.0307284, -0.941797, 47.5084, 4.16926, 28.5549)
+transform = Transform3D(-0.942425, 0.0109035, 0.334115, 2.12848e-06, 0.999281, -0.0326064, -0.334337, -0.0307284, -0.941797, 47.5084, 4.16926, 28.5549)
 progress = 4.10269
 loop = false
 
@@ -2239,7 +2239,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_wxl03")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE7/Path3D"]
-transform = Transform3D(-0.916535, 0.0141489, -0.399586, 6.55626e-07, 0.999172, 0.0353861, 0.399856, 0.03243, -0.915917, 60.7362, 7.19574, 58.1358)
+transform = Transform3D(-0.916535, 0.0141489, -0.399586, 6.55625e-07, 0.999172, 0.0353861, 0.399856, 0.03243, -0.915917, 60.7362, 7.19574, 58.1358)
 progress = 4.10269
 loop = false
 
@@ -2443,7 +2443,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oip0c")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE10/Path3D"]
-transform = Transform3D(-0.998322, 0.0279637, -0.0503461, -4.68773e-05, 0.873699, 0.486262, 0.0575938, 0.48543, -0.872296, 19.3063, 6.40272, 71.4053)
+transform = Transform3D(-0.998322, 0.0279637, -0.0503462, -4.68773e-05, 0.873699, 0.486262, 0.0575938, 0.48543, -0.872296, 19.3063, 6.40272, 71.4053)
 progress = 4.10269
 loop = false
 

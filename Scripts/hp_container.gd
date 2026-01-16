@@ -6,6 +6,7 @@ extends Node3D
 @export var can_take_damage = true
 @export var damage_flash_time = 1.5
 @export var hurtboxes : Array[Area3D] = []
+@export var load_death_screen_on_death = false
 @onready var damage_flash_timer = $"Damage Flash Timer"
 
 signal damage_taken
@@ -22,17 +23,16 @@ func _physics_process(delta: float) -> void:
 		
 		# Stop further damage processing
 		can_take_damage = false
-		# Show death screen
-		print("Dead")
-		print("Parent node name: ", get_parent().get_parent().name)
-		show_death_screen()
+		
+		## show death screen can be connected to a world manager node by the health_is_zero signal
+		## right now, it's placed in the player's script, and teh enemy connects to health_is_zero by deleting itself
 		
 	
 	for hurtbox in hurtboxes:
 		if hurtbox.is_hit:
 			if can_take_damage == true:
 				damage_taken.emit()
-				#hurtbox.rotation.x += 1
+				##hurtbox.rotation.x += 1
 				hp -= hurtbox.damage
 				#print(parent, " hp = ", hp)
 				can_take_damage = false

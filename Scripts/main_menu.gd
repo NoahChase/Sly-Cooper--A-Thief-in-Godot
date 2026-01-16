@@ -10,8 +10,6 @@ func close_menu_buttons() -> void:
 	$"Quit Button".visible = false
 
 func _on_start_button_pressed() -> void:
-	
-	close_menu_buttons()
 	$"Loading Label".visible = true
 	$SlyCooperClassicTitleLogo.visible = false
 	close_menu_buttons()

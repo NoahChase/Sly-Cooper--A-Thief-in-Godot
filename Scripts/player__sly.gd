@@ -477,7 +477,7 @@ func _physics_process(delta: float) -> void:
 	camera_smooth_follow(delta)
 
 	move_and_slide()
-	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | velocity = ", motion_tracker.velocity.length())
+	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, " | velocity = ", motion_tracker.velocity.length())
 
 
 func _input(event: InputEvent) -> void:
@@ -1025,3 +1025,15 @@ func _on_air_wait_timer_timeout() -> void:
 	else:
 		print("decided not air")
 		state = FLOOR
+
+
+func _on_hp_container_health_is_zero() -> void:
+	print("Dead")
+	print("Parent node name: ", get_parent().get_parent().name)
+	show_death_screen()
+func show_death_screen() -> void:
+	var death_screen = get_parent().get_node("DeathScreen")
+	Engine.time_scale = 0.0
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	death_screen.visible = true	
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
