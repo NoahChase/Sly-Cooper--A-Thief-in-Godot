@@ -15,6 +15,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xkv6f")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -2
+offset_right = 1927.0
+offset_bottom = 1081.0
+color = Color(0, 0, 0, 1)
+
 [node name="Death label" type="Label" parent="."]
 top_level = true
 visibility_layer = 1023

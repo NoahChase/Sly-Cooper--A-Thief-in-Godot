@@ -162,6 +162,8 @@ specular_mode = 1
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jj232"]
 render_priority = -1
 shader = ExtResource("4_skok1")
+shader_parameter/fade_near = 8.0
+shader_parameter/fade_far = 20.0
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_width = 1.5
 

@@ -25,7 +25,7 @@ func _physics_process(delta: float) -> void:
 		can_take_damage = false
 		
 		## show death screen can be connected to a world manager node by the health_is_zero signal
-		## right now, it's placed in the player's script, and teh enemy connects to health_is_zero by deleting itself
+		## right now, it's placed in the player's script, and the enemy connects to health_is_zero by deleting itself
 		
 	
 	for hurtbox in hurtboxes:

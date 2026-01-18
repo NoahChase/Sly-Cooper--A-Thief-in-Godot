@@ -2,6 +2,9 @@
 shader_type spatial;
 render_mode cull_front, unshaded;
 
+uniform float fade_near = 8.0;   // fully visible
+uniform float fade_far  = 20.0;  // fully transparent
+
 uniform vec4 outline_color_lit   : source_color = vec4(1.0, 1.0, 1.0, 1.0); // Lit outline color
 uniform vec4 outline_color_unlit : source_color = vec4(0.0, 0.0, 0.0, 1.0); // Unlit outline color
 uniform float outline_width : hint_range(0.0, 10.0) = 1.0;
@@ -34,6 +37,11 @@ void fragment() {
 	// Use NdotL as a mask to select between lit/unlit outline colors
 	vec4 final_color = mix(outline_color_unlit, outline_color_lit, step(outline_step, NdotL));
 
+	// Distance fade
+	float dist = distance(VERTEX, VIEW);
+	float fade = 1.0 - smoothstep(fade_near, fade_far, dist);
+
 	ALBEDO = final_color.rgb;
-	ALPHA  = final_color.a;
+	ALPHA  = final_color.a * fade;
+
 }

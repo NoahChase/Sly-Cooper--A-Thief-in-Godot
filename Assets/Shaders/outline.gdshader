@@ -2,6 +2,9 @@
 shader_type spatial;
 render_mode cull_front, unshaded;
 
+uniform float fade_near = 8.0;   // fully visible
+uniform float fade_far  = 20.0;  // fully transparent
+
 uniform vec4 outline_color : source_color;
 uniform float outline_width = 1.0;
 
@@ -18,7 +21,12 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = outline_color.rgb;
+	
+	// Distance fade
+	float dist = distance(VERTEX, VIEW);
+	float fade = 1.0 - smoothstep(fade_near, fade_far, dist);
+	
 	if (outline_color.a < 1.0) {
-		ALPHA = outline_color.a;
+		ALPHA = outline_color.a * fade;
 	}
 }

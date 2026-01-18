@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=3 uid="uid://3di44ouc68mq"]
+
+[ext_resource type="Script" uid="uid://cg6oba802dquj" path="res://Scripts/pickup_coin.gd" id="1_ltykn"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fv07r"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ltykn"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.926704, 0.754991, 0.193364, 1)
+roughness = 0.5
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_enabled = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_88vds"]
+radius = 0.75
+
+[sub_resource type="Animation" id="Animation_ltykn"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -1.5708)]
+}
+
+[sub_resource type="Animation" id="Animation_fv07r"]
+resource_name = "idle spion"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -1.5708), Vector3(0, 6.28319, -1.5708)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_88vds"]
+_data = {
+&"RESET": SubResource("Animation_ltykn"),
+&"idle spin": SubResource("Animation_fv07r")
+}
+
+[node name="Pickup_Coin" type="Node3D"]
+script = ExtResource("1_ltykn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-3.61999e-06, 1, 0, -1, -3.61999e-06, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CylinderMesh_fv07r")
+surface_material_override/0 = SubResource("StandardMaterial3D_ltykn")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_88vds")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_88vds")
+}
+autoplay = "idle spin"
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

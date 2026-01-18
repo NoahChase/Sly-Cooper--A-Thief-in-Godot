@@ -93,6 +93,8 @@ bottom_radius = 4.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xiv4v"]
 render_priority = 3
 shader = ExtResource("4_xiv4v")
+shader_parameter/fade_near = 8.0
+shader_parameter/fade_far = 20.0
 shader_parameter/outline_color = Color(0, 1, 0, 0.196078)
 shader_parameter/outline_width = 1.0
 
@@ -112,6 +114,8 @@ height = 3.0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fnvxh"]
 render_priority = 3
 shader = ExtResource("4_xiv4v")
+shader_parameter/fade_near = 8.0
+shader_parameter/fade_far = 20.0
 shader_parameter/outline_color = Color(1, 0, 0, 0.196078)
 shader_parameter/outline_width = 1.0
 

@@ -1,11 +1,12 @@
-[gd_scene load_steps=24 format=3 uid="uid://dd5jlx7gfenis"]
+[gd_scene load_steps=25 format=3 uid="uid://d1v0d851s67ka"]
 
-[ext_resource type="Script" uid="uid://dkty77jclhlgg" path="res://Scripts/enemy_base_flashlight.gd" id="1_q5ydn"]
-[ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="2_kfhgq"]
-[ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="3_q4nxv"]
-[ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="4_e1dqi"]
-[ext_resource type="PackedScene" uid="uid://bibovwn6qb1d8" path="res://Scenes/Design Tools/gun.tscn" id="5_1lhpl"]
-[ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="6_q4nxv"]
+[ext_resource type="PackedScene" uid="uid://bhmb7tfnis47w" path="res://Scenes/Character Mesh/carmelita_animations_7.tscn" id="1_blgq8"]
+[ext_resource type="Script" uid="uid://dkty77jclhlgg" path="res://Scripts/enemy_base_flashlight.gd" id="2_nl3io"]
+[ext_resource type="PackedScene" uid="uid://deklym4nj8rbp" path="res://Scenes/Design Tools/hitbox.tscn" id="3_oq16c"]
+[ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="4_vf31g"]
+[ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="5_nx177"]
+[ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="6_32kva"]
+[ext_resource type="PackedScene" uid="uid://bibovwn6qb1d8" path="res://Scenes/Design Tools/gun.tscn" id="7_n063b"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bj7m3"]
 radial_segments = 7
@@ -60,9 +61,9 @@ height = 0.5
 [sub_resource type="BoxMesh" id="BoxMesh_1lhpl"]
 size = Vector3(0.25, 0.25, 0.25)
 
-[node name="enemy_flashlight_generic" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container", "kb_parent") groups=["Enemy", "SLIP"]]
+[node name="enemy_carmelita" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container", "kb_parent") groups=["Enemy", "SLIP"]]
 floor_max_angle = 0.610865
-script = ExtResource("1_q5ydn")
+script = ExtResource("2_nl3io")
 character_mesh = NodePath("MeshInstance3D")
 col_shape = NodePath("CollisionShape3D")
 flashlight = NodePath("Spotlight Detection")
@@ -77,17 +78,19 @@ avoidance_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_bj7m3")
 
 [node name="arms" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("BoxMesh_e1dqi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tbyxe")
 
-[node name="Hitbox" parent="." node_paths=PackedStringArray("kb_excluded") instance=ExtResource("6_q4nxv")]
+[node name="Hitbox" parent="." node_paths=PackedStringArray("kb_excluded") instance=ExtResource("3_oq16c")]
 do_kb = true
 kb_excluded = [NodePath("../HP Container")]
 
@@ -96,23 +99,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.75)
 shape = SubResource("BoxShape3D_q4nxv")
 debug_color = Color(0.956863, 0, 0, 0.419608)
 
-[node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("2_kfhgq")]
+[node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("4_vf31g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-get_kb = true
 damage_flash_time = 1.0
 hurtboxes = [NodePath("Hurtbox")]
 
-[node name="Hurtbox" parent="HP Container" instance=ExtResource("3_q4nxv")]
+[node name="Hurtbox" parent="HP Container" instance=ExtResource("5_nx177")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HP Container/Hurtbox"]
 shape = SubResource("CapsuleShape3D_q4nxv")
 debug_color = Color(0, 1, 0, 0.419608)
 
-[node name="Spotlight Detection" parent="." instance=ExtResource("4_e1dqi")]
+[node name="Spotlight Detection" parent="." instance=ExtResource("6_32kva")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.5625)
 
-[node name="gun" parent="." instance=ExtResource("5_1lhpl")]
+[node name="gun" parent="." instance=ExtResource("7_n063b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -0.625)
+visible = false
 
 [node name="Point Timer" type="Timer" parent="."]
 one_shot = true
@@ -139,6 +142,7 @@ one_shot = true
 
 [node name="Point Mesh" type="MeshInstance3D" parent="."]
 top_level = true
+visible = false
 mesh = SubResource("CapsuleMesh_kfhgq")
 surface_material_override/0 = SubResource("StandardMaterial3D_kfhgq")
 
@@ -307,9 +311,26 @@ mesh = SubResource("SphereMesh_q4nxv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 mesh = SubResource("BoxMesh_1lhpl")
 
+[node name="Carmelita_Animations7" parent="." instance=ExtResource("1_blgq8")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Enemy_Carmelita" type="Node3D" parent="."]
+
+[connection signal="air" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_air"]
+[connection signal="hit_taken" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_hit_taken"]
+[connection signal="idle" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_idle"]
+[connection signal="jump" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_jump"]
+[connection signal="look_around" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_look_around"]
+[connection signal="run" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_run"]
+[connection signal="shoot" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_shoot"]
+[connection signal="walk" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_walk"]
+[connection signal="walk2" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_walk_2"]
 [connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_area_entered"]
 [connection signal="area_exited" from="Hitbox" to="Hitbox" method="_on_area_exited"]
 [connection signal="health_is_zero" from="HP Container" to="." method="_on_hp_container_health_is_zero"]
+[connection signal="fire" from="gun" to="." method="_on_gun_fire"]
+[connection signal="fire" from="gun" to="Carmelita_Animations7" method="_on_gun_fire"]
+[connection signal="reload" from="gun" to="." method="_on_gun_reload"]
 [connection signal="timeout" from="Point Timer" to="." method="_on_point_timer_timeout"]
 [connection signal="timeout" from="Quickshot Timer" to="." method="_on_quickshot_timer_timeout"]
 [connection signal="timeout" from="Quickshot Flash Timer" to="." method="_on_quickshot_flash_timer_timeout"]

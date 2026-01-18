@@ -407,7 +407,7 @@ func _physics_process(delta: float) -> void:
 
 	# Adjust rotation smoothing based on player movement
 
-	var look_val = 0.165 * air_mult / speed_mult
+	var look_val = 0.125 * air_mult / speed_mult
 	if can_ledge:
 		var dir = rot_container.global_position - $"ray v container/ray v ball".global_position
 		rot_container.rotation.y = lerp_angle(rot_container.rotation.y, atan2(dir.x, dir.z), 0.2)
@@ -444,9 +444,9 @@ func _physics_process(delta: float) -> void:
 	var direction_2d = Vector2(direction.x, direction.z)
 # Camera Rotation:
 	if horizontal < 0 and state == FLOOR:
-		camera_parent.yaw += motion_tracker.velocity.length() / 5.5 * delta * -horizontal
+		camera_parent.yaw += motion_tracker.velocity.length() / 4 * delta * -horizontal
 	elif horizontal > 0 and state == FLOOR:
-		camera_parent.yaw -= motion_tracker.velocity.length() / 5.5 * delta * horizontal
+		camera_parent.yaw -= motion_tracker.velocity.length() / 4 * delta * horizontal
 	
 	var colliding_count = 0  # Reset every frame
 	manual_slip = false
@@ -1035,5 +1035,5 @@ func show_death_screen() -> void:
 	var death_screen = get_parent().get_node("DeathScreen")
 	Engine.time_scale = 0.0
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	death_screen.visible = true	
+	death_screen.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

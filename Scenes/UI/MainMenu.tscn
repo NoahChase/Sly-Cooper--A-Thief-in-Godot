@@ -11,6 +11,14 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_g18y6")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -2
+layout_mode = 0
+offset_right = 1927.0
+offset_bottom = 1081.0
+color = Color(0, 0, 0, 1)
+
 [node name="Start Button" type="Button" parent="."]
 layout_mode = 0
 offset_left = 875.0

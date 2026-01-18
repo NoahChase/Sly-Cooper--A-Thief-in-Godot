@@ -1,5 +1,8 @@
 extends Node3D
 
+signal fire
+signal reload
+
 @onready var anim = $AnimationPlayer
 @onready var projectile_scene : PackedScene = load("res://Scenes/Design Tools/projectile.tscn")
 @onready var shot_num = 0
@@ -25,11 +28,14 @@ func _physics_process(delta: float) -> void:
 		
 		if bullet_chambered == false:
 			decide_shoot()
+		else:
+			reload.emit()
 
 func decide_shoot():
 	shot_num += 1
 	var shoot_int = randi_range(1, 6)
 	if shoot_int >= 0:
+		fire.emit()
 		#$"Gun Audio".pitch_scale = randf_range(0.75, 1)
 		#$"Gun Audio".play()
 		var projectile = projectile_scene.instantiate()

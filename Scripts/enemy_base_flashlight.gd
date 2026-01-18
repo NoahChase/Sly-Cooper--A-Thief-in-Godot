@@ -2,6 +2,18 @@ extends CharacterBody3D
 
 enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 
+#animation signals (connect to enemy mesh to do animations)
+signal idle
+signal air
+signal walk
+signal walk2
+signal run
+signal jump
+signal look_around
+signal hit_taken
+signal shoot #gun also has a shoot signal that works better, will probably remove this one
+
+@export var first_spawn = true
 @export var unique = false
 @export var character_mesh : Node3D
 @export var col_shape : CollisionShape3D
@@ -23,12 +35,13 @@ enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
 @onready var potential_target_in_range = false
 @onready var heard_enemy = false
 @onready var enemy_target
-@onready var new_nav_point = Node3D
-@onready var prev_nav_point = Node3D
+@onready var new_nav_point : Node3D = null
+@onready var prev_nav_point : Node3D = null
 @onready var nav_distance = 0
 @onready var final_nav_distance_to_target = 0.0
 @onready var target_y_abs = 0.0
 @onready var SPEED_MULT = 1.0
+@onready var stop_walking = false
 @onready var grav_mult = 1.0
 @onready var do_180 = false
 @onready var move_to_nav_point = false
@@ -98,11 +111,16 @@ var custom_direction_locked = true
 var rng_idle_still_generated = false
 var nav_generated_count = 0
 var nav_generated_max = 2
+
 func _ready():
-	nav_rng = RandomNumberGenerator.new()
-	new_nav_point = nav_parent.get_node("Point 2")
-	$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
-			
+	reset_ai_state()
+	if nav_parent != null:
+		nav_rng = RandomNumberGenerator.new()
+		new_nav_point = nav_parent.get_node("Point 2")
+		$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
+		#if not first_spawn: #temporary, should be moved to reset_ai_state()
+			#nav_rng = RandomNumberGenerator.new()
+			#gen_nav_rng()
 
 func _physics_process(delta):
 	#print("pot tar: ", potential_target, "in range == ", potential_target_in_range)
@@ -128,6 +146,11 @@ func _physics_process(delta):
 		target_y_abs = abs(target.global_transform.origin.y - global_transform.origin.y)
 	else:
 		$"Flat Target Visual".global_transform.origin = nav_agent.get_final_position()
+
+	#if not is_on_floor(): #moved this here for animation fix for walking on stairs
+		#velocity += get_gravity() * delta * grav_mult
+		#if not ascending_stairs:
+			#air.emit()
 
 # DO STATES
 	state_manager()
@@ -175,7 +198,7 @@ func _physics_process(delta):
 				flat_target = target.global_transform.origin
 		else:
 			flat_target = nav_agent.get_next_path_position()
-	if not flat_target == null:
+	if not flat_target == null and flat_target != global_transform.origin:
 		flat_target.y = global_transform.origin.y  # Ignore vertical difference
 		var target_rotation = global_transform.looking_at(flat_target, Vector3.UP).basis
 		global_transform.basis = global_transform.basis.slerp(target_rotation, delta * PI)
@@ -184,16 +207,16 @@ func _physics_process(delta):
 	var h_velocity = velocity #done to prevent velocity.y from going to zero
 	h_velocity.y = 0
 	h_velocity = h_velocity.lerp(direction * SPEED * SPEED_MULT, 4 * delta)
-	velocity.x = h_velocity.x
-	velocity.z = h_velocity.z
-	
+	if stop_walking == false:
+		velocity.x = h_velocity.x
+		velocity.z = h_velocity.z
+	else:
+		velocity.x = 0.0
+		velocity.z = 0.0
 	if velocity.y > -6.5:
 		grav_mult = 2.5
 	else:
 		grav_mult = 1.0
-	
-	if not is_on_floor():
-		velocity += get_gravity() * delta * grav_mult
 
 # ADD SLIP
 	if $"Floor Ray".is_colliding():
@@ -207,6 +230,11 @@ func _physics_process(delta):
 	#weapon.shoot = false # turn off shooting for to help debug
 
 	stair_ray_check(delta)
+
+	if not is_on_floor(): ## Air used to be here
+		velocity += get_gravity() * delta * grav_mult
+		if not $"Floor Ray".is_colliding(): #keeps from switching to air when going up stairs
+			air.emit()
 
 # MOVE AND SLIDE
 	move_and_slide()
@@ -298,6 +326,7 @@ func state_execute():
 	match  state:
 		HIT:
 			if previous_position == null:
+				hit_taken.emit()
 				do_custom_direciton = true
 				custom_direction = Vector3.ZERO
 				print("custom dir set true HERE HIT")
@@ -307,6 +336,10 @@ func state_execute():
 				flat_target = previous_position
 # CHASE
 		CHASE:
+			if velocity.length() > 0:
+				run.emit()
+			else:
+				idle.emit()
 			print("state CHASE")
 			distance_to_target = (global_position - target.global_position).length()
 			flashlight.target = target
@@ -335,7 +368,7 @@ func state_execute():
 				weapon.shoot = false
 			else:
 				weapon.shoot = true
-				SPEED_MULT = 1.0
+				SPEED_MULT = 1.75
 				weapon.look_at(aim_prediction, Vector3.UP)
 			if distance_to_target > chase_radius:
 				if $"Stop Chase Timer".is_stopped():
@@ -343,7 +376,7 @@ func state_execute():
 # COMBAT (CHASE)
 			if distance_to_target <= 1.5:
 				weapon.shoot = false
-				SPEED_MULT = 0.0
+				stop_walking = true
 				if do_melee == false:
 					melee_hitbox.active = false
 					if $"Melee Flash Timer".is_stopped():
@@ -360,10 +393,12 @@ func state_execute():
 					weapon.look_at(aim_prediction, Vector3.UP)
 					if $"Quickshot Flash Timer".is_stopped():
 						$"Quickshot Flash Timer".start(2.0) # do_quickshot = true, $"Attack Flash Timer".start(1.5)
+						stop_walking = true
 				else:
 					weapon.look_at(aim_prediction, Vector3.UP)
 					SPEED_MULT = 1.0
 			else:
+				stop_walking = false
 				if do_quickshot == true: # true
 					SPEED_MULT = 0.0
 					weapon.look_at(aim_prediction, Vector3.UP)
@@ -390,6 +425,10 @@ func state_execute():
 				do_idle()
 # IDLE
 		IDLE:
+			if velocity.length() > 0:
+				walk.emit()
+			else:
+				idle.emit()
 			#print("state IDLE")
 			#if enemies.size() > 0:
 				#hear_enemy_target()
@@ -409,6 +448,7 @@ func state_execute():
 				if nav_distance.length() < 2:
 					if $"Point Timer".is_stopped():
 						state = IDLE_STILL
+						look_around.emit()
 						$"Point Timer".start(3.0)
 			# target is path or point
 			if move_to_nav_point == false:
@@ -419,6 +459,7 @@ func state_execute():
 			
 # IDLE STILL
 	if state == IDLE_STILL:
+		idle.emit()
 		print("state IDLE STILL")
 		do_custom_direciton = true
 		custom_direction = Vector3.ZERO
@@ -506,12 +547,14 @@ func detect_jump():
 		if target_y_abs > 1.0:
 			jump_down()
 func jump_up():
+	jump.emit()
 	var height_to_target = max(0, target.global_transform.origin.y - global_transform.origin.y)
 	var total_jump_height = height_to_target + 4.0
 	velocity.y = sqrt(2 * gravity * grav_mult * total_jump_height)
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
 func jump_down():
+	jump.emit()
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
 	velocity.y = 8.0
@@ -697,6 +740,33 @@ func stair_detect(delta):
 			floor_snap_length = 0.1
 			return
 
+func reset_ai_state():
+	target = null
+	potential_target = null
+	potential_target_in_range = false
+	body_found_target = false
+	heard_enemy = false
+	enemy_target = null
+	
+	return_to_safe_point = false
+	safe_point_found = false
+	can_jump = false
+	just_hit = false
+	
+	do_custom_direciton = false
+	custom_direction_locked = true
+	custom_direction = Vector3.ZERO
+	
+	stop_chase = false
+	move_to_nav_point = false
+	
+	ascending_stairs = false
+	manual_slip = false
+	stair_miss_counter = 0
+	
+	previous_position = null
+	state = IDLE
+
 ## AREAS
 func _on_close_detection_area_body_entered(body):
 	if body.is_in_group("Player"):
@@ -727,13 +797,16 @@ func _on_quickshot_timer_timeout() -> void:
 	do_quickshot = true
 func _on_quickshot_flash_timer_timeout() -> void:
 	$"Attack Flash Timer".start(4.0)
+	stop_walking = true
 	weapon.anim.play("shoot")
+	shoot.emit()
 	print("quickshot!")
 	do_quickshot = false # false
 	#SPEED_MULT = 0.0
 func _on_melee_flash_timer_timeout() -> void:
 	do_melee = true
 	$"Attack Flash Timer".start(0.25)
+	stop_walking = true
 func _on_attack_flash_timer_timeout() -> void:
 	print("quickshot false")
 	do_melee = false
@@ -748,3 +821,10 @@ func _on_just_hit_flash_timer_timeout() -> void:
 
 func _on_hp_container_health_is_zero() -> void:
 	queue_free()
+
+
+func _on_gun_fire() -> void:
+	stop_walking = true
+
+func _on_gun_reload() -> void:
+	stop_walking = false

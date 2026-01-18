@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://xcipepk1meu" path="res://Scenes/Design Tools/camera_parent.tscn" id="3_617rq"]
 [ext_resource type="PackedScene" uid="uid://8r1717wlwg3r" path="res://Assets/Temp Imports/p-bld-4.glb" id="3_oqbgp"]
 [ext_resource type="PackedScene" uid="uid://c4mn85fobgsha" path="res://Assets/Temp Imports/p-bld-safehouse.glb" id="6_617rq"]
-[ext_resource type="PackedScene" uid="uid://dd5jlx7gfenis" path="res://Scenes/Design Tools/enemy_base_flashlight.tscn" id="7_6cvge"]
+[ext_resource type="PackedScene" uid="uid://d1v0d851s67ka" path="res://Scenes/Character/enemy_carmelita.tscn" id="6_gw2uj"]
 [ext_resource type="PackedScene" uid="uid://bgstehumyyjb6" path="res://Assets/Temp Imports/a balcony.glb" id="7_u86sc"]
 [ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="8_awwuf"]
 [ext_resource type="Material" uid="uid://cg5fm5vb7hp40" path="res://Assets/Materials/rope.tres" id="10_bbu04"]
@@ -64,10 +64,10 @@
 closed = true
 bake_interval = 16.0
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -12.0787, 0, -9.0356, 0, 0, 0, 0, 0, 0, -14.2483, 0, 1.34517, 0, 0, 0, 0, 0, 0, -11.8147, 0, 10.8393, 0, 0, 0, 0, 0, 0, -1.69919, 0, 13.3415, 0, 0, 0, 0, 0, 0, 7.24809, 0, 11.892, 0, 0, 0, 0, 0, 0, 10.691, 0, -0.20345, 0, 0, 0, 0, 0, 0, 10.601, 0, -10.1917, 0, 0, 0, 0, 0, 0, -2.30633, 0, -11.7304, 0, 0, 0, 0, 0, 0, -0.304818, -1.39238, 1.14643),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, -4, 0, 0, -12.5038, 0, -9.28979, 0, 0, 0, 0, 0, 0, -11.8147, 0, 10.8393, 0, 0, 0, 0, 0, 0, -1.82042, 0.0291557, 14.1888, 0, 0, 0, 0, 0, 0, 8.02467, 0.00923538, 12.0238, 0, 0, 0, 0, 0, 0, 10.691, 0, -0.20345, 0, 0, 0, 0, 0, 0, 9.62886, -0.000307083, -10.5649, 0, 0, 0, 0, 0, 0, -0.740043, 0, -12.7641),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 9
+point_count = 7
 
 [sub_resource type="BoxMesh" id="BoxMesh_6cvge"]
 
@@ -1020,7 +1020,6 @@ directional_shadow_blend_splits = true
 
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.71481, 18.3081, 42.4118)
-subdiv = 2
 size = Vector3(222, 48, 201)
 data = ExtResource("1_pr2ko")
 
@@ -1035,8 +1034,8 @@ camera_player = NodePath("../Player_ Sly")
 [node name="Spotlight Detection" parent="." instance=ExtResource("15_awwuf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, 11.8951)
 
-[node name="enemy_flashlight_generic" parent="." node_paths=PackedStringArray("nav_parent", "path_follow") instance=ExtResource("7_6cvge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 9.5)
+[node name="enemy_carmelita" parent="." node_paths=PackedStringArray("nav_parent", "path_follow") instance=ExtResource("6_gw2uj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0, 10)
 nav_parent = NodePath("../Enemy Nav Points")
 path_follow = NodePath("../Enemy Path 1/PathFollow3D")
 
@@ -1054,20 +1053,21 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0, 11)
 [node name="Point 4" type="Node3D" parent="Enemy Nav Points"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0.5, -11)
 
-[node name="Enemy Path 1" type="Path3D" parent="." node_paths=PackedStringArray("enemy", "path_follow", "target_mesh")]
+[node name="Enemy Path 1" type="Path3D" parent="." node_paths=PackedStringArray("enemy", "path_follow", "target_mesh", "nav_points")]
 curve = SubResource("Curve3D_6cvge")
 script = ExtResource("31_rseyu")
-enemy = NodePath("../enemy_flashlight_generic")
+enemy = NodePath("../enemy_carmelita")
 path_follow = NodePath("PathFollow3D")
 target_mesh = NodePath("PathFollow3D/MeshInstance3D")
-length = 103.42
+length = 86.36
+nav_points = NodePath("../Enemy Nav Points")
+enemy_preload_string = "res://Scenes/Character/enemy_carmelita.tscn"
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Enemy Path 1"]
-transform = Transform3D(0.603708, 0, -0.79715, 0, 1, 0, 0.79715, 0, 0.603708, 9.30056, 0, 7.31851)
-progress = 45.3029
+transform = Transform3D(-0.28323, 8.02088e-05, 0.958995, 0.000283169, 0.999977, 7.27556e-12, -0.958995, 0.000271581, -0.28323, -12.5038, 0, -9.28979)
+progress = 86.7799
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy Path 1/PathFollow3D"]
-visible = false
 mesh = SubResource("BoxMesh_6cvge")
 surface_material_override/0 = SubResource("StandardMaterial3D_6cvge")
 
@@ -1696,7 +1696,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Rope/Path3D"]
-transform = Transform3D(0.999823, -0.00175603, -0.00777051, 5.86066e-07, 0.97526, -0.220346, 0.00796615, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999826, -0.00175603, -0.00777051, 5.86068e-07, 0.97526, -0.220346, 0.00796616, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -1831,7 +1831,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_vhdbp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE/Path3D"]
-transform = Transform3D(0.546182, 0.0342799, 0.836844, -6.54652e-06, 0.999008, -0.0409228, -0.837544, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
+transform = Transform3D(0.54618, 0.0342799, 0.836844, -6.54651e-06, 0.999008, -0.0409227, -0.837542, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
 progress = 4.10269
 loop = false
 
@@ -2172,7 +2172,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_v4hwl")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE6/Path3D"]
-transform = Transform3D(-0.942425, 0.0109035, 0.334115, 2.12848e-06, 0.999281, -0.0326064, -0.334337, -0.0307284, -0.941797, 47.5084, 4.16926, 28.5549)
+transform = Transform3D(-0.942425, 0.0109036, 0.334115, 2.12848e-06, 0.999284, -0.0326064, -0.334337, -0.0307284, -0.941797, 47.5084, 4.16926, 28.5549)
 progress = 4.10269
 loop = false
 
@@ -2581,7 +2581,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_ru5vu")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE12/Path3D"]
-transform = Transform3D(-0.132368, -0.17208, 0.976097, 4.99174e-07, 0.984691, 0.17362, -0.99117, 0.0229813, -0.130355, 36.7479, 7.87008, 63.5305)
+transform = Transform3D(-0.132368, -0.17208, 0.976095, 4.99174e-07, 0.984691, 0.17362, -0.99117, 0.0229813, -0.130355, 36.7479, 7.87008, 63.5305)
 progress = 4.10269
 loop = false
 
@@ -2746,7 +2746,7 @@ reversed = true
 curve = SubResource("Curve3D_ovoob")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE2/Path3D"]
-transform = Transform3D(-1.06654e-07, 0.999728, -0.0203502, 6.12972e-08, -0.0203508, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
+transform = Transform3D(-1.06654e-07, 0.999725, -0.0203502, 6.12972e-08, -0.0203507, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
 progress = 4.17492
 loop = false
 
@@ -3545,7 +3545,7 @@ reversed = true
 curve = SubResource("Curve3D_2qbwh")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE21/Path3D"]
-transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999849, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
+transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999846, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
 progress = 4.17492
 loop = false
 
@@ -4237,7 +4237,6 @@ debug_color = Color(0.605674, 1.66051e-06, 3.85046e-07, 0.419608)
 debug_fill = false
 
 [node name="DeathScreen" parent="." instance=ExtResource("58_0ksea")]
-visible = false
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("59_gw2uj")

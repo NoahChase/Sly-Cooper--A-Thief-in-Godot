@@ -6,6 +6,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cfhnj"]
 render_priority = 2
 shader = ExtResource("1_cfhnj")
+shader_parameter/fade_near = 8.0
+shader_parameter/fade_far = 20.0
 shader_parameter/outline_color_lit = Color(0.3, 0.35, 0.5, 0.392157)
 shader_parameter/outline_color_unlit = Color(0.09, 0.1425, 0.3, 0.392157)
 shader_parameter/outline_width = 6.0
@@ -16,5 +18,7 @@ shader_parameter/light_direction = Vector3(0, -1, 0.15)
 render_priority = 3
 next_pass = SubResource("ShaderMaterial_cfhnj")
 shader = ExtResource("1_ejxmp")
+shader_parameter/fade_near = 8.0
+shader_parameter/fade_far = 20.0
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_width = 4.0

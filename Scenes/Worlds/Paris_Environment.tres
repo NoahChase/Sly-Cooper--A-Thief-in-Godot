@@ -154,8 +154,8 @@ shader_parameter/sky_curve = 0.125
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover = ExtResource("1_xdm0e")
 shader_parameter/sky_cover_modulate = Color(0.5, 0.541667, 1, 0.588235)
-shader_parameter/ground_bottom_color = Color(0, 0, 0, 1)
-shader_parameter/ground_horizon_color = Color(0, 0, 0, 1)
+shader_parameter/ground_bottom_color = Color(0.0784314, 0.0627451, 0.25098, 1)
+shader_parameter/ground_horizon_color = Color(0.0784314, 0.0627451, 0.25098, 1)
 shader_parameter/skybox_blend = 0.5
 shader_parameter/ground_curve = 0.02
 shader_parameter/ground_energy = 1.0
@@ -174,6 +174,7 @@ shader_parameter/cloud_texture2 = SubResource("NoiseTexture2D_a202f")
 
 [sub_resource type="Sky" id="Sky_r3fl7"]
 sky_material = SubResource("ShaderMaterial_a0tk4")
+radiance_size = 2
 
 [resource]
 background_mode = 2
