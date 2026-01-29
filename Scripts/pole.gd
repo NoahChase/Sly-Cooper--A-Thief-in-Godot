@@ -48,7 +48,7 @@ func _physics_process(delta):
 				var ball_pos = target.global_transform.origin
 				ball_pos = test_ball.global_transform.origin
 				#target.sly_container.rotation.y = lerp(target.sly_container.rotation.y, -test_ball.rotation.y, 0.1)
-			speed = 2.0
+			speed = 1.5
 			if reversed:
 				if Input.is_action_pressed("ui_down"):
 					path_follow_3d.progress_ratio -= delta / (length / speed) + 0.002

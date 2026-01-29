@@ -317,9 +317,14 @@ func _physics_process(delta: float) -> void:
 		elif target.is_in_group("pole"):
 			temp_sly.anim_tree.set("parameters/state/transition_request", "pole")
 			if direction and moving and target.at_end == false:
+				if motion_tracker.velocity.y > 0: #cheap, wrong way to make pole anim right
+					temp_sly.anim_tree.set("parameters/pole_timescale/scale", 1.0)
+				else:
+					temp_sly.anim_tree.set("parameters/pole_timescale/scale", -1.0)
 				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_walk")
 			else:
-				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_idle")
+				temp_sly.anim_tree.set("parameters/pole_timescale/scale", 0.0)
+				temp_sly.anim_tree.set("parameters/pole_state/transition_request", "pole_walk")
 		elif target.is_in_group("swing"):
 			temp_sly.anim_tree.set("parameters/state/transition_request", "swing")
 			if direction:

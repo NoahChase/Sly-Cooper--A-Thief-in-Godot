@@ -31,6 +31,8 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=3
 window/stretch/mode="canvas_items"
+window/directional_shadow/size=4096
+window/directional_shadow/soft_shadow_filter_quality=2
 
 [global_group]
 
@@ -169,8 +171,11 @@ environment/ssao/fadeout_to=100.0
 environment/ssil/quality=1
 environment/ssil/fadeout_from=30.0
 environment/ssil/fadeout_to=100.0
+anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/msaa_3d=1
 occlusion_culling/occlusion_rays_per_thread=256
 environment/volumetric_fog/volume_size=32
 environment/volumetric_fog/volume_depth=32
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+anti_aliasing/quality/screen_space_aa=1
 occlusion_culling/use_occlusion_culling=true

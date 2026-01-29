@@ -1,4 +1,4 @@
-[gd_scene load_steps=173 format=4 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=171 format=4 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -28,7 +28,6 @@
 [ext_resource type="PackedScene" uid="uid://ctq3vop8jsw26" path="res://Assets/Temp Imports/bld-watertower.glb" id="30_gaw5t"]
 [ext_resource type="Script" uid="uid://qnsjwbapmk76" path="res://Scripts/enemy_walking_path.gd" id="31_rseyu"]
 [ext_resource type="PackedScene" uid="uid://gni0aewdrdoq" path="res://Assets/Temp Imports/p-background-bld-1-.glb" id="32_8m1p0"]
-[ext_resource type="Texture2D" uid="uid://7o85xs4kc3q1" path="res://Assets/Temp Imports/moon.png" id="33_bbu04"]
 [ext_resource type="Material" uid="uid://j0ntykgdka1q" path="res://Assets/Materials/light_emis.tres" id="33_gesgi"]
 [ext_resource type="PackedScene" uid="uid://c3pa3h60niddb" path="res://Assets/Temp Imports/p-bld-6.glb" id="35_aajgs"]
 [ext_resource type="PackedScene" uid="uid://bug0o34spxd8f" path="res://Assets/Temp Imports/d-rooftop-antenna.glb" id="36_erpqo"]
@@ -844,17 +843,6 @@ size = Vector3(1.5, 2, 0.25)
 emission_enabled = true
 emission = Color(0.701961, 0.376471, 0.278431, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7t0kj"]
-transparency = 1
-shading_mode = 0
-disable_ambient_light = true
-disable_fog = true
-albedo_color = Color(0.4, 0.55, 1, 1)
-albedo_texture = ExtResource("33_bbu04")
-billboard_mode = 1
-billboard_keep_scale = true
-grow_amount = -16.0
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_p4poh"]
 size = Vector2(1000, 1000)
 
@@ -863,7 +851,7 @@ size = Vector2(2000, 2000)
 
 [sub_resource type="Shader" id="Shader_p4poh"]
 code = "shader_type spatial;
-render_mode blend_mix, cull_back, diffuse_burley, specular_disabled;
+render_mode blend_mix, cull_back, diffuse_burley, specular_toon;
 
 uniform sampler2D wave_height_1;
 uniform sampler2D wave_height_2;
@@ -947,13 +935,13 @@ shader_parameter/final_wave_speed = 0.175
 shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
-shader_parameter/normal_mult = 0.125
-shader_parameter/normal_height = 0.625
-shader_parameter/normal_2_height = 0.375
-shader_parameter/normal_lod = 0.5
+shader_parameter/normal_mult = 0.175
+shader_parameter/normal_height = 1.0
+shader_parameter/normal_2_height = 0.5
+shader_parameter/normal_lod = 2.5
 shader_parameter/albedo = Color(0.425, 0.4775, 0.5, 1)
 shader_parameter/roughness = 0.05
-shader_parameter/transparency = 0.5
+shader_parameter/transparency = 0.75
 shader_parameter/specular = 1.0
 shader_parameter/metallic = 0.9
 shader_parameter/distance_fade_min = 50.0
@@ -973,27 +961,27 @@ shader_parameter/final_wave_speed = 0.175
 shader_parameter/wave_scale_1 = 2.0
 shader_parameter/wave_scale_2 = 1.0
 shader_parameter/final_wave_scale = 1.0
-shader_parameter/normal_mult = 0.125
-shader_parameter/normal_height = 1.5
+shader_parameter/normal_mult = 0.175
+shader_parameter/normal_height = 1.0
 shader_parameter/normal_2_height = 0.5
-shader_parameter/normal_lod = 1.0
+shader_parameter/normal_lod = 1.5
 shader_parameter/albedo = Color(0.1275, 0.129375, 0.15, 1)
 shader_parameter/edge_color = Color(0.3375, 0.4125, 0.45, 1)
 shader_parameter/edge_scale = 0.25
 shader_parameter/near = 8.0
 shader_parameter/far = 100.0
 shader_parameter/roughness = 0.05
-shader_parameter/transparency = 0.5
+shader_parameter/transparency = 0.75
 shader_parameter/specular = 1.0
-shader_parameter/metallic = 1.0
+shader_parameter/metallic = 0.9
 shader_parameter/distance_fade_min = 190.0
 shader_parameter/distance_fade_max = 60.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xslp6"]
 lightmap_size_hint = Vector2i(400, 400)
-size = Vector2(400, 400)
-subdivide_width = 100
-subdivide_depth = 100
+size = Vector2(300, 300)
+subdivide_width = 300
+subdivide_depth = 300
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0ksea"]
 size = Vector3(5000, 1, 5000)
@@ -1005,8 +993,9 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456094, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.42, 0.49, 0.7, 1)
+light_color = Color(0.39, 0.476667, 0.65, 1)
 light_indirect_energy = 0.25
+light_volumetric_fog_energy = 4.0
 light_bake_mode = 1
 shadow_enabled = true
 shadow_bias = 0.05
@@ -1017,6 +1006,7 @@ directional_shadow_split_1 = 0.25
 directional_shadow_split_2 = 0.5
 directional_shadow_split_3 = 0.75
 directional_shadow_blend_splits = true
+sky_mode = 1
 
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.71481, 18.3081, 42.4118)
@@ -1064,7 +1054,7 @@ nav_points = NodePath("../Enemy Nav Points")
 enemy_preload_string = "res://Scenes/Character/enemy_carmelita.tscn"
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Enemy Path 1"]
-transform = Transform3D(-0.28323, 8.02088e-05, 0.958995, 0.000283169, 0.999977, 7.27556e-12, -0.958995, 0.000271581, -0.28323, -12.5038, 0, -9.28979)
+transform = Transform3D(-0.28323, 8.02087e-05, 0.958995, 0.000283169, 0.999976, 7.27556e-12, -0.958995, 0.000271581, -0.28323, -12.5038, 0, -9.28979)
 progress = 86.7799
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy Path 1/PathFollow3D"]
@@ -1203,7 +1193,7 @@ transform = Transform3D(-0.000489607, 0, 0.999999, 0, 1, 0, -0.999999, 0, -0.000
 mesh = SubResource("BoxMesh_u6lno")
 
 [node name="Bounce Pad" parent="NavigationRegion3D/p-bld-sly2-medtower/MeshInstance3D" instance=ExtResource("14_vhdbp")]
-jump = 14
+jump = 16
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="NavigationRegion3D/p-bld-sly2-medtower"]
 transform = Transform3D(-0.707452, 0, 0.70676, 0, 1, 0, -0.70676, 0, -0.707452, 6.13163, 2, -7.58606)
@@ -1274,7 +1264,7 @@ jump = 14
 transform = Transform3D(-0.629692, -0.0550909, 0.774889, -0.0871558, 0.996195, -1.92596e-09, -0.77194, -0.067536, -0.632097, -6.06956, 2.41706, -8.68581)
 
 [node name="Skylight-convcol2" parent="NavigationRegion3D/p-bld-14" instance=ExtResource("52_yxbvy")]
-transform = Transform3D(-0.965362, -0.0159589, -0.260423, -0.0161307, 0.999869, -0.00147779, 0.260412, 0.00277422, -0.965494, -0.452045, 7.85341, -2.15251)
+transform = Transform3D(-0.965493, -0.00158567, -0.260423, -0.00124377, 0.999998, -0.00147779, 0.260424, -0.00110287, -0.965494, -0.452027, 7.84212, -2.1525)
 
 [node name="p-bld-15" parent="NavigationRegion3D" groups=["roof"] instance=ExtResource("50_0cqli")]
 transform = Transform3D(-0.866026, 0, -0.5, 0, 1, 0, 0.5, 0, -0.866026, -75, 0, 73)
@@ -1355,7 +1345,7 @@ transform = Transform3D(0.258819, 0, -0.965926, 0, 1, 0, 0.965926, 0, 0.258819, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 7.89725, -7.5)
 
 [node name="Skylight-convcol" parent="NavigationRegion3D" instance=ExtResource("52_yxbvy")]
-transform = Transform3D(0.171854, -0.0426013, 0.984201, -0.00696581, 0.998987, 0.0444575, -0.985097, -0.0144959, 0.171383, 20.4244, 5.93299, 4.08593)
+transform = Transform3D(0.171314, -0.0112261, 0.985153, 0.00539625, 0.999931, 0.010456, -0.985201, 0.00352494, 0.171362, 20.429, 5.82598, 4.08727)
 
 [node name="p-clock" parent="NavigationRegion3D" groups=["roof"] instance=ExtResource("52_xslp6")]
 transform = Transform3D(-0.422618, 0, -0.906308, 0, 1, 0, 0.906308, 0, -0.422618, -75, 0, 76.5)
@@ -1489,7 +1479,6 @@ transform = Transform3D(0.55667, 0.663414, 0.5, -0.766044, 0.642788, -7.45058e-0
 
 [node name="Target Point" parent="NavigationRegion3D/d-rooftop-antenna2" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.642788, -0.766044, 0, 0.766044, 0.642788, 0, 0, 0, 1, -0.0493677, 1.47254, 1.86265e-09)
-adj_fov = true
 invisible = false
 
 [node name="d-rooftop-antenna3" parent="NavigationRegion3D" instance=ExtResource("36_erpqo")]
@@ -1497,7 +1486,6 @@ transform = Transform3D(-0.526541, -0.627507, -0.573576, -0.766045, 0.642788, 1.
 
 [node name="Target Point" parent="NavigationRegion3D/d-rooftop-antenna3" groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.642788, -0.766044, 0, 0.766044, 0.642788, 0, 0, 0, 1, -0.0493677, 1.47254, 1.86265e-09)
-adj_fov = true
 invisible = false
 
 [node name="car 2m11" parent="NavigationRegion3D" instance=ExtResource("11_gojqr")]
@@ -1696,7 +1684,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Rope/Path3D"]
-transform = Transform3D(0.999826, -0.00175603, -0.00777051, 5.86068e-07, 0.97526, -0.220346, 0.00796616, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999827, -0.00175603, -0.00777051, 5.86068e-07, 0.97526, -0.220346, 0.00796617, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 
@@ -2172,7 +2160,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_v4hwl")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE6/Path3D"]
-transform = Transform3D(-0.942425, 0.0109036, 0.334115, 2.12848e-06, 0.999284, -0.0326064, -0.334337, -0.0307284, -0.941797, 47.5084, 4.16926, 28.5549)
+transform = Transform3D(-0.942425, 0.0109036, 0.334115, 2.12848e-06, 0.999285, -0.0326064, -0.334337, -0.0307285, -0.941797, 47.5084, 4.16926, 28.5549)
 progress = 4.10269
 loop = false
 
@@ -2660,7 +2648,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 5.96
+length = 9.96
 end_clamp = 0.67
 reversed = true
 
@@ -2699,7 +2687,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 5.53
+length = 5.93
 start_clamp = 0.05
 end_clamp = 0.58
 reversed = true
@@ -2746,7 +2734,7 @@ reversed = true
 curve = SubResource("Curve3D_ovoob")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE2/Path3D"]
-transform = Transform3D(-1.06654e-07, 0.999725, -0.0203502, 6.12972e-08, -0.0203507, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
+transform = Transform3D(-1.06654e-07, 0.999724, -0.0203502, 6.12972e-08, -0.0203507, -0.999701, -0.999939, -1.07879e-07, -5.9112e-08, 84.096, 4.23775, 60)
 progress = 4.17492
 loop = false
 
@@ -2842,7 +2830,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 15.09
+length = 14.97
 end_clamp = 0.85
 reversed = true
 
@@ -2882,7 +2870,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 9.95
+length = 10.81
 end_clamp = 0.75
 reversed = true
 
@@ -3014,7 +3002,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 8.4
+length = 10.43
 end_clamp = 0.7
 reversed = true
 
@@ -3156,7 +3144,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 11.24
+length = 13.01
 end_clamp = 0.8
 reversed = true
 
@@ -3196,7 +3184,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 6.73
+length = 7.59
 end_clamp = 0.8
 reversed = true
 
@@ -3457,7 +3445,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 12.46
+length = 11.09
 end_clamp = 0.8
 reversed = true
 
@@ -3497,7 +3485,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 7.6
+length = 11.97
 end_clamp = 0.8
 reversed = true
 
@@ -3537,7 +3525,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 8.6
+length = 7.21
 end_clamp = 0.8
 reversed = true
 
@@ -3545,7 +3533,7 @@ reversed = true
 curve = SubResource("Curve3D_2qbwh")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE21/Path3D"]
-transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999846, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
+transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999845, 0.791754, 0.610758, -0.00130186, 1.27222, 15.3013, 76.5326)
 progress = 4.17492
 loop = false
 
@@ -3697,7 +3685,7 @@ smooth_faces = true
 script = ExtResource("3_0qql5")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 target = NodePath("../../../Player_ Sly")
-length = 10.87
+length = 11.11
 end_clamp = 0.75
 reversed = true
 
@@ -3817,7 +3805,6 @@ surface_material_override/0 = ExtResource("41_jevjf")
 [node name="Target Point14" parent="Thief Points/POINTS" node_paths=PackedStringArray("player") groups=["point"] instance=ExtResource("2_0qql5")]
 transform = Transform3D(0.819152, 0, 0.573577, 0, 1, 0, -0.573577, 0, 0.819152, -28.4943, 11.0974, 101.213)
 player = NodePath("../../../Player_ Sly")
-adj_fov = true
 invisible = false
 jump_mult = 1.25
 
@@ -4122,17 +4109,6 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_617rq")
 
 [node name="Background" type="Node3D" parent="."]
-
-[node name="moon" type="Sprite3D" parent="Background"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -600.688, 843, -1087.69)
-material_override = SubResource("StandardMaterial3D_7t0kj")
-cast_shadow = 0
-pixel_size = 0.125
-billboard = 1
-shaded = true
-double_sided = false
-no_depth_test = true
-texture = ExtResource("33_bbu04")
 
 [node name="Sprite3D4" type="Sprite3D" parent="Background"]
 transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 848.5, 5.3125, 25)
