@@ -75,6 +75,7 @@ var did_target_jump = false
 var ascending_stairs = false
 var was_on_floor = true
 var moving = false
+var jump_when_hit_floor = false
 
 #temporal buffer (frame buffers)
 const stair_grace_frames := 20
@@ -90,7 +91,7 @@ const to_target_failed_time_max = 20
 var to_target_time_counter = 0
 
 func _ready() -> void:
-	#Engine.time_scale = 0.5
+	#Engine.time_scale = 0.25
 	rot_container.position = Vector3(0,0,0)
 	
 	temp_sly.cane_hitbox.kb_excluded.append(hp_container)
@@ -142,6 +143,8 @@ func _physics_process(delta: float) -> void:
 		apply_magnetism()
 	
 ## States
+	state_handler(delta)
+	reposition_player_mesh()
 	if state == FLOOR:
 		#print("state = floor")
 		velocity += get_gravity() * delta * gravmult
@@ -191,7 +194,7 @@ func _physics_process(delta: float) -> void:
 		jump_from_floor_anim = false
 		can_ledge = false
 		if not temp_sly.anim_tree.get("parameters/jump_state/transition_request") == "jump_air_forward":
-			temp_sly.anim_tree.call_deferred("set", "parameters/state/transition_request", "air")
+			temp_sly.anim_tree.set("parameters/state/transition_request", "air")
 		#var forward = -rot_container.global_transform.basis.z
 
 		speed_mult = 1.0
@@ -334,18 +337,6 @@ func _physics_process(delta: float) -> void:
 		elif target.is_in_group("ledge"):
 			temp_sly.anim_tree.set("parameters/state/transition_request", "ledge")
 			temp_sly.anim_tree.set("parameters/ledge_state/transition_request", "ledge_idle")
-		#
-		#
-		#temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-		#temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
-		#
-		#if target.is_in_group("pole") or target.is_in_group("swing"):
-			#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_stand")
-		#if direction:
-			#if not target.is_in_group("point") and not target.is_in_group("notch") and not target.is_in_group("pole") and not target.is_in_group("swing"):
-				#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_walk_rope")
-		#elif not target.is_in_group("pole") and not target.is_in_group("swing"):
-			#temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
 		target.assign_player(self)
 		jump_num = 0
 		air_mult = 1.0
@@ -432,9 +423,18 @@ func _physics_process(delta: float) -> void:
 		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET: #pole and hook look at point while moving to them
 			if not target.is_in_group("rope"):
 				var dis_to_target = global_transform.origin - target.global_transform.origin
-				if dis_to_target.length() > 1:
+				if dis_to_target.length() > 0.5:
 					$"Look_At Rotation".look_at(target.global_position + direction)
 					rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+				if target.is_in_group("swing"): ## rotates x/z to hook swing
+					rot_container.rotation.x = target.rotation.x
+					rot_container.rotation.z = target.rotation.z
+			else:
+				if not temp_sly.anim_tree.get("parameters/OneShot/active"):
+					var dis_to_target = global_transform.origin - target.global_transform.origin
+					if dis_to_target.length() > 0.5:
+						$"Look_At Rotation".look_at(target.global_position + direction)
+						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
 		
 		# for rope correction (re align to proper rotation)
 		if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
@@ -477,11 +477,15 @@ func _physics_process(delta: float) -> void:
 		stair_detect(delta)
 	if colliding_count <= 1:
 		ledge_detect(delta)
-		
-	state_handler(delta)
+
+	# delayed jump trigger
+	if jump_when_hit_floor == true and state == FLOOR:
+		jump()
+
 	camera_smooth_follow(delta)
 
 	move_and_slide()
+
 	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, " | velocity = ", motion_tracker.velocity.length())
 
 
@@ -615,19 +619,26 @@ func jump():
 #	parameters/jump_state/transition_request
 	can_ledge = false
 	jump_num += 1
+	
 	if not previous_jump_was_notch and state != ON_TARGET:
 		jump_mult = 1.0
-	if jump_num <= 2:
+	
+	if jump_num <= 3:
 		$"Jump Input Buffer".start(0.1)
 		ascending_stairs = false
 		if state == FLOOR:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
-			jump_from_floor_anim = true
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y = JUMP_VELOCITY * jump_mult
+			jump_from_floor_anim = true
+			jump_when_hit_floor = false
 			print("jump floor")
 		elif state == ON_LEDGE:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 			ledge_cooldown_timer = 0.2
 			state = AIR
 			jump_num = 0
@@ -635,6 +646,8 @@ func jump():
 			print("jump ledge")
 		elif state == ON_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 			emit_signal("target_released", target)
 			target.unassign_player()
 			#target.player = null
@@ -650,24 +663,33 @@ func jump():
 				if ray.is_colliding():
 					if velocity.y < 0:
 						var ray_col = ray.get_collider()
-						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.25:
+						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.125:
 							close_to_floor = true
+						else:
+							jump_when_hit_floor = true
+							print("jump when hit floor true")
 					
 			if close_to_floor == true:
 				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
+				temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
 				jump_from_floor_anim = true
 				# if press shift on first jump, do extra velocity push in forward direction
 				velocity.y = JUMP_VELOCITY * jump_mult
 				jump_num = 0
 				print("jump close to floor")
 			else:
-				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
-				air_mult = 1.0
-				var jump_value := jump_mult_curve.sample_baked(clamp(velocity.y, -8.0, 8.0))
-				velocity.y += jump_value
-					
-				print("jump air")
-		temp_sly.anim_tree.call_deferred("set", "parameters/OneShot/request", 1)
+				if jump_num <= 2:
+					if jump_when_hit_floor == false:
+						temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
+						temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+						temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+						air_mult = 1.0
+						var jump_value := jump_mult_curve.sample_baked(clamp(velocity.y, -8.0, 8.0))
+						velocity.y += jump_value
+							
+						print("jump air")
+		#temp_sly.anim_tree.call_deferred("set", "parameters/OneShot/request", 1)
 
 func collision_detect():
 	var safe = true
@@ -818,39 +840,61 @@ func ledge_detect(delta):
 
 func apply_target(delta):
 	if can_ledge:
-		pass
-	else:
-		var predicted_position = global_transform.origin + velocity * delta
-		var best_target: Node3D = null
-		var best_distance := INF
-		
-		for potential_target in target_points:
-			var current_distance
-			if potential_target.is_in_group("swing"):
-				if potential_target.global_transform.origin.y < global_transform.origin.y:
-					current_distance = basis_offset.global_transform.origin.distance_to(potential_target.global_transform.origin)
-				else:
-					return
-			else:
-				current_distance = basis_offset.global_transform.origin.distance_to(potential_target.global_transform.origin)
-		
-			if current_distance < best_distance:
-				best_distance = current_distance
-				best_target = potential_target
+		return
 	
-		# Assign the best target after evaluating all options
-		if best_target != null:
-			if best_target.is_in_group("swing"):
-				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_swing")
-				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
-			elif not best_target.is_in_group("pole"):
-				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_spin")
-				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
-			else:
-				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_pole")
-				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
-			target = best_target
-			
+	var best_target: Node3D = null
+	var best_score := -INF  # Use scoring instead of just distance
+	
+	# Player's forward direction (based on movement or camera)
+	var player_forward = direction if direction.length() > 0.5 else -rot_container.global_transform.basis.z
+	
+	for potential_target in target_points:
+		# Skip swings above player
+		if potential_target.is_in_group("swing"):
+			if potential_target.global_transform.origin.y >= global_transform.origin.y:
+				continue
+		
+		var to_target = (potential_target.global_transform.origin - basis_offset.global_transform.origin)
+		var distance = to_target.length()
+		var direction_to_target = to_target.normalized()
+		
+		# Calculate alignment: 1.0 = directly ahead, -1.0 = directly behind
+		var alignment = player_forward.dot(direction_to_target)
+		
+		# Score = closer is better + facing target is better
+		# Weight alignment heavily (3x) so targets ahead are strongly preferred
+		var score = -distance + (alignment * distance * 0.25)
+		
+		### weight score based on horizontal and vertical distance too
+			# so if 1: horiz distance = 0 and vert distance = 2, or if 2: vert distance = 20 and horiz = 0
+			# vs 3: horiz = 2 vert = 0
+				# if 1 vs 3: 1 wins. if 2 vs 3: 3 wins.
+				# probably use a curve here, horiz vs vert to assess score
+				
+		# makes player favor higher points, which are always closer to them (because of their detection cone shape)
+		if potential_target.global_transform.origin.y > global_transform.origin.y:
+			score += 0.125
+		
+		if score > best_score:
+			best_score = score
+			best_target = potential_target
+	
+	# Assign the best target after evaluating all options
+	if best_target != null:
+		if best_target.is_in_group("swing"):
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_swing")
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+		elif not best_target.is_in_group("pole"):
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_spin")
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+		else:
+			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_pole")
+			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
+			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+		target = best_target
+		
 	
 
 func apply_magnetism(): # the holy grail of magnetism
@@ -919,6 +963,12 @@ func target_jump():
 		velocity.y = 4.0
 	did_target_jump = true
 
+func reposition_player_mesh():
+	if state == ON_TARGET or state == TO_TARGET or state == ON_LEDGE:
+		$"Body Mesh Container/SlyCooper_Anims4".position.z = lerp($"Body Mesh Container/SlyCooper_Anims4".position.z, 0.0, 0.2)
+	else:
+		$"Body Mesh Container/SlyCooper_Anims4".position.z = lerp($"Body Mesh Container/SlyCooper_Anims4".position.z, 0.063, 0.2)
+
 func camera_smooth_follow(delta):
 	var cam_speed = 182.5
 	var cam_timer = clamp(delta * cam_speed / 20, 0, 1)
@@ -940,7 +990,7 @@ func camera_smooth_follow(delta):
 	var y_add = 0.5
 	cam_max = 0
 	cam_min = 0
-	tform_mult = .5 #0.5 added to camera
+	tform_mult = 0.5 #0.5 added to camera
 	camera_length = clamp(camera_length, cam_min, cam_max)
 	camera_parent.cam_container.position = lerp(camera_parent.cam_container.position, Vector3(0,0.5, camera_length + add), 0.175)
 	

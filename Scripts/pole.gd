@@ -96,17 +96,8 @@ func ball2player():
 	if not path or not path.curve:
 		return
 		
-	var vert_offset = 0.0
-	
-	if dis_2_plyr <= 0.5:
-		vert_offset = 0
-	elif dis_2_plyr <= 1:
-		vert_offset = dis_2_plyr
-	elif dis_2_plyr > 1:
-		vert_offset = 1
-	
 	# Get the closest offset on the curve
-	var closest_offset = path.curve.get_closest_offset(target.global_position - Vector3(0, vert_offset, 0))
+	var closest_offset = path.curve.get_closest_offset(target.global_position)
 	
 	# Convert offset to progress_ratio only if the rope isn't being manually moved
 	if length > 0:

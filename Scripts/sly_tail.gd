@@ -73,20 +73,28 @@ func _physics_process(delta):
 	ball_target.global_transform.basis = global_transform.basis
 	# Check handedness
 	#print("Correction determinant: ", correction.determinant())  # Should be close to +1
-	if Update.count == 1 or Update.count == 3 or Update.count == 5:
-		var current_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
-		var tail_velocity = (current_tail_pos - prev_tail_pos).length() / (delta / Engine.time_scale)
-		prev_tail_pos = current_tail_pos
-		
-		var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
-		var bounce_lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
-		bounce = lerp(bounce, ((ball_1.global_position.y - ball_target.global_position.y) * 3.0) / bounce_lerp_val, bounce_lerp_val)
+	
+	var current_tail_pos = sly_mesh.tail_001_attachment.global_transform.origin
+	var tail_velocity = (current_tail_pos - prev_tail_pos).length() / (delta / Engine.time_scale)
+	prev_tail_pos = current_tail_pos
+	
+	var base_val = (tail_velocity * 2) / ((tail_velocity * 2) + 1.0)
+	var bounce_lerp_val = 0.5 * clamp(base_val, 0.45, 1.75) + 0.05
+	bounce = lerp(bounce, ((ball_1.global_position.y - ball_target.global_position.y) * 1.25) / bounce_lerp_val, bounce_lerp_val)
+	
+	var speed_compensation = 0.0
+	if tail_velocity > 4.0:
+		speed_compensation = 0.4
+	else:
+		speed_compensation = tail_velocity / 10
+	lerp_val = 0.1 + speed_compensation
+	print("lerp val = ", lerp_val)
 	
 	# Tail rotations using quaternion slerp
-	_set_tail_rotation(ball_1, ball_target, 0.9)
-	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.5))
-	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.25))
-	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val + 0.125))
+	_set_tail_rotation(ball_1, ball_target, lerp_val + 0.45)
+	_set_tail_rotation(ball_8, ball_1, max(0.01, lerp_val + 0.25))
+	_set_tail_rotation(ball_7, ball_8, max(0.01, lerp_val + 0.125))
+	_set_tail_rotation(ball_6, ball_7, max(0.01, lerp_val + 0.0625))
 	_set_tail_rotation(ball_5, ball_6, max(0.01, lerp_val))
 	_set_tail_rotation(ball_4, ball_5, max(0.01, lerp_val - 0.0125))
 	_set_tail_rotation(ball_3, ball_4, max(0.01, lerp_val - 0.025))
@@ -94,10 +102,10 @@ func _physics_process(delta):
 
 	# Tail positions remain the same as you had them
 	
-	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, 0.9)
-	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 1.5), 0), max(0.01, lerp_val + 0.5))
-	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 2), 0), max(0.01, lerp_val + 0.25))
-	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.03 + (bounce / 2.5), 0), max(0.01, lerp_val + 0.125))
+	ball_1.global_position = lerp(ball_1.global_position, ball_target.global_position, lerp_val + 0.45)
+	ball_8.global_position = lerp(ball_8.global_position, ik_1.global_position + Vector3(0, -0.01 + (bounce / 1.5), 0), max(0.01, lerp_val + 0.25))
+	ball_7.global_position = lerp(ball_7.global_position, ik_8.global_position + Vector3(0, -0.02 + (bounce / 2), 0), max(0.01, lerp_val + 0.125))
+	ball_6.global_position = lerp(ball_6.global_position, ik_7.global_position + Vector3(0, -0.03 + (bounce / 2.5), 0), max(0.01, lerp_val + 0.0625))
 	ball_5.global_position = lerp(ball_5.global_position, ik_6.global_position + Vector3(0, -0.04 + (bounce / 3), 0), max(0.01, lerp_val))
 	ball_4.global_position = lerp(ball_4.global_position, ik_5.global_position + Vector3(0, -0.05 + (bounce / 2.5), 0), max(0.01, lerp_val - 0.0125))
 	ball_3.global_position = lerp(ball_3.global_position, ik_4.global_position + Vector3(0, -0.06 + (bounce / 2), 0), max(0.01, lerp_val - 0.025))

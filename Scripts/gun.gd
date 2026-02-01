@@ -13,8 +13,10 @@ var bullet_chambered = false
 var aim_rng = RandomNumberGenerator.new()
 var aim_rng_num = 0.0
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	## add a timer with an rng 0-3 seconds between shots to give the period between them variety. 
+		## wouldn't be in gun, but this timer could affect accuracy 
+	
 	if shoot:
 		if not anim.current_animation == "shoot":
 			anim.queue("shoot")

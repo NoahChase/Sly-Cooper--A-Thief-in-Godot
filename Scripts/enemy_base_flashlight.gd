@@ -340,7 +340,7 @@ func state_execute():
 				run.emit()
 			else:
 				idle.emit()
-			print("state CHASE")
+			#print("state CHASE")
 			distance_to_target = (global_position - target.global_position).length()
 			flashlight.target = target
 			flashlight.player_detected = true
@@ -350,20 +350,20 @@ func state_execute():
 			var projectile_to_target = to_target / 15 # 15 is projectile's speed. this is predicted aim's default, set every frame
 			if prev_rng != weapon.aim_rng_num:
 				if weapon.shot_num == 0:
-					projectile_to_target = to_target
-					#print("first aim <3")
+					projectile_to_target = to_target ## NEED offset here somehow, wrong aim always on this one.
+					print("- first aim")
 				if weapon.shot_num == 1:
-					projectile_to_target = to_target / weapon.aim_rng_num
-					#print("bad aim!")
-				elif weapon.shot_num == 2:
-					pass
-					#print("best aim...")
+					projectile_to_target = to_target ## NEED offset here somehow, wrong aim always on this one.
+					print("- repeat first aim")
+				if weapon.shot_num == 2:
+					projectile_to_target = to_target / weapon.aim_rng_num ## NEED this to be pretty terrible aim, still could hit if still
+					print("- bad aim!")
 				elif weapon.shot_num == 3:
-					weapon.shot_num = 1
-						#print("best final aim")
+					weapon.shot_num = 0 ## killer predicted aim shot
+					print("- best final aim")
 				#print(weapon.aim_rng_num)
 				prev_rng = weapon.aim_rng_num
-			var aim_prediction = target.global_transform.origin + Vector3(0,0.5,0) + target.velocity * projectile_to_target
+			var aim_prediction = target.global_transform.origin + Vector3(0,0.5,0) + target.velocity * projectile_to_target / 2.0 ## fairly good general aim, easy to dodge if paying attention
 			if not is_on_floor():
 				weapon.shoot = false
 			else:
@@ -411,7 +411,7 @@ func state_execute():
 					SPEED_MULT = 1.0
 # SEARCH
 		SEARCH:
-			print("state SEARCH")
+			#print("state SEARCH")
 			SPEED_MULT = 1.0
 			weapon.shoot = false
 			weapon.look_at(flashlight.get_node("TestMesh").global_transform.origin + Vector3(0,0.5,0), Vector3.UP)
@@ -655,17 +655,17 @@ func stair_detect(delta):
 	print("vel.y = ", velocity.y)
 	if velocity.y < -0.28:
 		can_stair = false
-		print("enemy stair velocity.y failed")
+		#print("enemy stair velocity.y failed")
 	if not is_on_floor():
 		can_stair = false
-		print("enemy stair AIR failed")
+		#print("enemy stair AIR failed")
 	if not direction:
 		can_stair = false
-		print("enemy stair direction failed")
+		#print("enemy stair direction failed")
 	for ray in stair_rays:
 		if ray.is_colliding():
 			can_stair = false
-			print("enemy stair wall ray failed")
+			#print("enemy stair wall ray failed")
 
 	var stair_horizontal = Vector3()
 	var stair_vertical = Vector3()
@@ -683,7 +683,7 @@ func stair_detect(delta):
 		ray = $"Stair Ray Low"
 	else:
 		can_stair = false
-		print("enemy stair ray h failed")
+		#print("enemy stair ray h failed")
 
 	if ray:
 		stair_horizontal = ray.get_collision_point()
@@ -711,7 +711,7 @@ func stair_detect(delta):
 			stair_miss_counter += 1
 			if stair_miss_counter >= stair_grace_frames:
 				ascending_stairs = false
-				print("enemy ray v denied stairs")
+				#print("enemy ray v denied stairs")
 				floor_snap_length = 0.1
 				return
 		
@@ -724,19 +724,19 @@ func stair_detect(delta):
 		var stair_direction = (stair_vertical - global_transform.origin).normalized()
 		if distance_to_top < 0.2:
 			distance_to_top = 0.2
-			print("enemy helped distance to top, 0.2")
+			#print("enemy helped distance to top, 0.2")
 		
 		if velocity.y < (stair_direction.y * distance_to_top) + 2:
 			if is_on_wall():
 				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top, 0.25) + 2.5)
 			else:
 				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top) + 2, 0.25 / (distance_to_top + 0.25))
-			print("enemy ascending stairs")
+			#print("enemy ascending stairs")
 	else:
 		stair_miss_counter += 1
 		if stair_miss_counter >= stair_grace_frames:
 			ascending_stairs = false
-			print("enemy denied stairs")
+			#print("enemy denied stairs")
 			floor_snap_length = 0.1
 			return
 

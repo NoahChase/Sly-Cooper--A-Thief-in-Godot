@@ -248,12 +248,12 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 5:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult) / length, 0.1)
-		elif player.global_transform.origin.y >= target_point.global_transform.origin.y + 1:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 1.75) / length, 0.1)
-		elif player.state != player.TO_TARGET:
+		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 4:
 			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 1.25) / length, 0.1)
+		elif player.global_transform.origin.y >= target_point.global_transform.origin.y + 2:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 2) / length, 0.1)
+		elif player.state != player.TO_TARGET:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult) / length, 0.1)
 		
 
 

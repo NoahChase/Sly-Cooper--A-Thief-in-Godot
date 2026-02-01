@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b4athtlke2t2e"]
+[gd_scene load_steps=14 format=3 uid="uid://b4athtlke2t2e"]
 
 [ext_resource type="Script" uid="uid://c8t6q4glc6o27" path="res://Scripts/hook_swing.gd" id="1_iriet"]
 [ext_resource type="PackedScene" uid="uid://bj34qq52wpb60" path="res://Scenes/Design Tools/target_point.tscn" id="2_iojh8"]
@@ -19,6 +19,8 @@ albedo_color = Color(0, 0, 0, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_j75q4"]
 radius = 0.125
 height = 0.25
+
+[sub_resource type="PrismMesh" id="PrismMesh_cjysu"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cpaoe"]
 size = Vector3(0.1, 0.1, 1)
@@ -66,8 +68,17 @@ mesh = SubResource("SphereMesh_j75q4")
 
 [node name="Rot Container" type="Node3D" parent="."]
 
+[node name="Look_At Rot Container" type="Node3D" parent="Rot Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rot Container/Look_At Rot Container"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.5)
+mesh = SubResource("PrismMesh_cjysu")
+
 [node name="Target Point" parent="Rot Container" groups=["LOCK PLAYER ROT", "swing"] instance=ExtResource("2_iojh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+top_level = true
 invisible = false
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Rot Container/Target Point"]

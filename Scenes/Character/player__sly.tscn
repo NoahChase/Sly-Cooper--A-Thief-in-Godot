@@ -314,7 +314,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0.25)
 target_position = Vector3(0, -0.75, 0)
 
 [node name="SlyCooper_Anims4" parent="Body Mesh Container" node_paths=PackedStringArray("player", "tail_ik") instance=ExtResource("3_ncpw6")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.063)
 player = NodePath("../..")
 tail_ik = NodePath("../../sly_tail")
 

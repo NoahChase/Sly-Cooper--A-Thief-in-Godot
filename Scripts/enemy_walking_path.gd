@@ -31,32 +31,33 @@ func _physics_process(delta: float) -> void:
 			else:
 				enemy_respawn_count += 1
 			return
-		if Update.count == 3:
-			print("updating enemy")
-			print("enemy = ", enemy)
-			distance_to_enemy = (enemy.global_transform.origin - target_mesh.global_transform.origin).length()
-			var distance_to_enemy_y = abs(enemy.global_transform.origin.y - target_mesh.global_transform.origin.y)
+			if Update.count == 3:
+				print("updating enemy")
+				print("enemy = ", enemy)
 			
-			if enemy.state == enemy.IDLE or enemy.state == enemy.IDLE_STILL:
-				if distance_to_enemy > 8.0 or distance_to_enemy_y > 4.0:
-					path_to_enemy_count += 1
-					path_to_enemy(delta)
-				elif distance_to_enemy >= 2.0:
-					path_wait_count += 1
-					path_wait(delta)
-				elif distance_to_enemy < 2.0:
-					path_progress_count += 1
-					path_progress(delta)
-				
-				#if path_progress_count > path_to_enemy_count and path_progress_count > path_wait_count:
-					#path_progress(delta)
-				#elif path_wait_count > path_to_enemy_count and path_wait_count > path_progress_count:
-					#path_wait(delta)
-				#elif path_to_enemy_count > path_progress_count and path_to_enemy_count > path_wait_count:
-					#path_to_enemy(delta)
-					
-			else:
+		distance_to_enemy = (enemy.global_transform.origin - target_mesh.global_transform.origin).length()
+		var distance_to_enemy_y = abs(enemy.global_transform.origin.y - target_mesh.global_transform.origin.y)
+		
+		if enemy.state == enemy.IDLE or enemy.state == enemy.IDLE_STILL:
+			if distance_to_enemy > 16.0 or distance_to_enemy_y > 8.0:
+				path_to_enemy_count += 1
 				path_to_enemy(delta)
+			elif distance_to_enemy >= 2.0:
+				path_wait_count += 1
+				path_wait(delta)
+			elif distance_to_enemy < 2.0:
+				path_progress_count += 1
+				path_progress(delta)
+			
+			#if path_progress_count > path_to_enemy_count and path_progress_count > path_wait_count:
+				#path_progress(delta)
+			#elif path_wait_count > path_to_enemy_count and path_wait_count > path_progress_count:
+				#path_wait(delta)
+			#elif path_to_enemy_count > path_progress_count and path_to_enemy_count > path_wait_count:
+				#path_to_enemy(delta)
+				
+		else:
+			path_to_enemy(delta)
 
 func respawn_enemy():
 	print("respawning enemy")

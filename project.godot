@@ -179,3 +179,4 @@ environment/volumetric_fog/volume_depth=32
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 anti_aliasing/quality/screen_space_aa=1
 occlusion_culling/use_occlusion_culling=true
+mesh_lod/lod_change/threshold_pixels=0.3
