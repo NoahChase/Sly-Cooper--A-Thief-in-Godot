@@ -1683,7 +1683,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_oqbgp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Rope/Path3D"]
-transform = Transform3D(0.999827, -0.00175603, -0.00777051, 5.86069e-07, 0.97526, -0.220346, 0.00796618, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
+transform = Transform3D(0.999827, -0.00175603, -0.00777051, 5.86068e-07, 0.97526, -0.220346, 0.00796618, 0.220326, 0.975286, 15.9564, 4.9621, -9.19225)
 progress = 4.5459
 loop = false
 

@@ -410,25 +410,28 @@ func _physics_process(delta: float) -> void:
 	else:
 		if target == null or not target.is_in_group("LOCK PLAYER ROT"):
 			if global_rotation != Vector3(0,0,0):
-				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.2)
+				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.125)
 			#for rotating on point targets
 			rot_container.rotation.y += angle_difference * look_val
 			if not rot_container.rotation.x == 0.0:
-				rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.2)
+				rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.125)
 			if not rot_container.rotation.z == 0.0:
-				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.2)
+				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.125)
 		#elif target.is_in_group("swing"):
 			#$"Look_At Rotation".global_rotation.y = target.global_rotation.y
 			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
 		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET: #pole and hook look at point while moving to them
 			if not target.is_in_group("rope"):
 				var dis_to_target = global_transform.origin - target.global_transform.origin
-				if dis_to_target.length() > 0.5:
+				if target.is_in_group("swing"): ## rotates x/z to hook swing
+					rotation.x = lerp(rotation.x, target.rotation.x, 0.125)
+					rotation.z = lerp(rotation.z, target.rotation.z, 0.125)
 					$"Look_At Rotation".look_at(target.global_position + direction)
 					rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
-				if target.is_in_group("swing"): ## rotates x/z to hook swing
-					rot_container.rotation.x = target.rotation.x
-					rot_container.rotation.z = target.rotation.z
+				else:
+					if dis_to_target.length() > 0.5:
+						$"Look_At Rotation".look_at(target.global_position + direction)
+						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
 			else:
 				if not temp_sly.anim_tree.get("parameters/OneShot/active"):
 					var dis_to_target = global_transform.origin - target.global_transform.origin
