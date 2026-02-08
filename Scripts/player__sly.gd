@@ -179,6 +179,7 @@ func _physics_process(delta: float) -> void:
 				floor_ray_colliding = true
 		if floor_ray_colliding == false:
 			$"Return to Safe Timer".stop()
+			jump_when_hit_floor = false #stops delayed jump if player goes over large gap again before falling (edge case fix)
 		else:
 			if velocity.y <= 0:
 				temp_sly.anim_tree.set("parameters/OneShot/request", 3)
@@ -666,7 +667,7 @@ func jump():
 				if ray.is_colliding():
 					if velocity.y < 0:
 						var ray_col = ray.get_collider()
-						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.125:
+						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.1:
 							close_to_floor = true
 						else:
 							jump_when_hit_floor = true
@@ -1000,7 +1001,7 @@ func camera_smooth_follow(delta):
 	# offset for camera parent to follow 
 	var tform = (sly_mesh.global_transform.origin - rot_container.global_transform.basis.z * tform_mult)
 	# Predict ahead based on velocity and lerp_val
-	if motion_tracker.velocity.length() > 0.5: #don't predict camera if player isn't moving a lot
+	if motion_tracker.velocity.length() > 0.5 and velocity.x != 0.0 and velocity.z != 0.0: #don't predict camera if player isn't moving a lot
 		if state != ON_TARGET:
 			tform.x += velocity.x * (delta / lerp_val) + lerp_val * speed_mult
 			tform.z += velocity.z * (delta / lerp_val) + lerp_val * speed_mult
@@ -1028,27 +1029,28 @@ func camera_smooth_follow(delta):
 
 	if state == AIR or state == TO_TARGET:
 		if manual_move_cam == true:
-			#print("cam moved 1")
+			print("cam moved 1")
 			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + 2, cam_timer * lerp_val / 2 * (velocity.length() + 1))
 		elif velocity.y >= 0 and global_transform.origin.y > camera_parent.global_transform.origin.y + 2:
-			#print("cam moved 2")
+			print("cam moved 2")
 			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
 		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
 			if jump_cam_trigger == true:
-				#print("cam moved 3")
+				print("cam moved 3")
 				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
-				#print("cam moved 4")
+				print("cam moved 4")
 				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 1: # and not downward_raycast.is_colliding()
-				#print("cam moved 5")
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
+				print("cam moved 5")
 				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y - y_add, cam_timer * lerp_val * (abs(velocity.y) + 10.5))
 	else:
-		#print("cam moved 6")
-		$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer / PI)
+		if is_on_floor() or state == ON_TARGET or state == ON_LEDGE:
+			print("cam moved 6")
+			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer / PI)
 
 	ray_to_cam_distance = ray_to_cam.global_transform.origin - camera_parent.cam_container.global_transform.origin
 	ray_to_cam.look_at(camera_parent.cam_container.global_position)
