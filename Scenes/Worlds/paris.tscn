@@ -993,7 +993,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456094, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.39, 0.476667, 0.65, 1)
+light_color = Color(0.33, 0.403333, 0.55, 1)
 light_indirect_energy = 0.25
 light_volumetric_fog_energy = 4.0
 light_bake_mode = 1
@@ -4186,6 +4186,7 @@ surface_material_override/0 = ExtResource("53_xslp6")
 [node name="Water_SIMPLE" type="MeshInstance3D" parent="Background"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
 cast_shadow = 0
+ignore_occlusion_culling = true
 mesh = SubResource("PlaneMesh_yxbvy")
 surface_material_override/0 = SubResource("ShaderMaterial_eo8k6")
 

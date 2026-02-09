@@ -1001,10 +1001,11 @@ func camera_smooth_follow(delta):
 	# offset for camera parent to follow 
 	var tform = (sly_mesh.global_transform.origin - rot_container.global_transform.basis.z * tform_mult)
 	# Predict ahead based on velocity and lerp_val
-	if motion_tracker.velocity.length() > 0.5 and velocity.x != 0.0 and velocity.z != 0.0: #don't predict camera if player isn't moving a lot
+	if motion_tracker.velocity.length() > 0.5: #don't predict camera if player isn't moving a lot
 		if state != ON_TARGET:
-			tform.x += velocity.x * (delta / lerp_val) + lerp_val * speed_mult
-			tform.z += velocity.z * (delta / lerp_val) + lerp_val * speed_mult
+			if velocity.x != 0.0 and velocity.z != 0.0:
+				tform.x += velocity.x * (delta / lerp_val) + lerp_val * speed_mult
+				tform.z += velocity.z * (delta / lerp_val) + lerp_val * speed_mult
 		elif target.is_in_group("rope"):
 			# predict velocity (better than true one for following)
 			tform.x += motion_tracker.velocity.x * (delta / lerp_val) + lerp_val
