@@ -57,6 +57,10 @@ _subresources={
 "wall.001": {
 "use_external/enabled": true,
 "use_external/path": "uid://cqiaoxninm4yl"
+},
+"window": {
+"use_external/enabled": true,
+"use_external/path": "uid://dpu6l5di2d53m"
 }
 }
 }

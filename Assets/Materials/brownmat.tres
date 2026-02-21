@@ -3,7 +3,7 @@
 [resource]
 diffuse_mode = 3
 specular_mode = 1
-albedo_color = Color(0.3, 0.2125, 0.09, 1)
+albedo_color = Color(0.35, 0.240625, 0.0875, 1)
 metallic_specular = 0.1
 roughness = 0.75
 rim_enabled = true

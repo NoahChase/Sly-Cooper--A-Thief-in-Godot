@@ -1,4 +1,4 @@
-[gd_scene load_steps=171 format=4 uid="uid://b7jlhjo3apaay"]
+[gd_scene load_steps=176 format=4 uid="uid://b7jlhjo3apaay"]
 
 [ext_resource type="Script" uid="uid://bwgpmck7grlvy" path="res://Scripts/auto_rope_path.gd" id="1_3ytsx"]
 [ext_resource type="Environment" uid="uid://ch3alxhyfv1n0" path="res://Scenes/Worlds/Paris_Environment.tres" id="1_25okp"]
@@ -57,7 +57,10 @@
 [ext_resource type="PackedScene" uid="uid://bal3t01ejdg7d" path="res://Assets/Temp Imports/fountain.glb" id="55_w61al"]
 [ext_resource type="Script" uid="uid://cmfrde1dglfth" path="res://Scripts/return_player_to_safe_point.gd" id="57_1u24f"]
 [ext_resource type="PackedScene" uid="uid://vjnxpg1bb3jo" path="res://Scenes/UI/DeathScreen.tscn" id="58_0ksea"]
+[ext_resource type="Script" uid="uid://dyi3rlrsfqp0p" path="res://Scripts/drop_item_scene.gd" id="59_5qi1b"]
 [ext_resource type="AudioStream" uid="uid://c4oeia67kvqp8" path="res://Assets/Music/Sly_2_OST_Episode_Menu_1_KLICKAUD.mp3" id="59_gw2uj"]
+[ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="60_v4hwl"]
+[ext_resource type="PackedScene" uid="uid://dgbbsv1fb5nex" path="res://Scenes/Design Tools/hp_container.tscn" id="61_a7ejk"]
 
 [sub_resource type="Curve3D" id="Curve3D_6cvge"]
 closed = true
@@ -844,7 +847,7 @@ emission_enabled = true
 emission = Color(0.701961, 0.376471, 0.278431, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_p4poh"]
-size = Vector2(1000, 1000)
+size = Vector2(2000, 2000)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yxbvy"]
 size = Vector2(2000, 2000)
@@ -939,13 +942,13 @@ shader_parameter/normal_mult = 0.175
 shader_parameter/normal_height = 1.0
 shader_parameter/normal_2_height = 0.5
 shader_parameter/normal_lod = 2.5
-shader_parameter/albedo = Color(0.129412, 0.129412, 0.14902, 1)
+shader_parameter/albedo = Color(0.188235, 0.207843, 0.25098, 1)
 shader_parameter/roughness = 0.05
 shader_parameter/transparency = 0.75
 shader_parameter/specular = 1.0
 shader_parameter/metallic = 0.9
-shader_parameter/distance_fade_min = 50.0
-shader_parameter/distance_fade_max = 200.0
+shader_parameter/distance_fade_min = 60.0
+shader_parameter/distance_fade_max = 150.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0glgx"]
 render_priority = 0
@@ -965,8 +968,8 @@ shader_parameter/normal_mult = 0.175
 shader_parameter/normal_height = 1.0
 shader_parameter/normal_2_height = 0.5
 shader_parameter/normal_lod = 1.75
-shader_parameter/albedo = Color(0.1275, 0.129375, 0.15, 1)
-shader_parameter/edge_color = Color(0.3375, 0.4125, 0.45, 1)
+shader_parameter/albedo = Color(0.105, 0.12, 0.15, 1)
+shader_parameter/edge_color = Color(0.255, 0.27, 0.3, 1)
 shader_parameter/edge_scale = 0.25
 shader_parameter/near = 8.0
 shader_parameter/far = 100.0
@@ -974,8 +977,8 @@ shader_parameter/roughness = 0.05
 shader_parameter/transparency = 0.75
 shader_parameter/specular = 1.0
 shader_parameter/metallic = 0.9
-shader_parameter/distance_fade_min = 190.0
-shader_parameter/distance_fade_max = 60.0
+shader_parameter/distance_fade_min = 140.0
+shader_parameter/distance_fade_max = 70.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xslp6"]
 lightmap_size_hint = Vector2i(400, 400)
@@ -986,6 +989,10 @@ subdivide_depth = 300
 [sub_resource type="BoxShape3D" id="BoxShape3D_0ksea"]
 size = Vector3(5000, 1, 5000)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gw2uj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v4hwl"]
+
 [node name="Paris" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -993,7 +1000,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456094, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.33, 0.403333, 0.55, 1)
+light_color = Color(0.3025, 0.385, 0.55, 1)
 light_indirect_energy = 0.25
 light_volumetric_fog_energy = 4.0
 light_bake_mode = 1
@@ -1053,10 +1060,11 @@ nav_points = NodePath("../Enemy Nav Points")
 enemy_preload_string = "res://Scenes/Character/enemy_carmelita.tscn"
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Enemy Path 1"]
-transform = Transform3D(-0.28323, 8.02085e-05, 0.958995, 0.000283169, 0.999974, 7.27556e-12, -0.958995, 0.00027158, -0.28323, -12.5038, 0, -9.28979)
+transform = Transform3D(-0.28323, 8.02082e-05, 0.958995, 0.000283169, 0.99997, 7.27556e-12, -0.958995, 0.000271579, -0.28323, -12.5038, 0, -9.28979)
 progress = 86.7799
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Enemy Path 1/PathFollow3D"]
+visible = false
 mesh = SubResource("BoxMesh_6cvge")
 surface_material_override/0 = SubResource("StandardMaterial3D_6cvge")
 
@@ -2159,7 +2167,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_v4hwl")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE6/Path3D"]
-transform = Transform3D(-0.942425, 0.0109036, 0.334115, 2.12848e-06, 0.999287, -0.0326064, -0.334337, -0.0307286, -0.941797, 47.5084, 4.16926, 28.5549)
+transform = Transform3D(-0.942425, 0.0109036, 0.334115, 2.12848e-06, 0.999288, -0.0326064, -0.334337, -0.0307286, -0.941797, 47.5084, 4.16926, 28.5549)
 progress = 4.10269
 loop = false
 
@@ -2733,7 +2741,7 @@ reversed = true
 curve = SubResource("Curve3D_ovoob")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE2/Path3D"]
-transform = Transform3D(-1.06654e-07, 0.999722, -0.0203502, 6.12972e-08, -0.0203507, -0.999701, -0.999939, -1.07878e-07, -5.9112e-08, 84.096, 4.23775, 60)
+transform = Transform3D(-1.06654e-07, 0.999719, -0.0203502, 6.12972e-08, -0.0203506, -0.999701, -0.999939, -1.07878e-07, -5.9112e-08, 84.096, 4.23775, 60)
 progress = 4.17492
 loop = false
 
@@ -2762,14 +2770,6 @@ path_joined = false
 smooth_faces = true
 
 [node name="Thief Moves POLE" type="Node3D" parent="Thief Points/POLES/Thief Moves POLE2"]
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Thief Points/POLES/Thief Moves POLE2"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 83.0467, 7.90908, 58.9967)
-light_color = Color(0.9375, 1, 0.75, 1)
-light_energy = 2.0
-spot_range = 10.2847
-spot_angle = 24.8466
-spot_angle_attenuation = 0.3
 
 [node name="light emis_lamp_0_0" type="MeshInstance3D" parent="Thief Points/POLES/Thief Moves POLE2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 83.0968, 8, 59.0505)
@@ -3532,7 +3532,7 @@ reversed = true
 curve = SubResource("Curve3D_2qbwh")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/POLES/Thief Moves POLE21/Path3D"]
-transform = Transform3D(0.610694, -0.791695, -0.0131043, -0.00903486, 0.00958097, -0.999843, 0.791754, 0.610758, -0.00130185, 1.27222, 15.3013, 76.5326)
+transform = Transform3D(0.610694, -0.791695, -0.0131042, -0.00903486, 0.00958097, -0.99984, 0.791754, 0.610758, -0.00130185, 1.27222, 15.3013, 76.5326)
 progress = 4.17492
 loop = false
 
@@ -4113,25 +4113,25 @@ surface_material_override/0 = ExtResource("41_jevjf")
 [node name="Background" type="Node3D" parent="."]
 
 [node name="Sprite3D4" type="Sprite3D" parent="Background"]
-transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 848.5, 5.3125, 25)
+transform = Transform3D(8.74228e-08, 0, -1, 0, 1, 0, 1, 0, 8.74228e-08, 848.5, -6, 25)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D" type="Sprite3D" parent="Background"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, 5.3125, -794)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.5, -6, -794)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D2" type="Sprite3D" parent="Background"]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -785.5, 5.3125, 24)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -785.5, -6, 24)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
 
 [node name="Sprite3D3" type="Sprite3D" parent="Background"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 30, 5.3125, 844.5)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 30, -6, 844.5)
 pixel_size = 1.0
 texture_filter = 0
 texture = ExtResource("8_awwuf")
@@ -4140,7 +4140,7 @@ texture = ExtResource("8_awwuf")
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 71.146, -2.5, -95.653)
 
 [node name="p-background-bld-1-2" parent="Background" instance=ExtResource("32_8m1p0")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 170.343, -2.5, -88.958)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 170.343, -1.75, -88.958)
 
 [node name="p-background-bld-1-3" parent="Background" instance=ExtResource("32_8m1p0")]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 65.508, 0.5, -143.185)
@@ -4149,16 +4149,16 @@ transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 65.508, 0.5, -143.185)
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 50.44, 3.5, -189.38)
 
 [node name="p-background-bld-1-5" parent="Background" instance=ExtResource("32_8m1p0")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 33.995, 7.5, -244.278)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 29.495, 7.5, -241.278)
 
 [node name="p-background-bld-1-6" parent="Background" instance=ExtResource("32_8m1p0")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 8.495, 9, -307.278)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 2.495, 11.25, -290.778)
 
 [node name="p-background-bld-1-7" parent="Background" instance=ExtResource("32_8m1p0")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -24.505, 13.5, -373.278)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -30.505, 14.25, -338.028)
 
 [node name="Arch" type="MeshInstance3D" parent="Background"]
-transform = Transform3D(-4.61936e-07, 0, 2, 0, 2, 0, -2, 0, -4.61936e-07, -5.6861, -4, -156.117)
+transform = Transform3D(-4.61936e-07, 0, 2, 0, 2, 0, -2, 0, -4.61936e-07, 3.31389, 3, -189.117)
 mesh = ExtResource("45_jevjf")
 skeleton = NodePath("../..")
 
@@ -4226,6 +4226,25 @@ autoplay = true
 [node name="SpawnPoint" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.07173, 12.766, 4.05441)
 
+[node name="drop_item_scene" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.25507, 5, 3.74067)
+script = ExtResource("59_5qi1b")
+total_drop_count_max = 3
+y_spawn_offset = 2.0
+
+[node name="HP Container" parent="drop_item_scene" node_paths=PackedStringArray("hurtboxes") instance=ExtResource("61_a7ejk")]
+hurtboxes = [NodePath("Hurtbox")]
+
+[node name="Hurtbox" parent="drop_item_scene/HP Container" instance=ExtResource("60_v4hwl")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="drop_item_scene/HP Container/Hurtbox"]
+shape = SubResource("BoxShape3D_gw2uj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="drop_item_scene"]
+mesh = SubResource("BoxMesh_v4hwl")
+
 [connection signal="body_entered" from="Thief Points/WALL NOTCH/Wall Notch/Area3D" to="Thief Points/WALL NOTCH/Wall Notch" method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Thief Points/WALL NOTCH/Wall Notch/Area3D" to="Thief Points/WALL NOTCH/Wall Notch" method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="Thief Points/WALL NOTCH/Wall Notch2/Area3D" to="Thief Points/WALL NOTCH/Wall Notch2" method="_on_area_3d_body_entered"]
@@ -4234,5 +4253,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.07173, 12.766, 4.05441)
 [connection signal="body_exited" from="Thief Points/WALL NOTCH/Wall Notch3/Area3D" to="Thief Points/WALL NOTCH/Wall Notch3" method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="Gameplay Areas/Water Big Area3D" to="Gameplay Areas" method="_on_water_big_area_3d_body_entered"]
 [connection signal="body_exited" from="Gameplay Areas/Water Big Area3D" to="Gameplay Areas" method="_on_water_big_area_3d_body_exited"]
+[connection signal="damage_taken" from="drop_item_scene/HP Container" to="drop_item_scene" method="_on_hp_container_damage_taken"]
 
 [editable path="Camera Parent"]

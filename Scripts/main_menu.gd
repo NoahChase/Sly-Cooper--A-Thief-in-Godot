@@ -1,8 +1,8 @@
 extends Control
 
 func _ready():
-	# Make mouse visible
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# Make mouse visible and confine to screen
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 
 func close_menu_buttons() -> void:
 	$"Start Button".visible = false
@@ -10,6 +10,8 @@ func close_menu_buttons() -> void:
 	$"Quit Button".visible = false
 
 func _on_start_button_pressed() -> void:
+	# Make mouse visible and confine to screen
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	$"Loading Label".visible = true
 	$SlyCooperClassicTitleLogo.visible = false
 	close_menu_buttons()

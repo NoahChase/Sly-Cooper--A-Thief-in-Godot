@@ -7,7 +7,6 @@ diffuse_mode = 3
 specular_mode = 1
 albedo_texture = ExtResource("1_sblg6")
 metallic_specular = 1.0
-roughness = 0.5
 rim_enabled = true
 ao_texture = ExtResource("1_sblg6")
 ao_texture_channel = 4

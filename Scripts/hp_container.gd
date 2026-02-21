@@ -1,5 +1,6 @@
 extends Node3D
 @export var parent = get_parent()
+@export var invincible = false #needed for coin purses etc. necessary for anything that isn't expected to change in this script when hit.
 @export var maxHP = 3
 @export var hp = 3
 @export var get_kb = false
@@ -18,22 +19,24 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	hp = clamp(hp, 0, maxHP)
 	
-	if hp <= 0:
-		health_is_zero.emit()
-		
-		# Stop further damage processing
-		can_take_damage = false
-		
-		## show death screen can be connected to a world manager node by the health_is_zero signal
-		## right now, it's placed in the player's script, and the enemy connects to health_is_zero by deleting itself
-		
+	if not invincible:
+		if hp <= 0:
+			health_is_zero.emit()
+			
+			# Stop further damage processing
+			can_take_damage = false
+			
+			## show death screen can be connected to a world manager node by the health_is_zero signal
+			## right now, it's placed in the player's script, and the enemy connects to health_is_zero by deleting itself
+			
 	
 	for hurtbox in hurtboxes:
 		if hurtbox.is_hit:
 			if can_take_damage == true:
 				damage_taken.emit()
 				##hurtbox.rotation.x += 1
-				hp -= hurtbox.damage
+				if not invincible:
+					hp -= hurtbox.damage
 				#print(parent, " hp = ", hp)
 				can_take_damage = false
 				damage_flash_timer.start(damage_flash_time)

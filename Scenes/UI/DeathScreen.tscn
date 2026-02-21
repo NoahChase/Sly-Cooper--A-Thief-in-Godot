@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://vjnxpg1bb3jo"]
+[gd_scene load_steps=3 format=3 uid="uid://vjnxpg1bb3jo"]
 
 [ext_resource type="Script" uid="uid://bul5gqb1u4y0k" path="res://Scripts/DeathScreen.gd" id="1_xkv6f"]
+[ext_resource type="PackedScene" uid="uid://cni61khpmvx26" path="res://Scenes/UI/ui_mouse_controller.tscn" id="2_vbq58"]
 
 [node name="DeathScreen" type="Control"]
 layout_mode = 3
@@ -15,12 +16,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xkv6f")
 
+[node name="UI Mouse Controller" parent="." instance=ExtResource("2_vbq58")]
+layout_mode = 1
+
 [node name="ColorRect" type="ColorRect" parent="."]
 show_behind_parent = true
 z_index = -2
 layout_mode = 0
-offset_right = 1927.0
-offset_bottom = 1081.0
+offset_left = -28.0
+offset_top = -27.0
+offset_right = 1943.0
+offset_bottom = 1104.0
 color = Color(0, 0, 0, 1)
 
 [node name="Death label" type="Label" parent="."]

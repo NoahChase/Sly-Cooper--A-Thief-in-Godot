@@ -189,13 +189,17 @@ func bend_rope(delta):
 			var lerp_factor
 		
 			if player_on_target == true:
-				val = lerp(val, 0.0, 0.01)
-				bend_mult = lerp(bend_mult, 1.0, 0.015)
+				#val = lerp(val, 0.0, 0.01)
+				val += (0.0 - val) * 0.005
+				#bend_mult = lerp(bend_mult, 1.0, 0.015)
+				bend_mult += (1.0 - bend_mult) * 0.0075
 				if val == 0.0:
 					do_bend = false
 			else:
-				val = lerp(val, 1.0, 0.005)
-				bend_mult = lerp(bend_mult, val, 0.001)
+				#val = lerp(val, 1.0, 0.005)
+				val += (1.0 - val) * 0.005
+				#bend_mult = lerp(bend_mult, val, 0.001)
+				bend_mult += (val - bend_mult) * 0.0075
 				if val == 1.0:
 					do_bend = false
 				

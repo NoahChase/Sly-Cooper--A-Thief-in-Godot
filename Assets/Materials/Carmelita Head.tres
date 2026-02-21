@@ -9,9 +9,9 @@ render_priority = 2
 shader = ExtResource("2_rkkeb")
 shader_parameter/fade_near = 8.0
 shader_parameter/fade_far = 20.0
-shader_parameter/outline_color_lit = Color(0.3, 0.31, 0.5, 0.392157)
-shader_parameter/outline_color_unlit = Color(0.12, 0.134, 0.4, 0.392157)
-shader_parameter/outline_width = 5.0
+shader_parameter/outline_color_lit = Color(0.301961, 0.34902, 0.501961, 0.392157)
+shader_parameter/outline_color_unlit = Color(0.0509804, 0.0509804, 0.0509804, 1)
+shader_parameter/outline_width = 6.0
 shader_parameter/outline_step = 0.5
 shader_parameter/light_direction = Vector3(0, -1, 0.15)
 
@@ -21,16 +21,17 @@ next_pass = SubResource("ShaderMaterial_t836l")
 shader = ExtResource("3_ydk4b")
 shader_parameter/fade_near = 8.0
 shader_parameter/fade_far = 20.0
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_width = 3.0
+shader_parameter/outline_color = Color(0.05, 0.05, 0.05, 1)
+shader_parameter/outline_width = 2.0
 
 [resource]
 next_pass = SubResource("ShaderMaterial_bftro")
 diffuse_mode = 3
 specular_mode = 1
 albedo_texture = ExtResource("1_flfm5")
-roughness = 0.5
 rim_enabled = true
+rim = 0.25
+rim_tint = 1.0
 ao_enabled = true
 ao_light_affect = 0.5
 ao_texture = ExtResource("1_flfm5")

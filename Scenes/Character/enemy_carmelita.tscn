@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://d1v0d851s67ka"]
+[gd_scene load_steps=29 format=3 uid="uid://d1v0d851s67ka"]
 
 [ext_resource type="PackedScene" uid="uid://bhmb7tfnis47w" path="res://Scenes/Character Mesh/carmelita_animations_7.tscn" id="1_blgq8"]
 [ext_resource type="Script" uid="uid://dkty77jclhlgg" path="res://Scripts/enemy_base_flashlight.gd" id="2_nl3io"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://c0q01l776k7jc" path="res://Scenes/Design Tools/hurtbox.tscn" id="5_nx177"]
 [ext_resource type="PackedScene" uid="uid://brv7l2iku2ciy" path="res://Scenes/Design Tools/spotlight_detection.tscn" id="6_32kva"]
 [ext_resource type="PackedScene" uid="uid://bibovwn6qb1d8" path="res://Scenes/Design Tools/gun.tscn" id="7_n063b"]
+[ext_resource type="Script" uid="uid://dyi3rlrsfqp0p" path="res://Scripts/drop_item_scene.gd" id="8_oq16c"]
+[ext_resource type="Material" uid="uid://bbrp6qg74jmrw" path="res://Assets/Materials/transparent.tres" id="9_vf31g"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bj7m3"]
 radial_segments = 7
@@ -60,6 +62,10 @@ height = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_1lhpl"]
 size = Vector3(0.25, 0.25, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nx177"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_32kva"]
 
 [node name="enemy_carmelita" type="CharacterBody3D" node_paths=PackedStringArray("character_mesh", "col_shape", "flashlight", "weapon", "hp_container", "kb_parent") groups=["Enemy", "SLIP"]]
 floor_max_angle = 0.610865
@@ -316,6 +322,30 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="Enemy_Carmelita" type="Node3D" parent="."]
 
+[node name="drop_item_scene" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 1)
+script = ExtResource("8_oq16c")
+total_drop_count_max = 5
+item_spawn_max = 7
+item_spawn_min = 4
+y_spawn_offset = 0.5
+
+[node name="HP Container" parent="drop_item_scene" node_paths=PackedStringArray("hurtboxes") instance=ExtResource("4_vf31g")]
+invincible = true
+hurtboxes = [NodePath("Hurtbox")]
+
+[node name="Hurtbox" parent="drop_item_scene/HP Container" instance=ExtResource("5_nx177")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="drop_item_scene/HP Container/Hurtbox"]
+shape = SubResource("BoxShape3D_nx177")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="drop_item_scene"]
+visible = false
+material_override = ExtResource("9_vf31g")
+mesh = SubResource("BoxMesh_32kva")
+
 [connection signal="air" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_air"]
 [connection signal="hit_taken" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_hit_taken"]
 [connection signal="idle" from="." to="Carmelita_Animations7" method="_on_enemy_carmelita_idle"]
@@ -343,3 +373,4 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 [connection signal="body_exited" from="close_detection_area" to="." method="_on_close_detection_area_body_exited"]
 [connection signal="body_entered" from="med detection area" to="." method="_on_med_detection_area_body_entered"]
 [connection signal="body_exited" from="med detection area" to="." method="_on_med_detection_area_body_exited"]
+[connection signal="damage_taken" from="drop_item_scene/HP Container" to="drop_item_scene" method="_on_hp_container_damage_taken"]

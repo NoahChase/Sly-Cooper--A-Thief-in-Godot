@@ -40,6 +40,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var jump_cam_trigger = false
 @onready var previous_jump_was_notch = false
 @onready var left_stick_pressure = 1.0
+@onready var right_stick_pressure = 1.0
 @onready var joystick_input = Vector2()
 ## export
 @export var jump_mult_curve: Curve
@@ -56,6 +57,8 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var follower = $Follower
 @onready var motion_tracker: Node3D = $Follower/Motion_Tracker
 @onready var collision_point = $"collision point"
+
+var coin = 0
 
 ## var
 var target
@@ -76,6 +79,8 @@ var ascending_stairs = false
 var was_on_floor = true
 var moving = false
 var jump_when_hit_floor = false
+
+var hat_fall_lerp = 1.0
 
 #temporal buffer (frame buffers)
 const stair_grace_frames := 20
@@ -135,7 +140,9 @@ func _physics_process(delta: float) -> void:
 	floor_or_roof = $"Body Mesh Container/Floor Ray".get_collider()
 	# keep for reading pressure, better on rope than joystick_input.length()
 	left_stick_pressure = Input.get_action_strength("ui_left") + Input.get_action_strength("ui_right") + Input.get_action_strength("ui_up") + Input.get_action_strength("ui_down")
-	left_stick_pressure = clamp(left_stick_pressure, 0, 1)
+	left_stick_pressure = clamp(left_stick_pressure, 0.0, 1.0)
+	right_stick_pressure = Input.get_action_strength("right_stick_left") + Input.get_action_strength("right_stick_right") + Input.get_action_strength("right_stick_up") + Input.get_action_strength("right_stick_down")
+	right_stick_pressure = clamp(right_stick_pressure, 0.0, 1.0)
 	
 
 	if $"Target Area/CollisionShape3D3".disabled == false and state == AIR:
@@ -196,6 +203,13 @@ func _physics_process(delta: float) -> void:
 		can_ledge = false
 		if not temp_sly.anim_tree.get("parameters/jump_state/transition_request") == "jump_air_forward":
 			temp_sly.anim_tree.set("parameters/state/transition_request", "air")
+			var hat_fall = -velocity.y / 6.5
+			hat_fall = clamp(hat_fall, 0.0, 1.0)
+			if velocity.y < 0:
+				hat_fall_lerp = lerp(hat_fall_lerp, 1 - hat_fall, 0.2)
+			else:
+				hat_fall_lerp = lerp(hat_fall_lerp, 1.0, 0.2)
+			temp_sly.anim_tree.set("parameters/Hat Fall Sub/sub_amount", hat_fall_lerp)
 		#var forward = -rot_container.global_transform.basis.z
 
 		speed_mult = 1.0
@@ -366,7 +380,7 @@ func _physics_process(delta: float) -> void:
 
 	# Calculate input direction
 	var joystick_input = Vector2(Input.get_axis("ui_left", "ui_right"), Input.get_axis("ui_up", "ui_down"))
-	if joystick_input.length() < 1.0:
+	if joystick_input.length() < 0.75:
 		joystick_input = lerp(joystick_input, joystick_input.normalized(), joystick_input)
 	else:
 		joystick_input = joystick_input.normalized()
@@ -375,7 +389,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Calculate movement direction relative to the camera
 	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult, 0.0, vertical * air_mult * speed_mult).rotated(Vector3.UP, camera_T)).normalized()
-
+	
 	if direction and state != ON_LEDGE and state != ON_TARGET:
 		var speed_factor = velocity.length() / SPEED
 		var lerp_speed = clamp(1 - speed_factor, 0.08, 0.8) * air_mult
@@ -453,9 +467,9 @@ func _physics_process(delta: float) -> void:
 	var direction_2d = Vector2(direction.x, direction.z)
 # Camera Rotation:
 	if horizontal < 0 and state == FLOOR:
-		camera_parent.yaw += motion_tracker.velocity.length() / 4 * delta * -horizontal
+		camera_parent.yaw += motion_tracker.velocity.length() / (SPEED * speed_mult * left_stick_pressure) * delta * -horizontal
 	elif horizontal > 0 and state == FLOOR:
-		camera_parent.yaw -= motion_tracker.velocity.length() / 4 * delta * horizontal
+		camera_parent.yaw -= motion_tracker.velocity.length() / (SPEED * speed_mult * left_stick_pressure) * delta * horizontal
 	
 	var colliding_count = 0  # Reset every frame
 	manual_slip = false
@@ -481,41 +495,56 @@ func _physics_process(delta: float) -> void:
 		stair_detect(delta)
 	if colliding_count <= 1:
 		ledge_detect(delta)
-
+	
+	## Physics Process Sensitive Inputs (after state and all logic)
 	# delayed jump trigger
 	if jump_when_hit_floor == true and state == FLOOR:
 		jump()
+	# Handle jump.
+	if Input.is_action_just_pressed("ui_accept"):
+		if $"Jump Input Buffer".is_stopped():
+			jump()
+	if Input.is_action_just_pressed("circle") and not stunned:
+		if state == AIR:
+			#$"Body Mesh Container/AnimationPlayer".play("spin")
+			$"Target Area/AnimationPlayer".play("detect targets")
+		if state == FLOOR:
+			temp_sly.anim_tree.set("parameters/Hit Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			temp_sly.cane_pickpocket_hitbox.hit_timer.start(temp_sly.cane_pickpocket_hitbox.hit_time)
 
 	camera_smooth_follow(delta)
 
 	move_and_slide()
 
-	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, " | velocity = ", motion_tracker.velocity.length())
+	$RichTextLabel.text = str("coins = ", coin, " FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, " | velocity = ", motion_tracker.velocity.length())
 
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("esc"):
-		get_tree().quit()
+		get_tree().quit() # open pause menu
 	
 	# Debug super jump
 	if Input.is_action_just_pressed("lalt"):
 		if $"Jump Input Buffer".is_stopped():
 			velocity.y += JUMP_VELOCITY * 2
 	
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept"):
-		if $"Jump Input Buffer".is_stopped():
-			jump()
+	## Handle jump.
+	#if Input.is_action_just_pressed("ui_accept"):
+		#if $"Jump Input Buffer".is_stopped():
+			#jump()
 	
 	if Input.is_action_just_pressed("square"):
-		temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
+		temp_sly.anim_tree.set("parameters/Hit Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		temp_sly.cane_hitbox.hit_timer.start(temp_sly.cane_hitbox.hit_time)
 		#temp_sly.cane_hitbox.active = true
 
-	if Input.is_action_just_pressed("circle") and state == AIR and not stunned:
-		#$"Body Mesh Container/AnimationPlayer".play("spin")
-		$"Target Area/AnimationPlayer".play("detect targets")
-		
+	#if Input.is_action_just_pressed("circle") and not stunned:
+		#if state == AIR:
+			##$"Body Mesh Container/AnimationPlayer".play("spin")
+			#$"Target Area/AnimationPlayer".play("detect targets")
+		#if state == FLOOR:
+			#temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
+			#temp_sly.cane_pickpocket_hitbox.hit_timer.start(temp_sly.cane_pickpocket_hitbox.hit_time)
 
 func state_handler(delta):
 # Stun Logic
@@ -632,8 +661,7 @@ func jump():
 		ascending_stairs = false
 		if state == FLOOR:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			# if press shift on first jump, do extra velocity push in forward direction
 			velocity.y = JUMP_VELOCITY * jump_mult
 			jump_from_floor_anim = true
@@ -641,8 +669,7 @@ func jump():
 			print("jump floor")
 		elif state == ON_LEDGE:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			ledge_cooldown_timer = 0.2
 			state = AIR
 			jump_num = 0
@@ -650,8 +677,7 @@ func jump():
 			print("jump ledge")
 		elif state == ON_TARGET:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			emit_signal("target_released", target)
 			target.unassign_player()
 			#target.player = null
@@ -667,7 +693,7 @@ func jump():
 				if ray.is_colliding():
 					if velocity.y < 0:
 						var ray_col = ray.get_collider()
-						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.1:
+						if global_transform.origin.y - ray_col.global_transform.origin.y <= 0.2:
 							close_to_floor = true
 						else:
 							jump_when_hit_floor = true
@@ -675,8 +701,7 @@ func jump():
 					
 			if close_to_floor == true:
 				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
-				temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-				temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+				temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				jump_from_floor_anim = true
 				# if press shift on first jump, do extra velocity push in forward direction
 				velocity.y = JUMP_VELOCITY * jump_mult
@@ -686,8 +711,7 @@ func jump():
 				if jump_num <= 2:
 					if jump_when_hit_floor == false:
 						temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_air_forward")
-						temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-						temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+						temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 						air_mult = 1.0
 						var jump_value := jump_mult_curve.sample_baked(clamp(velocity.y, -8.0, 8.0))
 						velocity.y += jump_value
@@ -721,23 +745,23 @@ func stair_detect(delta):
 	#if is_on_wall():
 		#can_stair = false
 		#print("stair wall failed")
-	print("vel.y = ", velocity.y)
+	#print("vel.y = ", velocity.y)
 	if velocity.y < -0.28:
 		can_stair = false
-		print("stair velocity.y failed")
+		#print("stair velocity.y failed")
 	if state != FLOOR:
 		can_stair = false
-		print("stair AIR failed")
+		#print("stair AIR failed")
 	if left_stick_pressure < 0.01:
 		can_stair = false
-		print("stair left stick pressure failed")
+		#print("stair left stick pressure failed")
 	if not direction:
 		can_stair = false
-		print("stair direction failed")
+		#print("stair direction failed")
 	for ray in stair_rays:
 		if ray.is_colliding():
 			can_stair = false
-			print("stair wall ray failed")
+			#print("stair wall ray failed")
 
 	var stair_horizontal = Vector3()
 	var stair_vertical = Vector3()
@@ -755,7 +779,7 @@ func stair_detect(delta):
 		ray = $"Body Mesh Container/Stair Ray Low"
 	else:
 		can_stair = false
-		print("stair ray h failed")
+		#print("stair ray h failed")
 
 	if ray:
 		stair_horizontal = ray.get_collision_point()
@@ -764,8 +788,8 @@ func stair_detect(delta):
 	# Reject shallow slopes
 	if stair_normal.dot(Vector3.UP) > max_dot:
 		can_stair = false
-		print("stair normal failed")
-	print("stair dot = ", stair_normal.dot(Vector3.UP))
+		#print("stair normal failed")
+	#print("stair dot = ", stair_normal.dot(Vector3.UP))
 
 	# Temporal smoothing
 	if can_stair:
@@ -783,7 +807,7 @@ func stair_detect(delta):
 			stair_miss_counter += 1
 			if stair_miss_counter >= stair_grace_frames:
 				ascending_stairs = false
-				print("ray v denied stairs")
+				#print("ray v denied stairs")
 				floor_snap_length = 0.1
 				return
 		
@@ -796,19 +820,19 @@ func stair_detect(delta):
 		var stair_direction = (stair_vertical - global_transform.origin).normalized()
 		if distance_to_top < 0.2:
 			distance_to_top = 0.2
-			print("helped distance to top, 0.2")
+			#print("helped distance to top, 0.2")
 		
 		if velocity.y < (stair_direction.y * distance_to_top) + 2:
 			if is_on_wall():
 				velocity.y = max(velocity.y, stair_direction.y * max(distance_to_top/2, 0.25) + 0.75)
 			else:
 				velocity.y = lerp(velocity.y, (stair_direction.y * distance_to_top/2) + 0.75, 0.25 / (distance_to_top + 0.25))
-			print("ascending stairs")
+			#print("ascending stairs")
 	else:
 		stair_miss_counter += 1
 		if stair_miss_counter >= stair_grace_frames:
 			ascending_stairs = false
-			print("denied stairs")
+			#print("denied stairs")
 			floor_snap_length = 0.1
 			return
 
@@ -887,16 +911,13 @@ func apply_target(delta):
 	if best_target != null:
 		if best_target.is_in_group("swing"):
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_swing")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		elif not best_target.is_in_group("pole"):
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_spin")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		else:
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_pole")
-			temp_sly.anim_tree.set("parameters/OneShot/request", 3)
-			temp_sly.anim_tree.set("parameters/OneShot/request", 1)
+			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		target = best_target
 		
 	
@@ -954,17 +975,8 @@ func apply_magnetism(): # the holy grail of magnetism
 			
 
 func target_jump():
-	if velocity.y >= 4:
-		velocity.y += 2 / (velocity.y / 2)
-	elif velocity.y >= 0:
-		velocity.y += 3
-	elif velocity.y <= -6.5:
-		velocity.y += (-velocity.y/4) + 4
-	else:
-		velocity.y += (-velocity.y) + 4
-		
-	if global_transform.origin.y <= target.global_transform.origin.y + 1.0:
-		velocity.y = 4.0
+	var jump_value := jump_mult_curve.sample_baked(clamp(velocity.y, -8.0, 8.0))
+	velocity.y += jump_value
 	did_target_jump = true
 
 func reposition_player_mesh():
@@ -1020,38 +1032,33 @@ func camera_smooth_follow(delta):
 	camera_parent.position.y = lerp(camera_parent.position.y, $Basis_Offset.global_transform.origin.y, 0.2)
 	camera_parent.position.z = lerp(camera_parent.position.z, $Basis_Offset.global_transform.origin.z, cam_timer)
 
-	
 	#set move camera on high double jump
 	## Add raycast collider check here and ensure does not turn off early
 	if velocity.y >= 12 and jump_num > 0:
 		jump_cam_trigger = true
 	elif velocity.y <= 0 or state != AIR:
 		jump_cam_trigger = false
-
+	
+	var spring_val = 0.05 #changed to spring instead of lerp for smoothness
 	if state == AIR or state == TO_TARGET:
-		if manual_move_cam == true:
-			print("cam moved 1")
-			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + 2, cam_timer * lerp_val / 2 * (velocity.length() + 1))
+		var target_y = tform.y + y_add
+		if manual_move_cam:
+			target_y = tform.y + 2
+			$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val / 2 * (velocity.length() + 1)
 		elif velocity.y >= 0 and global_transform.origin.y > camera_parent.global_transform.origin.y + 2:
-			print("cam moved 2")
-			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
-		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6:
-			if jump_cam_trigger == true:
-				print("cam moved 3")
-				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
+			$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 1)
+		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6 and jump_cam_trigger:
+			$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 1)
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
-				print("cam moved 4")
-				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer * lerp_val * (abs(velocity.y) + 1))
+				$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y / gravmult) + 1)
 		else:
-			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2: # and not downward_raycast.is_colliding()
-				print("cam moved 5")
-				$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y - y_add, cam_timer * lerp_val * (abs(velocity.y) + 10.5))
+			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2.0:
+				$Basis_Offset.global_transform.origin.y += (tform.y - y_add - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 10.5)
 	else:
 		if is_on_floor() or state == ON_TARGET or state == ON_LEDGE:
-			print("cam moved 6")
-			$Basis_Offset.global_transform.origin.y = lerp($Basis_Offset.global_transform.origin.y, tform.y + y_add, cam_timer / PI)
+			$Basis_Offset.global_transform.origin.y += (tform.y + y_add - $Basis_Offset.global_transform.origin.y) * cam_timer / PI
 
 	ray_to_cam_distance = ray_to_cam.global_transform.origin - camera_parent.cam_container.global_transform.origin
 	ray_to_cam.look_at(camera_parent.cam_container.global_position)
@@ -1094,7 +1101,10 @@ func _on_hp_container_health_is_zero() -> void:
 	show_death_screen()
 func show_death_screen() -> void:
 	var death_screen = get_parent().get_node("DeathScreen")
-	Engine.time_scale = 0.0
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	#Engine.time_scale = 0.0 #this disables all engine processes
+	death_screen.process_mode = Node.PROCESS_MODE_ALWAYS #set death screen to run
+	get_parent().process_mode = Node.PROCESS_MODE_DISABLED #set main scene to stop running
 	death_screen.visible = true
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	death_screen.process_mode = Node.PROCESS_MODE_ALWAYS
+	# Make mouse visible and confine to screen
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)

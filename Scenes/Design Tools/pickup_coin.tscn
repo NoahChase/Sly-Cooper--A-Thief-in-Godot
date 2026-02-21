@@ -17,7 +17,6 @@ rim_tint = 1.0
 clearcoat_enabled = true
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_88vds"]
-radius = 0.75
 
 [sub_resource type="Animation" id="Animation_ltykn"]
 length = 0.001
@@ -58,6 +57,7 @@ _data = {
 }
 
 [node name="Pickup_Coin" type="Node3D"]
+top_level = true
 script = ExtResource("1_ltykn")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -75,6 +75,16 @@ libraries = {
 &"": SubResource("AnimationLibrary_88vds")
 }
 autoplay = "idle spin"
+
+[node name="RayCast3D V" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+
+[node name="RayCast3D H" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, -0.45, 0)
+
+[node name="RayCast3D H2" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, -0.45, 0)
+target_position = Vector3(0, 1, 0)
 
 [connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

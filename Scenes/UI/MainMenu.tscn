@@ -1,63 +1,95 @@
-[gd_scene load_steps=4 format=3 uid="uid://csndptq2dn7ys"]
+[gd_scene load_steps=5 format=3 uid="uid://csndptq2dn7ys"]
 
 [ext_resource type="Script" uid="uid://b5tpwd6mab1gs" path="res://Scripts/main_menu.gd" id="1_g18y6"]
 [ext_resource type="Texture2D" uid="uid://pcq4og8s3lyk" path="res://sly cooper classic title logo.png" id="2_mjmdf"]
+[ext_resource type="PackedScene" uid="uid://cni61khpmvx26" path="res://Scenes/UI/ui_mouse_controller.tscn" id="2_t6w0q"]
 [ext_resource type="AudioStream" uid="uid://yfearjp8uqa6" path="res://Assets/Music/Sly 2 Soundtrack - Museum.mp3" id="3_72sra"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_g18y6")
+
+[node name="UI Mouse Controller" parent="." instance=ExtResource("2_t6w0q")]
+layout_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="."]
 show_behind_parent = true
 z_index = -2
-layout_mode = 0
-offset_right = 1927.0
-offset_bottom = 1081.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -963.5
+offset_top = -540.5
+offset_right = 963.5
+offset_bottom = 540.5
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Start Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 875.0
-offset_top = 723.0
-offset_right = 1124.0
-offset_bottom = 815.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = 108.0
+offset_right = 124.5
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Start Game"
 
 [node name="Control Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 883.0
-offset_top = 840.0
-offset_right = 1119.0
-offset_bottom = 942.0
+offset_left = -96.5
+offset_top = 245.0
+offset_right = 139.5
+offset_bottom = 347.0
 text = "Controls"
 
 [node name="Quit Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 876.0
-offset_top = 961.0
-offset_right = 1129.0
-offset_bottom = 1061.0
+offset_left = -103.5
+offset_top = 366.0
+offset_right = 149.5
+offset_bottom = 466.0
 text = "Quit"
 
 [node name="Loading Label" type="Label" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 9.965
-anchor_bottom = 7.175
-offset_left = 983.0
-offset_top = 540.0
-offset_right = 646.4
-offset_bottom = 276.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -11.5
+offset_right = 31.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
 text = "Loading"
 
 [node name="SlyCooperClassicTitleLogo" type="Sprite2D" parent="."]
-position = Vector2(1018, 357)
-scale = Vector2(0.350293, 0.319097)
+position = Vector2(0, -256)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_mjmdf")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

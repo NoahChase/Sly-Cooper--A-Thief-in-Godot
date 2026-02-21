@@ -460,7 +460,7 @@ func state_execute():
 # IDLE STILL
 	if state == IDLE_STILL:
 		idle.emit()
-		print("state IDLE STILL")
+		#print("state IDLE STILL")
 		do_custom_direciton = true
 		custom_direction = Vector3.ZERO
 		#print("custom dir set true HERE IDLE STILL")
@@ -483,22 +483,22 @@ func direction_manager():
 					if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 						do_custom_direciton = true
 						custom_direction = target.global_transform.origin
-						print("custom dir set true HERE 1")
+						#print("custom dir set true HERE 1")
 				else:
 					do_custom_direciton = true
 					custom_direction = target.global_transform.origin
-					print("custom dir set true HERE 2")
+					#print("custom dir set true HERE 2")
 	else:
 		if dis_to_wall >= 1.25 and final_nav_distance_to_target > 2.0:
 			if target.is_in_group("Player"):
 				if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 					do_custom_direciton = true
 					custom_direction = target.global_transform.origin
-					print("custom dir set true HERE 3")
+					#print("custom dir set true HERE 3")
 			else:
 				do_custom_direciton = true
 				custom_direction = target.global_transform.origin
-				print("custom dir set true HERE 4")
+				#print("custom dir set true HERE 4")
 
 	if do_custom_direciton == true:
 		if target == new_nav_point:
