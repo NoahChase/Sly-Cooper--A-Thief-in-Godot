@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cni61khpmvx26"]
+[gd_scene load_steps=3 format=3 uid="uid://cni61khpmvx26"]
 
 [ext_resource type="Script" uid="uid://mviqod5hfmka" path="res://Scripts/ui_mouse_controller.gd" id="1_m3x1x"]
+[ext_resource type="AudioStream" uid="uid://ydioaev8vvpy" path="res://Assets/Effects/denielcz-immersivecontrol-button-click-sound-463065.mp3" id="2_yuonx"]
 
 [node name="UI Mouse Controller" type="Control"]
 layout_mode = 3
@@ -10,3 +11,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_m3x1x")
+
+[node name="Audio Mouse Move" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_yuonx")
+volume_db = -10.0
+pitch_scale = 0.9

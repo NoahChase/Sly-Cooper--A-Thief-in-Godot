@@ -94,6 +94,7 @@ texture = ExtResource("2_mjmdf")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_72sra")
+volume_db = 5.0
 autoplay = true
 
 [connection signal="pressed" from="Start Button" to="." method="_on_start_button_pressed"]

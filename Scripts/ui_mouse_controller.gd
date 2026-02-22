@@ -19,11 +19,21 @@ func _process(delta: float) -> void: # smooth final cursor movement per frame
 		# smooth target vector from zero (double smoothing is da way)
 		var target_vector = lerped_input * stick_acceleration * delta
 		base_move_vector += (target_vector - base_move_vector) * 0.1 # spring smoothing "current += (target - current) * spring"
+		
 		# final movement
 		var mouse_pos := get_viewport().get_mouse_position()
 		mouse_pos += base_move_vector
 		get_viewport().warp_mouse(mouse_pos)
+		
+		## mouse move sound
+		if $"Audio Mouse Move".playing == false:
+			$"Audio Mouse Move".playing = true
+		$"Audio Mouse Move".pitch_scale += ((base_move_vector.length() / 8.0) - $"Audio Mouse Move".pitch_scale) * 0.25
+		$"Audio Mouse Move".pitch_scale = clamp($"Audio Mouse Move".pitch_scale, 0.5, 1.25)
+		print($"Audio Mouse Move".pitch_scale)
+		
 	elif lerped_input.length() <= 0.1:
+		$"Audio Mouse Move".playing = false
 		base_move_vector = Vector2.ZERO # reset final smoothing
 		
 	
