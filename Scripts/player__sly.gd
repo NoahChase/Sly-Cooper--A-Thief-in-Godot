@@ -1105,6 +1105,6 @@ func show_death_screen() -> void:
 	death_screen.process_mode = Node.PROCESS_MODE_ALWAYS #set death screen to run
 	get_parent().process_mode = Node.PROCESS_MODE_DISABLED #set main scene to stop running
 	death_screen.visible = true
-	death_screen.process_mode = Node.PROCESS_MODE_ALWAYS
+	death_screen.get_node("UI Mouse Controller").process_mode = Node.PROCESS_MODE_ALWAYS # turn controller on
 	# Make mouse visible and confine to screen
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)

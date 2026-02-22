@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://ydioaev8vvpy" path="res://Assets/Effects/denielcz-immersivecontrol-button-click-sound-463065.mp3" id="2_yuonx"]
 
 [node name="UI Mouse Controller" type="Control"]
+process_mode = 4
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cni61khpmvx26" path="res://Scenes/UI/ui_mouse_controller.tscn" id="2_vbq58"]
 
 [node name="DeathScreen" type="Control"]
+process_mode = 4
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

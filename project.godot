@@ -29,6 +29,7 @@ shapes/navigation/geometry_face_color=Color(0.25, 0.5, 0.5, 0.0784314)
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/mode=3
 window/stretch/mode="canvas_items"
 window/directional_shadow/size=4096
 window/directional_shadow/soft_shadow_filter_quality=2

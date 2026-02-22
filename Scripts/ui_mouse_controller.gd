@@ -30,7 +30,7 @@ func _process(delta: float) -> void: # smooth final cursor movement per frame
 			$"Audio Mouse Move".playing = true
 		$"Audio Mouse Move".pitch_scale += ((base_move_vector.length() / 8.0) - $"Audio Mouse Move".pitch_scale) * 0.25
 		$"Audio Mouse Move".pitch_scale = clamp($"Audio Mouse Move".pitch_scale, 0.5, 1.25)
-		print($"Audio Mouse Move".pitch_scale)
+		#print($"Audio Mouse Move".pitch_scale)
 		
 	elif lerped_input.length() <= 0.1:
 		$"Audio Mouse Move".playing = false
