@@ -8,6 +8,8 @@ extends Path3D
 
 @export var enemy_preload_string: String = "paste enemy file path here"
 
+@onready var scene := load(enemy_preload_string) as PackedScene
+
 var switch_path_buffer = 0
 
 var path_wait_count = 0
@@ -61,8 +63,6 @@ func _physics_process(delta: float) -> void:
 
 func respawn_enemy():
 	print("respawning enemy")
-	
-	var scene := load(enemy_preload_string) as PackedScene
 	if not scene:
 		push_error("Invalid enemy scene path: " + enemy_preload_string)
 		return

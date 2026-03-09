@@ -7,6 +7,9 @@ signal target_not_in_range(target)
 signal target_acquired(target_ball)
 signal target_released(target_ball)
 
+signal triangle
+signal pause
+
 ## const
 const SPEED = 4.03 #3.52 for 3.4m #4.03 jump distance 4m
 const JUMP_VELOCITY = 8.06 #single jump 2m, cozy double jump 3m
@@ -57,7 +60,7 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var follower = $Follower
 @onready var motion_tracker: Node3D = $Follower/Motion_Tracker
 @onready var collision_point = $"collision point"
-
+@onready var smoke_bomb_scene = load("res://Scenes/Power Ups/pow_smoke_bomb.tscn")
 var coin = 0
 
 ## var
@@ -75,10 +78,13 @@ var joystick_move_mult = 1.0
 var manual_slip = false
 var sprinting = false
 var did_target_jump = false
+var did_mega_jump = false
+var mega_jump_frame_buffer = 0
 var ascending_stairs = false
 var was_on_floor = true
 var moving = false
 var jump_when_hit_floor = false
+var cam_basis_lerp_vector = 0.0
 
 var hat_fall_lerp = 1.0
 
@@ -96,7 +102,7 @@ const to_target_failed_time_max = 20
 var to_target_time_counter = 0
 
 func _ready() -> void:
-	#Engine.time_scale = 0.25
+	#Engine.time_scale = 2.25
 	rot_container.position = Vector3(0,0,0)
 	
 	temp_sly.cane_hitbox.kb_excluded.append(hp_container)
@@ -212,7 +218,12 @@ func _physics_process(delta: float) -> void:
 			temp_sly.anim_tree.set("parameters/Hat Fall Sub/sub_amount", hat_fall_lerp)
 		#var forward = -rot_container.global_transform.basis.z
 
-		speed_mult = 1.0
+		if did_mega_jump == false:
+			speed_mult = 1.0
+		else:
+			if speed_mult != 1.0:
+				speed_mult = 1.5
+
 		if hp_container.damage_flash_timer.is_stopped(): #prevents move on knockback
 			if not $"Body Mesh Container/Floor Ray".is_colliding() and gravmult > 1.0:
 				#slight dampening when player just begins to fall
@@ -244,6 +255,11 @@ func _physics_process(delta: float) -> void:
 		#air animation fix animfix anim fix
 		#temp_sly.position = lerp(temp_sly.position, Vector3(0, -1.0, 0.0), 0.2)
 		previous_jump_was_notch = false
+		if mega_jump_frame_buffer < 10:
+			mega_jump_frame_buffer += 1
+		else:
+			did_mega_jump = false
+			mega_jump_frame_buffer = 0
 		if sprinting:
 			speed_mult = 1.75
 		else:
@@ -372,7 +388,8 @@ func _physics_process(delta: float) -> void:
 
 		target = null
 		if ! previous_jump_was_notch:
-			manual_move_cam = false
+			if ! did_mega_jump:
+				manual_move_cam = false
 
 	# Direction:
 	# Get the camera's yaw angle
@@ -453,6 +470,10 @@ func _physics_process(delta: float) -> void:
 					if dis_to_target.length() > 0.5:
 						$"Look_At Rotation".look_at(target.global_position + direction)
 						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+		elif target.is_in_group("LOCK PLAYER ROT") and state == ON_TARGET:
+			if target.is_in_group("swing"):
+				rotation.x = target.rotation.x
+				rotation.z = target.rotation.z
 		
 		# for rope correction (re align to proper rotation)
 		if rot_container.rotation.y != true_player_rot.rotation.y and state != ON_TARGET and can_ledge == false:
@@ -516,12 +537,15 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	$RichTextLabel.text = str("coins = ", coin, " FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, " | velocity = ", motion_tracker.velocity.length())
+	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, "/", hp_container.maxHP, " | $ = ", Update.coins, )
+#	, " | velocity = ", motion_tracker.velocity.length()
 
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("esc"):
-		get_tree().quit() # open pause menu
+		var pause_menu = get_parent().get_node("InGamePauseMenu")
+		pause.connect(Callable(pause_menu, "_on_pause"))
+		pause.emit() # open pause menu, move this to ui controller or gui, something else
 	
 	# Debug super jump
 	if Input.is_action_just_pressed("lalt"):
@@ -545,6 +569,46 @@ func _input(event: InputEvent) -> void:
 		#if state == FLOOR:
 			#temp_sly.anim_tree.set("parameters/Hit Shot/request", 1)
 			#temp_sly.cane_pickpocket_hitbox.hit_timer.start(temp_sly.cane_pickpocket_hitbox.hit_time)
+			
+	if Input.is_action_just_pressed("triangle"):
+		triangle.emit()
+	
+	## Unlockable Power-Ups
+	if Input.is_action_just_pressed("L1"):
+		use_pow("L1")
+	if Input.is_action_just_pressed("L2"):
+		use_pow("L2")
+	if Input.is_action_just_pressed("R2"):
+		use_pow("R2")
+
+func use_pow(input:String):
+	for unlockable in UnlockableManager.unlockables.keys():
+		var u = UnlockableManager.unlockables[unlockable]
+		if u.input_assigned == input and u.unlocked:
+			trigger_power(unlockable)
+			return
+
+func trigger_power(power:String):
+	match power: #make these emit signals in the future, get out of player script
+		"pow_smoke_bomb":
+			use_smoke_bomb()
+		"pow_mega_jump":
+			use_mega_jump()
+
+func use_smoke_bomb():
+	print("smoke bomb")
+	#var smoke_bomb_scene = load("res://Scenes/Power Ups/pow_smoke_bomb.tscn")
+	#
+	var new_smoke_bomb = smoke_bomb_scene.instantiate()
+	add_child(new_smoke_bomb)
+	new_smoke_bomb.global_transform.origin = global_transform.origin
+	
+func use_mega_jump():
+	print("mega jump")
+	if state == FLOOR:
+		velocity.y = 12
+		did_mega_jump = true
+		manual_move_cam = true
 
 func state_handler(delta):
 # Stun Logic
@@ -879,7 +943,7 @@ func apply_target(delta):
 	for potential_target in target_points:
 		# Skip swings above player
 		if potential_target.is_in_group("swing"):
-			if potential_target.global_transform.origin.y >= global_transform.origin.y:
+			if potential_target.global_transform.origin.y > global_transform.origin.y:
 				continue
 		
 		var to_target = (potential_target.global_transform.origin - basis_offset.global_transform.origin)
@@ -951,7 +1015,9 @@ func apply_magnetism(): # the holy grail of magnetism
 					velocity = Vector3.ZERO # perfect snapping
 					#$CollisionShape3D.disabled = true
 					global_transform.origin = lerp(global_transform.origin, target.global_transform.origin, 0.2 / (distance_to_player + 0.2))
-				if global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
+				if velocity.y > 4.0:
+					velocity.y = lerp(velocity.y, magnet_direction.y * velocity.y, 0.3)
+				elif global_transform.origin.y >= target.global_transform.origin.y - 2: # natural move toward
 					
 					velocity.x = lerp(velocity.x, magnet_direction.x * 4.0 * speed_mult * gravmult, 0.2)
 					velocity.z = lerp(velocity.z, magnet_direction.z * 4.0 * speed_mult * gravmult, 0.2)
@@ -1002,7 +1068,7 @@ func camera_smooth_follow(delta):
 	lerp_val *= 4 / cam_parent_to_basis_offset
 	lerp_val = clamp(lerp_val, 0.05, 1.0)
 	
-	var add = 5.5 #(this is +1 for buffer, so it's 4.5) (with the tform_mult, it's 4.0 from the back)
+	var add = 6.5 #(this is +2 for buffer, so it's 4.5) (with the tform_mult, it's 4.0 from the back)
 	var y_add = 0.5
 	cam_max = 0
 	cam_min = 0
@@ -1028,9 +1094,10 @@ func camera_smooth_follow(delta):
 	$Basis_Offset.global_transform.origin.z = lerp($Basis_Offset.global_transform.origin.z, tform.z, lerp_val)
 	# Smoothly update the camera's position to follow the basis offset
 	
-	camera_parent.position.x = lerp(camera_parent.position.x, $Basis_Offset.global_transform.origin.x, cam_timer)
-	camera_parent.position.y = lerp(camera_parent.position.y, $Basis_Offset.global_transform.origin.y, 0.2)
-	camera_parent.position.z = lerp(camera_parent.position.z, $Basis_Offset.global_transform.origin.z, cam_timer)
+	# spring instead of lerp here is much smoother and more accurate
+	camera_parent.position.x += ($Basis_Offset.global_transform.origin.x - camera_parent.position.x) * cam_timer
+	camera_parent.position.y += ($Basis_Offset.global_transform.origin.y - camera_parent.position.y) * 0.1
+	camera_parent.position.z += ($Basis_Offset.global_transform.origin.z - camera_parent.position.z) * cam_timer
 
 	#set move camera on high double jump
 	## Add raycast collider check here and ensure does not turn off early
@@ -1057,14 +1124,20 @@ func camera_smooth_follow(delta):
 			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2.0:
 				$Basis_Offset.global_transform.origin.y += (tform.y - y_add - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 10.5)
 	else:
-		if is_on_floor() or state == ON_TARGET or state == ON_LEDGE:
-			$Basis_Offset.global_transform.origin.y += (tform.y + y_add - $Basis_Offset.global_transform.origin.y) * cam_timer / PI
-
+		var player_to_cam_root_distance = abs((tform.y + y_add) - camera_parent.global_transform.origin.y)
+		#var cam_basis_lerp_vector = cam_timer / 2.0 / (player_to_cam_root_distance + 0.1)
+		if state == ON_TARGET or state == ON_LEDGE or state == FLOOR:
+			cam_basis_lerp_vector = cam_timer / 2.0 / ((player_to_cam_root_distance) + 0.1)
+			#$Basis_Offset.global_transform.origin.y += ((tform.y + y_add) - $Basis_Offset.global_transform.origin.y) * cam_basis_lerp_vector #was same as manual move camera
+		else:
+			cam_basis_lerp_vector = 0.0
+		cam_basis_lerp_vector = clamp(cam_basis_lerp_vector, 0.0, 1.0)
+		$Basis_Offset.global_transform.origin.y += ((tform.y + y_add) - $Basis_Offset.global_transform.origin.y) * cam_basis_lerp_vector
+		
 	ray_to_cam_distance = ray_to_cam.global_transform.origin - camera_parent.cam_container.global_transform.origin
 	ray_to_cam.look_at(camera_parent.cam_container.global_position)
 	ray_to_cam.target_position = Vector3(0,0,-ray_to_cam_distance.length())
 	
-
 func _on_target_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("target"):
 		#print("body added")
@@ -1107,4 +1180,4 @@ func show_death_screen() -> void:
 	death_screen.visible = true
 	death_screen.get_node("UI Mouse Controller").process_mode = Node.PROCESS_MODE_ALWAYS # turn controller on
 	# Make mouse visible and confine to screen
-	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)

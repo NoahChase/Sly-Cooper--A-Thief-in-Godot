@@ -28,7 +28,10 @@ func _physics_process(delta: float) -> void:
 			
 			## show death screen can be connected to a world manager node by the health_is_zero signal
 			## right now, it's placed in the player's script, and the enemy connects to health_is_zero by deleting itself
-			
+		elif hp <= 0: #this be sloppy for now (shouldn't need to check every physics frame)
+			if Update.coins >= 50:
+				Update.coins -= 50
+				add_hp(20)
 	
 	for hurtbox in hurtboxes:
 		if hurtbox.is_hit:
@@ -50,7 +53,19 @@ func show_death_screen() -> void:
 	death_screen.visible = true	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
-	
 
 func _on_damage_flash_timer_timeout() -> void:
 	can_take_damage = true
+	
+
+
+func add_hp(num):
+	print("ADD HP", num)
+	if hp >= maxHP:
+		Update.coins += 10
+	else:
+		hp += num
+		
+	if hp > maxHP:
+		hp = maxHP
+		

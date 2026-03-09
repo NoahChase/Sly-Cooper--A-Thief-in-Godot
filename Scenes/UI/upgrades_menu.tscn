@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8g3llu28vgv8"]
+
+[ext_resource type="Script" uid="uid://kfosdxp1drkh" path="res://Scripts/ui_upgrades_menu.gd" id="1_805vs"]
+
+[node name="UpgradesMenu" type="Control"]
+process_mode = 4
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_805vs")
+
+[node name="Unlock Silhouette Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = -20.0
+offset_right = 124.5
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Silhouette Skin
+$150"
+
+[node name="Unlock Mega Jump Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -438.0
+offset_top = -20.0
+offset_right = -189.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Mega Jump
+$400"
+
+[node name="Unlock Smoke Bomb Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 190.0
+offset_top = -20.0
+offset_right = 439.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Smoke Bomb
+$200"
+
+[node name="Main Menu Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = 134.0
+offset_right = 124.5
+offset_bottom = 226.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+
+[node name="Upgrades Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -139.5
+offset_right = 37.0
+offset_bottom = -116.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Upgrades"
+
+[node name="Coins Text" type="RichTextLabel" parent="."]
+offset_right = 547.0
+offset_bottom = 40.0
+text = "Coins = "
+
+[connection signal="pressed" from="Unlock Silhouette Button" to="." method="_on_unlock_silhouette_button_pressed"]
+[connection signal="pressed" from="Unlock Mega Jump Button" to="." method="_on_unlock_mega_jump_button_pressed"]
+[connection signal="pressed" from="Unlock Smoke Bomb Button" to="." method="_on_unlock_smoke_bomb_button_pressed"]
+[connection signal="pressed" from="Main Menu Button" to="." method="_on_main_menu_button_pressed"]

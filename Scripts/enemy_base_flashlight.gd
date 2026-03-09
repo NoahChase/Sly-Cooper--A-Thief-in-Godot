@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-enum {IDLE, CHASE, SEARCH, SHOOT, HIT, STUNNED, IDLE_STILL}
+enum {IDLE, CHASE, SEARCH, SHOOT, HIT, IDLE_STILL}
 
 #animation signals (connect to enemy mesh to do animations)
 signal idle
@@ -41,6 +41,7 @@ signal shoot #gun also has a shoot signal that works better, will probably remov
 @onready var final_nav_distance_to_target = 0.0
 @onready var target_y_abs = 0.0
 @onready var SPEED_MULT = 1.0
+var stored_speed_mult = 1.0
 @onready var stop_walking = false
 @onready var grav_mult = 1.0
 @onready var do_180 = false
@@ -116,7 +117,7 @@ func _ready():
 	reset_ai_state()
 	if nav_parent != null:
 		nav_rng = RandomNumberGenerator.new()
-		new_nav_point = nav_parent.get_node("Point 2")
+		new_nav_point = nav_parent.get_node("Point 1")
 		$"Point Mesh".global_transform.origin = new_nav_point.global_transform.origin
 		#if not first_spawn: #temporary, should be moved to reset_ai_state()
 			#nav_rng = RandomNumberGenerator.new()
@@ -126,8 +127,9 @@ func _physics_process(delta):
 	#print("pot tar: ", potential_target, "in range == ", potential_target_in_range)
 
 # WALL RAYCASTS
-	dis_to_wall = INF
+	dis_to_wall = 1000.0
 	wall_detected = false
+
 	for wall_ray in wall_detection_rays:
 		if wall_ray.is_colliding():
 			var collider = wall_ray.get_collider()
@@ -137,7 +139,17 @@ func _physics_process(delta):
 				var dis_to_col = (wall_ray.global_transform.origin - wall_ray_col).length()
 				if dis_to_col < dis_to_wall:
 					dis_to_wall = dis_to_col
-	if wall_detected == false or dis_to_wall == INF:
+
+	if not wall_detected and roof_raycast.is_colliding():
+		var collider = roof_raycast.get_collider()
+		if not collider.is_in_group("Player"):
+			wall_detected = true
+			var wall_ray_col = roof_raycast.get_collision_point()
+			var dis_to_col = (roof_raycast.global_transform.origin - wall_ray_col).length()
+			if dis_to_col < dis_to_wall:
+				dis_to_wall = dis_to_col
+
+	if wall_detected == false or dis_to_wall == 1000.0:
 		dis_to_wall = -1.0
 
 # FINAL NAV DISTANCE TO TARGET
@@ -174,7 +186,13 @@ func _physics_process(delta):
 		$"Safe Position".material_override.albedo_color = Color(1, 0, 1)
 		direction = custom_direction - global_position
 		if not is_on_floor() and can_jump and not state == HIT:
-			SPEED_MULT = 2.0
+			var horiz = Vector3(global_transform.origin.x, 0.0, global_transform.origin.z)
+			var target_horiz = Vector3(target.global_transform.origin.x, 0.0, target.global_transform.origin.z)
+			var horiz_distance = abs(target_horiz - horiz).length()
+			
+			stored_speed_mult = 1.0 + (horiz_distance / 2.5)
+			
+			SPEED_MULT = stored_speed_mult
 		if $"Custom Direction Timer".is_stopped():
 			custom_direction_locked = true
 			$"Custom Direction Timer".start(1.0)
@@ -213,6 +231,7 @@ func _physics_process(delta):
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
+	
 	if velocity.y > -6.5:
 		grav_mult = 2.5
 	else:
@@ -243,7 +262,7 @@ func _physics_process(delta):
 func state_manager():
 	if state != CHASE:
 		if not hp_container.damage_flash_timer.is_stopped():
-			$"Just Hit Flash Timer".start(3.0)
+			$"Just Hit Flash Timer".start(4.0)
 			just_hit = true
 			state = HIT
 		if flashlight.player_detected:
@@ -260,7 +279,7 @@ func state_manager():
 				if potential_target.sprinting == true and potential_target.velocity.length() > 5.0:
 					print("potential target = ", potential_target)
 					target = potential_target
-					$"Just Hit Flash Timer".start(3.0)
+					$"Just Hit Flash Timer".start(4.0)
 					print("Chase triggered: player is sprinting on ground")
 					do_chase()
 		if state == HIT:
@@ -282,6 +301,7 @@ func state_manager():
 					
 	if Input.is_action_just_pressed("triangle"):
 		stop_chase = true
+		
 	if stop_chase == true:
 		print("stop chase = true")
 		do_idle()
@@ -290,6 +310,7 @@ func state_manager():
 ## DO STATE
 func do_chase():
 	stop_chase = false
+	stop_walking = false
 	if target.is_in_group("Player"):
 		flashlight.target = target
 		just_hit = false
@@ -320,6 +341,8 @@ func do_idle():
 	custom_direction = null
 	target = null
 	state = IDLE
+	stop_walking = false
+	SPEED_MULT = 0.5
 ## STATE EXECUTE
 func state_execute():
 # HIT
@@ -336,40 +359,53 @@ func state_execute():
 				flat_target = previous_position
 # CHASE
 		CHASE:
-			if velocity.length() > 0:
-				run.emit()
+			if is_on_floor():
+				if velocity.length() > 0:
+					run.emit()
+				else:
+					idle.emit()
 			else:
-				idle.emit()
+				if not ascending_stairs and not $"Floor Ray".is_colliding():
+					air.emit()
 			#print("state CHASE")
 			distance_to_target = (global_position - target.global_position).length()
 			flashlight.target = target
 			flashlight.player_detected = true
 			
 			# ranged weapon aim prediction
-			var to_target = ((target.global_position + Vector3(0,0.5,0)) - global_position).length()
-			var projectile_to_target = to_target / 15 # 15 is projectile's speed. this is predicted aim's default, set every frame
+			var to_target = ((target.global_position + Vector3(0,0.5,0)) - global_position)
+			var projectile_to_target = to_target.length() / 12 # 12 is projectile's speed.
+			var aim_prediction = target.global_transform.origin + Vector3(0,0.5,0) + target.velocity * projectile_to_target / 2.0 ## fairly good general aim, easy to dodge if paying attention
+			var aim_offset = 0
 			if prev_rng != weapon.aim_rng_num:
 				if weapon.shot_num == 0:
-					projectile_to_target = to_target ## NEED offset here somehow, wrong aim always on this one.
+					aim_offset = weapon.aim_rng_num
+					to_target += Vector3(0, 4, 0)
+					projectile_to_target = to_target.length() / weapon.aim_rng_num
+					aim_prediction += Vector3(0, 4, 0)
 					print("- first aim")
 				if weapon.shot_num == 1:
-					projectile_to_target = to_target ## NEED offset here somehow, wrong aim always on this one.
+					aim_offset = weapon.aim_rng_num
+					to_target += Vector3(0, 4, 0)
+					projectile_to_target = to_target.length() / weapon.aim_rng_num
+					aim_prediction += Vector3(0, 4, 0)
 					print("- repeat first aim")
 				if weapon.shot_num == 2:
-					projectile_to_target = to_target / weapon.aim_rng_num ## NEED this to be pretty terrible aim, still could hit if still
+					aim_offset = weapon.aim_rng_num / 2
+					projectile_to_target = to_target.length() / weapon.aim_rng_num
+					aim_prediction += Vector3(0, 4, 0)
 					print("- bad aim!")
 				elif weapon.shot_num == 3:
 					weapon.shot_num = 0 ## killer predicted aim shot
 					print("- best final aim")
 				#print(weapon.aim_rng_num)
 				prev_rng = weapon.aim_rng_num
-			var aim_prediction = target.global_transform.origin + Vector3(0,0.5,0) + target.velocity * projectile_to_target / 2.0 ## fairly good general aim, easy to dodge if paying attention
 			if not is_on_floor():
 				weapon.shoot = false
 			else:
 				weapon.shoot = true
-				SPEED_MULT = 1.75
-				weapon.look_at(aim_prediction, Vector3.UP)
+				SPEED_MULT = 1.5
+				weapon.look_at(aim_prediction + Vector3(0, aim_offset, 0), Vector3.UP)
 			if distance_to_target > chase_radius:
 				if $"Stop Chase Timer".is_stopped():
 					$"Stop Chase Timer".start(3.0)
@@ -383,23 +419,28 @@ func state_execute():
 						$"Melee Flash Timer".start(0.25) # do_melee = true, $"Attack Flash Timer".start(0.5)
 				else:
 					melee_hitbox.active = true
+					shoot.emit()
 			
-			elif distance_to_target < 8.0:
+			elif distance_to_target < 12.0:
 				do_melee = false
 				melee_hitbox.active = false
-				weapon.shoot = true
 				if do_quickshot == true: # true
-					SPEED_MULT = 0.0
-					weapon.look_at(aim_prediction, Vector3.UP)
+					#weapon.shoot = false
+					#SPEED_MULT = 0.0
+					stop_walking = true
+					SPEED_MULT = 1.0
+					weapon.look_at(aim_prediction + Vector3(aim_offset, 0.5, aim_offset), Vector3.UP)
 					if $"Quickshot Flash Timer".is_stopped():
-						$"Quickshot Flash Timer".start(2.0) # do_quickshot = true, $"Attack Flash Timer".start(1.5)
+						$"Quickshot Flash Timer".start(1.25) # timer for how long carmelita holds still before doing quickshot  
 						stop_walking = true
 				else:
-					weapon.look_at(aim_prediction, Vector3.UP)
+					stop_walking = false
+					weapon.shoot = true
+					weapon.look_at(aim_prediction + Vector3(aim_offset * 2.0, aim_offset, aim_offset * 2.0), Vector3.UP)
 					SPEED_MULT = 1.0
 			else:
-				stop_walking = false
 				if do_quickshot == true: # true
+					stop_walking = true
 					SPEED_MULT = 0.0
 					weapon.look_at(aim_prediction, Vector3.UP)
 					do_quickshot = false
@@ -407,8 +448,11 @@ func state_execute():
 					do_melee = false
 					melee_hitbox.active = false
 					weapon.shoot = true
-					weapon.look_at(aim_prediction, Vector3.UP)
+					weapon.look_at(aim_prediction + Vector3(0, weapon.aim_rng_num, 0), Vector3.UP)
+					stop_walking = false
 					SPEED_MULT = 1.0
+			if weapon.anim.current_animation == "shoot":
+				stop_walking = true
 # SEARCH
 		SEARCH:
 			#print("state SEARCH")
@@ -449,7 +493,7 @@ func state_execute():
 					if $"Point Timer".is_stopped():
 						state = IDLE_STILL
 						look_around.emit()
-						$"Point Timer".start(3.0)
+						$"Point Timer".start(2.0)
 			# target is path or point
 			if move_to_nav_point == false:
 				target = path_follow
@@ -478,7 +522,7 @@ func direction_manager():
 
 	if wall_detected == false:
 		if not is_on_wall():
-			if final_nav_distance_to_target > 2.0:
+			if final_nav_distance_to_target > 2.5:
 				if target.is_in_group("Player"): #possibly if player is lower than target, set do_custom_direction == true (so enemy can jump off roof to get player)
 					if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 						do_custom_direciton = true
@@ -489,7 +533,7 @@ func direction_manager():
 					custom_direction = target.global_transform.origin
 					#print("custom dir set true HERE 2")
 	else:
-		if dis_to_wall >= 1.25 and final_nav_distance_to_target > 2.0:
+		if dis_to_wall >= 1.5 and final_nav_distance_to_target > 2.5:
 			if target.is_in_group("Player"):
 				if target.state != target.ON_TARGET or target.global_transform.origin.y < global_transform.origin.y - 1:
 					do_custom_direciton = true
@@ -537,7 +581,7 @@ func detect_jump():
 	if not is_on_floor():
 		return
 	if wall_detected == true:
-		if dis_to_wall >= 1.25: #this y difference might cause odd things.
+		if dis_to_wall >= 1.5: #this y difference might cause odd things.
 			can_jump = true
 		else:
 			can_jump = false
@@ -548,8 +592,15 @@ func detect_jump():
 			jump_down()
 func jump_up():
 	jump.emit()
-	var height_to_target = max(0, target.global_transform.origin.y - global_transform.origin.y)
-	var total_jump_height = height_to_target + 4.0
+	var height_to_target = max(0, target.global_transform.origin.y - global_transform.origin.y) + 1.0
+	
+	var horiz = Vector3(global_transform.origin.x, 0.0, global_transform.origin.z)
+	var target_horiz = Vector3(target.global_transform.origin.x, 0.0, target.global_transform.origin.z)
+	var horiz_distance = abs(target_horiz - horiz).length()
+	
+	stored_speed_mult = 1.0 + (horiz_distance / 2.5)
+	
+	var total_jump_height = height_to_target + (horiz_distance / 2.5) #this needs to factor in horizontal distance to target, as does speed_mult when jumping.
 	velocity.y = sqrt(2 * gravity * grav_mult * total_jump_height)
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
@@ -557,7 +608,7 @@ func jump_down():
 	jump.emit()
 	#do_custom_direciton = true
 	custom_direction = target.global_transform.origin
-	velocity.y = 8.0
+	velocity.y = 12.0
 
 ## HEARING
 func hear_enemy_target():
@@ -652,7 +703,7 @@ func stair_detect(delta):
 	#if is_on_wall():
 		#can_stair = false
 		#print("stair wall failed")
-	print("vel.y = ", velocity.y)
+	#print("vel.y = ", velocity.y)
 	if velocity.y < -0.28:
 		can_stair = false
 		#print("enemy stair velocity.y failed")
@@ -795,9 +846,13 @@ func _on_point_timer_timeout() -> void: # reset state to idle or chase from idle
 	move_to_nav_point = false
 func _on_quickshot_timer_timeout() -> void:
 	do_quickshot = true
+	weapon.shoot = true
 func _on_quickshot_flash_timer_timeout() -> void:
-	$"Attack Flash Timer".start(4.0)
+	var quickshot_wait_rng = randf_range(3, 6)
+	$"Attack Flash Timer".start(quickshot_wait_rng) #timer for interval between quickshot
 	stop_walking = true
+	weapon.shoot = true
+	weapon.shoot_buffer = 120
 	weapon.anim.play("shoot")
 	shoot.emit()
 	print("quickshot!")
@@ -805,12 +860,14 @@ func _on_quickshot_flash_timer_timeout() -> void:
 	#SPEED_MULT = 0.0
 func _on_melee_flash_timer_timeout() -> void:
 	do_melee = true
-	$"Attack Flash Timer".start(0.25)
+	if $"Attack Flash Timer".is_stopped():
+		$"Attack Flash Timer".start(0.625) # time before hit
 	stop_walking = true
 func _on_attack_flash_timer_timeout() -> void:
 	print("quickshot false")
 	do_melee = false
 	do_quickshot = true # true
+	weapon.shoot = true
 func _on_stop_chase_timer_timeout() -> void:
 	if distance_to_target != null and distance_to_target > chase_radius:
 		stop_chase = true

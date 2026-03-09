@@ -49,10 +49,15 @@ func _physics_process(delta: float) -> void:
 	
 		# Player x & z rotate to hook the closer they get, from 1 meter.
 		var distance = player.global_transform.origin - target_point.global_transform.origin
-		align_lerp_val = lerp(align_lerp_val, distance.length(), 0.025)
+		#align_lerp_val = lerp(align_lerp_val, distance.length(), 0.025)
+		align_lerp_val += (distance.length() - align_lerp_val) * 0.025
+		align_lerp_val = clamp(align_lerp_val, 0.0, 1.0)
 		if distance.length() <= 1.0:
 			player.rotation.x = lerp(player.rotation.x,rot_container.global_rotation.x, 1.0 - align_lerp_val)
 			player.rotation.z = lerp(player.rotation.z, rot_container.global_rotation.z, 1.0 - align_lerp_val)
+			
+			#player.rotation.x += (rot_container.global_rotation.x - player.rotation.x) * (1.0 - align_lerp_val)
+			
 		else:
 			player.rotation.x = lerp(player.rotation.x,rot_container.global_rotation.x, 0.125)
 			player.rotation.z = lerp(player.rotation.z, rot_container.global_rotation.z,0.125)
@@ -62,7 +67,8 @@ func _physics_process(delta: float) -> void:
 			pushback = false
 		else :
 			pushback = true
-			swing_strength = lerp(swing_strength, 0.0, 0.01)
+			#swing_strength = lerp(swing_strength, 0.0, 0.01)
+			swing_strength += (0.0 - swing_strength) * 0.01
 		if player.direction:
 			if pushback == false:
 				swing_strength = 2.0
@@ -77,7 +83,8 @@ func _physics_process(delta: float) -> void:
 		if look_at == look_2: 
 			player.temp_sly.anim_tree.set("parameters/Swing BlendSpace/blend_position", -swing_ratio)
 
-	rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
+	#rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
+	rot_container.rotation.x += ($"Rot Ghost".rotation.x - rot_container.rotation.x) * 0.05
 	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-75), deg_to_rad(75))
 	target_point.global_transform.origin = $"Rot Container/Look_At Rot Container".global_transform.origin
 	target_point.global_rotation = $"Rot Container/Look_At Rot Container".global_rotation

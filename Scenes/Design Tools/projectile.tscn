@@ -19,9 +19,9 @@ top_level = true
 script = ExtResource("1_5ci83")
 
 [node name="Hitbox" parent="." instance=ExtResource("1_xtq5k")]
+damage = 4
 active = true
 do_kb = true
-kb_distance = 6.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("BoxShape3D_5ci83")

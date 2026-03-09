@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=3 uid="uid://bwpmmw3oo4y5j"]
+
+[ext_resource type="Script" uid="uid://ct2d4pamo7j4h" path="res://Scripts/pow_smoke_bomb.gd" id="1_83e2c"]
+[ext_resource type="Material" uid="uid://bbrp6qg74jmrw" path="res://Assets/Materials/transparent.tres" id="2_yrxh0"]
+[ext_resource type="Texture2D" uid="uid://b14y53tsfnaww" path="res://Assets/Textures/smoke.png" id="3_yrxh0"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ehpgb"]
+radius = 6.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_t7yi3"]
+radius = 4.0
+height = 8.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83e2c"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+diffuse_mode = 3
+specular_mode = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.52, 0.530833, 0.65, 0.588235)
+albedo_texture = ExtResource("3_yrxh0")
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_yrxh0"]
+material = SubResource("StandardMaterial3D_83e2c")
+size = Vector2(5, 5)
+orientation = 2
+
+[sub_resource type="Curve" id="Curve_ehpgb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.7), 1.8939, 1.8939, 0, 0, Vector2(0.498039, 1), 9.49949e-07, 9.49949e-07, 0, 0, Vector2(1, 0.504967), -2.31542, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Gradient" id="Gradient_t7yi3"]
+offsets = PackedFloat32Array(0, 0.270742, 0.515284, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.44, 0.447333, 0.55, 0.490196, 0.44, 0.447333, 0.55, 0.490196, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_yrxh0"]
+colors = PackedColorArray(0.85, 0.85, 0.85, 0.588235, 1, 1, 1, 1)
+
+[node name="Pow_Smoke_Bomb" type="Node3D"]
+top_level = true
+script = ExtResource("1_83e2c")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_ehpgb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("SphereMesh_t7yi3")
+surface_material_override/0 = ExtResource("2_yrxh0")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+amount = 16
+lifetime = 4.0
+explosiveness = 1.0
+fixed_fps = 60
+mesh = SubResource("PlaneMesh_yrxh0")
+direction = Vector3(0, 1, 0)
+spread = 90.0
+gravity = Vector3(0, 0.025, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+radial_accel_min = 0.1
+radial_accel_max = 0.2
+tangential_accel_min = 0.05
+tangential_accel_max = 0.1
+damping_min = 0.01
+damping_max = 0.05
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.75
+scale_amount_max = 1.25
+scale_amount_curve = SubResource("Curve_ehpgb")
+color_ramp = SubResource("Gradient_t7yi3")
+color_initial_ramp = SubResource("Gradient_yrxh0")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

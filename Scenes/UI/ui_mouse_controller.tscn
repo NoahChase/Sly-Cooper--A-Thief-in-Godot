@@ -1,7 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://cni61khpmvx26"]
+[gd_scene load_steps=9 format=3 uid="uid://cni61khpmvx26"]
 
 [ext_resource type="Script" uid="uid://mviqod5hfmka" path="res://Scripts/ui_mouse_controller.gd" id="1_m3x1x"]
 [ext_resource type="AudioStream" uid="uid://ydioaev8vvpy" path="res://Assets/Effects/denielcz-immersivecontrol-button-click-sound-463065.mp3" id="2_yuonx"]
+[ext_resource type="Texture2D" uid="uid://olr3dq42yeme" path="res://Assets/Textures/sly mask logo.png" id="3_r3oy5"]
+[ext_resource type="Texture2D" uid="uid://dufsa658cs0yy" path="res://Assets/Textures/sparkle.png" id="4_r3oy5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yuonx"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_fw4u4"]
+diffuse_texture = SubResource("NoiseTexture2D_yuonx")
+
+[sub_resource type="Curve" id="Curve_r3oy5"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.7), 3.73545, 3.73545, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.7), -3.735, -3.735, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_r3oy5"]
+offsets = PackedFloat32Array(0, 0.299363, 0.541401, 0.761146, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="UI Mouse Controller" type="Control"]
 process_mode = 4
@@ -17,3 +32,39 @@ script = ExtResource("1_m3x1x")
 stream = ExtResource("2_yuonx")
 volume_db = -10.0
 pitch_scale = 0.9
+
+[node name="Physics Mouse" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Physics Mouse"]
+z_index = 1
+scale = Vector2(0.04, 0.04)
+texture = SubResource("CanvasTexture_fw4u4")
+
+[node name="Physics Mouse2" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Physics Mouse2"]
+z_index = 1
+scale = Vector2(0.02, 0.02)
+texture = ExtResource("3_r3oy5")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Physics Mouse2"]
+show_behind_parent = true
+z_index = 1
+amount = 48
+texture = ExtResource("4_r3oy5")
+randomness = 0.25
+fixed_fps = 120
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2(1, 1)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+tangential_accel_min = 0.25
+tangential_accel_max = 0.5
+scale_amount_min = 0.05
+scale_amount_max = 0.1
+scale_amount_curve = SubResource("Curve_r3oy5")
+color_ramp = SubResource("Gradient_r3oy5")

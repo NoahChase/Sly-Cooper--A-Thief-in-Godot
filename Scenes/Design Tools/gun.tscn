@@ -4,6 +4,7 @@
 
 [sub_resource type="Animation" id="Animation_oav6y"]
 resource_name = "no reset"
+length = 2.0
 
 [sub_resource type="Animation" id="Animation_sp6o2"]
 resource_name = "reset"
@@ -11,6 +12,7 @@ length = 4.0
 
 [sub_resource type="Animation" id="Animation_op1r2"]
 resource_name = "shoot"
+length = 2.0
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_2y70f"]
 _data = {

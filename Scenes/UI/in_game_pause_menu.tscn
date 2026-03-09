@@ -1,0 +1,100 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1h8um8vslewj"]
+
+[ext_resource type="Script" uid="uid://bic2e0ae7o28n" path="res://Scripts/ui_in_game_pause_menu.gd" id="1_gravo"]
+[ext_resource type="PackedScene" uid="uid://cni61khpmvx26" path="res://Scenes/UI/ui_mouse_controller.tscn" id="1_srmwo"]
+[ext_resource type="PackedScene" uid="uid://b4e1xeqdaeuqp" path="res://Scenes/UI/controls_menu.tscn" id="2_wlwmn"]
+[ext_resource type="PackedScene" uid="uid://b8g3llu28vgv8" path="res://Scenes/UI/upgrades_menu.tscn" id="3_gravo"]
+
+[node name="InGamePauseMenu" type="Control"]
+process_mode = 4
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gravo")
+
+[node name="UI Mouse Controller" parent="." instance=ExtResource("1_srmwo")]
+layout_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+z_index = -2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -963.5
+offset_top = -540.5
+offset_right = 963.5
+offset_bottom = 540.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Pause Menu" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Resume Button" type="Button" parent="Pause Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 815.5
+offset_top = 500.0
+offset_right = 1064.5
+offset_bottom = 592.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Keep Playing"
+
+[node name="Upgrades Button" type="Button" parent="Pause Menu/Resume Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = 108.0
+offset_right = 124.5
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Thief Net Upgrades"
+
+[node name="Quit Button" type="Button" parent="Pause Menu/Resume Button"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = 262.0
+offset_right = 124.5
+offset_bottom = 354.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Quit Game"
+
+[node name="ControlsMenu" parent="." instance=ExtResource("2_wlwmn")]
+layout_mode = 1
+
+[node name="UpgradesMenu" parent="." instance=ExtResource("3_gravo")]
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+
+[connection signal="pressed" from="Pause Menu/Resume Button" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Pause Menu/Resume Button/Upgrades Button" to="." method="_on_upgrades_button_pressed"]
+[connection signal="pressed" from="Pause Menu/Resume Button/Quit Button" to="." method="_on_quit_button_pressed"]
+[connection signal="main_manu_pressed" from="UpgradesMenu" to="." method="_on_upgrades_menu_main_manu_pressed"]

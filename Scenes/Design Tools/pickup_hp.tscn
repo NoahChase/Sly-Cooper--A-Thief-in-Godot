@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3 uid="uid://cmar2imfjt20y"]
+
+[ext_resource type="Script" uid="uid://bm3lt46etp16e" path="res://Scripts/pickup_hp.gd" id="1_8eev3"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wfego"]
+size = Vector3(0.2, 0.5, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stkmh"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0, 0, 1)
+metallic = 0.25
+roughness = 0.25
+emission = Color(1, 0, 0, 1)
+ao_light_affect = 1.0
+ao_on_uv2 = true
+
+[sub_resource type="Animation" id="Animation_wfego"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8eev3"]
+resource_name = "rotate"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.28319, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_stkmh"]
+_data = {
+&"RESET": SubResource("Animation_wfego"),
+&"rotate": SubResource("Animation_8eev3")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_uswx3"]
+
+[node name="pickup_hp" type="Node3D"]
+top_level = true
+script = ExtResource("1_8eev3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_wfego")
+surface_material_override/0 = SubResource("StandardMaterial3D_stkmh")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_wfego")
+surface_material_override/0 = SubResource("StandardMaterial3D_stkmh")
+
+[node name="RayCast3D V" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+
+[node name="RayCast3D H" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, -0.45, 0)
+
+[node name="RayCast3D H2" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, -0.45, 0)
+target_position = Vector3(0, 1, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_stkmh")
+}
+autoplay = "rotate"
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_uswx3")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

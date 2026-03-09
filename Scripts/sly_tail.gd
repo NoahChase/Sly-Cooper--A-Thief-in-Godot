@@ -120,11 +120,5 @@ func _set_tail_rotation(from_node: Node3D, to_node: Node3D, factor: float, max_a
 	# Slerp toward target
 	var slerped = from_quat.slerp(to_quat, factor)
 	
-	# Clamp relative rotation to prevent flipping
-	var relative = from_quat.inverse() * slerped
-	if relative.get_angle() > deg_to_rad(max_angle_deg):
-		relative = Quaternion(relative.get_axis(), deg_to_rad(max_angle_deg))
-		slerped = from_quat * relative
-	
 	# Apply rotation while keeping current position
 	from_node.global_transform = Transform3D(slerped, from_node.global_transform.origin)

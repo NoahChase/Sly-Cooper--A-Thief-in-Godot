@@ -13,11 +13,20 @@ var bullet_chambered = false
 var aim_rng = RandomNumberGenerator.new()
 var aim_rng_num = 0.0
 
+var shoot_buffer_max = 120
+var shoot_buffer = 0
+
 func _physics_process(delta: float) -> void:
 	## add a timer with an rng 0-3 seconds between shots to give the period between them variety. 
 		## wouldn't be in gun, but this timer could affect accuracy 
 	
 	if shoot:
+		if shoot_buffer < shoot_buffer_max:
+			shoot_buffer += 1
+	else:
+		shoot_buffer = 0
+	
+	if shoot_buffer >= shoot_buffer_max:
 		if not anim.current_animation == "shoot":
 			anim.queue("shoot")
 		
@@ -36,22 +45,22 @@ func _physics_process(delta: float) -> void:
 func decide_shoot():
 	shot_num += 1
 	var shoot_int = randi_range(1, 6)
-	if shoot_int >= 0:
-		fire.emit()
-		#$"Gun Audio".pitch_scale = randf_range(0.75, 1)
-		#$"Gun Audio".play()
-		var projectile = projectile_scene.instantiate()
-		projectile.dont_shoot_parent = get_parent().get_node("HP Container")
-		get_tree().get_current_scene().add_child(projectile)
-		if projectile.position_set == false:
-			projectile.global_position = $muzzle.global_position
-			projectile.global_rotation = $muzzle.global_rotation
-			projectile.position_set = true
+	fire.emit()
+	#$"Gun Audio".pitch_scale = randf_range(0.75, 1)
+	#$"Gun Audio".play()
+	var projectile = projectile_scene.instantiate()
+	projectile.dont_shoot_parent = get_parent().get_node("HP Container")
+	get_tree().get_current_scene().add_child(projectile)
+	if projectile.position_set == false:
+		projectile.global_position = $muzzle.global_position
+		projectile.global_rotation = $muzzle.global_rotation
+		projectile.position_set = true
+	if shoot_int >= 3:
 		anim.play("reset")
 	else:
 		anim.play("no reset")
 		
 func gen_aim_rng():
-	aim_rng_num = aim_rng.randf_range(-8.0, 8.0)
+	aim_rng_num = aim_rng.randf_range(-1.0, 2.0)
 	#print("aim rng: ", aim_rng_num)
 		

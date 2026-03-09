@@ -201,7 +201,7 @@ shape = SubResource("CapsuleShape3D_r3pa2")
 debug_color = Color(0, 0.595, 0.7, 1)
 
 [node name="To Cam RayCast" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46572, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 debug_shape_thickness = 1
 
 [node name="Body Mesh Container" type="Node3D" parent="."]
@@ -394,12 +394,14 @@ material_overlay = SubResource("ShaderMaterial_jj232")
 mesh = SubResource("SphereMesh_s3532")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
+z_index = -2
 offset_right = 402.0
 offset_bottom = 73.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel2" type="RichTextLabel" parent="."]
+visible = false
 offset_top = 136.0
 offset_right = 167.0
 offset_bottom = 224.0
@@ -407,6 +409,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel3" type="RichTextLabel" parent="."]
+visible = false
 offset_left = 11.0
 offset_top = 322.0
 offset_right = 626.0
@@ -415,6 +418,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="RichTextLabel4" type="RichTextLabel" parent="."]
+visible = false
 offset_top = 181.0
 offset_right = 615.0
 offset_bottom = 801.0
@@ -446,6 +450,8 @@ mesh = SubResource("PrismMesh_nt6o0")
 skeleton = NodePath("../..")
 
 [node name="HP Container" parent="." node_paths=PackedStringArray("hurtboxes") instance=ExtResource("4_ncpw6")]
+maxHP = 20
+hp = 20
 get_kb = true
 hurtboxes = [NodePath("Hurtbox")]
 
@@ -488,6 +494,7 @@ motion_tracker = NodePath("Motion_Tracker")
 script = ExtResource("8_hqqdn")
 distance_buffer = 0.2
 
+[connection signal="triangle" from="." to="Body Mesh Container/SlyCooper_Anims4" method="set_skin_color"]
 [connection signal="body_entered" from="Target Area" to="." method="_on_target_area_body_entered"]
 [connection signal="body_exited" from="Target Area" to="." method="_on_target_area_body_exited"]
 [connection signal="health_is_zero" from="HP Container" to="." method="_on_hp_container_health_is_zero"]

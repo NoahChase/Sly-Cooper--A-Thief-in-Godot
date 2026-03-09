@@ -10,7 +10,7 @@ func _ready() -> void:
 	hitbox.dont_shoot_parent = dont_shoot_parent
 
 func _physics_process(delta: float) -> void:
-	position -= transform.basis.z * 15 * delta
+	position -= transform.basis.z * 12 * delta
 	if $RayCast3D.is_colliding():
 		var col = $RayCast3D.get_collider()
 		if not col.is_in_group("Player"):

@@ -13,6 +13,7 @@ signal total_drop_count_reached
 @export var item_spawn_max = 9
 @export var item_spawn_min = 3
 @export var item_spawn_num = 1
+@export_range(0.2, 3.0, 0.1) var drop_bias := 1.0 #curved drop mix/max bias (higher number more likely to spawn more drops)
 
 @export var y_spawn_offset = 0.0
 
@@ -38,7 +39,8 @@ func start_drop_items():
 	print("spawning drop")
 
 func gen_item_spawn_num():
-	item_spawn_num = randf_range(item_spawn_min, item_spawn_max)
+	var t = 1.0 - pow(randf(), drop_bias)
+	item_spawn_num = roundi(lerp(item_spawn_min, item_spawn_max, t))
 	gen_rng = false #set generate rng to false until spawn is completed
 
 func spawn_entire_drop():

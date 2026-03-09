@@ -9,6 +9,7 @@ func _on_exit_button_pressed() -> void:
 func _on_restart_button_pressed() -> void:
 	# turn off controller!!!
 	$"UI Mouse Controller".process_mode = Node.PROCESS_MODE_DISABLED
+	$"UI Mouse Controller".visible = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	get_tree().reload_current_scene()
 	

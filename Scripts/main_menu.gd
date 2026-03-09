@@ -2,7 +2,6 @@ extends Control
 
 func _ready():
 	# Make mouse visible and confine to screen
-	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 	$"UI Mouse Controller".process_mode = Node.PROCESS_MODE_ALWAYS
 
 func close_menu_buttons() -> void:
@@ -10,10 +9,15 @@ func close_menu_buttons() -> void:
 	$"Control Button".visible = false
 	$"Quit Button".visible = false
 
+func open_control_menu() -> void:
+	$ControlsMenu.visible = true
+	$ControlsMenu.process_mode = Node.PROCESS_MODE_ALWAYS
+
 func _on_start_button_pressed() -> void:
 	# Make mouse visible and confine to screen
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
 	$"UI Mouse Controller".process_mode = Node.PROCESS_MODE_DISABLED
+	$"UI Mouse Controller".visible = false
 	$"Loading Label".visible = true
 	$SlyCooperClassicTitleLogo.visible = false
 	close_menu_buttons()

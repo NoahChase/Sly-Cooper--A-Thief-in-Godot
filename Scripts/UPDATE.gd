@@ -1,7 +1,9 @@
 extends Node
 
-
 @onready var update_timer := Timer.new()
+
+var coins = 800
+var coins_max = 9999999
 
 func _ready():
 	update_timer.wait_time = 0.25
@@ -13,7 +15,6 @@ func _ready():
 func _on_update_timer_timeout():
 	pass# Do expensive update here
 
-
 var count = 1
 
 func _physics_process(delta: float) -> void:
@@ -21,3 +22,7 @@ func _physics_process(delta: float) -> void:
 		count += 1
 	if count == 6:
 		count = 0
+
+func add_coin(num):
+	if coins < coins_max:
+		coins += num

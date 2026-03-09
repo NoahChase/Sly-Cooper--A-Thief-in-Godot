@@ -3,6 +3,17 @@ extends Node3D
 @onready var anim_player = $AnimationPlayer
 @onready var anim_tree = $AnimationTree
 
+func _process(delta): #scale mesh based on distance to camera
+	var cam := get_viewport().get_camera_3d()
+	if cam == null:
+		return
+
+	var dist_2_cam := global_position.distance_to(cam.global_position)
+	var dist_mult = clamp((dist_2_cam - 4.0) / (32.0 - 4.0), 0.0, 1.0) #4 min distance, 16 max distance
+	var scale = lerp(1.0, 1.5, dist_mult) #min max mesh scale
+
+	scale = Vector3.ONE * scale
+
 func anim_idle():
 	anim_tree.set("parameters/transition looping/transition_request", "idle")
 func anim_air():

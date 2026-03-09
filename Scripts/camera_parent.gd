@@ -26,8 +26,8 @@ var default_camera_offset := Vector3(0, 0, -4.5)
 
 # Spring smoothing factors
 var rotation_spring = 0.15
-var position_spring = 0.1
-var fov_spring = 0.02
+var position_spring = 0.25 # if this value is too low, camera will move into walls
+var fov_spring = 0.0125
 var pitch_adjust_spring = 0.015
 
 func _ready():
@@ -35,6 +35,7 @@ func _ready():
 	
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() != 0:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #always set to captured (confined mouse mode clamps yaw)
 		mouse_motion = true
 		yaw += -event.relative.x * (yaw_sens / 360) * avg_distance
 		pitch += -event.relative.y * (pitch_sens / 360) * avg_distance
@@ -85,7 +86,7 @@ func _physics_process(delta):
 		var target_fov = 75.0 if camera_player.target.adj_fov else 60.0
 		camera.fov += (target_fov - camera.fov) * fov_spring
 	else:
-		camera.fov += (60.0 - camera.fov) * fov_spring
+		camera.fov += (65.0 - camera.fov) * fov_spring
 
 
 func rotate_yaw():

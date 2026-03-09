@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://djpes1xijvcyu"]
+
+[ext_resource type="Texture2D" uid="uid://qqcd76u2o2ig" path="res://Assets/Temp Imports/paris skyline.png" id="1_c0pca"]
+
+[resource]
+render_priority = -1
+transparency = 1
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+albedo_color = Color(0.0265, 0.018, 0.12, 1)
+albedo_texture = ExtResource("1_c0pca")
+uv1_scale = Vector3(4, 2, 4)
