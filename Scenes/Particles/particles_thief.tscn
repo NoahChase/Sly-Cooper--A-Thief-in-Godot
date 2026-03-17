@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://2rs5jrs6ebie"]
+
+[ext_resource type="Texture2D" uid="uid://dufsa658cs0yy" path="res://Assets/Textures/sparkle.png" id="1_j30d5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qoe2y"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+disable_ambient_light = true
+disable_fog = true
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 0.588235)
+albedo_texture = ExtResource("1_j30d5")
+billboard_mode = 1
+billboard_keep_scale = true
+point_size = 6.2
+distance_fade_mode = 1
+distance_fade_min_distance = 20.0
+distance_fade_max_distance = 8.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_7mxur"]
+material = SubResource("StandardMaterial3D_qoe2y")
+size = Vector2(0.4, 0.4)
+
+[sub_resource type="Curve" id="Curve_n256m"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 0.7), 3.73545, 3.73545, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.75, 0.7), -3.735, -3.735, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_vwfmj"]
+offsets = PackedFloat32Array(0, 0.502183, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="Particles_Thief" type="CPUParticles3D"]
+amount = 16
+lifetime = 3.0
+randomness = 1.0
+fixed_fps = 60
+mesh = SubResource("QuadMesh_7mxur")
+direction = Vector3(0, 1, 0)
+spread = 90.0
+flatness = 0.5
+gravity = Vector3(0, 0.01, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.15
+tangential_accel_min = 0.01
+tangential_accel_max = 0.05
+damping_min = 0.01
+damping_max = 0.1
+scale_amount_min = 0.25
+scale_amount_curve = SubResource("Curve_n256m")
+color = Color(0.4, 0.45, 1, 1)
+color_ramp = SubResource("Gradient_vwfmj")

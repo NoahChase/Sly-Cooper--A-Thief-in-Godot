@@ -25,9 +25,9 @@ func _process(delta: float) -> void:
 	if delay_frames <= delay_frames_max:
 		return
 
-	var follow_speed := 12.0
+	var follow_speed := 24.0
 	var t := 1.0 - exp(-follow_speed * delta)
-	if target_input.length() > 0.1 or lerped_input.length() > 0.1:
+	if target_input.length() > 0.0001 or lerped_input.length() > 0.0001:
 		var mouse_pos = $"Physics Mouse2".global_position
 		#$"Physics Mouse".global_position += (mouse_pos - $"Physics Mouse".global_position) * (12 / Engine.get_frames_per_second())
 		
@@ -56,12 +56,12 @@ func _physics_process(delta: float) -> void: # more performant first recording o
 		right_joystick_input = right_joystick_input.normalized()
 	
 	target_input = (left_joystick_input + right_joystick_input)
-	lerped_input = lerp(lerped_input, target_input, 0.15) 
+	lerped_input = lerp(lerped_input, target_input, 0.25) 
 	
-	if target_input.length() > 0.1 or lerped_input.length() > 0.1:
+	if target_input.length() > 0.0001 or lerped_input.length() > 0.0001:
 		stick_acceleration = viewport_diagonal * 0.25 # make base movement 0.25 of the screen's resolution
 		var smoothed_vector = lerped_input * stick_acceleration * delta
-		base_move_vector += (smoothed_vector - base_move_vector) * 0.1 # spring smoothing "current += (target - current) * spring"
+		base_move_vector += (smoothed_vector - base_move_vector) * 0.25 # spring smoothing "current += (target - current) * spring"
 		$"Physics Mouse".global_position += base_move_vector
 		# clamp mouse to viewport
 		var viewport_rect := get_viewport_rect()
@@ -73,28 +73,29 @@ func _physics_process(delta: float) -> void: # more performant first recording o
 		if mouse_to_physics_mouse.length() < 1.0:
 			do_juice = false
 		base_move_vector = Vector2.ZERO # reset final smoothing
+	
+	if base_move_vector != Vector2.ZERO:
+		if target_input.length() < 0.001 or lerped_input.length() < 0.001:
+			do_juice = false
 		
 	if do_juice:
 		$"Physics Mouse2/CPUParticles2D".emitting = true
 		## mouse move sound
 		if $"Audio Mouse Move".playing == false:
 			$"Audio Mouse Move".playing = true
-		if base_move_vector != Vector2.ZERO:
-			$"Audio Mouse Move".pitch_scale += ((base_move_vector.length() / 12.0) - $"Audio Mouse Move".pitch_scale) * 0.25
-		else:
+		if base_move_vector != Vector2.ZERO: #controller input sound scaling
+			$"Audio Mouse Move".pitch_scale += ((base_move_vector.length() / 16.0) - $"Audio Mouse Move".pitch_scale) * 0.25
+		else: #mouse input sound scaling
 			$"Audio Mouse Move".pitch_scale += ((mouse_to_physics_mouse.length() / 128.0) - $"Audio Mouse Move".pitch_scale) * 0.25
 		$"Audio Mouse Move".pitch_scale = clamp($"Audio Mouse Move".pitch_scale, 0.25, 1.25)
 	else:
 		$"Physics Mouse2/CPUParticles2D".emitting = false
 		$"Audio Mouse Move".playing = false
-
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_released("ui_accept"):
+	
+	if Input.is_action_just_released("ui_accept"): #moved to physics process because input() wasn't consistent
 		_press_button_under_mouse()
-	#if Input.is_action_just_pressed("esc"):
-		#get_tree().quit() # open pause menu
 
 func _press_button_under_mouse():
 	var hovered = get_viewport().gui_get_hovered_control()
 	if hovered and hovered is BaseButton:
-		hovered.emit_signal("pressed")
+		hovered.pressed.emit()

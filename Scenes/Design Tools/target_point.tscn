@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://bj34qq52wpb60"]
+[gd_scene load_steps=16 format=3 uid="uid://bj34qq52wpb60"]
 
 [ext_resource type="Script" uid="uid://duw7xddv1s1bp" path="res://Scripts/target_point.gd" id="1_57eij"]
 [ext_resource type="Shader" uid="uid://b0axti1avktul" path="res://Assets/Shaders/outline_shine.gdshader" id="2_soa8h"]
+[ext_resource type="PackedScene" uid="uid://2rs5jrs6ebie" path="res://Scenes/Particles/particles_thief.tscn" id="3_odmcu"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ij1nr"]
 radius = 0.125
@@ -134,6 +135,7 @@ collision_mask = 2
 script = ExtResource("1_57eij")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("SphereMesh_ij1nr")
 surface_material_override/0 = SubResource("StandardMaterial3D_i8qnk")
 
@@ -145,3 +147,5 @@ libraries = {
 &"": SubResource("AnimationLibrary_8yu1b")
 }
 autoplay = "shine"
+
+[node name="Particles_Thief" parent="." instance=ExtResource("3_odmcu")]

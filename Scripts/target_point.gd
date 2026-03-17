@@ -14,9 +14,11 @@ signal player_lost()
 
 func _physics_process(delta: float) -> void:
 	if invisible:
-		visible = false
+		#visible = false
+		$Particles_Thief.emitting = false
 	else:
-		visible = true
+		#visible = true
+		$Particles_Thief.emitting = true
 		
 func assign_player(p: CharacterBody3D):
 	player = p

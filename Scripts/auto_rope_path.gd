@@ -239,7 +239,11 @@ func ball2player(delta):
 	var closest_offset = path_3d.curve.get_closest_offset(Vector3(player.global_position.x, target_point.global_position.y, player.global_position.z))
 
 	# Find vertical difference, use left_stick_pressure rather than joystick_input.length()
-	var y_dif = (player.global_transform.origin.y - target_point.global_transform.origin.y) * player.left_stick_pressure
+	var y_dif = abs(player.global_transform.origin.y - target_point.global_transform.origin.y)
+	if y_dif <= 7:
+		y_dif *= player.left_stick_pressure
+	else:
+		y_dif *= 0
 
 	# Get the player's forward direction (assuming -Z is forward)
 	var forward = player.rot_container.global_transform.basis.z.normalized()
@@ -252,12 +256,8 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.global_transform.origin.y >= target_point.global_transform.origin.y + 4:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 1.25) / length, 0.1)
-		elif player.global_transform.origin.y >= target_point.global_transform.origin.y + 2:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult * 2) / length, 0.1)
-		elif player.state != player.TO_TARGET:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset) / player.gravmult) / length, 0.1)
+		if player.state != player.TO_TARGET:
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset)) / length, 0.1 * player.motion_tracker.velocity.length() + 0.01)
 		
 
 

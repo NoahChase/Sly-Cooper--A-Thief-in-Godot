@@ -11,8 +11,8 @@ signal triangle
 signal pause
 
 ## const
-const SPEED = 4.03 #3.52 for 3.4m #4.03 jump distance 4m
-const JUMP_VELOCITY = 8.06 #single jump 2m, cozy double jump 3m
+const SPEED = 4.0 #4.0 jump distance 4m
+const JUMP_VELOCITY = 8.0 #single jump 2m, cozy double jump 3m
 
 ## enum
 enum {FLOOR, AIR, TO_TARGET, ON_TARGET, ON_LEDGE}
@@ -222,17 +222,17 @@ func _physics_process(delta: float) -> void:
 			speed_mult = 1.0
 		else:
 			if speed_mult != 1.0:
-				speed_mult = 1.5
+				speed_mult = 1.75
 
 		if hp_container.damage_flash_timer.is_stopped(): #prevents move on knockback
 			if not $"Body Mesh Container/Floor Ray".is_colliding() and gravmult > 1.0:
 				#slight dampening when player just begins to fall
-				air_mult = lerp(air_mult, 0.125, 0.05)
+				air_mult += (0.125 - air_mult) * 0.0375
 				#temp_sly.anim_tree.set("parameters/Anim State/transition_request", "air")
 			elif velocity.y <= -6.5 and gravmult <= 1.0 and not $"Body Mesh Container/Floor Ray".is_colliding():
 				#smooth release so they can control a long fall naturally and also set their rotation  right just before they hit the ground
 				#self.visible = false
-				air_mult = lerp(air_mult, 0.125, 0.25)
+				air_mult += (0.125 - air_mult) * 0.0625
 			else:
 				#resets multipliers when player jumps into the air (upward velocity)
 				#self.visible = true
@@ -404,23 +404,26 @@ func _physics_process(delta: float) -> void:
 	horizontal = joystick_input.x
 	vertical = joystick_input.y
 	
+	
+	var h_vel = Vector3(velocity.x, 0, velocity.y).length()
+	var speed_factor = h_vel / SPEED / speed_mult
+	var lerp_speed = clamp(1 - speed_factor, 0.4, 0.8) * air_mult
+	var left_stick_pressure_corrected
+	left_stick_pressure_corrected = joystick_input.length()
+	
 	# Calculate movement direction relative to the camera
 	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult, 0.0, vertical * air_mult * speed_mult).rotated(Vector3.UP, camera_T)).normalized()
 	
 	if direction and state != ON_LEDGE and state != ON_TARGET:
-		var speed_factor = velocity.length() / SPEED
-		var lerp_speed = clamp(1 - speed_factor, 0.08, 0.8) * air_mult
-		var left_stick_pressure_corrected
-		left_stick_pressure_corrected = joystick_input.length()
 		if state == AIR:
-			lerp_speed = 0.5 * air_mult
+			#lerp_speed = 0.5 * air_mult
 			left_stick_pressure_corrected = clamp(left_stick_pressure_corrected, 0.0,1.0)
 		else:
 			left_stick_pressure_corrected = clamp(left_stick_pressure_corrected, 0.25,1.0)
 			temp_sly.anim_tree.set("parameters/walk timescale/scale", left_stick_pressure_corrected)
 		var target_velocity = direction * SPEED * speed_mult
-		velocity.x = lerp(velocity.x, target_velocity.x * left_stick_pressure_corrected, lerp_speed)
-		velocity.z = lerp(velocity.z, target_velocity.z * left_stick_pressure_corrected, lerp_speed)
+		velocity.x = move_toward(velocity.x, target_velocity.x * left_stick_pressure_corrected, lerp_speed)
+		velocity.z = move_toward(velocity.z, target_velocity.z * left_stick_pressure_corrected, lerp_speed)
 	elif state != AIR and state != TO_TARGET:
 		velocity.x = lerp(velocity.x, 0.0, 0.25)
 		velocity.z = lerp(velocity.z, 0.0, 0.25)
@@ -429,6 +432,8 @@ func _physics_process(delta: float) -> void:
 		velocity.z = lerp(velocity.z, 0.0, 0.015 * (1-air_mult))
 
 # Rotation:
+	var angle_input = Vector2(horizontal, vertical) # already square→circle corrected
+	$"Look_At Rotation".look_at(position + Vector3(angle_input.x, 0, angle_input.y).rotated(Vector3.UP, camera_T))
 	var target_rotation_y = $"Look_At Rotation".rotation.y
 	var current_rotation_y = true_player_rot.rotation.y
 	var angle_difference = wrapf(target_rotation_y - current_rotation_y, -PI, PI)
@@ -444,14 +449,14 @@ func _physics_process(delta: float) -> void:
 			if global_rotation != Vector3(0,0,0):
 				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.125)
 			#for rotating on point targets
-			rot_container.rotation.y += angle_difference * look_val
+			#rot_container.rotation.y += angle_difference * look_val
 			if not rot_container.rotation.x == 0.0:
 				rot_container.rotation.x = lerp_angle(rot_container.rotation.x, 0.0, 0.125)
 			if not rot_container.rotation.z == 0.0:
 				rot_container.rotation.z = lerp_angle(rot_container.rotation.z, 0.0, 0.125)
 		#elif target.is_in_group("swing"):
 			#$"Look_At Rotation".global_rotation.y = target.global_rotation.y
-			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.25 * lerp_speed)
 		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET: #pole and hook look at point while moving to them
 			if not target.is_in_group("rope"):
 				var dis_to_target = global_transform.origin - target.global_transform.origin
@@ -481,16 +486,18 @@ func _physics_process(delta: float) -> void:
 			var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
 			rot_container.rotation.y += angle_diff * look_val
 		true_player_rot.rotation.y += angle_difference * look_val
-	if not direction.length_squared() < 0.0001:
-		$"Look_At Rotation".look_at(position + direction)
+	
 	
 	# Directional 2D vector for additional calculations (if needed)
 	var direction_2d = Vector2(direction.x, direction.z)
-# Camera Rotation:
+	
+	# Camera Rotation:
 	if horizontal < 0 and state == FLOOR:
-		camera_parent.yaw += motion_tracker.velocity.length() / (SPEED * speed_mult * left_stick_pressure) * delta * -horizontal
+		var hvel = Vector3(motion_tracker.velocity.x, 0, motion_tracker.velocity.z).length()
+		camera_parent.yaw += ( hvel / (SPEED * speed_mult * left_stick_pressure) * delta * -horizontal ) / 2
 	elif horizontal > 0 and state == FLOOR:
-		camera_parent.yaw -= motion_tracker.velocity.length() / (SPEED * speed_mult * left_stick_pressure) * delta * horizontal
+		var hvel = Vector3(motion_tracker.velocity.x, 0, motion_tracker.velocity.z).length()
+		camera_parent.yaw -= ( hvel / (SPEED * speed_mult * left_stick_pressure) * delta * horizontal ) / 2
 	
 	var colliding_count = 0  # Reset every frame
 	manual_slip = false
@@ -537,7 +544,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, "/", hp_container.maxHP, " | $ = ", Update.coins, )
+	$RichTextLabel.text = str("FPS: ", Engine.get_frames_per_second(), " | HP = ", hp_container.hp, "/", hp_container.maxHP, " | $ = ", Update.coins, " | V = ", velocity.length())
 #	, " | velocity = ", motion_tracker.velocity.length()
 
 
@@ -606,7 +613,10 @@ func use_smoke_bomb():
 func use_mega_jump():
 	print("mega jump")
 	if state == FLOOR:
-		velocity.y = 12
+		if sprinting:
+			velocity.y = 10
+		else:
+			velocity.y = 14
 		did_mega_jump = true
 		manual_move_cam = true
 
@@ -1111,7 +1121,10 @@ func camera_smooth_follow(delta):
 		var target_y = tform.y + y_add
 		if manual_move_cam:
 			target_y = tform.y + 2
-			$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val / 2 * (velocity.length() + 1)
+			if velocity.y > 0:
+				$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val / 2 * abs(velocity.y + 2)
+			else:
+				$Basis_Offset.global_transform.origin.y += (tform.y - y_add - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 10.5)
 		elif velocity.y >= 0 and global_transform.origin.y > camera_parent.global_transform.origin.y + 2:
 			$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 1)
 		elif direction and velocity.y > 0 and jump_num > 0 and camera_parent.pitch > -0.6 and jump_cam_trigger:
@@ -1119,7 +1132,7 @@ func camera_smooth_follow(delta):
 		elif state == TO_TARGET:
 			var distance_to_player = global_transform.origin.distance_to(target.global_transform.origin)
 			if distance_to_player > 2 or global_transform.origin.y < target.global_transform.origin.y or global_transform.origin.y >= target.global_transform.origin.y + 2:
-				$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y / gravmult) + 1)
+				$Basis_Offset.global_transform.origin.y += (target_y - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y / gravmult) + 2)
 		else:
 			if velocity.y <= -6.5 and global_transform.origin.y < camera_parent.global_transform.origin.y - 2.0:
 				$Basis_Offset.global_transform.origin.y += (tform.y - y_add - $Basis_Offset.global_transform.origin.y) * cam_timer * spring_val * (abs(velocity.y) + 10.5)

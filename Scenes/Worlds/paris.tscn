@@ -1045,7 +1045,7 @@ environment = ExtResource("1_25okp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.895542, -0.285105, -0.341643, -0.442634, 0.492072, 0.749626, -0.0456094, 0.822545, -0.566868, 0, 20, 0)
-light_color = Color(0.25, 0.333333, 0.5, 1)
+light_color = Color(0.3025, 0.385, 0.55, 1)
 light_indirect_energy = 0.25
 light_volumetric_fog_energy = 4.0
 light_bake_mode = 1
@@ -1896,7 +1896,7 @@ surface_material_override/0 = ExtResource("10_gaw5t")
 curve = SubResource("Curve3D_vhdbp")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Thief Points/ROPES/Thief Moves ROPE/Path3D"]
-transform = Transform3D(0.54618, 0.0342799, 0.836844, -6.54651e-06, 0.999008, -0.0409228, -0.837542, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
+transform = Transform3D(0.54618, 0.0342799, 0.836844, -6.54651e-06, 0.999008, -0.0409227, -0.837542, 0.0223469, 0.545726, -63.8351, 5.59204, 43.5492)
 progress = 4.10269
 loop = false
 
