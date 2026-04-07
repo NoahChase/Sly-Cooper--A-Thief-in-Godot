@@ -9,6 +9,6 @@ depth_draw_mode = 1
 shading_mode = 0
 disable_ambient_light = true
 disable_fog = true
-albedo_color = Color(0.4275, 0.333, 0.9, 1)
+albedo_color = Color(0.4275, 0.333, 0.9, 0.588235)
 albedo_texture = ExtResource("1_fcbqi")
 uv1_scale = Vector3(2, 1, 2)

@@ -397,8 +397,8 @@ func _physics_process(delta: float) -> void:
 
 	# Calculate input direction
 	var joystick_input = Vector2(Input.get_axis("ui_left", "ui_right"), Input.get_axis("ui_up", "ui_down"))
-	if joystick_input.length() < 0.75:
-		joystick_input = lerp(joystick_input, joystick_input.normalized(), joystick_input)
+	if left_stick_pressure < 0.5:
+		joystick_input = joystick_input.normalized() * left_stick_pressure
 	else:
 		joystick_input = joystick_input.normalized()
 	horizontal = joystick_input.x

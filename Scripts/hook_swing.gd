@@ -115,10 +115,11 @@ func update_swing(delta):
 		TAU
 	)
 	var swinging_forward = angle_diff < deg_to_rad(70) or angle_diff > deg_to_rad(290)
-
-	var swing_input = swing_strength
+	
+	#change swing direction
+	var swing_input = -swing_strength
 	if not swinging_forward:
-		swing_input = -swing_strength
+		swing_input = swing_strength
 
 	var max_angle = deg_to_rad(135.0)
 	var angle = abs($"Rot Ghost".rotation.x)
