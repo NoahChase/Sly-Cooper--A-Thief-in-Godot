@@ -1,0 +1,26 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://icyqxxevm813"]
+
+[ext_resource type="Texture2D" uid="uid://c250qxqev3i4o" path="res://Assets/Textures/CrateTexturePrep_DefaultMaterial_BaseColor.1001.png" id="1_8or16"]
+[ext_resource type="Texture2D" uid="uid://fioh7hppy1md" path="res://Assets/Models/Objects/ParisChair_DefaultMaterial_BaseColor.1001.png" id="2_wxmxj"]
+
+[resource]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.8075, 0.818125, 0.85, 1)
+albedo_texture = ExtResource("1_8or16")
+roughness_texture = ExtResource("1_8or16")
+roughness_texture_channel = 4
+rim_enabled = true
+rim = 0.25
+rim_texture = ExtResource("1_8or16")
+clearcoat = 0.0
+clearcoat_roughness = 1.0
+clearcoat_texture = ExtResource("2_wxmxj")
+ao_light_affect = 1.0
+ao_texture_channel = 4
+subsurf_scatter_strength = 1.0
+subsurf_scatter_texture = ExtResource("2_wxmxj")
+subsurf_scatter_transmittance_texture = ExtResource("2_wxmxj")
+subsurf_scatter_transmittance_depth = 0.001
+backlight_enabled = true
+backlight = Color(0.912289, 0.912289, 0.912289, 1)

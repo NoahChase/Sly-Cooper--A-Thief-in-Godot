@@ -5,6 +5,7 @@ signal player_lost()
 
 @onready var is_selected = false
 @export var player : CharacterBody3D
+@export var parent : Node3D
 @export var adj_fov = false
 @export var invisible = true
 @export var jump_mult = 1.0

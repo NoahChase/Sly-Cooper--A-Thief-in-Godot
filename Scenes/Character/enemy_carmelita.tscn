@@ -323,14 +323,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 0)
 mesh = SubResource("BoxMesh_1lhpl")
 
 [node name="Carmelita_Animations7" parent="." instance=ExtResource("1_blgq8")]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
+transform = Transform3D(-1.25, 0, -1.88745e-07, 0, 1.25, 0, 1.88745e-07, 0, -1.25, 0, 0, 0)
 
 [node name="Enemy_Carmelita" type="Node3D" parent="."]
 
 [node name="drop_item_scene" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.75)
 script = ExtResource("8_oq16c")
-total_drop_count_max = 5
 item_spawn_max = 8
 item_spawn_min = 4
 drop_bias = 1.2
@@ -357,7 +356,6 @@ mesh = SubResource("BoxMesh_32kva")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.75)
 script = ExtResource("8_oq16c")
 item_preload_string = "res://Scenes/Design Tools/pickup_hp.tscn"
-total_drop_count_max = 5
 item_spawn_max = 1
 item_spawn_min = 0
 drop_bias = 0.6

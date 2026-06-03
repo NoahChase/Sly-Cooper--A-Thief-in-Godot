@@ -5,6 +5,7 @@ extends Node3D
 @export var dont_shoot_parent = CharacterBody3D
 
 func _ready() -> void:
+	reparent(get_tree().current_scene) #prevents from despawning if original parent despawns
 	$Timer.start(20.0)
 	#print("projectile dont shoot parent = ", dont_shoot_parent)
 	hitbox.dont_shoot_parent = dont_shoot_parent

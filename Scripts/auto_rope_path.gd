@@ -25,6 +25,8 @@ var lerp_val = 0.0
 var return_points: Array #initial position of curve_points
 var sag_points: Array #sagged down position of curve points
 
+var lerp_speed = 0.1
+
 func _ready():
 	if Engine.is_editor_hint():
 		#update_curve()
@@ -122,6 +124,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		if update_tool:
 			# Editor
+			var csg = $CSGPolygon3D
+			csg.use_collision = true
+			csg.set_collision_layer_value(3, true)
+			csg.set_collision_mask_value(3, true)
+			csg.set_collision_layer_value(1,false)
+			csg.set_collision_mask_value(1,false)
 			update_curve()
 			if path_3d:
 				length = calculate_path_length(path_3d.curve)
@@ -256,9 +264,21 @@ func ball2player(delta):
 	var directional_offset = forward_offset.dot(curve_forward)
 
 	if length > 0:
-		if player.state != player.TO_TARGET:
-			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset)) / length, 0.1 * player.motion_tracker.velocity.length() + 0.01)
+		var y_dis = player.global_transform.origin.y - target_point.global_transform.origin.y
+		var dis = player.global_position.distance_to(target_point.global_position)
+		var extra_y_dis = (y_dis + dis) / 2.0
 		
+		var y_multiplier = clamp((extra_y_dis - 2.0) / (4.0 - 2.0), 0.0, 1.0)
+		var y_prediction_mult = 3 - lerp(1.0, 3.0, y_multiplier) # the 3 - x makes it zero at the lowest, which switches to 'closest_offset' completely
+		
+		
+		if player.state != player.TO_TARGET: #predictive movement
+			#print(y_prediction_mult)
+			lerp_speed = 0.1
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset * (y_prediction_mult))) / length, lerp_speed * player.motion_tracker.velocity.length() + 0.01)
+		else: #lerp predictive movement speed to zero when to target
+			lerp_speed = lerp(lerp_speed, 0.0, 0.1)
+			path_follow.progress_ratio = lerp(path_follow.progress_ratio, (closest_offset + (directional_offset * (y_prediction_mult))) / length, lerp_speed * player.motion_tracker.velocity.length())
 
 
 func _on_player_target_acquired(target_ball):

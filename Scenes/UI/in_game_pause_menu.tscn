@@ -37,6 +37,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Pause Menu" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -87,6 +88,7 @@ grow_vertical = 2
 text = "Quit Game"
 
 [node name="ControlsMenu" parent="." instance=ExtResource("2_wlwmn")]
+visible = false
 layout_mode = 1
 
 [node name="UpgradesMenu" parent="." instance=ExtResource("3_gravo")]

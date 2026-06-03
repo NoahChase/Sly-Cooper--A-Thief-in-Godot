@@ -7,7 +7,6 @@ code = "
 // NOTE: Shader automatically converted from Godot Engine 4.4.1.stable's ProceduralSkyMaterial.
 
 shader_type sky;
-render_mode use_debanding;
 
 uniform vec4 sky_top_color : source_color = vec4(0.385, 0.454, 0.55, 1.0);
 uniform vec4 sky_horizon_color : source_color = vec4(0.646, 0.656, 0.67, 1.0);
@@ -87,7 +86,7 @@ void sky() {
 
 	vec4 sky_cover_texture = texture(sky_cover, SKY_COORDS);
 	sky += (sky_cover_texture.rgb * sky_cover_modulate.rgb) * sky_cover_texture.a * sky_cover_modulate.a * sky_energy;
-	
+
 
 
 	c = (v_angle - (PI * 0.5)) / (PI * 0.5);
@@ -106,10 +105,10 @@ void sky() {
 
 	// Blend clouds with sky
 	sky = mix(sky, cloud_color.rgb, cloud_alpha);
-	
+
 	vec4 skyline_cover_texture = texture(skyline_cover, SKY_COORDS);
 	sky += (skyline_cover_texture.rgb * skyline_cover_modulate.rgb) * skyline_cover_texture.a * skyline_cover_modulate.a * sky_energy;
-	
+
 	COLOR = mix(ground, sky, step(0.0, EYEDIR.y)) * exposure;
 }
 "
@@ -141,7 +140,7 @@ fractal_gain = 1.0
 fractal_weighted_strength = 0.51
 cellular_jitter = 1.33
 domain_warp_enabled = true
-domain_warp_amplitude = 50.0
+domain_warp_amplitude = 80.0
 domain_warp_frequency = 20.0
 domain_warp_fractal_octaves = 10
 domain_warp_fractal_lacunarity = 0.415
@@ -157,11 +156,11 @@ noise = SubResource("FastNoiseLite_4xowi")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0tk4"]
 shader = SubResource("Shader_4xowi")
 shader_parameter/sky_top_color = Color(0, 0.0125, 0.05, 1)
-shader_parameter/sky_horizon_color = Color(0.145833, 0.105, 0.35, 1)
-shader_parameter/sky_curve = 0.066
+shader_parameter/sky_horizon_color = Color(0.0625, 0.078125, 0.25, 1)
+shader_parameter/sky_curve = 0.125
 shader_parameter/sky_energy = 1.0
 shader_parameter/sky_cover = ExtResource("1_xdm0e")
-shader_parameter/sky_cover_modulate = Color(0.45098, 0.4, 1, 1)
+shader_parameter/sky_cover_modulate = Color(0.45, 0.45, 1, 1)
 shader_parameter/skyline_cover_modulate = Color(0.233333, 0.1, 0.5, 1)
 shader_parameter/ground_bottom_color = Color(0.196078, 0.113725, 0.45098, 1)
 shader_parameter/ground_horizon_color = Color(0.196078, 0.113725, 0.45098, 1)
@@ -171,8 +170,8 @@ shader_parameter/ground_energy = 1.0
 shader_parameter/sun_angle_max = 30.0
 shader_parameter/sun_curve = 0.0
 shader_parameter/exposure = 1.0
-shader_parameter/cloud_color = Color(0.2025, 0.223125, 0.45, 0.294118)
-shader_parameter/cloud_distance = 0.025
+shader_parameter/cloud_color = Color(0.375, 0.4375, 0.75, 0.196078)
+shader_parameter/cloud_distance = 0.04
 shader_parameter/cloud_direction = Vector2(0.75, 0.125)
 shader_parameter/cloud_direction2 = Vector2(0.3, 0.2)
 shader_parameter/cloud_scale = Vector2(0.03, 0.03)
@@ -190,26 +189,28 @@ background_mode = 2
 background_color = Color(0.0862745, 0.121569, 0.25098, 1)
 sky = SubResource("Sky_r3fl7")
 ambient_light_source = 3
-ambient_light_color = Color(0.25, 0.333333, 0.5, 1)
-ambient_light_sky_contribution = 0.75
+ambient_light_color = Color(0.16, 0.26, 0.4, 1)
+ambient_light_sky_contribution = 0.5
 reflected_light_source = 2
 ssao_enabled = true
 ssao_radius = 1.5
 ssao_intensity = 1.0
+ssao_detail = 5.0
+ssao_horizon = 0.0
+ssao_sharpness = 0.75
 ssil_sharpness = 1.0
-sdfgi_read_sky_light = false
 glow_enabled = true
 glow_normalized = true
 glow_bloom = 0.1
 glow_blend_mode = 1
 fog_enabled = true
-fog_light_color = Color(0.03, 0.08, 0.15, 1)
-fog_density = 0.004
+fog_light_color = Color(0.015, 0.07125, 0.15, 1)
+fog_density = 0.0045
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.0075
-volumetric_fog_albedo = Color(0.0225, 0.075625, 0.15, 1)
-volumetric_fog_emission = Color(0.0225, 0.075625, 0.15, 1)
+volumetric_fog_albedo = Color(0.015, 0.07125, 0.15, 1)
+volumetric_fog_emission = Color(0.015, 0.07125, 0.15, 1)
 volumetric_fog_anisotropy = 0.5
 volumetric_fog_length = 32.0
 volumetric_fog_sky_affect = 0.0

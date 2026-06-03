@@ -4,9 +4,11 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5bbg0"]
 
-[node name="Camera Parent" type="Node3D" node_paths=PackedStringArray("camera_target", "camera")]
+[node name="Camera Parent" type="Node3D" node_paths=PackedStringArray("camera_target", "camera_container", "camera_return", "camera")]
 script = ExtResource("1_t1ixj")
 camera_target = NodePath("Camera Target")
+camera_container = NodePath("Camera Target/Camera Container")
+camera_return = NodePath("Camera Target/Camera Container/Camera Return")
 camera = NodePath("Camera Target/Camera Container/Camera3D")
 
 [node name="Camera Target" type="Node3D" parent="."]
@@ -36,3 +38,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Camera Target/Camera Container/Camera3D/Camera Area3D"]
 shape = SubResource("SphereShape3D_5bbg0")
 debug_fill = false
+
+[node name="Camera Return" type="Node3D" parent="Camera Target/Camera Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)

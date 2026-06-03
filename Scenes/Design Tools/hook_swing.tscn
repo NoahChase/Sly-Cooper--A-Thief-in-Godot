@@ -58,18 +58,20 @@ script = ExtResource("1_iriet")
 
 [node name="Look At 1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, -1)
+visible = false
 material_override = SubResource("StandardMaterial3D_kxfox")
 mesh = SubResource("SphereMesh_44ef5")
 
 [node name="Look At 2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.125, 1)
+visible = false
 material_override = SubResource("StandardMaterial3D_ts64k")
 mesh = SubResource("SphereMesh_j75q4")
 
 [node name="Rot Container" type="Node3D" parent="."]
 
 [node name="Look_At Rot Container" type="Node3D" parent="Rot Container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.875, 0)
 visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rot Container/Look_At Rot Container"]
@@ -77,8 +79,9 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 
 mesh = SubResource("PrismMesh_cjysu")
 
 [node name="Target Point" parent="Rot Container" groups=["LOCK PLAYER ROT", "swing"] instance=ExtResource("2_iojh8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.875, 0)
 top_level = true
+visible = false
 invisible = false
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Rot Container/Target Point"]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://buhr2diaphoxt"]
+[gd_scene load_steps=5 format=3 uid="uid://buhr2diaphoxt"]
 
 [ext_resource type="Script" uid="uid://cscev8pm7n7nw" path="res://Scripts/bounce_pad.gd" id="1_eynds"]
+[ext_resource type="PackedScene" uid="uid://hwv6ktjgwj1u" path="res://Assets/Models/Objects/Awning_No_Text.glb" id="2_mbn5a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mbn5a"]
-size = Vector3(2, 0.5, 2)
+size = Vector3(2.29376, 0.5, 2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_eynds"]
 size = Vector3(2, 0.5, 2)
@@ -14,10 +15,15 @@ script = ExtResource("1_eynds")
 [node name="Area3D" type="Area3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0.0132141, 0.264677, -0.10743)
 shape = SubResource("BoxShape3D_mbn5a")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("BoxMesh_eynds")
+
+[node name="Awning_No_Text" parent="." instance=ExtResource("2_mbn5a")]
+transform = Transform3D(0.75, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 0, -1)
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

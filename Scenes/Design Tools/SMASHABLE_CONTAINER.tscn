@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://c6wudyxignt4x"]
+
+[ext_resource type="Script" uid="uid://dejijqqulaifq" path="res://Scripts/smashable.gd" id="1_u0kxe"]
+[ext_resource type="PackedScene" uid="uid://b617atxcx6a5p" path="res://Scenes/Design Tools/drop_item_scene.tscn" id="2_pjomx"]
+[ext_resource type="Script" uid="uid://dlvcledff4yvv" path="res://Scripts/hp_container.gd" id="3_po6tm"]
+[ext_resource type="Script" uid="uid://gir0yfgvio3d" path="res://Scripts/hurtbox.gd" id="4_2eamr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cvjnx"]
+size = Vector3(1, 2, 2)
+
+[node name="Smashable_Crate_1x1_" type="Node3D" node_paths=PackedStringArray("coin_drop")]
+script = ExtResource("1_u0kxe")
+coin_drop = NodePath("drop_item_scene")
+
+[node name="Respawn Timer" type="Timer" parent="."]
+
+[node name="drop_item_scene" parent="." instance=ExtResource("2_pjomx")]
+y_spawn_offset = 1.0
+
+[node name="HP Container" type="Node3D" parent="." node_paths=PackedStringArray("hurtboxes")]
+script = ExtResource("3_po6tm")
+invincible = true
+hurtboxes = [NodePath("Hurtbox")]
+
+[node name="Damage Flash Timer" type="Timer" parent="HP Container"]
+one_shot = true
+
+[node name="Hurtbox" type="Area3D" parent="HP Container" groups=["hurtbox"]]
+script = ExtResource("4_2eamr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HP Container/Hurtbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_cvjnx")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+target_position = Vector3(0, -0.8, 0)
+
+[node name="RayCast3D2" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, 0.5, 0)
+
+[node name="RayCast3D3" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 0, 4.37114e-08, 0, 1, -4.37114e-08, 0, 0.5, 0.5)
+
+[node name="RayCast3D4" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.707107, -0.707107, 1, -3.09086e-08, -3.09086e-08, 0, -0.707107, 0.707107, -0.441421, 0.5, -0.441421)
+target_position = Vector3(0, -1.15, 0)
+
+[node name="RayCast3D5" type="RayCast3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.707107, 0.707107, 1, -3.09086e-08, 3.09086e-08, 0, 0.707107, 0.707107, -0.441421, 0.5, 0.441421)
+target_position = Vector3(0, -1.15, 0)
+
+[connection signal="timeout" from="Respawn Timer" to="." method="_on_respawn_timer_timeout"]
+[connection signal="timeout" from="HP Container/Damage Flash Timer" to="HP Container" method="_on_damage_flash_timer_timeout"]

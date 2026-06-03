@@ -87,6 +87,16 @@ func _on_unlock_silhouette_button_pressed() -> void:
 		UnlockableManager.set_unlockable("skin_silhouette", "active", !skin.active)
 	set_text()
 
+func _on_unlock_first_person_button_pressed() -> void:
+	var special_first_person_mode = UnlockableManager.unlockables["special_first_person_mode"]
+	#unlock / activate skin
+	if special_first_person_mode.unlocked == false:
+		if Update.current_bottles == Update.current_bottles_max:
+			UnlockableManager.set_unlockable("special_first_person_mode", "unlocked", true)
+	else:
+		UnlockableManager.set_unlockable("special_first_person_mode", "active", !special_first_person_mode.active)
+	set_text()
+
 func set_text():
 	$"Coins Text".text = str("Coins = ", Update.coins)
 	
@@ -97,7 +107,16 @@ func set_text():
 		$"Unlock Silhouette Button".text = "Silhouette Skin - On"
 	else:
 		$"Unlock Silhouette Button".text = "Silhouette Skin - Off"
-		
+	
+	var special_first_person_mode = UnlockableManager.unlockables["special_first_person_mode"]
+	if !special_first_person_mode.unlocked:
+		$"Unlock First Person Button".text = "Collect All Paris Bottles"
+	else:
+		if special_first_person_mode.active:
+			$"Unlock First Person Button".text = str("First Person Mode - On")
+		else:
+			$"Unlock First Person Button".text = str("First Person Mode - Off")
+	
 	var pow_smoke_bomb = UnlockableManager.unlockables["pow_smoke_bomb"]
 	if !pow_smoke_bomb.unlocked:
 		$"Unlock Smoke Bomb Button".text = "Smoke Bomb - 250 Coins"
@@ -115,4 +134,3 @@ func set_text():
 			$"Unlock Mega Jump Button".text = "Mapping: L1, L2, R2"
 		else:
 			$"Unlock Mega Jump Button".text = str("Mega Jump ", pow_mega_jump.input_assigned)
-	

@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cybx7fh85bb7t"]
+
+[ext_resource type="Texture2D" uid="uid://bmtq575h0mbto" path="res://Assets/Models/Objects/Vintage_Lamp_Post_SlyTIP_LampVintaget_BaseColor.png" id="1_qj4u7"]
+
+[resource]
+diffuse_mode = 3
+specular_mode = 1
+albedo_texture = ExtResource("1_qj4u7")
+metallic_texture_channel = 4
+roughness = 0.75
+roughness_texture = ExtResource("1_qj4u7")
+roughness_texture_channel = 4
+rim_enabled = true
+rim_texture = ExtResource("1_qj4u7")

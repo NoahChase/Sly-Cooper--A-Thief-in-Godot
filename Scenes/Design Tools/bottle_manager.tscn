@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://gxu8gcaxjtnk"]
+
+[ext_resource type="Script" uid="uid://mavuchj5l3b1" path="res://Scripts/bottle_manager.gd" id="1_uxkul"]
+[ext_resource type="PackedScene" uid="uid://bq2yn3a5plttd" path="res://Scenes/Design Tools/bottle.tscn" id="2_5s7nv"]
+
+[node name="Bottle Manager" type="Node3D" node_paths=PackedStringArray("bottles")]
+script = ExtResource("1_uxkul")
+bottles = [null]
+
+[node name="Bottle" parent="." instance=ExtResource("2_5s7nv")]

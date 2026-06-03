@@ -5,6 +5,7 @@ extends Node3D
 @export var update_tool = false
 @export var test_ball = StaticBody3D
 @onready var path_follow_3d = $Path3D/PathFollow3D
+@onready var path_follow_3d_2: PathFollow3D = $Path3D/PathFollow3D2 # IK Path Follow for Sly's Torso
 @onready var path = $Path3D
 @export var target : CharacterBody3D
 @onready var move_ball = true
@@ -13,16 +14,27 @@ extends Node3D
 @export var end_clamp = 0.99
 @export var reversed = false
 @onready var player_on_target = false
+
+@onready var ik_mesh: Node3D = $"Path3D/PathFollow3D2/Grip Offset/IK MESH"
+
+
+
 var tween : Tween
 
 var speed = 0.001
 var previous_position : Vector3
 var dis_2_plyr
+
 func _ready():
+	$"Path3D/PathFollow3D2/Grip Offset/IK MESH/IK MESH".visible = false
 	if Engine.is_editor_hint():
 		#path.curve = path.curve.duplicate() # to make curve unique (needs to be tested)
 		return
 	#test_ball.mesh.visible = true
+	if target == null:
+		var scene_root = get_tree().current_scene
+		var player_sly = scene_root.get_node("Player_ Sly")
+		target = player_sly
 	previous_position = path_follow_3d.global_transform.origin
 	target.target_acquired.connect(_on_player_target_acquired)
 	target.target_released.connect(_on_player_target_released)
@@ -61,6 +73,7 @@ func _physics_process(delta):
 					path_follow_3d.progress_ratio += delta / (length / speed) + 0.002
 			#clamp path
 		path_follow_3d.progress_ratio = clamp(path_follow_3d.progress_ratio, start_clamp, end_clamp)
+		path_follow_3d_2.progress_ratio = path_follow_3d.progress_ratio + (1.5 / length) # For IK
 		if path_follow_3d.progress_ratio <= start_clamp + 0.001 or path_follow_3d.progress_ratio >= end_clamp - 0.001:
 			test_ball.at_end = true
 		else:
@@ -68,6 +81,9 @@ func _physics_process(delta):
 	else:
 		if path and update_tool:
 			length = calculate_path_length(path.curve)
+			$"Path3D/PathFollow3D2/Grip Offset".rotation = $"Path3D/PathFollow3D/Grip Offset".rotation
+			path_follow_3d_2.progress_ratio = path_follow_3d.progress_ratio
+			update_tool = false
 	
 
 # Editor Functions

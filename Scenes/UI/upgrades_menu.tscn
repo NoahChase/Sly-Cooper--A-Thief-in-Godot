@@ -60,6 +60,22 @@ grow_vertical = 2
 text = "Smoke Bomb
 $200"
 
+[node name="Unlock First Person Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 504.0
+offset_top = -20.0
+offset_right = 753.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "First Person Mode
+(Paris Bottles)"
+
 [node name="Main Menu Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -99,4 +115,5 @@ text = "Coins = "
 [connection signal="pressed" from="Unlock Silhouette Button" to="." method="_on_unlock_silhouette_button_pressed"]
 [connection signal="pressed" from="Unlock Mega Jump Button" to="." method="_on_unlock_mega_jump_button_pressed"]
 [connection signal="pressed" from="Unlock Smoke Bomb Button" to="." method="_on_unlock_smoke_bomb_button_pressed"]
+[connection signal="pressed" from="Unlock First Person Button" to="." method="_on_unlock_first_person_button_pressed"]
 [connection signal="pressed" from="Main Menu Button" to="." method="_on_main_menu_button_pressed"]

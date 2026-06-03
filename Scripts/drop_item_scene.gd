@@ -4,6 +4,7 @@ signal total_drop_count_reached
 
 @export var item_preload_string: String = "res://Scenes/Design Tools/pickup_coin.tscn"
 
+@export var infinite_drops = true
 @export var total_drop_count_max = 1
 @export var total_drop_count = 0
 
@@ -25,6 +26,10 @@ func _on_trigger_drop():
 	if total_drop_count < total_drop_count_max:
 		print("drop started")
 		print("drop count = ", total_drop_count, " out of ", total_drop_count_max)
+		start_drop_items()
+	elif infinite_drops == true:
+		print("drop started")
+		print("infinite drops on")
 		start_drop_items()
 	else:
 		print("total drop count reached")
@@ -70,4 +75,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_hp_container_damage_taken() -> void:
+	_on_trigger_drop()
+
+
+func _on_spawn_drop() -> void:
 	_on_trigger_drop()

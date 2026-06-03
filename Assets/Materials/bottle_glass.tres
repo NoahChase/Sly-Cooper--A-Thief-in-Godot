@@ -1,0 +1,72 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://c4t6igjrs7ouj"]
+
+[sub_resource type="Shader" id="Shader_073xw"]
+code = "// credit goes to: \"axilirate\" https://godotshaders.com/shader/pixel-perfect-outline-shader/ https://godotshaders.com/author/axilirate/
+shader_type spatial;
+render_mode cull_front, unshaded;
+
+uniform float fade_near = 8.0;   // fully visible
+uniform float fade_far  = 20.0;  // fully transparent
+
+uniform vec4 outline_color : source_color;
+uniform float outline_width = 1.0;
+
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture;
+
+void vertex() {
+	vec4 clip_position = PROJECTION_MATRIX * (MODELVIEW_MATRIX * vec4(VERTEX, 1.0));
+	vec3 clip_normal = mat3(PROJECTION_MATRIX) * (mat3(MODELVIEW_MATRIX) * NORMAL);
+
+	vec2 offset = normalize(clip_normal.xy) / VIEWPORT_SIZE * clip_position.w * outline_width;
+
+	clip_position.xy += offset;
+
+	POSITION = clip_position;
+}
+
+void fragment() {
+	ALBEDO = outline_color.rgb;
+
+	// Screen UV
+	vec2 uv = SCREEN_UV;
+
+	// Scene depth at this pixel
+	float scene_depth = texture(DEPTH_TEXTURE, uv).r;
+
+	// Current fragment depth
+	float my_depth = FRAGCOORD.z;
+
+	//// If actual mesh is closer than outline, kill pixel
+	//if (scene_depth > my_depth - 0.0005) {
+		//discard;
+	//}
+
+	// Distance fade
+	float dist = distance(VERTEX, VIEW);
+	float fade = 1.0 - smoothstep(fade_near, fade_far, dist);
+
+	ALPHA = outline_color.a * fade;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c40ca"]
+render_priority = 3
+shader = SubResource("Shader_073xw")
+shader_parameter/fade_near = 16.0
+shader_parameter/fade_far = 28.0
+shader_parameter/outline_color = Color(0.225, 0.3, 0.3, 0.588235)
+shader_parameter/outline_width = 3.0
+
+[resource]
+next_pass = SubResource("ShaderMaterial_c40ca")
+transparency = 1
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0, 0.4, 0.1, 0.823529)
+metallic_specular = 1.0
+roughness = 0.15
+rim_enabled = true
+rim_tint = 1.0
+clearcoat_roughness = 0.33
+refraction_enabled = true
+refraction_scale = 0.01

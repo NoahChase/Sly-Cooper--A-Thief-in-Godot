@@ -1,0 +1,94 @@
+[gd_scene load_steps=7 format=3 uid="uid://bq2yn3a5plttd"]
+
+[ext_resource type="Script" uid="uid://c2lbuoxcsctbl" path="res://Scripts/bottle.gd" id="1_2e5h4"]
+[ext_resource type="PackedScene" uid="uid://bqa621sidy85f" path="res://Assets/Models/Pickups/BOTTLE.glb" id="1_q8b3u"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cnsrq"]
+radius = 0.625
+
+[sub_resource type="Animation" id="Animation_gx6xd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BOTTLE ROT/BOTTLE:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.125, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BOTTLE ROT:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2e5h4"]
+resource_name = "idle"
+length = 1.5
+loop_mode = 1
+step = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BOTTLE ROT/BOTTLE:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.375, 0.75, 1.125, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.25, 0), Vector3(-0.125, 0.2, 0), Vector3(0, 0.25, 0), Vector3(0.125, 0.2, 0), Vector3(0, 0.25, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BOTTLE ROT:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.375, 0.75, 1.125, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.349066), Vector3(0, 0, 0), Vector3(0, 0, -0.349066), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dsyou"]
+_data = {
+&"RESET": SubResource("Animation_gx6xd"),
+&"idle": SubResource("Animation_2e5h4")
+}
+
+[node name="Bottle" type="Node3D"]
+transform = Transform3D(1, -1.5974e-05, 0, 1.5974e-05, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_2e5h4")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.666, 0)
+shape = SubResource("SphereShape3D_cnsrq")
+
+[node name="BOTTLE ROT" type="Node3D" parent="."]
+
+[node name="BOTTLE" parent="BOTTLE ROT" instance=ExtResource("1_q8b3u")]
+transform = Transform3D(0.875, 0, 0, 0, 0.875, 0, 0, 0, 0.875, 0, 0.125, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BOTTLE ROT/BOTTLE"]
+root_node = NodePath("../../..")
+libraries = {
+&"": SubResource("AnimationLibrary_dsyou")
+}
+autoplay = "idle"
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

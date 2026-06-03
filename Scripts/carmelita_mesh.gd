@@ -6,13 +6,14 @@ extends Node3D
 func _process(delta): #scale mesh based on distance to camera
 	var cam := get_viewport().get_camera_3d()
 	if cam == null:
+		print("cam is null")
 		return
 
 	var dist_2_cam := global_position.distance_to(cam.global_position)
-	var dist_mult = clamp((dist_2_cam - 4.0) / (32.0 - 4.0), 0.0, 1.0) #4 min distance, 16 max distance
-	var scale = lerp(1.0, 1.5, dist_mult) #min max mesh scale
+	var dist_mult = clamp((dist_2_cam - 12.0) / (64.0 - 12.0), 0.0, 1.0) #12 min distance, 64 max distance
+	var dis_scale = lerp(1.25, 2.0, dist_mult) #min max mesh scale
 
-	scale = Vector3.ONE * scale
+	scale = Vector3.ONE * dis_scale
 
 func anim_idle():
 	anim_tree.set("parameters/transition looping/transition_request", "idle")

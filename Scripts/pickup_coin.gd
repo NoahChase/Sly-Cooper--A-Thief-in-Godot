@@ -18,6 +18,7 @@ var num_z
 var num_y
 
 func _ready():
+	reparent(get_tree().current_scene) #prevents from despawning if original parent despawns
 	num_x = randf_range(-3, 3)
 	num_z = randf_range(-3, 3)
 	num_y = -0.75
@@ -56,5 +57,8 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 
 
 func _on_area_3d_area_entered(area: Area3D) -> void:
-	pass # Replace with function body.
+	if area.is_in_group("hitbox"):
+		var scene_root = get_tree().current_scene
+		var player_sly = scene_root.get_node("Player_ Sly")
+		player = player_sly
 	# if hitbox is player's do pickup and add coin

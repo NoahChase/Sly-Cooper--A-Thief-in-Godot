@@ -37,12 +37,12 @@ func _physics_process(delta: float) -> void:
 
 		if look_at == look_1:
 			hook_swing_rotation = -target_point.global_transform.basis.z
-			look_1.visible = true
-			look_2.visible = false
+			#look_1.visible = true
+			#look_2.visible = false
 		if look_at == look_2:
 			hook_swing_rotation = target_point.global_transform.basis.z
-			look_1.visible = false
-			look_2.visible = true
+			#look_1.visible = false
+			#look_2.visible = true
 	
 	#player y rotation
 		player.rot_container.global_transform.basis = lerp(player.rot_container.global_transform.basis, Basis().looking_at(hook_swing_rotation, Vector3.UP), 0.2)
@@ -85,7 +85,7 @@ func _physics_process(delta: float) -> void:
 
 	#rot_container.rotation.x = lerp(rot_container.rotation.x, $"Rot Ghost".rotation.x, 0.05)
 	rot_container.rotation.x += ($"Rot Ghost".rotation.x - rot_container.rotation.x) * 0.05
-	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-75), deg_to_rad(75))
+	rot_container.rotation.x = clamp(lerp(rot_container.rotation.x, target_x_rotation, 0.1), deg_to_rad(-70), deg_to_rad(70))
 	target_point.global_transform.origin = $"Rot Container/Look_At Rot Container".global_transform.origin
 	target_point.global_rotation = $"Rot Container/Look_At Rot Container".global_rotation
 

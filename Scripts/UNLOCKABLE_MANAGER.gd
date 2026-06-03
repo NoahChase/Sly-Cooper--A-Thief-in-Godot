@@ -19,6 +19,11 @@ func create_unlockables():
 	unlockables["skin_silhouette"] = skin_silhouette
 	#set_unlockable("skin_silhouette", "unlocked", true)
 	#set_unlockable("skin_silhouette", "active", true)
+	
+	var special_first_person_mode = Unlockable.new()
+	unlockables["special_first_person_mode"] = special_first_person_mode
+	#set_unlockable("special_first_person_mode", "unlocked", true)
+	#set_unlockable("special_first_person_mode", "active", true)
 
 func set_unlockable(id, property, value):
 	unlockables[id].set(property, value)

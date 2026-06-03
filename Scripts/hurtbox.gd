@@ -1,4 +1,5 @@
 extends Area3D
+signal hit
 
 @export var damage = 1
 @export var is_hit = false
@@ -8,7 +9,8 @@ extends Area3D
 		#print(get_parent().parent, " is hit = ", is_hit)
 
 func _on_area_entered(area: Area3D) -> void:
-	pass # Replace with function body.
+	if area.is_in_group("hitbox"):
+		hit.emit()
 
 
 func _on_area_exited(area: Area3D) -> void:

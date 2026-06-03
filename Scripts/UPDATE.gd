@@ -2,8 +2,11 @@ extends Node
 
 @onready var update_timer := Timer.new()
 
-var coins = 800
+var coins = 400
 var coins_max = 9999999
+
+var current_bottles = -1
+var current_bottles_max = -1
 
 func _ready():
 	update_timer.wait_time = 0.25
