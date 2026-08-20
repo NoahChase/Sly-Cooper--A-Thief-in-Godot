@@ -26,7 +26,7 @@ reversed = true
 curve = SubResource("Curve3D_xbfvn")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.685885, -0.658788, -0.308995, -0.00644647, 0.430117, -0.902702, 0.727621, -0.617189, -0.299269, 49.8718, 12.4087, 40.0315)
+transform = Transform3D(-0.685874, -0.658796, -0.309001, -0.00645561, 0.430127, -0.902697, 0.727631, -0.617173, -0.299277, 49.8718, 12.4087, 40.0315)
 progress = 4.17492
 loop = false
 
@@ -38,7 +38,7 @@ parent = NodePath("../../../..")
 invisible = false
 
 [node name="PathFollow3D2" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.685914, -0.658812, -0.309009, -0.00644674, 0.430133, -0.902742, 0.727652, -0.617212, -0.299282, 49.8718, 12.4087, 40.0315)
+transform = Transform3D(-0.685903, -0.65882, -0.309015, -0.00645589, 0.430143, -0.902737, 0.727662, -0.617196, -0.299291, 49.8718, 12.4087, 40.0315)
 progress = 4.17492
 loop = false
 

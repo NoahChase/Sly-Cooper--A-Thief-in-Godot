@@ -18,6 +18,7 @@ var num_z
 var num_y
 
 func _ready():
+	reparent(get_tree().current_scene) #prevents from despawning if original parent despawns
 	num_x = randf_range(-3, 3)
 	num_z = randf_range(-3, 3)
 	num_y = -0.75

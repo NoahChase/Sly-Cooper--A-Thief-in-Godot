@@ -87,6 +87,8 @@ shape = SubResource("ConvexPolygonShape3D_jvbrg")
 
 [node name="drop_item_scene" parent="." instance=ExtResource("4_4h2mc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+item_spawn_max = 7
+item_spawn_min = 2
 y_spawn_offset = 1.0
 
 [node name="Respawn Timer" type="Timer" parent="."]

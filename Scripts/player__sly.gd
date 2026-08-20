@@ -1073,7 +1073,7 @@ func apply_magnetism(): # the holy grail of magnetism
 						if not target.is_in_group("pole") and not target.is_in_group("swing"):
 							target_jump() #need special y mag for these more horizontal seeming thief moves, boost the y faster if it's lower than target_point.
 						
-				if  not target.is_in_group("notch") and distance_to_player < 0.5:
+				if  not target.is_in_group("notch") and distance_to_player < 1.5:
 					colshape.disabled = true #used for edge cases to move player to target when there is a small collision keeping them from it
 				if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 					velocity = Vector3.ZERO # perfect snapping

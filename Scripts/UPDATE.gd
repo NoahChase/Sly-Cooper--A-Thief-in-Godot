@@ -2,7 +2,7 @@ extends Node
 
 @onready var update_timer := Timer.new()
 
-var coins = 400
+var coins = 0
 var coins_max = 9999999
 
 var current_bottles = -1

@@ -151,3 +151,4 @@ smooth_faces = true
 
 [node name="Target Point" parent="." index="2" groups=["NO CAM COL", "point"] instance=ExtResource("3_djo32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1875, 0)
+visible = false
