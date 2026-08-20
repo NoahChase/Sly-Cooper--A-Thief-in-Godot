@@ -12,6 +12,7 @@ extends Node3D
 
 signal damage_taken
 signal health_is_zero
+signal update_health_bar(hp)
 
 func _ready() -> void:
 	parent = get_parent()
@@ -40,6 +41,7 @@ func _physics_process(delta: float) -> void:
 				##hurtbox.rotation.x += 1
 				if not invincible:
 					hp -= hurtbox.damage
+					update_health_bar.emit(hp)
 				#print(parent, " hp = ", hp)
 				can_take_damage = false
 				damage_flash_timer.start(damage_flash_time)

@@ -10,6 +10,11 @@ signal target_released(target_ball)
 signal triangle
 signal pause
 
+signal show_hud
+signal show_pickups
+signal show_binocucom
+signal hide_binocucom
+
 ## const
 const SPEED = 4.0 #4.0 jump distance 4m
 const JUMP_VELOCITY = 8.0 #single jump 2m, cozy double jump 3m
@@ -62,12 +67,14 @@ enum target_type {point} #rope, pole, notch, hook, ledge, ledgegrab
 @onready var collision_point = $"collision point"
 @onready var smoke_bomb_scene = load("res://Scenes/Power Ups/pow_smoke_bomb.tscn")
 @onready var binocucom_container = $"Body Mesh Container/Binocucom"
-@onready var binocucom = false
 @onready var FIRST_PERSON_MODE = false
+@onready var BINOCUCOM = false
+@onready var hud = $"Sly HUD"
 
 var coin = 0
 
 ## var
+var ledge_normal = Vector3()
 var target
 var last_target
 var camera_T = float()
@@ -86,6 +93,7 @@ var did_mega_jump = false
 var mega_jump_frame_buffer = 0
 var ascending_stairs = false
 var was_on_floor = true
+var can_move = true
 var moving = false
 var jump_when_hit_floor = false
 var cam_basis_lerp_vector = 0.0
@@ -157,7 +165,7 @@ func _physics_process(delta: float) -> void:
 	right_stick_pressure = clamp(right_stick_pressure, 0.0, 1.0)
 	
 
-	if $"Target Area/CollisionShape3D3".disabled == false and state == AIR:
+	if state == AIR:
 		apply_target(delta)
 		apply_magnetism()
 	
@@ -165,6 +173,8 @@ func _physics_process(delta: float) -> void:
 	state_handler(delta)
 	reposition_player_mesh()
 	if state == FLOOR:
+		temp_sly.position.z = lerp(temp_sly.position.z, 0.5, 0.15)
+		temp_sly.position.x = lerp(temp_sly.position.x, 0.0, 0.15)
 		#print("state = floor")
 		velocity += get_gravity() * delta * gravmult
 		collision_detect() #put node at player's feet, leave it when they jump
@@ -192,6 +202,8 @@ func _physics_process(delta: float) -> void:
 		jump_mult = 1.0
 		$RichTextLabel3.text = str("FLOOR")
 	if state == AIR:
+		temp_sly.position.z = lerp(temp_sly.position.z, 0.0, 0.15)
+		temp_sly.position.x = lerp(temp_sly.position.x, 0.0, 0.15)
 		var floor_ray_colliding = false
 		for ray in floor_rays:
 			if ray.is_colliding():
@@ -272,24 +284,37 @@ func _physics_process(delta: float) -> void:
 			speed_mult = 1.0
 		
 	if state == ON_LEDGE:
+		var rays_col = 9
+		for ray in [$"Body Mesh Container/Ledge Ray 1", $"Body Mesh Container/Ledge Ray 2", $"Body Mesh Container/Ledge Ray 3", $"Body Mesh Container/Ledge Ray 4", $"Body Mesh Container/Ledge Ray 5", $"Body Mesh Container/Ledge Ray 6", $"Body Mesh Container/Ledge Ray 7", $"Body Mesh Container/Ledge Ray 8", $"Body Mesh Container/Ledge Ray 9"]:
+			if not ray.is_colliding():
+				rays_col -= 1
+		if rays_col <= 0:
+			can_ledge = false
+			state = AIR
+			return
+		temp_sly.global_transform.origin.x = lerp(temp_sly.global_transform.origin.x, $"ray v container/ray v ball".global_transform.origin.x, 0.15)
+		temp_sly.global_transform.origin.y = lerp(temp_sly.global_transform.origin.y, $"ray v container/ray v ball".global_transform.origin.y - 1.85, 0.15)
+		temp_sly.global_transform.origin.z = lerp(temp_sly.global_transform.origin.z, $"ray v container/ray v ball".global_transform.origin.z, 0.15)
+		#temp_sly.position.z = lerp(temp_sly.position.z, -1.0, 0.15)
 		velocity = Vector3.ZERO
 		air_mult = 1.0
 		jump_num = 0
 		jump_mult = 1.0
 		target = $"ray v container/ray v ball"
 		$RichTextLabel3.text = str("ON LEDGE", target)
-		temp_sly.anim_tree.set("parameters/state/transition_request", "floor")
-		temp_sly.anim_tree.set("parameters/floor_state/transition_request", "floor_idle_crouch")
+		temp_sly.anim_tree.set("parameters/state/transition_request", "ledge")
 		temp_sly.anim_tree.set("parameters/OneShot/request", 3)
 		#lerp to ledge w offset
 		
 
 	if state == TO_TARGET and target != null:
+		temp_sly.position.z = lerp(temp_sly.position.z, 0.0, 0.15)
+		temp_sly.position.x = lerp(temp_sly.position.x, 0.0, 0.15)
 		var missed_to_target = false
 		if motion_tracker.velocity.length() > 0.001:
 			var distance_to_player = (target.global_transform.origin - global_transform.origin).length()
 			if distance_to_player <= 2.0 and not target.is_in_group("notch"):
-				colshape.disabled = true
+				set_col(false)
 			if distance_to_player <= 0.125 and can_ledge == false:
 				target.assign_player(self)
 			jump_num = 0
@@ -346,6 +371,8 @@ func _physics_process(delta: float) -> void:
 			$"TO_TARGET Timer".stop()
 			return
 	elif state == ON_TARGET and target != null:
+		temp_sly.position.z = lerp(temp_sly.position.z, 0.0, 0.15)
+		temp_sly.position.x = lerp(temp_sly.position.x, 0.0, 0.15)
 		$"TO_TARGET Timer".stop()
 		did_target_jump = false
 		if target.is_in_group("point"):
@@ -358,14 +385,14 @@ func _physics_process(delta: float) -> void:
 			else:
 				temp_sly.anim_tree.set("parameters/rope_state/transition_request", "rope_idle")
 		elif target.is_in_group("pole"):
-			colshape.disabled = true
+			set_col(false)
 			temp_sly.global_transform.origin.y = lerp(temp_sly.global_transform.origin.y, target.global_transform.origin.y - 0.5, 0.2)
 			
 			var pole = target.parent
 			temp_sly.torso_ik_target.global_transform.origin = pole.ik_mesh.global_transform.origin
 
 			var pole_basis = pole.ik_mesh.transform.basis
-			var forward = pole_basis.z.normalized() # or -z depending
+			var forward = pole_basis.z.normalized()
 			var up = temp_sly.global_transform.basis.y
 			var right = up.cross(forward).normalized()
 			up = forward.cross(right).normalized()
@@ -374,7 +401,7 @@ func _physics_process(delta: float) -> void:
 			temp_sly.torso_ik_target.transform.basis = basis
 			
 			temp_sly.torso_ik.active = true
-			temp_sly.torso_ik2.active = true
+			#temp_sly.torso_ik2.active = true
 			
 			temp_sly.anim_tree.set("parameters/state/transition_request", "pole")
 			if direction and moving and target.at_end == false:
@@ -411,10 +438,11 @@ func _physics_process(delta: float) -> void:
 		if not state == TO_TARGET:
 			temp_sly.torso_ik.active = false
 			temp_sly.torso_ik2.active = false
-			temp_sly.global_transform.origin.y = global_transform.origin.y
+			if not state == ON_LEDGE:
+				temp_sly.global_transform.origin.y = global_transform.origin.y
 		
 		$"TO_TARGET Timer".stop()
-		colshape.disabled = false #enable colshape when not on target
+		set_col(true) #enable colshape when not on target
 		last_target = target
 		emit_signal("target_released", target)
 
@@ -445,7 +473,8 @@ func _physics_process(delta: float) -> void:
 	
 	# Calculate movement direction relative to the camera
 	direction = (transform.basis * Vector3(horizontal * air_mult * speed_mult, 0.0, vertical * air_mult * speed_mult).rotated(Vector3.UP, camera_T)).normalized()
-	
+	if can_move == false:
+		direction *= 0.0
 	if direction and state != ON_LEDGE and state != ON_TARGET:
 		if state == AIR:
 			#lerp_speed = 0.5 * air_mult
@@ -465,21 +494,24 @@ func _physics_process(delta: float) -> void:
 
 # Rotation:
 	var angle_input = Vector2(horizontal, vertical) # already square→circle corrected
-	$"Look_At Rotation".look_at(position + Vector3(angle_input.x, 0, angle_input.y).rotated(Vector3.UP, camera_T))
+	if direction:
+		$"Look_At Rotation".look_at(position + Vector3(angle_input.x, 0, angle_input.y).rotated(Vector3.UP, camera_T))
 	var target_rotation_y = $"Look_At Rotation".rotation.y
 	var current_rotation_y = true_player_rot.rotation.y
 	var angle_difference = wrapf(target_rotation_y - current_rotation_y, -PI, PI)
-
+	
 	# Adjust rotation smoothing based on player movement
 
 	var look_val = 0.125 * air_mult / speed_mult
+	true_player_rot.rotation.y = lerp_angle(true_player_rot.rotation.y, target_rotation_y, 0.15)
 	if can_ledge:
-		var dir = rot_container.global_position - $"ray v container/ray v ball".global_position
+		var dir = ledge_normal
+		dir.y = 0.0
 		rot_container.rotation.y = lerp_angle(rot_container.rotation.y, atan2(dir.x, dir.z), 0.125)
 	else:
 		if target == null or not target.is_in_group("LOCK PLAYER ROT"):
 			if global_rotation != Vector3(0,0,0):
-				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.125)
+				global_rotation = lerp(global_rotation, Vector3(0,0,0), 0.25)
 			#for rotating on point targets
 			#rot_container.rotation.y += angle_difference * look_val
 			if not rot_container.rotation.x == 0.0:
@@ -489,24 +521,28 @@ func _physics_process(delta: float) -> void:
 		#elif target.is_in_group("swing"):
 			#$"Look_At Rotation".global_rotation.y = target.global_rotation.y
 			rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.25 * lerp_speed)
+			rot_container.rotation.y += global_rotation.y * 0.5 #rotation correction factor (from transition off hook swing)
 		elif target.is_in_group("LOCK PLAYER ROT") and state == TO_TARGET: #pole and hook look at point while moving to them
 			if not target.is_in_group("rope"):
 				var dis_to_target = global_transform.origin - target.global_transform.origin
 				if target.is_in_group("swing"): ## rotates x/z to hook swing
 					rotation.x = lerp(rotation.x, target.rotation.x, 0.125)
 					rotation.z = lerp(rotation.z, target.rotation.z, 0.125)
-					$"Look_At Rotation".look_at(target.global_position + direction)
-					rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+					var rot_vector = target.global_position + direction
+					#$"Look_At Rotation".look_at(target.global_position + direction)
+					rot_container.rotation.y = lerp_angle(rot_container.rotation.y, rot_vector.y, 0.125)
 				else:
 					if dis_to_target.length() > 0.5:
-						$"Look_At Rotation".look_at(target.global_position + direction)
-						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+						var rot_vector = target.global_position + direction
+						#$"Look_At Rotation".look_at(target.global_position + direction)
+						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, rot_vector.y, 0.125)
 			else:
 				if not temp_sly.anim_tree.get("parameters/OneShot/active"):
 					var dis_to_target = global_transform.origin - target.global_transform.origin
 					if dis_to_target.length() > 0.5:
-						$"Look_At Rotation".look_at(target.global_position + direction)
-						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, $"Look_At Rotation".rotation.y, 0.125)
+						var rot_vector = target.global_position + direction
+						#$"Look_At Rotation".look_at(target.global_position + direction)
+						rot_container.rotation.y = lerp_angle(rot_container.rotation.y, rot_vector.y, 0.125)
 		elif target.is_in_group("LOCK PLAYER ROT") and state == ON_TARGET:
 			if target.is_in_group("swing"):
 				rotation.x = target.rotation.x
@@ -517,8 +553,7 @@ func _physics_process(delta: float) -> void:
 			#crazy line keeps player from doing 360 if other rotation (like a rope) rotates the player instead of this player script
 			var angle_diff = fposmod(true_player_rot.rotation.y - rot_container.rotation.y + PI, TAU) - PI
 			rot_container.rotation.y += angle_diff * look_val
-		true_player_rot.rotation.y += angle_difference * look_val
-	
+		
 	
 	# Directional 2D vector for additional calculations (if needed)
 	var direction_2d = Vector2(direction.x, direction.z)
@@ -569,8 +604,11 @@ func _physics_process(delta: float) -> void:
 			#$"Body Mesh Container/AnimationPlayer".play("spin")
 			$"Target Area/AnimationPlayer".play("detect targets")
 		if state == FLOOR:
+			temp_sly.anim_tree.set("parameters/Hit Transition/transition_request", "pickpocket")
 			temp_sly.anim_tree.set("parameters/Hit Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			temp_sly.cane_pickpocket_hitbox.hit_timer.start(temp_sly.cane_pickpocket_hitbox.hit_time)
+			can_move = false
+			$"Pickpocket Timer".start(0.34)
 
 	camera_smooth_follow(delta)
 
@@ -584,7 +622,7 @@ func _physics_process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("esc"):
 		var pause_menu = get_parent().get_node("InGamePauseMenu")
-		pause.connect(Callable(pause_menu, "_on_pause"))
+		#pause.connect(Callable(pause_menu, "_on_pause"))
 		pause.emit() # open pause menu, move this to ui controller or gui, something else
 	
 	# Debug super jump
@@ -598,9 +636,11 @@ func _input(event: InputEvent) -> void:
 			#jump()
 	
 	if Input.is_action_just_pressed("square"):
-		temp_sly.anim_tree.set("parameters/Hit Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		temp_sly.cane_hitbox.hit_timer.start(temp_sly.cane_hitbox.hit_time)
-		#temp_sly.cane_hitbox.active = true
+		if state == AIR or state == FLOOR:
+			temp_sly.anim_tree.set("parameters/Hit Transition/transition_request", "hit_floor")
+			temp_sly.anim_tree.set("parameters/Hit Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+			temp_sly.cane_hitbox.hit_timer.start(temp_sly.cane_hitbox.hit_time)
+			#temp_sly.cane_hitbox.active = true
 
 	#if Input.is_action_just_pressed("circle") and not stunned:
 		#if state == AIR:
@@ -620,6 +660,12 @@ func _input(event: InputEvent) -> void:
 		use_pow("L2")
 	if Input.is_action_just_pressed("R2"):
 		use_pow("R2")
+	
+	if Input.is_action_just_pressed("L3"):
+		toggle_binocucom()
+	if Input.is_action_just_pressed("R3"):
+		show_hud.emit(hp_container.hp)
+		show_pickups.emit()
 
 func _on_unlockable_changed(id):
 	if id == "special_first_person_mode":
@@ -673,6 +719,21 @@ func toggle_first_person_mode():
 		temp_sly.visible = true
 		$sly_tail.visible = true
 	print("first person mode toggled in player script")
+
+func toggle_binocucom():
+	if BINOCUCOM == false:
+		show_binocucom.emit()
+		temp_sly.visible = false
+		$sly_tail.visible = false
+		can_move = false
+		BINOCUCOM = true
+		return
+	else:
+		hide_binocucom.emit()
+		temp_sly.visible = true
+		$sly_tail.visible = true
+		can_move = true
+		BINOCUCOM = false
 
 func state_handler(delta):
 # Stun Logic
@@ -769,6 +830,8 @@ func state_handler(delta):
 			stunned = false
 
 func jump():
+	if can_move == false:
+		return
 	if state == AIR and jump_num == 0:
 		floor_grace_timer = 0.0
 		jump_num = 1
@@ -801,9 +864,16 @@ func jump():
 			ledge_cooldown_timer = 0.2
 			state = AIR
 			jump_num = 0
+			var forward = -rot_container.global_transform.basis.z
+			velocity.x += 1.0 * forward.x
+			velocity.z += 1.0 * forward.z
 			velocity.y = JUMP_VELOCITY * jump_mult
 			print("jump ledge")
 		elif state == ON_TARGET:
+			if direction:
+				var forward = -rot_container.global_transform.basis.z
+				velocity.x += 4.0 * forward.x
+				velocity.z += 4.0 * forward.z
 			temp_sly.anim_tree.set("parameters/jump_state/transition_request", "jump_floor")
 			temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 			emit_signal("target_released", target)
@@ -978,16 +1048,25 @@ func ledge_detect(delta):
 	if not can_ledge and state == AIR and velocity.y < -2.5:
 		if not $"Body Mesh Container/Cancel Ledge Ray".is_colliding() and not $"Body Mesh Container/Cancel Ledge Ray 2".is_colliding() and not $"Body Mesh Container/Cancel Ledge Ray 3".is_colliding():
 			if $"Body Mesh Container/Ledge Ray 1".is_colliding() and not ray_col.is_in_group("SLIP"):
+				ledge_normal = $"Body Mesh Container/Ledge Ray 1".get_collision_normal()
 				cp_final = cp_ray
 				state = ON_LEDGE
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "ledge_grab")
+				temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				can_ledge = true
 			elif $"Body Mesh Container/Ledge Ray 2".is_colliding() and not ray2_col.is_in_group("SLIP"):
+				ledge_normal = $"Body Mesh Container/Ledge Ray 2".get_collision_normal()
 				cp_final = cp_ray2
 				state = ON_LEDGE
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "ledge_grab")
+				temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				can_ledge = true
 			elif $"Body Mesh Container/Ledge Ray 3".is_colliding() and not ray3_col.is_in_group("SLIP"):
+				ledge_normal = $"Body Mesh Container/Ledge Ray 3".get_collision_normal()
 				cp_final = cp_ray3
 				state = ON_LEDGE
+				temp_sly.anim_tree.set("parameters/jump_state/transition_request", "ledge_grab")
+				temp_sly.anim_tree.set("parameters/OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 				can_ledge = true
 			var offset = Vector3(0, 7, 0)
 			$"ray v container".global_transform.origin = cp_final + offset
@@ -1074,7 +1153,7 @@ func apply_magnetism(): # the holy grail of magnetism
 							target_jump() #need special y mag for these more horizontal seeming thief moves, boost the y faster if it's lower than target_point.
 						
 				if  not target.is_in_group("notch") and distance_to_player < 1.5:
-					colshape.disabled = true #used for edge cases to move player to target when there is a small collision keeping them from it
+					set_col(false) #used for edge cases to move player to target when there is a small collision keeping them from it
 				if distance_to_player < 0.125 and global_transform.origin.y <= target.global_transform.origin.y + 0.15:
 					velocity = Vector3.ZERO # perfect snapping
 					#$CollisionShape3D.disabled = true
@@ -1245,6 +1324,14 @@ func _on_air_wait_timer_timeout() -> void:
 		state = FLOOR
 
 
+func set_col(bool):
+	if bool == true:
+		set_collision_layer_value(1, true)
+		set_collision_mask_value(1, true)
+	else:
+		set_collision_layer_value(1, false)
+		set_collision_mask_value(1, false)
+
 func _on_hp_container_health_is_zero() -> void:
 	print("Dead")
 	print("Parent node name: ", get_parent().get_parent().name)
@@ -1258,3 +1345,8 @@ func show_death_screen() -> void:
 	death_screen.get_node("UI Mouse Controller").process_mode = Node.PROCESS_MODE_ALWAYS # turn controller on
 	# Make mouse visible and confine to screen
 	Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED_HIDDEN)
+
+
+func _on_pickpocket_timer_timeout() -> void:
+	if not BINOCUCOM:
+		can_move = true

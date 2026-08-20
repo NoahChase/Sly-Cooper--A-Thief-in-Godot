@@ -1,14 +1,15 @@
 extends Node3D
 
 signal coin_picked_up
-
+@export var value = 1
+@export var can_fall_h = true
+@export var can_fall = true
 @onready var rays_h = [$"RayCast3D H", $"RayCast3D H2"]
 @onready var rays_v = $"RayCast3D V"
 @onready var player = null
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var can_fall_h = true
-var can_fall = true
+
 
 var spawn_flash_frame_max = 20
 var spawn_flash_frames = 0
@@ -28,8 +29,10 @@ func _physics_process(delta):
 		spawn_flash_frames += 1
 	else:
 		if not can_fall and player!= null: #conditions to pick up coin
+			coin_picked_up.connect(player.hud.coin_anim)
 			coin_picked_up.emit() #do coin things... might set global coins variable and maybe same for player health to make scene transfering easy
-			Update.coins += 1
+			Update.coins += value
+			
 			queue_free()
 		
 	for ray in rays_h:

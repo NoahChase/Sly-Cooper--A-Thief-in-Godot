@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=4 uid="uid://ck6sa01wlwt6l"]
+[gd_scene format=4 uid="uid://ck6sa01wlwt6l"]
 
 [ext_resource type="Script" uid="uid://dejijqqulaifq" path="res://Scripts/smashable.gd" id="1_f5lja"]
 [ext_resource type="Texture2D" uid="uid://c250qxqev3i4o" path="res://Assets/Textures/CrateTexturePrep_DefaultMaterial_BaseColor.1001.png" id="1_np6x1"]
 [ext_resource type="Texture2D" uid="uid://fioh7hppy1md" path="res://Assets/Models/Objects/ParisChair_DefaultMaterial_BaseColor.1001.png" id="2_f5lja"]
 [ext_resource type="PackedScene" uid="uid://b617atxcx6a5p" path="res://Scenes/Design Tools/drop_item_scene.tscn" id="4_4h2mc"]
 [ext_resource type="Script" uid="uid://gir0yfgvio3d" path="res://Scripts/hurtbox.gd" id="4_gukly"]
+[ext_resource type="PackedScene" uid="uid://3di44ouc68mq" path="res://Scenes/Design Tools/pickup_coin.tscn" id="5_bn8vx"]
 [ext_resource type="Script" uid="uid://dlvcledff4yvv" path="res://Scripts/hp_container.gd" id="5_lg40f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4h2mc"]
@@ -65,64 +66,65 @@ points = PackedVector3Array(-0.506613, 0.00242374, -0.422661, -0.525324, -0.0016
 [sub_resource type="BoxShape3D" id="BoxShape3D_lg40f"]
 size = Vector3(1, 2, 2)
 
-[node name="Smashable_Crate_1x1_" type="Node3D" node_paths=PackedStringArray("mesh_ins", "mesh_col", "coin_drop")]
+[node name="Smashable_Crate_1x1_" type="Node3D" unique_id=788803396 node_paths=PackedStringArray("mesh_ins", "mesh_col", "coin_drop")]
 script = ExtResource("1_f5lja")
 mesh_ins = [NodePath("Crate_Short/Square Crate")]
 mesh_col = [NodePath("Crate_Short/Square Crate/StaticBody3D/CollisionShape3D")]
 coin_drop = NodePath("drop_item_scene")
 
-[node name="Crate_Short" type="Node3D" parent="."]
+[node name="Crate_Short" type="Node3D" parent="." unique_id=885583592]
 
-[node name="Square Crate" type="MeshInstance3D" parent="Crate_Short"]
+[node name="Square Crate" type="MeshInstance3D" parent="Crate_Short" unique_id=518717868]
 transform = Transform3D(0.962, 0, 0, 0, 1.42, 0, 0, 0, 1.255, 0, 0, 0)
 mesh = SubResource("ArrayMesh_gukly")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Crate_Short/Square Crate"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Crate_Short/Square Crate" unique_id=1746999244]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate_Short/Square Crate/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Crate_Short/Square Crate/StaticBody3D" unique_id=497348085]
 shape = SubResource("ConvexPolygonShape3D_jvbrg")
 
-[node name="Smashable_Crate_1x1_" type="Node3D" parent="Crate_Short"]
+[node name="Smashable_Crate_1x1_" type="Node3D" parent="Crate_Short" unique_id=894213679]
 
-[node name="drop_item_scene" parent="." instance=ExtResource("4_4h2mc")]
+[node name="drop_item_scene" parent="." unique_id=2020877348 instance=ExtResource("4_4h2mc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+item_scene = ExtResource("5_bn8vx")
 item_spawn_max = 7
 item_spawn_min = 2
 y_spawn_offset = 1.0
 
-[node name="Respawn Timer" type="Timer" parent="."]
+[node name="Respawn Timer" type="Timer" parent="." unique_id=1807897569]
 
-[node name="HP Container" type="Node3D" parent="." node_paths=PackedStringArray("hurtboxes")]
+[node name="HP Container" type="Node3D" parent="." unique_id=2035700618 node_paths=PackedStringArray("hurtboxes")]
 script = ExtResource("5_lg40f")
 invincible = true
 hurtboxes = [NodePath("Hurtbox")]
 
-[node name="Damage Flash Timer" type="Timer" parent="HP Container"]
+[node name="Damage Flash Timer" type="Timer" parent="HP Container" unique_id=1705712964]
 one_shot = true
 
-[node name="Hurtbox" type="Area3D" parent="HP Container" groups=["hurtbox"]]
+[node name="Hurtbox" type="Area3D" parent="HP Container" unique_id=875672204 groups=["hurtbox"]]
 script = ExtResource("4_gukly")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="HP Container/Hurtbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HP Container/Hurtbox" unique_id=1464766050]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_lg40f")
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1929578688]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 target_position = Vector3(0, -0.8, 0)
 
-[node name="RayCast3D2" type="RayCast3D" parent="."]
+[node name="RayCast3D2" type="RayCast3D" parent="." unique_id=1966387546]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, 0.5, 0)
 
-[node name="RayCast3D3" type="RayCast3D" parent="."]
+[node name="RayCast3D3" type="RayCast3D" parent="." unique_id=1491799515]
 transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 0, 4.37114e-08, 0, 1, -4.37114e-08, 0, 0.5, 0.5)
 
-[node name="RayCast3D4" type="RayCast3D" parent="."]
+[node name="RayCast3D4" type="RayCast3D" parent="." unique_id=58838964]
 transform = Transform3D(-4.37114e-08, -0.707107, -0.707107, 1, -3.09086e-08, -3.09086e-08, 0, -0.707107, 0.707107, -0.441421, 0.5, -0.441421)
 target_position = Vector3(0, -1.15, 0)
 
-[node name="RayCast3D5" type="RayCast3D" parent="."]
+[node name="RayCast3D5" type="RayCast3D" parent="." unique_id=1634743198]
 transform = Transform3D(-4.37114e-08, -0.707107, 0.707107, 1, -3.09086e-08, 3.09086e-08, 0, 0.707107, 0.707107, -0.441421, 0.5, 0.441421)
 target_position = Vector3(0, -1.15, 0)
 

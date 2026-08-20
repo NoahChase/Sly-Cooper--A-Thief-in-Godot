@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cmar2imfjt20y"]
+[gd_scene format=3 uid="uid://cmar2imfjt20y"]
 
 [ext_resource type="Script" uid="uid://bm3lt46etp16e" path="res://Scripts/pickup_hp.gd" id="1_8eev3"]
 
@@ -55,38 +55,38 @@ _data = {
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uswx3"]
 
-[node name="pickup_hp" type="Node3D"]
+[node name="pickup_hp" type="Node3D" unique_id=87133048]
 top_level = true
 script = ExtResource("1_8eev3")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=622856132]
 mesh = SubResource("BoxMesh_wfego")
 surface_material_override/0 = SubResource("StandardMaterial3D_stkmh")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1520327963]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_wfego")
 surface_material_override/0 = SubResource("StandardMaterial3D_stkmh")
 
-[node name="RayCast3D V" type="RayCast3D" parent="."]
+[node name="RayCast3D V" type="RayCast3D" parent="." unique_id=2051518085]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 
-[node name="RayCast3D H" type="RayCast3D" parent="."]
+[node name="RayCast3D H" type="RayCast3D" parent="." unique_id=856762304]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, -0.45, 0)
 
-[node name="RayCast3D H2" type="RayCast3D" parent="."]
+[node name="RayCast3D H2" type="RayCast3D" parent="." unique_id=2018654979]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, -0.45, 0)
 target_position = Vector3(0, 1, 0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_stkmh")
-}
-autoplay = "rotate"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1491366265]
+libraries/ = SubResource("AnimationLibrary_stkmh")
+autoplay = &"rotate"
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=313295162]
+collision_layer = 7
+collision_mask = 7
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=854532679]
 shape = SubResource("SphereShape3D_uswx3")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

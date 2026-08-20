@@ -1,43 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://xcipepk1meu"]
+[gd_scene format=3 uid="uid://xcipepk1meu"]
 
 [ext_resource type="Script" uid="uid://e44htkl4q0ox" path="res://Scripts/camera_parent.gd" id="1_t1ixj"]
+[ext_resource type="AudioStream" uid="uid://ydioaev8vvpy" path="res://Assets/Effects/denielcz-immersivecontrol-button-click-sound-463065.mp3" id="2_oi4ta"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5bbg0"]
 
-[node name="Camera Parent" type="Node3D" node_paths=PackedStringArray("camera_target", "camera_container", "camera_return", "camera")]
+[node name="Camera Parent" type="Node3D" unique_id=312150875 node_paths=PackedStringArray("camera_target", "camera_container", "camera_return", "camera")]
 script = ExtResource("1_t1ixj")
 camera_target = NodePath("Camera Target")
 camera_container = NodePath("Camera Target/Camera Container")
 camera_return = NodePath("Camera Target/Camera Container/Camera Return")
 camera = NodePath("Camera Target/Camera Container/Camera3D")
 
-[node name="Camera Target" type="Node3D" parent="."]
+[node name="Camera Target" type="Node3D" parent="." unique_id=1932852042]
 
-[node name="Camera Container" type="Node3D" parent="Camera Target"]
+[node name="Camera Container" type="Node3D" parent="Camera Target" unique_id=1665743930]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 
-[node name="Camera3D" type="Camera3D" parent="Camera Target/Camera Container" groups=["CAMERA"]]
+[node name="Camera3D" type="Camera3D" parent="Camera Target/Camera Container" unique_id=1142483765 groups=["CAMERA"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 fov = 60.0
 far = 9000.0
 
-[node name="Cam Right" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
+[node name="Cam Right" type="Node3D" parent="Camera Target/Camera Container/Camera3D" unique_id=514937278]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
-[node name="Cam Left" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
+[node name="Cam Left" type="Node3D" parent="Camera Target/Camera Container/Camera3D" unique_id=648341557]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
-[node name="Cam Up" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
+[node name="Cam Up" type="Node3D" parent="Camera Target/Camera Container/Camera3D" unique_id=1224140717]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="Cam Down" type="Node3D" parent="Camera Target/Camera Container/Camera3D"]
+[node name="Cam Down" type="Node3D" parent="Camera Target/Camera Container/Camera3D" unique_id=1075485344]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
-[node name="Camera Area3D" type="Area3D" parent="Camera Target/Camera Container/Camera3D" groups=["CAMERA"]]
+[node name="Camera Area3D" type="Area3D" parent="Camera Target/Camera Container/Camera3D" unique_id=471213208 groups=["CAMERA"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera Target/Camera Container/Camera3D/Camera Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Camera Target/Camera Container/Camera3D/Camera Area3D" unique_id=960631277]
 shape = SubResource("SphereShape3D_5bbg0")
 debug_fill = false
 
-[node name="Camera Return" type="Node3D" parent="Camera Target/Camera Container"]
+[node name="Camera Return" type="Node3D" parent="Camera Target/Camera Container" unique_id=1230475956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Audio Mouse Move" type="AudioStreamPlayer" parent="." unique_id=498471277]
+stream = ExtResource("2_oi4ta")
+volume_db = -10.0
+pitch_scale = 0.5
+parameters/looping = true

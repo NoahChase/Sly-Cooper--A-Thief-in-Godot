@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://p0gyuhqkx2lp"]
+[gd_scene format=3 uid="uid://p0gyuhqkx2lp"]
 
 [ext_resource type="Script" uid="uid://c7dds02n1ehgd" path="res://Scripts/projectile.gd" id="1_5ci83"]
 [ext_resource type="Script" uid="uid://cwbpw1ao0ckxa" path="res://Scripts/hitbox.gd" id="2_5ci83"]
@@ -21,32 +21,32 @@ emission_enabled = true
 emission = Color(1, 0.490196, 0, 1)
 emission_energy_multiplier = 1.5
 
-[node name="projectile" type="Node3D"]
+[node name="projectile" type="Node3D" unique_id=1301736159]
 top_level = true
 script = ExtResource("1_5ci83")
 
-[node name="Hitbox" type="Area3D" parent="." groups=["hitbox"]]
+[node name="Hitbox" type="Area3D" parent="." unique_id=84419169 groups=["hitbox"]]
 script = ExtResource("2_5ci83")
 damage = 4
 active = true
 do_kb = true
 
-[node name="Hit Flash Timer" type="Timer" parent="Hitbox"]
+[node name="Hit Flash Timer" type="Timer" parent="Hitbox" unique_id=1431214232]
 one_shot = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=1754998143]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("ConcavePolygonShape3D_5ci83")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=439304985]
 one_shot = true
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1613904573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
 target_position = Vector3(0, 0, -0.5)
 hit_from_inside = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=745169083]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_5ci83")
 surface_material_override/0 = SubResource("StandardMaterial3D_5ci83")

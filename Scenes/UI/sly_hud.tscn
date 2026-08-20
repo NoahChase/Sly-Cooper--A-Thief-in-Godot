@@ -1,0 +1,329 @@
+[gd_scene format=3 uid="uid://cyisn5ufiw5bl"]
+
+[ext_resource type="Texture2D" uid="uid://ulfl27pykr13" path="res://Assets/Textures/Icons/Health_Meter_V1_-_A_Thief_in_Paris.png" id="1_c5mw3"]
+[ext_resource type="Script" uid="uid://dw7kd0vpe7rnc" path="res://Scripts/PLAYER_HUD.gd" id="1_kwggt"]
+[ext_resource type="Texture2D" uid="uid://bjp782ltke7nx" path="res://Assets/Textures/Icons/Health_Meter_V1_PROGRESS_BAR_HP.png" id="2_30ws6"]
+[ext_resource type="Theme" uid="uid://hih0pywt4u2b" path="res://Assets/Fonts/Cartoon Font Theme.tres" id="2_yplcr"]
+[ext_resource type="Texture2D" uid="uid://ciu26kilepx7e" path="res://Assets/Textures/Icons/Badge_Coin_V2_-_Sly_Cooper_A_Thief_In_Paris.png" id="4_ntq0h"]
+[ext_resource type="Texture2D" uid="uid://bw6jahxve1c7w" path="res://Assets/Textures/Icons/Clue_Bottle_V2_-_Sly_Cooper_A_Thief_In_Paris.png" id="5_yplcr"]
+[ext_resource type="Texture2D" uid="uid://dvhgfd2o2g7ft" path="res://Assets/Textures/Icons/Binocucom_V1_-_A_Thief_in_Paris.png" id="7_318e7"]
+
+[sub_resource type="Animation" id="Animation_yplcr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("COIN Label:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CenterContainer2/Coin Icon:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ju58i"]
+resource_name = "fade coins"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("COIN Label:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CenterContainer2/Coin Icon:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7ld4d"]
+_data = {
+&"RESET": SubResource("Animation_yplcr"),
+&"fade coins": SubResource("Animation_ju58i")
+}
+
+[sub_resource type="Animation" id="Animation_7ld4d"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CenterContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_enceo"]
+resource_name = "fade hp"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CenterContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_suqeh"]
+_data = {
+&"RESET": SubResource("Animation_7ld4d"),
+&"fade hp": SubResource("Animation_enceo")
+}
+
+[sub_resource type="Animation" id="Animation_318e7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BOTTLE Label:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CenterContainer2/Bottle Icon:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_suqeh"]
+resource_name = "fade bottles"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BOTTLE Label:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CenterContainer2/Bottle Icon:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1, 4, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h16j2"]
+_data = {
+&"RESET": SubResource("Animation_318e7"),
+&"fade bottles": SubResource("Animation_suqeh")
+}
+
+[sub_resource type="Animation" id="Animation_h16j2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BinocucomV1AThiefInParis:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_70tlj"]
+resource_name = "hide binocucom"
+length = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BinocucomV1AThiefInParis:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_pxha4"]
+resource_name = "fade binocucom"
+length = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BinocucomV1AThiefInParis:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t8y6c"]
+_data = {
+&"RESET": SubResource("Animation_h16j2"),
+&"hide binocucom": SubResource("Animation_70tlj"),
+&"show binocucom": SubResource("Animation_pxha4")
+}
+
+[node name="Sly HUD" type="Control" unique_id=1394045422 node_paths=PackedStringArray("hp_progress")]
+z_index = -2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kwggt")
+hp_progress = NodePath("CenterContainer/TextureProgressBar")
+
+[node name="COIN Label" type="Label" parent="." unique_id=1476157882]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -109.0
+offset_bottom = 41.0
+grow_horizontal = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-100, 64)
+theme = ExtResource("2_yplcr")
+theme_override_colors/font_color = Color(0.8039216, 0.6901961, 0.105882354, 1)
+theme_override_font_sizes/font_size = 36
+text = "COIN"
+horizontal_alignment = 2
+
+[node name="BOTTLE Label" type="Label" parent="." unique_id=945514846]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -109.0
+offset_bottom = 41.0
+grow_horizontal = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-100, 208)
+theme = ExtResource("2_yplcr")
+theme_override_colors/font_color = Color(0.40392157, 0.8039216, 0.60784316, 1)
+theme_override_font_sizes/font_size = 36
+text = "BOTTLES"
+horizontal_alignment = 2
+
+[node name="CenterContainer2" type="CenterContainer" parent="." unique_id=1171220316]
+layout_mode = 0
+offset_left = 905.0
+offset_top = 519.5
+offset_right = 1014.0
+offset_bottom = 560.5
+offset_transform_enabled = true
+offset_transform_position = Vector2(60, 30)
+offset_transform_scale = Vector2(0.2, 0.2)
+offset_transform_pivot = Vector2(1075, -575)
+
+[node name="Bottle Icon" type="Sprite2D" parent="CenterContainer2" unique_id=432394989]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, 512)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("5_yplcr")
+
+[node name="Coin Icon" type="Sprite2D" parent="CenterContainer2" unique_id=1910563705]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(0, -128)
+texture = ExtResource("4_ntq0h")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1428842904]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="CenterContainer" unique_id=834989922]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_scale = Vector2(0.1, 0.1)
+offset_transform_pivot_ratio = Vector2(0.025, 0.075)
+max_value = 20.0
+value = 20.0
+fill_mode = 4
+radial_initial_angle = 230.2
+radial_fill_degrees = 261.1
+radial_center_offset = Vector2(0, 155.6)
+texture_under = ExtResource("1_c5mw3")
+texture_progress = ExtResource("2_30ws6")
+
+[node name="AnimationPlayer COINS" type="AnimationPlayer" parent="." unique_id=981789935]
+libraries/ = SubResource("AnimationLibrary_7ld4d")
+
+[node name="AnimationPlayer HP" type="AnimationPlayer" parent="." unique_id=817163779]
+libraries/ = SubResource("AnimationLibrary_suqeh")
+
+[node name="AnimationPlayer BOTTLES" type="AnimationPlayer" parent="." unique_id=2001392643]
+libraries/ = SubResource("AnimationLibrary_h16j2")
+
+[node name="AnimationPlayer BINOCUCOM" type="AnimationPlayer" parent="." unique_id=1817615322]
+libraries/ = SubResource("AnimationLibrary_t8y6c")
+
+[node name="BinocucomV1AThiefInParis" type="Sprite2D" parent="." unique_id=1424334295]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(960, 540)
+texture = ExtResource("7_318e7")

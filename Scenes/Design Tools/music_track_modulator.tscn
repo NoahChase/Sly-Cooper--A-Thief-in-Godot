@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cvn55s72u4l02"]
+
+[ext_resource type="Script" uid="uid://c0bn0jqxb084p" path="res://Scripts/music_track_modulator.gd" id="1_ki823"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vgy2a"]
+radius = 10.0
+
+[node name="Music Track Modulator" type="Node3D" unique_id=1391335142]
+script = ExtResource("1_ki823")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=684148130]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=973791281]
+shape = SubResource("SphereShape3D_vgy2a")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]

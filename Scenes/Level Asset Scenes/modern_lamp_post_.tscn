@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://bibqum7qdxntv"]
+[gd_scene format=4 uid="uid://bibqum7qdxntv"]
 
 [ext_resource type="Material" uid="uid://c8xuf3i88kglp" path="res://Assets/Materials/Lamp_Modern.tres" id="1_2h75h"]
 [ext_resource type="Material" uid="uid://j0ntykgdka1q" path="res://Assets/Materials/light_emis.tres" id="2_qi7y8"]
@@ -69,84 +69,84 @@ data = PackedVector3Array(-0.0995583, 39.348, -0.182348, 0.0639779, 39.9473, -0.
 
 [sub_resource type="Curve3D" id="Curve3D_2h75h"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.00343418, 1.30434, 0.0248528, 0, 0, 0, 0, 0, 0, 0.00297165, 2.18021, 0.0175934, 0, 0, 0, 0, 0, 0, 0.00512505, 3.32963, 0.00105619, 0, 0, 0, 0, 0, 0, -0.0627184, 6.08377, 0.00178862, 0, 0, 0, 0, 0, 0, -0.0689335, 8.00605, -0.079751, 0, 0, 0, 0, 0, 0, -0.0953178, 9.53899, -0.141549, 0, 0, 0, 0, 0, 0, -0.0167627, 12.2314, -0.0154724),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.022942543, 1.30434, 0.0248528, 0, 0, 0, 0, 0, 0, 5.531311e-05, 2.18021, 0.0175934, 0, 0, 0, 0, 0, 0, 0.0022087097, 3.32963, 0.00105619, 0, 0, 0, 0, 0, 0, -0.00058329105, 5.4458733, 0.001643935, 0, 0, 0, 0, 0, 0, -0.05781555, 6.0290294, 0.00178862, 0, 0, 0, 0, 0, 0, -0.048389435, 6.5828075, -0.079751, 0, 0, 0, 0, 0, 0, -0.0238595, 7.2291403, -0.09326237, 0, 0, 0, 0, 0, 0, -0.06695363, 9.30439, -0.141549, 0, 0, 0, 0, 0, 0, 0.004986346, 11.615363, -0.040632464, 0, 0, 0, 0, 0, 0, -0.027498215, 11.87686, -0.0154724),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 7
+point_count = 10
 
 [sub_resource type="SphereMesh" id="SphereMesh_qi7y8"]
 radius = 0.125
 height = 0.25
 
-[node name="Modern_Lamp_Post_" type="Node3D"]
+[node name="Modern_Lamp_Post_" type="Node3D" unique_id=705743903]
 
-[node name="LAMP" type="Node3D" parent="."]
+[node name="LAMP" type="Node3D" parent="." unique_id=499886317]
 transform = Transform3D(1.75, 0, 0, 0, 1.75, 0, 0, 0, 1.75, 0, 0, 0)
 
-[node name="LampPostModern_001" type="MeshInstance3D" parent="LAMP"]
+[node name="LampPostModern_001" type="MeshInstance3D" parent="LAMP" unique_id=1739477951]
 transform = Transform3D(0.181496, 0, 0, 0, 0.181496, 0, 0, 0, 0.181496, 0, 0.167462, 0)
 mesh = SubResource("ArrayMesh_vw5rw")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="LAMP/LampPostModern_001"]
+[node name="StaticBody3D" type="StaticBody3D" parent="LAMP/LampPostModern_001" unique_id=2009276565]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LAMP/LampPostModern_001/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LAMP/LampPostModern_001/StaticBody3D" unique_id=852106247]
 shape = SubResource("ConcavePolygonShape3D_ropes")
 
-[node name="Target Point" parent="." groups=["point"] instance=ExtResource("4_f7fwl")]
+[node name="Target Point" parent="." unique_id=381689020 groups=["point"] instance=ExtResource("4_f7fwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0625, 6.4375, 0)
 visible = false
 
-[node name="Target Point2" parent="." groups=["point"] instance=ExtResource("4_f7fwl")]
+[node name="Target Point2" parent="." unique_id=1241143649 groups=["point"] instance=ExtResource("4_f7fwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0625, 12.5, 0)
 visible = false
 
-[node name="Target Point3" parent="." groups=["point"] instance=ExtResource("4_f7fwl")]
+[node name="Target Point3" parent="." unique_id=513916340 groups=["point"] instance=ExtResource("4_f7fwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0251398, 13.0359, 0)
 visible = false
 
-[node name="Thief Moves POLE" type="Node3D" parent="." node_paths=PackedStringArray("test_ball")]
+[node name="Thief Moves POLE" type="Node3D" parent="." unique_id=1041997960 node_paths=PackedStringArray("test_ball")]
 script = ExtResource("3_yhp76")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
-length = 10.94
+length = 10.59
 start_clamp = 0.1
 end_clamp = 0.9
 reversed = true
 
-[node name="Path3D" type="Path3D" parent="Thief Moves POLE"]
+[node name="Path3D" type="Path3D" parent="Thief Moves POLE" unique_id=597826240]
 curve = SubResource("Curve3D_2h75h")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Thief Moves POLE/Path3D"]
-transform = Transform3D(1.04298e-07, 0.999911, -0.000510101, -0.0109215, -0.000510072, -0.999846, -0.999846, 5.67684e-06, 0.0109215, 0.00308821, 2.25465, 0.0165806)
-progress = 0.953562
+[node name="PathFollow3D" type="PathFollow3D" parent="Thief Moves POLE/Path3D" unique_id=69932361]
+transform = Transform3D(0.009594772, 0.999378, -0.03108097, 0.043320972, -0.031469516, -0.99844766, -0.9988974, 0.008234572, -0.04360001, -0.009779672, 11.141026, -0.061346058)
+progress = 9.847714
 loop = false
 
-[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D"]
+[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D" unique_id=771176235]
 transform = Transform3D(0.00114703, 0.999992, -0.00379895, -0.999914, 0.00119686, 0.0130639, 0.0130682, 0.00378363, 0.999908, 0, 0, 0)
 
-[node name="Target Point" parent="Thief Moves POLE/Path3D/PathFollow3D/Grip Offset" node_paths=PackedStringArray("parent") groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("4_f7fwl")]
+[node name="Target Point" parent="Thief Moves POLE/Path3D/PathFollow3D/Grip Offset" unique_id=384580023 node_paths=PackedStringArray("parent") groups=["LOCK PLAYER ROT", "pole"] instance=ExtResource("4_f7fwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
 parent = NodePath("../../../..")
 invisible = false
 
-[node name="PathFollow3D2" type="PathFollow3D" parent="Thief Moves POLE/Path3D"]
-transform = Transform3D(1.043e-07, 0.999946, -0.000510125, -0.0109217, -0.00051009, -0.999892, -0.999862, 5.67704e-06, 0.010922, 0.00308821, 2.25465, 0.0165806)
-progress = 0.953562
+[node name="PathFollow3D2" type="PathFollow3D" parent="Thief Moves POLE/Path3D" unique_id=1188054059]
+transform = Transform3D(0.009595024, 0.9994147, -0.031082364, 0.04332211, -0.031470675, -0.9984924, -0.99892366, 0.008234874, -0.043601964, -0.009779672, 11.141026, -0.061346058)
+progress = 9.847714
 loop = false
 
-[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2"]
-transform = Transform3D(0.00114706, 0.999992, -0.00379894, -0.999914, 0.0011966, 0.0130638, 0.0130682, 0.00378363, 0.999907, 0, 0, 0)
+[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2" unique_id=1730365693]
+transform = Transform3D(0.0011470567, 0.999992, -0.0037989432, -0.99991393, 0.0011965958, 0.01306375, 0.0130682, 0.003783633, 0.99990696, 0, 0, 0)
 
-[node name="IK MESH" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset"]
+[node name="IK MESH" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset" unique_id=330673627]
 transform = Transform3D(1, 0, 0, 0, 1, -8.35187e-23, 0, -8.35187e-23, 1, 0.4, 0, 0)
 
-[node name="IK MESH" type="MeshInstance3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset/IK MESH"]
+[node name="IK MESH" type="MeshInstance3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset/IK MESH" unique_id=663452027]
 transform = Transform3D(1, 0, 0, 0, 1, -8.35187e-23, 0, -8.35187e-23, 1, 0, 0, 0)
 visible = false
 mesh = SubResource("SphereMesh_qi7y8")
 skeleton = NodePath("../..")
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Moves POLE"]
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Moves POLE" unique_id=1089817775]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
 visible = false
 material_override = ExtResource("5_tetqs")

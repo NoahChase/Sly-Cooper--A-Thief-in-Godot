@@ -1,6 +1,7 @@
 extends Node3D
 
 signal bottle_picked_up(bottle)
+signal bottle_vis
 
 @onready var bottle_mesh = $"BOTTLE ROT/BOTTLE"
 var picked_up = false
@@ -9,8 +10,10 @@ func _on_area_3d_body_entered(body: Node3D) -> void: #maybe do a transparent bot
 	if body.is_in_group("Player"):
 		if not picked_up:
 			picked_up = true
-			
+			var player = body
 			var parent = self.get_parent()
+			self.bottle_vis.connect(Callable(player.hud, "bottle_anim"))
+			bottle_vis.emit()
 			self.bottle_picked_up.connect(Callable(parent, "on_bottle_picked_up")) #connect pick-up node to its parent manager (so bottle to bottle_manager)
 			emit_signal("bottle_picked_up", self)
 			

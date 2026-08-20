@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8g3llu28vgv8"]
+[gd_scene format=3 uid="uid://b8g3llu28vgv8"]
 
 [ext_resource type="Script" uid="uid://kfosdxp1drkh" path="res://Scripts/ui_upgrades_menu.gd" id="1_805vs"]
+[ext_resource type="Theme" uid="uid://hih0pywt4u2b" path="res://Assets/Fonts/Cartoon Font Theme.tres" id="2_omxe6"]
 
-[node name="UpgradesMenu" type="Control"]
+[node name="UpgradesMenu" type="Control" unique_id=1610038907]
 process_mode = 4
 layout_mode = 3
 anchors_preset = 15
@@ -12,71 +13,71 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_805vs")
 
-[node name="Unlock Silhouette Button" type="Button" parent="."]
+[node name="Unlock Silhouette Button" type="Button" parent="." unique_id=2070581604]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -124.5
-offset_top = -20.0
-offset_right = 124.5
-offset_bottom = 72.0
+offset_left = -249.0
+offset_top = -93.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_omxe6")
 text = "Silhouette Skin
 $150"
 
-[node name="Unlock Mega Jump Button" type="Button" parent="."]
+[node name="Unlock Mega Jump Button" type="Button" parent="." unique_id=741578337]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -438.0
-offset_top = -20.0
-offset_right = -189.0
-offset_bottom = 72.0
+offset_left = -249.0
+offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_omxe6")
 text = "Mega Jump
 $400"
 
-[node name="Unlock Smoke Bomb Button" type="Button" parent="."]
+[node name="Unlock Smoke Bomb Button" type="Button" parent="." unique_id=1809920355]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 190.0
-offset_top = -20.0
-offset_right = 439.0
-offset_bottom = 72.0
+offset_left = 1.0
+offset_top = -93.0
+offset_right = 250.0
+offset_bottom = -1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_omxe6")
 text = "Smoke Bomb
 $200"
 
-[node name="Unlock First Person Button" type="Button" parent="."]
+[node name="Unlock First Person Button" type="Button" parent="." unique_id=168116469]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 504.0
-offset_top = -20.0
-offset_right = 753.0
-offset_bottom = 72.0
+offset_left = 1.0
+offset_right = 261.0
+offset_bottom = 92.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "First Person Mode
-(Paris Bottles)"
+theme = ExtResource("2_omxe6")
+text = "Collect All
+Paris Bottles"
 
-[node name="Main Menu Button" type="Button" parent="."]
+[node name="Main Menu Button" type="Button" parent="." unique_id=2049896420]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -89,9 +90,10 @@ offset_right = 124.5
 offset_bottom = 226.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_omxe6")
 text = "Main Menu"
 
-[node name="Upgrades Label" type="Label" parent="."]
+[node name="Upgrades Label" type="Label" parent="." unique_id=1888826638]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -104,12 +106,14 @@ offset_right = 37.0
 offset_bottom = -116.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_omxe6")
 text = "Upgrades"
 
-[node name="Coins Text" type="RichTextLabel" parent="."]
+[node name="Coins Text" type="RichTextLabel" parent="." unique_id=1960879878]
 layout_mode = 0
 offset_right = 547.0
-offset_bottom = 40.0
+offset_bottom = 49.0
+theme = ExtResource("2_omxe6")
 text = "Coins = "
 
 [connection signal="pressed" from="Unlock Silhouette Button" to="." method="_on_unlock_silhouette_button_pressed"]

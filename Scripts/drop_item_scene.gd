@@ -2,8 +2,8 @@ extends Node3D
 
 signal total_drop_count_reached
 
-@export var item_preload_string: String = "res://Scenes/Design Tools/pickup_coin.tscn"
-
+@export var spawn_on_ready = false
+@export var item_scene: PackedScene
 @export var infinite_drops = true
 @export var total_drop_count_max = 1
 @export var total_drop_count = 0
@@ -20,6 +20,9 @@ signal total_drop_count_reached
 
 @onready var item_spawn_num_count = 0
 
+func _ready() -> void:
+	if spawn_on_ready:
+		start_drop_items() #only use to initialize dropped items in a scene (so the first drop doesn't cause a stutter during play)
 
 func _on_trigger_drop():
 	print("drop requested")
@@ -49,13 +52,12 @@ func gen_item_spawn_num():
 	gen_rng = false #set generate rng to false until spawn is completed
 
 func spawn_entire_drop():
-	var scene := load(item_preload_string) as PackedScene
-	if not scene:
-		push_error("Invalid item scene path: " + item_preload_string)
+	if not item_scene:
+		push_error("No Item Scene")
 		return
 	
 	for item in range(item_spawn_num): #spawn all items in the drop
-		var new_drop = scene.instantiate()
+		var new_drop = item_scene.instantiate()
 		add_child(new_drop)
 		#print("new_drop = ", new_drop)
 		new_drop.global_transform.origin = global_transform.origin + Vector3(0, y_spawn_offset, 0)

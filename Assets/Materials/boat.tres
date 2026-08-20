@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cvso1ni5oplf7"]
+
+[resource]
+transparency = 4
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.22497863, 0.14872006, 0.042358167, 1)
+metallic_specular = 0.1
+roughness = 0.75
+rim_enabled = true
+rim_tint = 0.6
+ao_enabled = true
+ao_light_affect = 0.5
+refraction_scale = 1.0
+stencil_flags = 2

@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1h8um8vslewj"]
+[gd_scene format=3 uid="uid://c1h8um8vslewj"]
 
 [ext_resource type="Script" uid="uid://bic2e0ae7o28n" path="res://Scripts/ui_in_game_pause_menu.gd" id="1_gravo"]
 [ext_resource type="PackedScene" uid="uid://cni61khpmvx26" path="res://Scenes/UI/ui_mouse_controller.tscn" id="1_srmwo"]
 [ext_resource type="PackedScene" uid="uid://b4e1xeqdaeuqp" path="res://Scenes/UI/controls_menu.tscn" id="2_wlwmn"]
 [ext_resource type="PackedScene" uid="uid://b8g3llu28vgv8" path="res://Scenes/UI/upgrades_menu.tscn" id="3_gravo"]
+[ext_resource type="Theme" uid="uid://hih0pywt4u2b" path="res://Assets/Fonts/Cartoon Font Theme.tres" id="3_i5cyu"]
+[ext_resource type="Texture2D" uid="uid://dvhgfd2o2g7ft" path="res://Assets/Textures/Icons/Binocucom_V1_-_A_Thief_in_Paris.png" id="6_en4al"]
 
-[node name="InGamePauseMenu" type="Control"]
+[node name="InGamePauseMenu" type="Control" unique_id=333626555]
 process_mode = 4
 top_level = true
 layout_mode = 3
@@ -16,10 +18,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gravo")
 
-[node name="UI Mouse Controller" parent="." instance=ExtResource("1_srmwo")]
+[node name="UI Mouse Controller" parent="." unique_id=425618333 instance=ExtResource("1_srmwo")]
 layout_mode = 1
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1013558515]
 show_behind_parent = true
 z_index = -2
 layout_mode = 1
@@ -34,15 +36,14 @@ offset_right = 963.5
 offset_bottom = 540.5
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0, 0.008333325, 0.1, 1)
 
-[node name="Pause Menu" type="Control" parent="."]
-visible = false
+[node name="Pause Menu" type="Control" parent="." unique_id=2003953002]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Resume Button" type="Button" parent="Pause Menu"]
+[node name="Resume Button" type="Button" parent="Pause Menu" unique_id=1228411387]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -50,14 +51,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 815.5
-offset_top = 500.0
+offset_top = 345.0
 offset_right = 1064.5
-offset_bottom = 592.0
+offset_bottom = 437.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_i5cyu")
 text = "Keep Playing"
 
-[node name="Upgrades Button" type="Button" parent="Pause Menu/Resume Button"]
+[node name="Upgrades Button" type="Button" parent="Pause Menu/Resume Button" unique_id=1196818825]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -70,9 +72,10 @@ offset_right = 124.5
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_i5cyu")
 text = "Thief Net Upgrades"
 
-[node name="Quit Button" type="Button" parent="Pause Menu/Resume Button"]
+[node name="Quit Button" type="Button" parent="Pause Menu/Resume Button" unique_id=1791879908]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -85,16 +88,22 @@ offset_right = 124.5
 offset_bottom = 354.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_i5cyu")
 text = "Quit Game"
 
-[node name="ControlsMenu" parent="." instance=ExtResource("2_wlwmn")]
+[node name="ControlsMenu" parent="." unique_id=1584024405 instance=ExtResource("2_wlwmn")]
 visible = false
 layout_mode = 1
 
-[node name="UpgradesMenu" parent="." instance=ExtResource("3_gravo")]
+[node name="UpgradesMenu" parent="." unique_id=2128874207 instance=ExtResource("3_gravo")]
+visible = false
 layout_mode = 1
 offset_top = -1.0
 offset_bottom = -1.0
+
+[node name="BinocucomV1AThiefInParis" type="Sprite2D" parent="." unique_id=751192007]
+position = Vector2(960, 540)
+texture = ExtResource("6_en4al")
 
 [connection signal="pressed" from="Pause Menu/Resume Button" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="Pause Menu/Resume Button/Upgrades Button" to="." method="_on_upgrades_button_pressed"]

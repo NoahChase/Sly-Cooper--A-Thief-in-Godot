@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://brv7l2iku2ciy"]
+[gd_scene format=3 uid="uid://brv7l2iku2ciy"]
 
 [ext_resource type="Script" uid="uid://ct8gljh14lgnm" path="res://Scripts/spotlight_detection.gd" id="1_ahlui"]
 [ext_resource type="Texture2D" uid="uid://drluumk324478" path="res://Assets/Temp Imports/light_decal.png" id="2_torlo"]
@@ -36,20 +36,22 @@ height = 0.25
 radius = 0.125
 height = 0.25
 
-[node name="Spotlight Detection" type="Node3D"]
+[node name="Spotlight Detection" type="Node3D" unique_id=1766492390]
 script = ExtResource("1_ahlui")
 is_spotlight = true
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=41110666]
+collision_layer = 5
+collision_mask = 5
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1440209563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
 shape = SubResource("SphereShape3D_torlo")
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Area3D"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Area3D" unique_id=583875907]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.24754e-13, 0)
 visible = false
-light_color = Color(0.95, 0.910417, 0.7125, 1)
+light_color = Color(0.85, 0.8004167, 0.5525, 1)
 light_energy = 2.0
 light_cull_mask = 4294967293
 shadow_enabled = true
@@ -62,7 +64,7 @@ spot_attenuation = 0.0
 spot_angle = 40.0
 spot_angle_attenuation = 0.05
 
-[node name="Decal Floor" type="Decal" parent="Area3D"]
+[node name="Decal Floor" type="Decal" parent="Area3D" unique_id=1111979952]
 transform = Transform3D(1, 0, 0, 0, 1, -4.68958e-13, 0, 4.68958e-13, 1, 0, -0.00424051, -3.0316)
 size = Vector3(6.25, 5.95258, 5.92691)
 texture_albedo = ExtResource("2_torlo")
@@ -70,7 +72,7 @@ normal_fade = 0.5
 upper_fade = 1.5
 lower_fade = 1.5
 
-[node name="Decal Wall" type="Decal" parent="Area3D"]
+[node name="Decal Wall" type="Decal" parent="Area3D" unique_id=649499364]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -2.18558e-08, -2.99999)
 size = Vector3(6.25, 5.875, 6)
 texture_albedo = ExtResource("2_torlo")
@@ -78,38 +80,38 @@ normal_fade = 0.5
 upper_fade = 1.5
 lower_fade = 1.5
 
-[node name="Decal Wall Raycast" type="RayCast3D" parent="Area3D"]
+[node name="Decal Wall Raycast" type="RayCast3D" parent="Area3D" unique_id=1393468427]
 target_position = Vector3(0, -0.75, -6)
 
-[node name="Look At Player" type="Node3D" parent="."]
+[node name="Look At Player" type="Node3D" parent="." unique_id=1484898635]
 
-[node name="Look At Reference" type="MeshInstance3D" parent="Look At Player"]
+[node name="Look At Reference" type="MeshInstance3D" parent="Look At Player" unique_id=1188133715]
 visible = false
 mesh = SubResource("BoxMesh_bfkpc")
 surface_material_override/0 = SubResource("StandardMaterial3D_torlo")
 
-[node name="Ray Follow Player" type="RayCast3D" parent="Look At Player"]
+[node name="Ray Follow Player" type="RayCast3D" parent="Look At Player" unique_id=1554151860]
 target_position = Vector3(0, 0, -40)
 debug_shape_custom_color = Color(1, 1, 0, 1)
 debug_shape_thickness = 1
 
-[node name="Spotlight Mesh" type="MeshInstance3D" parent="."]
+[node name="Spotlight Mesh" type="MeshInstance3D" parent="." unique_id=1483182394]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -3.03354)
 visible = false
 mesh = SubResource("CylinderMesh_blsrq")
 
-[node name="TestMesh" type="MeshInstance3D" parent="."]
+[node name="TestMesh" type="MeshInstance3D" parent="." unique_id=1136343930]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 visible = false
 material_override = SubResource("StandardMaterial3D_lvkpg")
 mesh = SubResource("SphereMesh_1lccf")
 
-[node name="Return Origin" type="MeshInstance3D" parent="."]
+[node name="Return Origin" type="MeshInstance3D" parent="." unique_id=538658769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6)
 visible = false
 mesh = SubResource("SphereMesh_em3xp")
 
-[node name="Detection Lost Timer" type="Timer" parent="."]
+[node name="Detection Lost Timer" type="Timer" parent="." unique_id=1030449933]
 one_shot = true
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

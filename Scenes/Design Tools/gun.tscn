@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bibovwn6qb1d8"]
+[gd_scene format=3 uid="uid://bibovwn6qb1d8"]
 
 [ext_resource type="Script" uid="uid://bahd8fglbsqkx" path="res://Scripts/gun.gd" id="1_op1r2"]
+[ext_resource type="PackedScene" uid="uid://p0gyuhqkx2lp" path="res://Scenes/Design Tools/projectile.tscn" id="2_oav6y"]
 
 [sub_resource type="Animation" id="Animation_oav6y"]
 resource_name = "no reset"
@@ -28,18 +29,17 @@ disable_receive_shadows = true
 [sub_resource type="BoxMesh" id="BoxMesh_op1r2"]
 size = Vector3(0.1, 0.1, 0.25)
 
-[node name="gun" type="Node3D"]
+[node name="gun" type="Node3D" unique_id=186118585]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25)
 script = ExtResource("1_op1r2")
+projectile_scene = ExtResource("2_oav6y")
 
-[node name="muzzle" type="Node3D" parent="."]
+[node name="muzzle" type="Node3D" parent="." unique_id=998189402]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_2y70f")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1875111128]
+libraries/ = SubResource("AnimationLibrary_2y70f")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1650697916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.125)
 material_override = SubResource("StandardMaterial3D_op1r2")
 mesh = SubResource("BoxMesh_op1r2")

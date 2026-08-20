@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://bfg83rvn8p26g"]
+
+[ext_resource type="Script" uid="uid://cg6oba802dquj" path="res://Scripts/pickup_coin.gd" id="1_e66mt"]
+[ext_resource type="PackedScene" uid="uid://dqa4dpqvaytbt" path="res://Assets/Models/Pickups/diamond.glb" id="1_x6eu2"]
+[ext_resource type="PackedScene" uid="uid://cv7padv4mp583" path="res://Assets/Models/Objects/pedestal.glb" id="3_e66mt"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3k73a"]
+
+[node name="pickup_diamond" type="Node3D" unique_id=1295261309]
+script = ExtResource("1_e66mt")
+value = 50
+can_fall_h = false
+can_fall = false
+
+[node name="diamond" parent="." unique_id=107395986 instance=ExtResource("1_x6eu2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="Area3D" type="Area3D" parent="." unique_id=986333574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.125, 0)
+collision_layer = 7
+collision_mask = 7
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2098496456]
+shape = SubResource("SphereShape3D_3k73a")
+
+[node name="RayCast3D V" type="RayCast3D" parent="." unique_id=1617067984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+
+[node name="RayCast3D H" type="RayCast3D" parent="." unique_id=694799270]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.5, 0.55, 0)
+
+[node name="RayCast3D H2" type="RayCast3D" parent="." unique_id=777526918]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0.55, 0)
+target_position = Vector3(0, 1, 0)
+
+[node name="pedestal" parent="." unique_id=1650828778 instance=ExtResource("3_e66mt")]
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

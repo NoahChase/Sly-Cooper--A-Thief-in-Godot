@@ -13,6 +13,10 @@ signal look_around
 signal hit_taken
 signal shoot #gun also has a shoot signal that works better, will probably remove this one
 
+signal state_chase
+signal state_idle
+signal state_search
+
 @export var first_spawn = true
 @export var unique = false
 @export var character_mesh : Node3D
@@ -174,68 +178,69 @@ func _physics_process(delta):
 		$"Flat Target Visual".global_position = target.global_position
 
 # DIRECTION
-	if target != null:
-		direction_manager()
-	if return_to_safe_point == true and safe_point_found == true:
-		can_jump = false
-		#nav_agent.debug_enabled = false
-		$"Safe Position".material_override.albedo_color = Color(0, 1, 0)
-		direction = $"Safe Position".global_transform.origin - global_transform.origin
-	elif do_custom_direciton and custom_direction != null:
-		#nav_agent.debug_enabled = false
-		$"Safe Position".material_override.albedo_color = Color(1, 0, 1)
-		direction = custom_direction - global_position
-		if not is_on_floor() and can_jump and not state == HIT:
-			var horiz = Vector3(global_transform.origin.x, 0.0, global_transform.origin.z)
-			var target_horiz = Vector3(target.global_transform.origin.x, 0.0, target.global_transform.origin.z)
-			var horiz_distance = abs(target_horiz - horiz).length()
-			
-			stored_speed_mult = 1.0 + (horiz_distance / 2.5)
-			
-			SPEED_MULT = stored_speed_mult
-		if $"Custom Direction Timer".is_stopped():
-			custom_direction_locked = true
-			$"Custom Direction Timer".start(1.0)
-		if just_hit == false:
-			detect_jump()
-	else:
-		can_jump = false
-		#nav_agent.debug_enabled = true
-		$"Safe Position".material_override.albedo_color = Color(1, 1, 1)
-		direction = nav_agent.get_next_path_position() - global_position
-	direction = direction.normalized()
-	
-# ROTATION
-	var rot = weapon.rotation
-	rot.x = clamp(rot.x, deg_to_rad(-90), deg_to_rad(90))
-	weapon.rotation.x = rot.x
-	
 	if not state == HIT:
-		if do_custom_direciton:
-			if target != null:
-				flat_target = target.global_transform.origin
+		if target != null:
+			direction_manager()
+		if return_to_safe_point == true and safe_point_found == true:
+			can_jump = false
+			#nav_agent.debug_enabled = false
+			$"Safe Position".material_override.albedo_color = Color(0, 1, 0)
+			direction = $"Safe Position".global_transform.origin - global_transform.origin
+		elif do_custom_direciton and custom_direction != null:
+			#nav_agent.debug_enabled = false
+			$"Safe Position".material_override.albedo_color = Color(1, 0, 1)
+			direction = custom_direction - global_position
+			if not is_on_floor() and can_jump and not state == HIT:
+				var horiz = Vector3(global_transform.origin.x, 0.0, global_transform.origin.z)
+				var target_horiz = Vector3(target.global_transform.origin.x, 0.0, target.global_transform.origin.z)
+				var horiz_distance = abs(target_horiz - horiz).length()
+				
+				stored_speed_mult = 1.0 + (horiz_distance / 2.5)
+				
+				SPEED_MULT = stored_speed_mult
+			if $"Custom Direction Timer".is_stopped():
+				custom_direction_locked = true
+				$"Custom Direction Timer".start(1.0)
+			if just_hit == false:
+				detect_jump()
 		else:
-			flat_target = nav_agent.get_next_path_position()
-	if not flat_target == null and flat_target != global_transform.origin:
-		flat_target.y = global_transform.origin.y  # Ignore vertical difference
-		var target_rotation = global_transform.looking_at(flat_target, Vector3.UP).basis
-		global_transform.basis = global_transform.basis.slerp(target_rotation, delta * PI)
-
-# VELOCITY
-	var h_velocity = velocity #done to prevent velocity.y from going to zero
-	h_velocity.y = 0
-	h_velocity = h_velocity.lerp(direction * SPEED * SPEED_MULT, 4 * delta)
-	if stop_walking == false:
-		velocity.x = h_velocity.x
-		velocity.z = h_velocity.z
-	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
+			can_jump = false
+			#nav_agent.debug_enabled = true
+			$"Safe Position".material_override.albedo_color = Color(1, 1, 1)
+			direction = nav_agent.get_next_path_position() - global_position
+		direction = direction.normalized()
+		
+	# ROTATION
+		var rot = weapon.rotation
+		rot.x = clamp(rot.x, deg_to_rad(-90), deg_to_rad(90))
+		weapon.rotation.x = rot.x
+		
+		if not state == HIT:
+			if do_custom_direciton:
+				if target != null:
+					flat_target = target.global_transform.origin
+			else:
+				flat_target = nav_agent.get_next_path_position()
+		if not flat_target == null and flat_target != global_transform.origin:
+			flat_target.y = global_transform.origin.y  # Ignore vertical difference
+			var target_rotation = global_transform.looking_at(flat_target, Vector3.UP).basis
+			global_transform.basis = global_transform.basis.slerp(target_rotation, delta * PI)
 	
-	if velocity.y > -6.5:
-		grav_mult = 2.5
-	else:
-		grav_mult = 1.0
+	# VELOCITY
+		var h_velocity = velocity #done to prevent velocity.y from going to zero
+		h_velocity.y = 0
+		h_velocity = h_velocity.lerp(direction * SPEED * SPEED_MULT, 4 * delta)
+		if stop_walking == false:
+			velocity.x = h_velocity.x
+			velocity.z = h_velocity.z
+		else:
+			velocity.x = 0.0
+			velocity.z = 0.0
+		
+		if velocity.y > -6.5:
+			grav_mult = 2.5
+		else:
+			grav_mult = 1.0
 
 # ADD SLIP
 	if $"Floor Ray".is_colliding():
@@ -299,8 +304,8 @@ func state_manager():
 					do_idle()
 					return
 					
-	if Input.is_action_just_pressed("triangle"):
-		stop_chase = true
+	#if Input.is_action_just_pressed("triangle"):
+		#stop_chase = true
 		
 	if stop_chase == true:
 		print("stop chase = true")
@@ -309,6 +314,7 @@ func state_manager():
 		return
 ## DO STATE
 func do_chase():
+	state_chase.emit()
 	stop_chase = false
 	stop_walking = false
 	if target.is_in_group("Player"):
@@ -333,9 +339,11 @@ func do_chase():
 		return
 	#state = CHASE
 func do_search():
+	state_search.emit()
 	flashlight.target = target
 	state = SEARCH
 func do_idle():
+	state_idle.emit()
 	flashlight.target = null
 	do_custom_direciton = false
 	custom_direction = null
@@ -359,6 +367,7 @@ func state_execute():
 				flat_target = previous_position
 # CHASE
 		CHASE:
+			state_chase.emit()
 			if is_on_floor():
 				if velocity.length() > 0:
 					run.emit()

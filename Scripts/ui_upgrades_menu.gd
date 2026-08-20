@@ -102,35 +102,35 @@ func set_text():
 	
 	var skin = UnlockableManager.unlockables["skin_silhouette"]
 	if !skin.unlocked:
-		$"Unlock Silhouette Button".text = "Unlock Silhouette Skin - 150 Coins"
+		$"Unlock Silhouette Button".text = "Silhouette Skin\n150 Coins"
 	elif skin.active:
-		$"Unlock Silhouette Button".text = "Silhouette Skin - On"
+		$"Unlock Silhouette Button".text = "Silhouette Skin\nOn"
 	else:
-		$"Unlock Silhouette Button".text = "Silhouette Skin - Off"
+		$"Unlock Silhouette Button".text = "Silhouette Skin\nOff"
 	
 	var special_first_person_mode = UnlockableManager.unlockables["special_first_person_mode"]
 	if !special_first_person_mode.unlocked:
-		$"Unlock First Person Button".text = "Collect All Paris Bottles"
+		$"Unlock First Person Button".text = "Collect All\nParis Bottles"
 	else:
 		if special_first_person_mode.active:
-			$"Unlock First Person Button".text = str("First Person Mode - On")
+			$"Unlock First Person Button".text = str("First Person Mode\nOn")
 		else:
-			$"Unlock First Person Button".text = str("First Person Mode - Off")
+			$"Unlock First Person Button".text = str("First Person Mode\nOff")
 	
 	var pow_smoke_bomb = UnlockableManager.unlockables["pow_smoke_bomb"]
 	if !pow_smoke_bomb.unlocked:
-		$"Unlock Smoke Bomb Button".text = "Smoke Bomb - 250 Coins"
+		$"Unlock Smoke Bomb Button".text = "Smoke Bomb\n250 Coins"
 	else:
 		if awaiting_map == "pow_smoke_bomb":
-			$"Unlock Smoke Bomb Button".text = "Mapping: L1, L2, R2"
+			$"Unlock Smoke Bomb Button".text = "Mapping\nL1, L2, R2"
 		else:
 			$"Unlock Smoke Bomb Button".text = str("Smoke Bomb ", pow_smoke_bomb.input_assigned)
 			
 	var pow_mega_jump = UnlockableManager.unlockables["pow_mega_jump"]
 	if !pow_mega_jump.unlocked:
-		$"Unlock Mega Jump Button".text = "Mega Jump - 400 Coins"
+		$"Unlock Mega Jump Button".text = "Mega Jump\n400 Coins"
 	else:
 		if awaiting_map == "pow_mega_jump":
-			$"Unlock Mega Jump Button".text = "Mapping: L1, L2, R2"
+			$"Unlock Mega Jump Button".text = "Mapping\nL1, L2, R2"
 		else:
 			$"Unlock Mega Jump Button".text = str("Mega Jump ", pow_mega_jump.input_assigned)

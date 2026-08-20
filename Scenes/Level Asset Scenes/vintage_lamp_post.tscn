@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://bk37237molfhf"]
+[gd_scene format=4 uid="uid://bk37237molfhf"]
 
 [ext_resource type="PackedScene" uid="uid://bmnvwkxhhlsnc" path="res://Assets/Models/Objects/Vintage_Lamp_Post.glb" id="1_ky5w4"]
 [ext_resource type="Script" uid="uid://dndwb4exh4ccd" path="res://Scripts/pole.gd" id="2_8pvjc"]
@@ -78,7 +78,7 @@ point_count = 3
 radius = 0.125
 height = 0.25
 
-[node name="Vintage_Lamp_Post" groups=["NO CAM COL"] instance=ExtResource("1_ky5w4")]
+[node name="Vintage_Lamp_Post" unique_id=1242458398 groups=["NO CAM COL"] instance=ExtResource("1_ky5w4")]
 
 [node name="LampPost_001" parent="." index="0" groups=["NO CAM COL"]]
 transform = Transform3D(1.75, 0, 0, 0, 1.75, 0, 0, 0, 1.75, 0, 0, 0)
@@ -86,52 +86,52 @@ mesh = SubResource("ArrayMesh_oyq71")
 
 [node name="StaticBody3D" parent="LampPost_001" index="0" groups=["NO CAM COL"]]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LampPost_001/StaticBody3D" index="0" groups=["NO CAM COL"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LampPost_001/StaticBody3D" index="0" unique_id=66378821 groups=["NO CAM COL"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.74554, 0)
 shape = SubResource("CylinderShape3D_sid2r")
 
-[node name="Thief Moves POLE" type="Node3D" parent="." index="1" node_paths=PackedStringArray("test_ball") groups=["NO CAM COL"]]
+[node name="Thief Moves POLE" type="Node3D" parent="." index="1" unique_id=223146655 node_paths=PackedStringArray("test_ball") groups=["NO CAM COL"]]
 script = ExtResource("2_8pvjc")
 test_ball = NodePath("Path3D/PathFollow3D/Grip Offset/Target Point")
 length = 4.5
-start_clamp = 0.05
-end_clamp = 0.65
+start_clamp = 0.025
+end_clamp = 0.7
 reversed = true
 
-[node name="Path3D" type="Path3D" parent="Thief Moves POLE" index="0" groups=["NO CAM COL"]]
+[node name="Path3D" type="Path3D" parent="Thief Moves POLE" index="0" unique_id=537984813 groups=["NO CAM COL"]]
 curve = SubResource("Curve3D_xbfvn")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Thief Moves POLE/Path3D" index="0" groups=["NO CAM COL"]]
-transform = Transform3D(0.783836, -0.619472, 0.0418648, 0.00134503, -0.0657292, -0.997786, 0.620887, 0.782192, -0.0506904, 2.32831e-10, 5.19006, -4.65661e-10)
-progress = 4.4987
+[node name="PathFollow3D" type="PathFollow3D" parent="Thief Moves POLE/Path3D" index="0" unique_id=655072429 groups=["NO CAM COL"]]
+transform = Transform3D(0.78383994, -0.61995405, -0.033846956, 0, 0.054511294, -0.99846256, 0.62088096, 0.7826698, 0.04273057, 0.008784875, 0.93039495, -0.006714219)
+progress = 0.23168284
 loop = false
 
-[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D" index="0" groups=["NO CAM COL"]]
+[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D" index="0" unique_id=643836969 groups=["NO CAM COL"]]
 transform = Transform3D(0.573577, -0.817417, 0.0532731, 0.817342, 0.575419, 0.029072, -0.0544183, 0.0268673, 0.998157, 0, 0, 0)
 
-[node name="Target Point" parent="Thief Moves POLE/Path3D/PathFollow3D/Grip Offset" index="0" node_paths=PackedStringArray("parent") groups=["LOCK PLAYER ROT", "NO CAM COL", "pole"] instance=ExtResource("3_djo32")]
+[node name="Target Point" parent="Thief Moves POLE/Path3D/PathFollow3D/Grip Offset" index="0" unique_id=1570431052 node_paths=PackedStringArray("parent") groups=["LOCK PLAYER ROT", "NO CAM COL", "pole"] instance=ExtResource("3_djo32")]
 transform = Transform3D(1, 0, 4.65661e-10, 3.72529e-09, 1, -7.18865e-09, 4.65661e-10, -2.59024e-09, 1, 0.399664, 0.016434, 0.249472)
 parent = NodePath("../../../..")
 invisible = false
 
-[node name="PathFollow3D2" type="PathFollow3D" parent="Thief Moves POLE/Path3D" index="1" groups=["NO CAM COL"]]
-transform = Transform3D(0.783872, -0.619502, 0.0418667, 0.0013451, -0.0657324, -0.997832, 0.620916, 0.78223, -0.0506928, 0.0598231, 3.76426, -0.0724347)
-progress = 3.07109
+[node name="PathFollow3D2" type="PathFollow3D" parent="Thief Moves POLE/Path3D" index="1" unique_id=126208808 groups=["NO CAM COL"]]
+transform = Transform3D(0.78387725, -0.61998504, -0.03384851, 0, 0.054514017, -0.9985084, 0.6209105, 0.78270894, 0.04273253, 0.008784875, 0.93039495, -0.006714219)
+progress = 0.23168284
 loop = false
 
-[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2" index="0" groups=["NO CAM COL"]]
-transform = Transform3D(0.573577, -0.817417, 0.0532731, 0.817342, 0.575419, 0.029072, -0.0544183, 0.0268673, 0.998157, 0, 0, 0)
+[node name="Grip Offset" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2" index="0" unique_id=842921294 groups=["NO CAM COL"]]
+transform = Transform3D(0.573577, -0.81741726, 0.05327313, 0.817342, 0.57541865, 0.029071998, -0.054418303, 0.026867328, 0.99815696, 0, 0, 0)
 
-[node name="IK MESH" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset" index="0" groups=["NO CAM COL"]]
+[node name="IK MESH" type="Node3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset" index="0" unique_id=117251366 groups=["NO CAM COL"]]
 transform = Transform3D(1, 0, 0, 0, 1, -8.35187e-23, 0, -8.35187e-23, 1, 0.4, 0, 0)
 
-[node name="IK MESH" type="MeshInstance3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset/IK MESH" index="0" groups=["NO CAM COL"]]
+[node name="IK MESH" type="MeshInstance3D" parent="Thief Moves POLE/Path3D/PathFollow3D2/Grip Offset/IK MESH" index="0" unique_id=147866944 groups=["NO CAM COL"]]
 transform = Transform3D(1, 0, 0, 0, 1, -8.35187e-23, 0, -8.35187e-23, 1, 0, 0, 0)
 visible = false
 mesh = SubResource("SphereMesh_xbfvn")
 skeleton = NodePath("../..")
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Moves POLE" index="1" groups=["NO CAM COL"]]
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Thief Moves POLE" index="1" unique_id=384579000 groups=["NO CAM COL"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.05)
 visible = false
 material_override = ExtResource("4_ftp50")
@@ -149,6 +149,6 @@ path_u_distance = 1.0
 path_joined = false
 smooth_faces = true
 
-[node name="Target Point" parent="." index="2" groups=["NO CAM COL", "point"] instance=ExtResource("3_djo32")]
+[node name="Target Point" parent="." index="2" unique_id=704209238 groups=["NO CAM COL", "point"] instance=ExtResource("3_djo32")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.1875, 0)
 visible = false

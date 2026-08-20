@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://c4t6igjrs7ouj"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c4t6igjrs7ouj"]
 
 [sub_resource type="Shader" id="Shader_073xw"]
 code = "// credit goes to: \"axilirate\" https://godotshaders.com/shader/pixel-perfect-outline-shader/ https://godotshaders.com/author/axilirate/

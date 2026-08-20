@@ -78,7 +78,7 @@ func _physics_process(delta):
 			var current_pos = cam_container.global_transform.origin
 			cam_container.global_transform.origin += (collision_point - current_pos) * position_spring
 
-	if camera_player.binocucom or camera_player.FIRST_PERSON_MODE: #this works better here as opposed to the player's script. I should move all camera logic to this script, though.
+	if camera_player.BINOCUCOM or camera_player.FIRST_PERSON_MODE: #this works better here as opposed to the player's script. I should move all camera logic to this script, though.
 		cam_container.global_transform.origin += (camera_player.binocucom_container.global_transform.origin - cam_container.global_transform.origin) * (position_spring / 2)
 		camera.global_transform.origin = camera_player.binocucom_container.global_transform.origin
 	else:
@@ -94,11 +94,38 @@ func _physics_process(delta):
 	# FOV adjustments
 	if camera_player.FIRST_PERSON_MODE: 
 		target_fov = 75.0 #changing fov here doesn't really look good, but we can set these up as variables for the player to decide
+		$"Audio Mouse Move".playing = false
+	elif camera_player.BINOCUCOM:
+		var zoom_target = target_fov
+		var zoom = 0.0
+		if Input.is_action_pressed("ui_up"):
+			zoom = abs(Input.get_action_strength("ui_up"))
+			zoom_target = 15.0
+		elif Input.is_action_pressed("ui_down"):
+			zoom = abs(Input.get_action_strength("ui_down"))
+			zoom_target = 70.0
+		if zoom <= 0.1:
+			zoom = 0.0
+		zoom = clamp(zoom, 0.0, 1.0)
+		var zoomed_fov = lerp(target_fov, zoom_target, zoom)
+		target_fov = lerp(target_fov, zoomed_fov, 0.0375 * zoom)
+		target_fov = clamp(target_fov, 15.0, 70.0)
+		
+		$"Audio Mouse Move".pitch_scale = clamp(0.7 * zoom, 0.5, 0.7)
+		
+		if zoom > 0.1:
+			if not $"Audio Mouse Move".playing == true:
+				$"Audio Mouse Move".playing = true
+		else:
+			$"Audio Mouse Move".playing = false
+		
 	elif camera_player.target != null:
 		if camera_player.target.adj_fov:
 			target_fov = 85.0
+		$"Audio Mouse Move".playing = false
 	else:
 		target_fov = 75.0 #standard fov
+		$"Audio Mouse Move".playing = false
 	camera.fov += (target_fov - camera.fov) * fov_spring
 
 

@@ -1,4 +1,4 @@
-[gd_resource type="NoiseTexture2D" load_steps=3 format=3 uid="uid://bf7chtw1jw4td"]
+[gd_resource type="NoiseTexture2D" format=3 uid="uid://bf7chtw1jw4td"]
 
 [sub_resource type="Gradient" id="Gradient_0lmjb"]
 interpolation_mode = 2
@@ -20,10 +20,10 @@ domain_warp_fractal_lacunarity = 0.34
 [resource]
 width = 128
 height = 128
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_0lmjb")
+color_ramp = SubResource("Gradient_0lmjb")
+seamless = true
 invert = true
 in_3d_space = true
-generate_mipmaps = false
-seamless = true
 bump_strength = 16.0
-color_ramp = SubResource("Gradient_0lmjb")
-noise = SubResource("FastNoiseLite_0lmjb")

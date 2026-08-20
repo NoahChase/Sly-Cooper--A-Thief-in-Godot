@@ -45,7 +45,7 @@ func _physics_process(delta: float) -> void:
 			#look_2.visible = true
 	
 	#player y rotation
-		player.rot_container.global_transform.basis = lerp(player.rot_container.global_transform.basis, Basis().looking_at(hook_swing_rotation, Vector3.UP), 0.2)
+		player.rot_container.global_transform.basis = lerp(player.rot_container.global_transform.basis, Basis().looking_at(hook_swing_rotation, Vector3.UP), 0.125)
 	
 		# Player x & z rotate to hook the closer they get, from 1 meter.
 		var distance = player.global_transform.origin - target_point.global_transform.origin
@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		else :
 			pushback = true
 			#swing_strength = lerp(swing_strength, 0.0, 0.01)
-			swing_strength += (0.0 - swing_strength) * 0.01
+			swing_strength += (0.0 - swing_strength) * 0.05
 		if player.direction:
 			if pushback == false:
 				swing_strength = 2.0

@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Sly-Cooper--A-Thief-in-Godot"
 run/main_scene="uid://csndptq2dn7ys"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/show_image=false
 boot_splash/image="uid://pcq4og8s3lyk"
@@ -26,7 +30,8 @@ UnlockableManager="*res://Scripts/UNLOCKABLE_MANAGER.gd"
 
 [debug]
 
-shapes/navigation/geometry_face_color=Color(0.25, 0.5, 0.5, 0.0784314)
+shapes/navigation/3d/geometry_face_color=Color(0.25, 0.5, 0.5, 0.0784314)
+shapes/navigation/2d/geometry_face_color=Color(0.25, 0.5, 0.5, 0.0784314)
 
 [display]
 
@@ -174,9 +179,23 @@ L2={
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":50,"key_label":0,"unicode":50,"location":0,"echo":false,"script":null)
 ]
 }
+L3={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":7,"pressure":0.0,"pressed":true,"script":null)
+]
+}
+R3={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":8,"pressure":0.0,"pressed":true,"script":null)
+]
+}
 
 [layer_names]
 
+3d_physics/layer_1="default"
+3d_physics/layer_2="combat i think"
+3d_physics/layer_3="pickups"
+3d_physics/layer_5="camera"
 3d_navigation/navigation/geometry_face_color=Color(0.501961, 1, 1, 0.156863)
 
 [navigation]

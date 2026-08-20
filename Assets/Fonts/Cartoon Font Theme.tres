@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://hih0pywt4u2b"]
+
+[ext_resource type="FontFile" uid="uid://dcmcfdw44ckll" path="res://Assets/Fonts/Blambot Casual Bold.ttf" id="1_x55s6"]
+
+[resource]
+default_base_scale = 1.0
+default_font = ExtResource("1_x55s6")
+default_font_size = 28

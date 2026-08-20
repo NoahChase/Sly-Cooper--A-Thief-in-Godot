@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" load_steps=6 format=3 uid="uid://bnewj3kvedjat"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bnewj3kvedjat"]
 
 [ext_resource type="Texture2D" uid="uid://dfydqblgpdmsn" path="res://Assets/Temp Imports/tempcarmelita/Carmelita_Animations7_CarmelitaBody_TestMaterialBody_BaseColor.png" id="1_i0vfn"]
 [ext_resource type="Shader" uid="uid://b0axti1avktul" path="res://Assets/Shaders/outline_shine.gdshader" id="2_mfv7l"]

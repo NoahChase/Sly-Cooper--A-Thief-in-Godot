@@ -4,7 +4,8 @@ signal fire
 signal reload
 
 @onready var anim = $AnimationPlayer
-@onready var projectile_scene : PackedScene = load("res://Scenes/Design Tools/projectile.tscn")
+@export var projectile_scene : PackedScene
+@export var projectile_speed = 12.0
 @onready var shot_num = 0
 
 var shoot = true
@@ -55,6 +56,7 @@ func decide_shoot():
 		projectile.global_position = $muzzle.global_position
 		projectile.global_rotation = $muzzle.global_rotation
 		projectile.position_set = true
+		projectile.speed = projectile_speed
 	if shoot_int >= 3:
 		anim.play("reset")
 	else:

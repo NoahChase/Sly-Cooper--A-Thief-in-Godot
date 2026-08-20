@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b06xw6vwkduv5"]
+
+[ext_resource type="PackedScene" uid="uid://cbi0m33hicjex" path="res://Scenes/Vehicles/helicopter-carmelita.glb" id="1_0judl"]
+[ext_resource type="Script" uid="uid://dksxfhofepg2i" path="res://Scripts/helicopter_carmelita.gd" id="2_srjq8"]
+[ext_resource type="PackedScene" uid="uid://c4118kt7bhbcm" path="res://Assets/Models/Vehicles/helicopter-carmelita-propeller.glb" id="3_crq60"]
+
+[node name="helicopter-carmelita" unique_id=1552529682 instance=ExtResource("1_0judl")]
+script = ExtResource("2_srjq8")
+
+[node name="Motor" type="Node3D" parent="." index="1" unique_id=248495756]
+
+[node name="helicopter-carmelita-propeller" parent="Motor" index="0" unique_id=609302447 instance=ExtResource("3_crq60")]
+
+[node name="helicopter-carmelita-propeller2" parent="Motor" index="1" unique_id=432550806 instance=ExtResource("3_crq60")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="helicopter-carmelita-propeller3" parent="Motor" index="2" unique_id=235771337 instance=ExtResource("3_crq60")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="helicopter-carmelita-propeller4" parent="Motor" index="3" unique_id=593082988 instance=ExtResource("3_crq60")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 0, 0, 0)

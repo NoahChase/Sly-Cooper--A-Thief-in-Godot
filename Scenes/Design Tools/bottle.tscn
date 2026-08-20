@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bq2yn3a5plttd"]
+[gd_scene format=3 uid="uid://bq2yn3a5plttd"]
 
 [ext_resource type="Script" uid="uid://c2lbuoxcsctbl" path="res://Scripts/bottle.gd" id="1_2e5h4"]
 [ext_resource type="PackedScene" uid="uid://bqa621sidy85f" path="res://Assets/Models/Pickups/BOTTLE.glb" id="1_q8b3u"]
@@ -69,26 +69,26 @@ _data = {
 &"idle": SubResource("Animation_2e5h4")
 }
 
-[node name="Bottle" type="Node3D"]
+[node name="Bottle" type="Node3D" unique_id=2079427354]
 transform = Transform3D(1, -1.5974e-05, 0, 1.5974e-05, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("1_2e5h4")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." unique_id=1119956062]
+collision_layer = 7
+collision_mask = 7
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2130766148]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.666, 0)
 shape = SubResource("SphereShape3D_cnsrq")
 
-[node name="BOTTLE ROT" type="Node3D" parent="."]
+[node name="BOTTLE ROT" type="Node3D" parent="." unique_id=2023677454]
 
-[node name="BOTTLE" parent="BOTTLE ROT" instance=ExtResource("1_q8b3u")]
+[node name="BOTTLE" parent="BOTTLE ROT" unique_id=934196526 instance=ExtResource("1_q8b3u")]
 transform = Transform3D(0.875, 0, 0, 0, 0.875, 0, 0, 0, 0.875, 0, 0.125, 0)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="BOTTLE ROT/BOTTLE"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BOTTLE ROT/BOTTLE" unique_id=1913645857]
 root_node = NodePath("../../..")
-libraries = {
-&"": SubResource("AnimationLibrary_dsyou")
-}
-autoplay = "idle"
+libraries/ = SubResource("AnimationLibrary_dsyou")
+autoplay = &"idle"
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
